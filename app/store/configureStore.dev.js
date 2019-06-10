@@ -1,17 +1,19 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { createHashHistory } from 'history';
-import { routerMiddleware, routerActions } from 'connected-react-router';
+import { routerActions, routerMiddleware } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
+import createIpc from 'redux-electron-ipc';
 import createRootReducer from '../reducers';
-import * as counterActions from '../actions/counter';
-import type { counterStateType } from '../reducers/types';
+import * as settingsActions from '../actions/settings';
+import nodeActions, { onNodeRunning, onRunNodeFailed } from '../actions/node';
+import type { State } from '../reducers/types';
 
 const history = createHashHistory();
 
 const rootReducer = createRootReducer(history);
 
-const configureStore = (initialState?: counterStateType) => {
+const configureStore = (initialState?: State) => {
   // Redux Configuration
   const middleware = [];
   const enhancers = [];
@@ -34,9 +36,17 @@ const configureStore = (initialState?: counterStateType) => {
   const router = routerMiddleware(history);
   middleware.push(router);
 
+  // IPC Middleware
+  const ipc = createIpc({
+    NODE_RUNNING: onNodeRunning,
+    RUN_NODE_FAILED: onRunNodeFailed
+  });
+  middleware.push(ipc);
+
   // Redux DevTools Configuration
   const actionCreators = {
-    ...counterActions,
+    ...settingsActions,
+    ...nodeActions,
     ...routerActions
   };
   // If Redux DevTools Extension is installed use it, otherwise use Redux compose

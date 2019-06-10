@@ -10,9 +10,12 @@
  *
  * @flow
  */
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+// import { exec } from 'child_process';
+import path from 'path';
+import fs from 'fs';
 import MenuBuilder from './menu';
 
 export default class AppUpdater {
@@ -24,6 +27,7 @@ export default class AppUpdater {
 }
 
 let mainWindow = null;
+let nodeProcess = null;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -46,6 +50,23 @@ const installExtensions = async () => {
     extensions.map(name => installer.default(installer[name], forceDownload))
   ).catch(console.log);
 };
+
+function runNodeProcess(pass: string) {
+  const nodePath = path.resolve(__dirname, '../node/');
+  const passFile = `${nodePath}/pass`;
+  fs.writeFile(passFile, pass || '', console.log);
+  // nodeProcess = exec(`cd ${nodePath} && ${nodePath}/stegos`, (err, stdout) => {
+  //     if (err) {
+  //       console.log(`exec error: ${err}`);
+  //     } else {
+  //       console.log(`${stdout}`);
+  //     }
+  //   }
+  // );
+  // nodeProcess.stdout.on('data', data => console.log(data.toString('utf8')));
+  // nodeProcess.stderr.on('data', data => console.error(data.toString('utf8')));
+  fs.unlinkSync(passFile);
+}
 
 /**
  * Add event listeners...
@@ -99,4 +120,26 @@ app.on('ready', async () => {
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
+});
+
+app.on('quit', () => {
+  if (nodeProcess != null) {
+    nodeProcess.kill('SIGKILL');
+    nodeProcess = null;
+  }
+  app.exit(0);
+});
+
+/**
+ * IPC listeners
+ */
+
+ipcMain.on('RUN_NODE', (event, pass) => {
+  try {
+    runNodeProcess(pass);
+    event.sender.send('NODE_RUNNING');
+  } catch (e) {
+    console.log(e);
+    event.sender.send('RUN_NODE_FAILED');
+  }
 });

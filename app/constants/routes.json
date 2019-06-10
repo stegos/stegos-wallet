@@ -1,4 +1,5 @@
 {
-  "HOME": "/",
-  "COUNTER": "/counter"
+  "WELCOME": "/",
+  "PROTECT": "/protect",
+  "SYNC": "/sync"
 }

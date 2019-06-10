@@ -1,15 +1,17 @@
 import React from 'react';
-import { Switch, Route } from 'react-router';
+import { Route, Switch } from 'react-router';
 import routes from './constants/routes';
 import App from './containers/App';
-import HomePage from './containers/HomePage';
-import CounterPage from './containers/CounterPage';
+import WelcomePage from './containers/WelcomePage';
+import PasswordProtectionPage from './containers/PasswordProtectionPage';
+import SyncPage from './containers/SyncPage';
 
 export default () => (
   <App>
     <Switch>
-      <Route path={routes.COUNTER} component={CounterPage} />
-      <Route path={routes.HOME} component={HomePage} />
+      <Route exact path={routes.WELCOME} component={WelcomePage} />
+      <Route path={routes.SYNC} component={SyncPage} />
+      <Route path={routes.PROTECT} component={PasswordProtectionPage} />
     </Switch>
   </App>
 );

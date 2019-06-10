@@ -1,14 +1,25 @@
 import type { Dispatch as ReduxDispatch, Store as ReduxStore } from 'redux';
 
-export type counterStateType = {
-  +counter: number
+export type SettingsStateType = {
+  isPasswordSet: boolean,
+  password: string,
+  isSendBugReport: boolean
 };
+
+export type NodeStateType = {
+  isStarted: boolean,
+  isSynced: boolean,
+  syncingProgress: number
+};
+
+export type State = { settings: SettingsStateType, node: NodeStateType };
 
 export type Action = {
-  +type: string
+  +type: string,
+  payload: any
 };
 
-export type GetState = () => counterStateType;
+export type GetState = () => { ...State };
 
 export type Dispatch = ReduxDispatch<Action>;
 
