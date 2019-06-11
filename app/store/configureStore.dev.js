@@ -4,6 +4,7 @@ import { createHashHistory } from 'history';
 import { routerActions, routerMiddleware } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
 import createIpc from 'redux-electron-ipc';
+import reduxWebsocket from '@giantmachines/redux-websocket';
 import createRootReducer from '../reducers';
 import * as settingsActions from '../actions/settings';
 import nodeActions, { onNodeRunning, onRunNodeFailed } from '../actions/node';
@@ -42,6 +43,9 @@ const configureStore = (initialState?: State) => {
     RUN_NODE_FAILED: onRunNodeFailed
   });
   middleware.push(ipc);
+
+  const websocketMiddleware = reduxWebsocket();
+  middleware.push(websocketMiddleware);
 
   // Redux DevTools Configuration
   const actionCreators = {

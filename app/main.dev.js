@@ -13,7 +13,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-// import { exec } from 'child_process';
+import { exec } from 'child_process';
 import path from 'path';
 import fs from 'fs';
 import MenuBuilder from './menu';
@@ -54,18 +54,17 @@ const installExtensions = async () => {
 function runNodeProcess(pass: string) {
   const nodePath = path.resolve(__dirname, '../node/');
   const passFile = `${nodePath}/pass`;
-  fs.writeFile(passFile, pass || '', console.log);
-  // nodeProcess = exec(`cd ${nodePath} && ${nodePath}/stegos`, (err, stdout) => {
-  //     if (err) {
-  //       console.log(`exec error: ${err}`);
-  //     } else {
-  //       console.log(`${stdout}`);
-  //     }
-  //   }
-  // );
-  // nodeProcess.stdout.on('data', data => console.log(data.toString('utf8')));
-  // nodeProcess.stderr.on('data', data => console.error(data.toString('utf8')));
-  fs.unlinkSync(passFile);
+  fs.writeFileSync(passFile, pass || '');
+  nodeProcess = exec(`${nodePath}/stegos`, { cwd: nodePath }, (err, stdout) => {
+    if (err) {
+      console.log(`exec error: ${err}`);
+    } else {
+      console.log(`${stdout}`);
+    }
+    fs.unlinkSync(passFile);
+  });
+  nodeProcess.stdout.on('data', data => console.log(data.toString('utf8')));
+  nodeProcess.stderr.on('data', data => console.error(data.toString('utf8')));
 }
 
 /**
