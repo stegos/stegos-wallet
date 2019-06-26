@@ -6,6 +6,7 @@ import Button from './Button/Button';
 import Header from './Header/Header';
 import Input from './Input/Input';
 import styles from './PasswordProtection.css';
+import Wizard from './Wizard/Wizard';
 
 type Props = {
   setPassword: string => void
@@ -67,6 +68,7 @@ export default class PasswordProtection extends Component<Props> {
             </Link>
           </div>
         </Header>
+        <Wizard />
         <div className={styles.Main}>
           <div className={styles.Container}>
             <span className={styles.StatusBar}>Protect your wallet</span>
@@ -96,7 +98,7 @@ export default class PasswordProtection extends Component<Props> {
               <i className={`icon ion-md-warning ${styles.WarningIcon}`} />
               <p>
                 Make sure you remeber your password. Do not share it. Losing
-                yourpassword requires resetting Stegos Wallet and re-adding
+                your password requires resetting Stegos Wallet and re-adding
                 accounts. Resetting Stegos Wallet does not affect your crypto
                 assets.
               </p>
