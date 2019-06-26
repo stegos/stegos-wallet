@@ -2,6 +2,7 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import routes from '../constants/routes';
+import Input from './Input/Input';
 import styles from './PasswordProtection.css';
 
 type Props = {
@@ -66,28 +67,33 @@ export default class PasswordProtection extends Component<Props> {
           <div className={styles.Container}>
             <span className={styles.StatusBar}>Protect your wallet</span>
           </div>
-          <div>
+          <div className={styles.Description}>
             Set a password to prevent an unauthorized access to Stegos Wallet
             data on your computer, including account names, transactions and
             public wallet keys.
           </div>
-          <div>New password</div>
-          <input onChange={this.onPassChange} />
-          <span className={styles.error}>{passError}</span>
-          <div>Confirm password</div>
-          <input onChange={this.onConfirmPassChange} />
-          <span className={styles.error}>{confirmPassError}</span>
-          <div>
-            <ul>
-              <li>Make sure you remeber your password. Do not share it.</li>
-              <li>
-                Losing your password requires resetting Stegos Wallet and
-                re-adding accounts.
-              </li>
-              <li>
-                Resetting Stegos Wallet does not affect your crypto assets.
-              </li>
-            </ul>
+          <div className={styles.PasswordForm}>
+            <Input
+              onInput={this.onPassChange}
+              label="New password"
+              error={passError}
+              type="password"
+            />
+            <Input
+              onChange={this.onConfirmPassChange}
+              label="Confirm password"
+              error={confirmPassError}
+              type="password"
+            />
+          </div>
+          <div className={styles.Warning}>
+            <ion-icon name="heart" />
+            <p>
+              Make sure you remeber your password. Do not share it. Losing
+              yourpassword requires resetting Stegos Wallet and re-adding
+              accounts. Resetting Stegos Wallet does not affect your crypto
+              assets.
+            </p>
           </div>
           <button type="button" onClick={this.onSkip}>
             Skip this step

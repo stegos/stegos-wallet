@@ -1,0 +1,46 @@
+.Container {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  height: 49px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #5b5d63;
+}
+
+.InputStyle {
+  display: block;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0.48px;
+  color: #fff;
+}
+
+.Label {
+  display: inline-block;
+  text-align: left;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0.48px;
+  color: #bfc1c6;
+}
+
+.Error {
+  display: inline-block;
+  margin-top: 3px;
+  float: left;
+  text-align: left;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 20px;
+  letter-spacing: 0.48px;
+  color: #ff6c00;
+}
