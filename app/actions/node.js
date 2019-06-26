@@ -10,8 +10,8 @@ export const connectToNode = () => (dispatch: Dispatch) => {
   dispatch(connect('ws://localhost:3145/wallet')); // todo config
 };
 
-export const onNodeRunning = () => (dispatch: Dispatch) => {
-  dispatch({ type: NODE_RUNNING });
+export const onNodeRunning = (event, token) => (dispatch: Dispatch) => {
+  dispatch({ type: NODE_RUNNING, payload: { token } });
   dispatch(push('/sync'));
 };
 

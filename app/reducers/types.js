@@ -11,7 +11,8 @@ export type NodeStateType = {
   isStarted: boolean,
   isConnected: boolean,
   isSynced: boolean,
-  syncingProgress: number
+  syncingProgress: number,
+  apiToken: string | null
 };
 
 export type State = { settings: SettingsStateType, node: NodeStateType };

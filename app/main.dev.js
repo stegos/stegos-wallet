@@ -13,11 +13,9 @@
 import { app, BrowserWindow, dialog, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import { exec } from 'child_process';
+import { spawn } from 'child_process';
 import path from 'path';
 import fs from 'fs';
-import bs58 from 'bs58';
-import crypto from 'crypto';
 import MenuBuilder from './menu';
 
 export default class AppUpdater {
@@ -53,31 +51,38 @@ const installExtensions = async () => {
   ).catch(console.log);
 };
 
-function runNodeProcess(pass: string): Promise<void> {
+// todo refactor
+function runNodeProcess(pass: string): Promise<string> {
   return new Promise((resolve, reject) => {
     try {
       const nodePath = path.resolve(__dirname, '../node/');
       const passFile = `${nodePath}/pass`; // todo config
       fs.writeFileSync(passFile, pass || '');
-      const encoded = bs58.encode(crypto.randomBytes(16));
+      let token;
       const tokenFile = `${nodePath}/api_token.txt`; // todo config
-      fs.writeFileSync(tokenFile, encoded);
-      nodeProcess = exec(`${nodePath}/stegos`, { cwd: nodePath }, err => {
-        if (err) {
-          if (fs.existsSync(passFile)) fs.unlinkSync(passFile);
-          if (fs.existsSync(tokenFile)) fs.unlinkSync(tokenFile);
-          reject(err);
+      nodeProcess = spawn(
+        `./stegosd`,
+        [],
+        { cwd: nodePath, stdio: ['inherit', 'pipe', 'pipe'] },
+        err => {
+          if (err) {
+            if (fs.existsSync(passFile)) fs.unlinkSync(passFile);
+            if (fs.existsSync(tokenFile)) fs.unlinkSync(tokenFile);
+            reject(err);
+          }
         }
-      });
+      );
       nodeProcess.stdout.on('data', data => {
         const str = data.toString('utf8');
-        if (
-          str.includes('Network endpoints:') ||
-          str.includes('Adding node from seed pool')
-        ) {
+        if (str.includes('Listening on')) {
+          const ifTokenExists = fs.existsSync(tokenFile);
+          if (ifTokenExists) {
+            const readSync = fs.readFileSync(tokenFile);
+            token = readSync.toString('utf8');
+          }
           if (fs.existsSync(passFile)) fs.unlinkSync(passFile);
           if (fs.existsSync(tokenFile)) fs.unlinkSync(tokenFile);
-          resolve();
+          resolve(token);
         }
         if (str.includes('Invalid password:')) {
           if (fs.existsSync(passFile)) fs.unlinkSync(passFile);
@@ -162,8 +167,8 @@ app.on('quit', () => {
 
 ipcMain.on('RUN_NODE', (event, pass) => {
   runNodeProcess(pass)
-    .then(() => {
-      event.sender.send('NODE_RUNNING');
+    .then(token => {
+      event.sender.send('NODE_RUNNING', token);
       return true;
     })
     .catch(e => {
