@@ -51,6 +51,8 @@ main.js.map
 npm-debug.log.*
 test
 internals
+resources/*
+!resources/img/
 node
 !node/stegos
 !node/stegos.toml
