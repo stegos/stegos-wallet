@@ -53,6 +53,6 @@ test
 internals
 resources/*
 !resources/img/
-node
-!node/stegos
+node/*
+!node/stegosd
 !node/stegos.toml

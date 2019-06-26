@@ -68,7 +68,25 @@ export default class PasswordProtection extends Component<Props> {
             </Link>
           </div>
         </Header>
-        <Wizard />
+        <Wizard
+          steps={[
+            {
+              number: 1,
+              label: 'Password protection',
+              active: true
+            },
+            {
+              number: 2,
+              label: 'Sync',
+              active: false
+            },
+            {
+              number: 3,
+              label: 'Bugs & Terms of Use',
+              active: false
+            }
+          ]}
+        />
         <div className={styles.Main}>
           <div className={styles.Container}>
             <span className={styles.StatusBar}>Protect your wallet</span>
