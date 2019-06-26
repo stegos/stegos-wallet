@@ -9,7 +9,7 @@ body {
   color: white;
   height: 100vh;
   margin: 0;
-  background-color: #1f2331;
+  background: #1f2331 linear-gradient(180deg, #1f2331 0%, #151820 100%);
   font-family: 'Montserrat', sans-serif;
   overflow-y: hidden;
 }

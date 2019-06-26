@@ -59,7 +59,8 @@
       "error",
       { "extensions": [".js", ".jsx"] }
     ],
-    "react/prefer-stateless-function": "off"
+    "react/prefer-stateless-function": "off",
+    "react/prop-types": [1, { "ignore": ["children"] }]
   },
   "plugins": ["flowtype", "import", "promise", "compat", "react"],
   "settings": {

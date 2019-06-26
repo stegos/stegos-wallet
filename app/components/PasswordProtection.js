@@ -2,6 +2,8 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import routes from '../constants/routes';
+import Button from './Button/Button';
+import Header from './Header/Header';
 import Input from './Input/Input';
 import styles from './PasswordProtection.css';
 
@@ -58,11 +60,13 @@ export default class PasswordProtection extends Component<Props> {
     const { passError, confirmPassError } = this.state;
     return (
       <Fragment>
-        <div className={styles.backButton} data-tid="backButton">
-          <Link to={routes.WELCOME}>
-            <i className="fa fa-arrow-left fa-3x" />
-          </Link>
-        </div>
+        <Header>
+          <div className={styles.backButton} data-tid="backButton">
+            <Link to={routes.WELCOME}>
+              <i className="fa fa-arrow-left fa-3x" />
+            </Link>
+          </div>
+        </Header>
         <div className={styles.Main}>
           <div className={styles.Container}>
             <span className={styles.StatusBar}>Protect your wallet</span>
@@ -80,27 +84,43 @@ export default class PasswordProtection extends Component<Props> {
               type="password"
             />
             <Input
-              onChange={this.onConfirmPassChange}
+              onInput={this.onConfirmPassChange}
               label="Confirm password"
               error={confirmPassError}
               type="password"
             />
           </div>
-          <div className={styles.Warning}>
-            <ion-icon name="heart" />
-            <p>
-              Make sure you remeber your password. Do not share it. Losing
-              yourpassword requires resetting Stegos Wallet and re-adding
-              accounts. Resetting Stegos Wallet does not affect your crypto
-              assets.
-            </p>
+          <div className={styles.FooterWrapper}>
+            <div style={{ flex: 1 }} />
+            <div className={styles.Warning}>
+              <i className={`icon ion-md-warning ${styles.WarningIcon}`} />
+              <p>
+                Make sure you remeber your password. Do not share it. Losing
+                yourpassword requires resetting Stegos Wallet and re-adding
+                accounts. Resetting Stegos Wallet does not affect your crypto
+                assets.
+              </p>
+            </div>
+            <div className={styles.ButtonWrapper}>
+              <Button type="button" onClick={this.onSkip}>
+                <span>Skip</span>
+              </Button>
+              <Button
+                type="button"
+                onClick={this.onNext}
+                disabled={passError || confirmPassError}
+              >
+                <span>
+                  Next{' '}
+                  <i
+                    className={`icon ion-md-arrow-round-forward ${
+                      styles.NextButtonIcon
+                    }`}
+                  />
+                </span>
+              </Button>
+            </div>
           </div>
-          <button type="button" onClick={this.onSkip}>
-            Skip this step
-          </button>
-          <button type="button" onClick={this.onNext}>
-            Next
-          </button>
         </div>
       </Fragment>
     );
