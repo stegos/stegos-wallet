@@ -40,12 +40,14 @@ export default function node(
 }
 
 const handleMessage = payload => {
-  const { msg } = payload;
-  if (!msg) return {};
-  const { notification } = msg;
+  console.log('HANDLE MSG');
+  console.log(JSON.stringify(payload));
+  const { notification } = payload;
   switch (notification) {
     case 'sync_changed':
-      return { isSynced: msg.is_synchronized };
+      return { isSynced: payload.is_synchronized };
+    case 'epoch_changed':
+      return { isSynced: true, syncingProgress: 100 };
     default:
       return {};
   }

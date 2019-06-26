@@ -1,0 +1,51 @@
+:root {
+  --menu-width: 100px;
+  --menu-border-right-width: 2px;
+}
+
+.Menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: var(--menu-width);
+  height: 100vh;
+  border-right: solid black;
+  border-right-width: var(--menu-border-right-width);
+  float: left;
+}
+
+.MenuItem {
+  padding: 10px;
+  position: relative;
+}
+
+.Menu > .MenuItem:last-child {
+  margin-top: auto;
+  margin-bottom: 10px;
+}
+
+.MenuItem figure {
+  text-align: center;
+  margin: 0;
+  color: black;
+}
+
+.MenuItem > a {
+  text-decoration: none;
+}
+
+.Notification {
+  position: absolute;
+  background-color: red;
+  width: 20px;
+  height: 24px;
+  border-radius: 19px;
+  right: 0;
+  top: 0;
+  text-align: center;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 6px 5px 0 5px;
+  margin: 3px;
+}

@@ -1,5 +1,11 @@
 {
   "WELCOME": "/",
   "PROTECT": "/protect",
-  "SYNC": "/sync"
+  "SYNC": "/sync",
+  "BAGS_AND_TERMS": "/bagsAndTerms",
+  "PORTFOLIO": "/portfolio",
+  "ACCOUNTS": "/accounts",
+  "SEND": "/send",
+  "RECEIVE": "/receive",
+  "NODE": "/node"
 }
