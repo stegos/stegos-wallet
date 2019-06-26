@@ -52,6 +52,6 @@ npm-debug.log.*
 test
 internals
 resources
-node
-!node/stegos
+node/*
+!node/stegosd
 !node/stegos.toml
