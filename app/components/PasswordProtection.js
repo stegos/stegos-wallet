@@ -48,6 +48,11 @@ export default class PasswordProtection extends Component<Props> {
     setPassword(pass);
   };
 
+  onSkip = () => {
+    const { setPassword } = this.props;
+    setPassword('');
+  };
+
   render() {
     const { passError, confirmPassError } = this.state;
     return (
@@ -84,8 +89,8 @@ export default class PasswordProtection extends Component<Props> {
               </li>
             </ul>
           </div>
-          <button type="button">
-            <Link to={routes.SYNC}>Skip this step</Link>
+          <button type="button" onClick={this.onSkip}>
+            Skip this step
           </button>
           <button type="button" onClick={this.onNext}>
             Next

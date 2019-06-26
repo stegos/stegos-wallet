@@ -5,7 +5,7 @@ import routes from '../constants/routes';
 import type { NodeStateType } from '../reducers/types';
 
 type Props = {
-  runNode: string => void,
+  connectToNode: () => void,
   node: NodeStateType
 };
 
@@ -13,8 +13,12 @@ export default class Sync extends Component<Props> {
   props: Props;
 
   componentDidMount(): void {
-    const { runNode } = this.props;
-    runNode();
+    this.connectToNode();
+  }
+
+  connectToNode(): void {
+    const { connectToNode } = this.props;
+    connectToNode();
   }
 
   render() {
@@ -24,7 +28,7 @@ export default class Sync extends Component<Props> {
         <Link to={routes.PROTECT}>
           <i className="fa fa-arrow-left fa-3x" />
         </Link>
-        {node.isStarted
+        {node.isConnected
           ? 'Your wallet is synchronizing with the blockchain...'
           : 'Starting node'}
       </div>

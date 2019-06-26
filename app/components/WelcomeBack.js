@@ -7,7 +7,7 @@ import logo from '../logo.png';
 
 type Props = {};
 
-export default class Welcome extends Component<Props> {
+export default class WelcomeBack extends Component<Props> {
   props: Props;
 
   render() {
@@ -15,8 +15,10 @@ export default class Welcome extends Component<Props> {
       <div className={styles.Main}>
         <img src={logo} alt="" />
         <div className={styles.Container}>
-          <span className={styles.StatusBar}>Welcome to Stegos Wallet</span>
+          <span className={styles.StatusBar}>Welcome back</span>
         </div>
+        <div>Enter your password to continue</div>
+        <input onChange={this.onPassChange} />
         <Link to={routes.PROTECT}>Get Started</Link>
       </div>
     );

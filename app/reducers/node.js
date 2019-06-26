@@ -1,8 +1,10 @@
 import type { Action, NodeStateType } from './types';
-import { RUN_NODE_FAILED } from '../actions/node';
+import { NODE_RUNNING, RUN_NODE_FAILED } from '../actions/node';
+import { WS_MESSAGE, WS_OPEN } from '../ws/actionsTypes';
 
 const initialState = {
   isStarted: false,
+  isConnected: false,
   isSynced: false,
   syncingProgress: 0
 };
@@ -17,18 +19,34 @@ export default function node(
         ...state,
         isStarted: false
       };
-    case 'REDUX_WEBSOCKET::OPEN':
+    case NODE_RUNNING:
       return {
         ...state,
         isStarted: true
       };
-    case 'REDUX_WEBSOCKET::MESSAGE':
-      console.log(action.payload);
+    case WS_OPEN:
       return {
         ...state,
-        isStarted: true
+        isConnected: true
+      };
+    case WS_MESSAGE:
+      return {
+        ...state,
+        ...handleMessage(action.payload)
       };
     default:
       return state;
   }
 }
+
+const handleMessage = payload => {
+  const { msg } = payload;
+  if (!msg) return {};
+  const { notification } = msg;
+  switch (notification) {
+    case 'sync_changed':
+      return { isSynced: msg.is_synchronized };
+    default:
+      return {};
+  }
+};

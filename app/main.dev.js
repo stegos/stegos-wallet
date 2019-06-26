@@ -10,7 +10,7 @@
  *
  * @flow
  */
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { exec } from 'child_process';
@@ -51,20 +51,37 @@ const installExtensions = async () => {
   ).catch(console.log);
 };
 
-function runNodeProcess(pass: string) {
-  const nodePath = path.resolve(__dirname, '../node/');
-  const passFile = `${nodePath}/pass`;
-  fs.writeFileSync(passFile, pass || '');
-  nodeProcess = exec(`${nodePath}/stegos`, { cwd: nodePath }, (err, stdout) => {
-    if (err) {
-      console.log(`exec error: ${err}`);
-    } else {
-      console.log(`${stdout}`);
+function runNodeProcess(pass: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    try {
+      const nodePath = path.resolve(__dirname, '../node/');
+      const passFile = `${nodePath}/pass`; // todo config
+      fs.writeFileSync(passFile, pass || '');
+      nodeProcess = exec(`${nodePath}/stegos`, { cwd: nodePath }, err => {
+        if (err) {
+          fs.unlinkSync(passFile);
+          reject(err);
+        }
+      });
+      nodeProcess.stdout.on('data', data => {
+        const str = data.toString('utf8');
+        if (
+          str.includes('Network endpoints:') ||
+          str.includes('Adding node from seed pool')
+        ) {
+          resolve();
+        }
+        if (str.includes('Invalid password:')) {
+          reject(new Error('Invalid password'));
+        }
+      });
+      nodeProcess.stderr.on('data', data => {
+        reject(data.toString('utf8'));
+      });
+    } catch (e) {
+      reject(e);
     }
-    fs.unlinkSync(passFile);
   });
-  nodeProcess.stdout.on('data', data => console.log(data.toString('utf8')));
-  nodeProcess.stderr.on('data', data => console.error(data.toString('utf8')));
 }
 
 /**
@@ -134,11 +151,13 @@ app.on('quit', () => {
  */
 
 ipcMain.on('RUN_NODE', (event, pass) => {
-  try {
-    runNodeProcess(pass);
-    event.sender.send('NODE_RUNNING');
-  } catch (e) {
-    console.log(e);
-    event.sender.send('RUN_NODE_FAILED');
-  }
+  runNodeProcess(pass)
+    .then(() => {
+      event.sender.send('NODE_RUNNING');
+      return true;
+    })
+    .catch(e => {
+      dialog.showErrorBox('Error', e.message);
+      event.sender.send('RUN_NODE_FAILED');
+    });
 });
