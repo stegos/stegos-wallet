@@ -3,7 +3,8 @@ import type { Dispatch as ReduxDispatch, Store as ReduxStore } from 'redux';
 export type SettingsStateType = {
   isPasswordSet: boolean,
   password: string,
-  isSendBugReport: boolean
+  isSendBugReport: boolean,
+  isTermsAccepted: boolean
 };
 
 export type NodeStateType = {

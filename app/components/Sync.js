@@ -28,9 +28,19 @@ export default class Sync extends Component<Props> {
         <Link to={routes.PROTECT}>
           <i className="fa fa-arrow-left fa-3x" />
         </Link>
-        {node.isConnected
-          ? 'Your wallet is synchronizing with the blockchain...'
-          : 'Starting node'}
+        {node.isSynced ? (
+          <div>
+            Your wallet is synchronized!
+            <button type="button">
+              <Link to={routes.BAGS_AND_TERMS}>Next</Link>
+            </button>
+          </div>
+        ) : (
+          <div>
+            <span>Your wallet is synchronizing with the blockchain...</span>
+            <span>{node.syncingProgress} %</span>
+          </div>
+        )}
       </div>
     );
   }

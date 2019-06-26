@@ -2,16 +2,22 @@ import React from 'react';
 import { Route, Switch } from 'react-router';
 import routes from './constants/routes';
 import App from './containers/App';
-import WelcomePage from './containers/WelcomePage';
-import PasswordProtectionPage from './containers/PasswordProtectionPage';
-import SyncPage from './containers/SyncPage';
+import PortfolioPage from './containers/PortfolioPage';
+import AccountsPage from './containers/AccountsPage';
+import SendPage from './containers/SendPage';
+import ReceivePage from './containers/ReceivePage';
+import NodePage from './containers/NodePage';
+import Menu from './components/Menu';
 
 export default () => (
   <App>
+    <Menu />
     <Switch>
-      <Route exact path={routes.WELCOME} component={WelcomePage} />
-      <Route path={routes.SYNC} component={SyncPage} />
-      <Route path={routes.PROTECT} component={PasswordProtectionPage} />
+      <Route exact path={routes.PORTFOLIO} component={PortfolioPage} />
+      <Route path={routes.ACCOUNTS} component={AccountsPage} />
+      <Route path={routes.SEND} component={SendPage} />
+      <Route path={routes.RECEIVE} component={ReceivePage} />
+      <Route path={routes.NODE} component={NodePage} />
     </Switch>
   </App>
 );

@@ -1,10 +1,15 @@
 import type { Action, SettingsStateType } from './types';
-import { SET_BUG_REPORTS, SET_PASSWORD } from '../actions/settings';
+import {
+  SET_BUG_REPORTS,
+  SET_BUGS_AND_TERMS,
+  SET_PASSWORD
+} from '../actions/settings';
 
 const initialState = {
   isPasswordSet: false,
   password: null,
-  isSendBugReport: false
+  isSendBugReport: false,
+  isTermsAccepted: false
 };
 
 export default function settings(
@@ -22,6 +27,12 @@ export default function settings(
       return {
         ...state,
         isSendBugReport: true
+      };
+    case SET_BUGS_AND_TERMS:
+      return {
+        ...state,
+        isTermsAccepted: true,
+        isSendBugReport: action.payload.sentBugs
       };
     default:
       return state;
