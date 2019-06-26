@@ -6,7 +6,8 @@ const initialState = {
   isStarted: false,
   isConnected: false,
   isSynced: false,
-  syncingProgress: 0
+  syncingProgress: 0,
+  apiToken: null
 };
 
 export default function node(
@@ -22,7 +23,8 @@ export default function node(
     case NODE_RUNNING:
       return {
         ...state,
-        isStarted: true
+        isStarted: true,
+        apiToken: action.payload.token
       };
     case WS_OPEN:
       return {
