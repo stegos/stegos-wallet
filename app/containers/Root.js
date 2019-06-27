@@ -12,7 +12,7 @@ type Props = {
   settings: SettingsStateType
 };
 
-export class Root extends Component<Props> {
+class Root extends Component<Props> {
   render() {
     const { store, history, settings } = this.props;
     return (

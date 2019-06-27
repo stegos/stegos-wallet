@@ -1,0 +1,14 @@
+.Container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 77px;
+  padding: 21px 119px 17px 119px;
+}
+
+.Logo {
+  width: 248px;
+  height: 77px;
+  object-fit: contain;
+}

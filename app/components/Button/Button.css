@@ -1,0 +1,36 @@
+.Container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border: 1px solid #ff6c00;
+  box-sizing: border-box;
+  border-radius: 7.5px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 43px;
+  text-align: center;
+  letter-spacing: 0.48px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.Container:focus {
+  box-shadow: 0 0 1px #ff6c00;
+  outline: none;
+}
+
+.Disabled {
+  cursor: default;
+  border-color: #696e79;
+  opacity: 0.53;
+}
+
+.Container:focus.Disabled {
+  box-shadow: none;
+  outline: none;
+}
