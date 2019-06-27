@@ -8,10 +8,12 @@ import SendPage from './containers/SendPage';
 import ReceivePage from './containers/ReceivePage';
 import NodePage from './containers/NodePage';
 import Menu from './components/Menu';
+import StatusBar from './components/StatusBar';
 
 export default () => (
   <App>
     <Menu />
+    <StatusBar />
     <Switch>
       <Route exact path={routes.PORTFOLIO} component={PortfolioPage} />
       <Route path={routes.ACCOUNTS} component={AccountsPage} />
