@@ -6,7 +6,11 @@ import { createLogger } from 'redux-logger';
 import createIpc from 'redux-electron-ipc';
 import createRootReducer from '../reducers';
 import * as settingsActions from '../actions/settings';
-import nodeActions, { onNodeRunning, onRunNodeFailed } from '../actions/node';
+import nodeActions, {
+  onNodeRunning,
+  onRunNodeFailed,
+  onTokenReceived
+} from '../actions/node';
 import type { State } from '../reducers/types';
 import { wsMiddleware } from '../ws/wsMiddleware';
 
@@ -40,7 +44,8 @@ const configureStore = (initialState?: State) => {
   // IPC Middleware
   const ipc = createIpc({
     NODE_RUNNING: onNodeRunning,
-    RUN_NODE_FAILED: onRunNodeFailed
+    RUN_NODE_FAILED: onRunNodeFailed,
+    TOKEN_RECEIVED: onTokenReceived
   });
   middleware.push(ipc);
 
