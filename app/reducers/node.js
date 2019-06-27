@@ -65,16 +65,20 @@ const handleMessage = (state: NodeStateType, payload) => {
 };
 
 function handleReceivedBlockTimestamp(state, payload) {
-  const firstReceivedBlockTimestamp = state.firstReceivedBlockTimestamp
-    ? {}
-    : {
-        firstReceivedBlockTimestamp: getTimestamp(
-          payload.last_macro_block_timestamp
-        )
-      };
+  const firstReceivedBlockTimestamp =
+    state.firstReceivedBlockTimestamp ||
+    getTimestamp(payload.last_macro_block_timestamp);
+  const lastReceivedBlockTimestamp = getTimestamp(
+    payload.last_macro_block_timestamp
+  );
   return {
-    ...firstReceivedBlockTimestamp,
-    lastReceivedBlockTimestamp: getTimestamp(payload.last_macro_block_timestamp)
+    firstReceivedBlockTimestamp,
+    lastReceivedBlockTimestamp,
+    syncingProgress: Math.round(
+      ((lastReceivedBlockTimestamp - firstReceivedBlockTimestamp) /
+        (+new Date() - firstReceivedBlockTimestamp)) *
+        100
+    )
   };
 }
 
