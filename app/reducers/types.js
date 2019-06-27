@@ -12,7 +12,9 @@ export type NodeStateType = {
   isConnected: boolean,
   isSynced: boolean,
   syncingProgress: number,
-  apiToken: string | null
+  apiToken: string | null,
+  firstReceivedBlockTimestamp: number | null,
+  lastReceivedBlockTimestamp: number | null
 };
 
 export type State = { settings: SettingsStateType, node: NodeStateType };

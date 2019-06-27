@@ -1,6 +1,4 @@
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as NodeActions from '../actions/node';
 import Sync from '../components/Sync';
 
 function mapStateToProps(state) {
@@ -9,11 +7,7 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(NodeActions, dispatch);
-}
-
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  () => ({})
 )(Sync);

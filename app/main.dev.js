@@ -17,6 +17,7 @@ import { spawn } from 'child_process';
 import path from 'path';
 import fs from 'fs';
 import MenuBuilder from './menu';
+import { TOKEN_RECEIVED } from './actions/node';
 
 export default class AppUpdater {
   constructor() {
@@ -28,6 +29,7 @@ export default class AppUpdater {
 
 let mainWindow = null;
 let nodeProcess = null;
+let isTokenCapturing = false;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -52,14 +54,14 @@ const installExtensions = async () => {
 };
 
 // todo refactor
-function runNodeProcess(pass: string): Promise<string> {
+function runNodeProcess(pass: string): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
       const nodePath = path.resolve(__dirname, '../node/');
       const passFile = `${nodePath}/pass`; // todo config
       fs.writeFileSync(passFile, pass || '');
-      let token;
       const tokenFile = `${nodePath}/api_token.txt`; // todo config
+      if (fs.existsSync(tokenFile)) fs.unlinkSync(tokenFile);
       nodeProcess = spawn(
         `./stegosd`,
         [],
@@ -67,26 +69,26 @@ function runNodeProcess(pass: string): Promise<string> {
         err => {
           if (err) {
             if (fs.existsSync(passFile)) fs.unlinkSync(passFile);
-            if (fs.existsSync(tokenFile)) fs.unlinkSync(tokenFile);
             reject(err);
           }
         }
       );
       nodeProcess.stdout.on('data', data => {
         const str = data.toString('utf8');
-        if (str.includes('Listening on')) {
-          const ifTokenExists = fs.existsSync(tokenFile);
-          if (ifTokenExists) {
-            const readSync = fs.readFileSync(tokenFile);
-            token = readSync.toString('utf8');
-          }
+        console.log(str);
+        if (
+          str.includes('Network endpoints:') ||
+          str.includes('Adding node from seed pool')
+        ) {
           if (fs.existsSync(passFile)) fs.unlinkSync(passFile);
-          if (fs.existsSync(tokenFile)) fs.unlinkSync(tokenFile);
-          resolve(token);
+          resolve();
+          if (!isTokenCapturing) {
+            isTokenCapturing = true;
+            captureToken();
+          }
         }
         if (str.includes('Invalid password:')) {
           if (fs.existsSync(passFile)) fs.unlinkSync(passFile);
-          if (fs.existsSync(tokenFile)) fs.unlinkSync(tokenFile);
           reject(new Error('Invalid password'));
         }
       });
@@ -97,6 +99,27 @@ function runNodeProcess(pass: string): Promise<string> {
       reject(e);
     }
   });
+}
+
+function captureToken(): void {
+  const nodePath = path.resolve(__dirname, '../node/');
+  let token;
+  let checkingInterval;
+  const tokenFile = `${nodePath}/api_token.txt`; // todo config
+  checkingInterval = setInterval(() => {
+    token = readFile(tokenFile);
+    if (token) {
+      clearInterval(checkingInterval);
+      checkingInterval = null;
+      mainWindow.webContents.send(TOKEN_RECEIVED, token);
+    }
+  }, 300);
+}
+
+function readFile(filePath: string): string | null {
+  return fs.existsSync(filePath)
+    ? fs.readFileSync(filePath).toString('utf8')
+    : null;
 }
 
 /**
@@ -167,8 +190,8 @@ app.on('quit', () => {
 
 ipcMain.on('RUN_NODE', (event, pass) => {
   runNodeProcess(pass)
-    .then(token => {
-      event.sender.send('NODE_RUNNING', token);
+    .then(() => {
+      event.sender.send('NODE_RUNNING');
       return true;
     })
     .catch(e => {
