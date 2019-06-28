@@ -8,6 +8,7 @@ export type SettingsStateType = {
 };
 
 export type NodeStateType = {
+  hasKey: boolean | null,
   isStarted: boolean,
   isConnected: boolean,
   isSynced: boolean,

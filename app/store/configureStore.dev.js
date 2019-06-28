@@ -7,6 +7,7 @@ import createIpc from 'redux-electron-ipc';
 import createRootReducer from '../reducers';
 import * as settingsActions from '../actions/settings';
 import nodeActions, {
+  onCheckKeyExistence,
   onNodeRunning,
   onRunNodeFailed,
   onTokenReceived
@@ -43,6 +44,7 @@ const configureStore = (initialState?: State) => {
 
   // IPC Middleware
   const ipc = createIpc({
+    CHECK_KEY_EXISTENCE: onCheckKeyExistence,
     NODE_RUNNING: onNodeRunning,
     RUN_NODE_FAILED: onRunNodeFailed,
     TOKEN_RECEIVED: onTokenReceived

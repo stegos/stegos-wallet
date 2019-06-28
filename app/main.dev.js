@@ -53,75 +53,6 @@ const installExtensions = async () => {
   ).catch(console.log);
 };
 
-// todo refactor
-function runNodeProcess(pass: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    try {
-      const nodePath = path.resolve(__dirname, '../node/');
-      const passFile = `${nodePath}/pass`; // todo config
-      fs.writeFileSync(passFile, pass || '');
-      const tokenFile = `${nodePath}/api_token.txt`; // todo config
-      if (fs.existsSync(tokenFile)) fs.unlinkSync(tokenFile);
-      nodeProcess = spawn(
-        `./stegosd`,
-        [],
-        { cwd: nodePath, stdio: ['inherit', 'pipe', 'pipe'] },
-        err => {
-          if (err) {
-            if (fs.existsSync(passFile)) fs.unlinkSync(passFile);
-            reject(err);
-          }
-        }
-      );
-      nodeProcess.stdout.on('data', data => {
-        const str = data.toString('utf8');
-        console.log(str);
-        if (
-          str.includes('Network endpoints:') ||
-          str.includes('Adding node from seed pool')
-        ) {
-          if (fs.existsSync(passFile)) fs.unlinkSync(passFile);
-          resolve();
-          if (!isTokenCapturing) {
-            isTokenCapturing = true;
-            captureToken();
-          }
-        }
-        if (str.includes('Invalid password:')) {
-          if (fs.existsSync(passFile)) fs.unlinkSync(passFile);
-          reject(new Error('Invalid password'));
-        }
-      });
-      nodeProcess.stderr.on('data', data => {
-        reject(data.toString('utf8'));
-      });
-    } catch (e) {
-      reject(e);
-    }
-  });
-}
-
-function captureToken(): void {
-  const nodePath = path.resolve(__dirname, '../node/');
-  let token;
-  let checkingInterval;
-  const tokenFile = `${nodePath}/api_token.txt`; // todo config
-  checkingInterval = setInterval(() => {
-    token = readFile(tokenFile);
-    if (token) {
-      clearInterval(checkingInterval);
-      checkingInterval = null;
-      mainWindow.webContents.send(TOKEN_RECEIVED, token);
-    }
-  }, 300);
-}
-
-function readFile(filePath: string): string | null {
-  return fs.existsSync(filePath)
-    ? fs.readFileSync(filePath).toString('utf8')
-    : null;
-}
-
 /**
  * Add event listeners...
  */
@@ -199,3 +130,82 @@ ipcMain.on('RUN_NODE', (event, pass) => {
       event.sender.send('RUN_NODE_FAILED');
     });
 });
+
+ipcMain.on('CHECK_KEY_EXISTENCE', event => {
+  event.sender.send('CHECK_KEY_EXISTENCE', checkKeyExistence());
+});
+
+function checkKeyExistence(): boolean {
+  const nodePath = path.resolve(__dirname, '../node/');
+  const keyFile = `${nodePath}/wallet.pkey`; // todo config
+  return fs.existsSync(keyFile);
+}
+
+// todo refactor
+function runNodeProcess(pass: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    try {
+      const nodePath = path.resolve(__dirname, '../node/');
+      const passFile = `${nodePath}/pass`; // todo config
+      fs.writeFileSync(passFile, pass || '');
+      const tokenFile = `${nodePath}/api_token.txt`; // todo config
+      if (fs.existsSync(tokenFile)) fs.unlinkSync(tokenFile);
+      nodeProcess = spawn(
+        `./stegosd`,
+        [],
+        { cwd: nodePath, stdio: ['inherit', 'pipe', 'pipe'] },
+        err => {
+          if (err) {
+            if (fs.existsSync(passFile)) fs.unlinkSync(passFile);
+            reject(err);
+          }
+        }
+      );
+      nodeProcess.stdout.on('data', data => {
+        const str = data.toString('utf8');
+        console.log(str);
+        if (
+          str.includes('Network endpoints:') ||
+          str.includes('Adding node from seed pool')
+        ) {
+          if (fs.existsSync(passFile)) fs.unlinkSync(passFile);
+          resolve();
+          if (!isTokenCapturing) {
+            isTokenCapturing = true;
+            captureToken();
+          }
+        }
+        if (str.includes('Invalid password:')) {
+          if (fs.existsSync(passFile)) fs.unlinkSync(passFile);
+          reject(new Error('Invalid password'));
+        }
+      });
+      nodeProcess.stderr.on('data', data => {
+        reject(data.toString('utf8'));
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
+
+function captureToken(): void {
+  const nodePath = path.resolve(__dirname, '../node/');
+  let token;
+  let checkingInterval;
+  const tokenFile = `${nodePath}/api_token.txt`; // todo config
+  checkingInterval = setInterval(() => {
+    token = readFile(tokenFile);
+    if (token) {
+      clearInterval(checkingInterval);
+      checkingInterval = null;
+      mainWindow.webContents.send(TOKEN_RECEIVED, token);
+    }
+  }, 300);
+}
+
+function readFile(filePath: string): string | null {
+  return fs.existsSync(filePath)
+    ? fs.readFileSync(filePath).toString('utf8')
+    : null;
+}
