@@ -64,12 +64,14 @@ const handleMessage = (state: NodeStateType, payload) => {
   const { notification } = payload;
   switch (notification) {
     case 'sync_changed':
+      return payload.is_synchronized
+        ? { ...state, isSynced: true, syncingProgress: 100 }
+        : { ...state, ...handleReceivedBlockTimestamp(state, payload) };
+    case 'epoch_changed':
       return {
-        isSynced: payload.is_synchronized,
+        ...state,
         ...handleReceivedBlockTimestamp(state, payload)
       };
-    case 'epoch_changed':
-      return handleReceivedBlockTimestamp(state, payload);
     default:
       return {};
   }

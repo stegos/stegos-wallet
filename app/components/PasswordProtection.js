@@ -131,7 +131,7 @@ export default class PasswordProtection extends Component<Props> {
                 disabled={passError || confirmPassError}
               >
                 <span>
-                  Next{' '}
+                  Next
                   <i
                     className={`icon ion-md-arrow-round-forward ${
                       styles.NextButtonIcon
