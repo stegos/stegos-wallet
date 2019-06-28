@@ -5,6 +5,11 @@
   height: 100vh;
 }
 
+.HeaderContentWrapper {
+  padding-top: 21px;
+  padding-bottom: 17px;
+}
+
 .Main {
   display: flex;
   flex-direction: column;

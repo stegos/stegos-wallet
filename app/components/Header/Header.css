@@ -3,8 +3,30 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  height: 77px;
-  padding: 21px 119px 17px 119px;
+}
+
+.Content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 23px 120px 33px 120px;
+  box-sizing: border-box;
+  flex-grow: 1;
+}
+
+.Title {
+  margin-right: auto;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 37px;
+  line-height: 65px;
+  letter-spacing: 1.11px;
+  color: #bfc1c6;
+}
+
+.LogoWrapper {
+  padding: 21px 39px 30px 119px;
 }
 
 .Logo {
