@@ -1,11 +1,19 @@
-import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import * as NodeActions from '../actions/node';
+import Account from '../components/Accounts/Account';
 
-type Props = {};
-
-export default class AccountsPage extends Component<Props> {
-  props: Props;
-
-  render() {
-    return <div>Accounts</div>;
-  }
+function mapStateToProps(state) {
+  return {
+    node: state.node
+  };
 }
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(NodeActions, dispatch);
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Account);
