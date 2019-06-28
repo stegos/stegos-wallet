@@ -1,5 +1,5 @@
 // @flow
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import routes from '../constants/routes';
 import Button from './Button/Button';
@@ -60,7 +60,7 @@ export default class PasswordProtection extends Component<Props> {
   render() {
     const { passError, confirmPassError } = this.state;
     return (
-      <Fragment>
+      <div className={styles.Wrapper}>
         <Header>
           <div className={styles.backButton} data-tid="backButton">
             <Link to={routes.WELCOME}>
@@ -142,7 +142,7 @@ export default class PasswordProtection extends Component<Props> {
             </div>
           </div>
         </div>
-      </Fragment>
+      </div>
     );
   }
 }
