@@ -1,14 +1,20 @@
 import React, { PureComponent } from 'react';
-import type { NodeStateType } from '../../reducers/types';
+import type { AccountsStateType } from '../../reducers/types';
 
 type Props = {
-  node: NodeStateType
+  accounts: AccountsStateType,
+  getKeys: () => void
 };
 
 export default class Account extends PureComponent<Props> {
+  componentDidMount(): void {
+    const { getKeys } = this.props;
+    getKeys();
+  }
+
   render() {
-    const { node } = this.props;
-    console.log(node);
+    const { accounts } = this.props;
+    console.log(accounts);
     return <div>Accounts</div>;
   }
 }
