@@ -18,6 +18,18 @@ export type NodeStateType = {
   lastReceivedBlockTimestamp: number | null
 };
 
+export type AccountsStateType = {
+  accounts: Account[],
+  activeAccount: string | null
+};
+
+export type Account = {
+  id: string,
+  name: string,
+  key: string,
+  balance: string
+};
+
 export type State = { settings: SettingsStateType, node: NodeStateType };
 
 export type Action = {
