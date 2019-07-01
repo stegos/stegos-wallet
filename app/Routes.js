@@ -9,17 +9,20 @@ import ReceivePage from './containers/ReceivePage';
 import NodePage from './containers/NodePage';
 import Menu from './components/Menu';
 import StatusBar from './components/StatusBar';
+import styles from './Routes.css';
 
 export default () => (
   <App>
-    <Menu />
-    <StatusBar />
-    <Switch>
-      <Route exact path={routes.PORTFOLIO} component={PortfolioPage} />
-      <Route path={routes.ACCOUNTS} component={AccountsPage} />
-      <Route path={routes.SEND} component={SendPage} />
-      <Route path={routes.RECEIVE} component={ReceivePage} />
-      <Route path={routes.NODE} component={NodePage} />
-    </Switch>
+    <div className={styles.Container}>
+      <StatusBar containerClassName={styles.StatusBar} />
+      <Menu className={styles.Menu} />
+      <Switch>
+        <Route exact path={routes.PORTFOLIO} component={PortfolioPage} />
+        <Route path={routes.ACCOUNTS} component={AccountsPage} />
+        <Route path={routes.SEND} component={SendPage} />
+        <Route path={routes.RECEIVE} component={ReceivePage} />
+        <Route path={routes.NODE} component={NodePage} />
+      </Switch>
+    </div>
   </App>
 );

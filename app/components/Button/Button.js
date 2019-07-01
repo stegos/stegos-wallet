@@ -18,16 +18,26 @@ export default class Button extends Component<Props> {
   };
 
   onKeyPress(e: KeyboardEvent) {
-    const { onClick } = this.props;
-    return e.key === 'Enter' && typeof onClick === 'function' && onClick();
+    const { onClick, disabled } = this.props;
+    return (
+      !disabled &&
+      e.key === 'Enter' &&
+      typeof onClick === 'function' &&
+      onClick()
+    );
+  }
+
+  onClick() {
+    const { onClick, disabled } = this.props;
+    return !disabled && typeof onClick === 'function' && onClick();
   }
 
   render() {
-    const { disabled, onClick, tabIndex, children } = this.props;
+    const { disabled, tabIndex, children } = this.props;
     return (
       <div
         className={`${styles.Container} ${disabled ? styles.Disabled : ''}`}
-        onClick={onClick}
+        onClick={this.onClick.bind(this)}
         onKeyPress={this.onKeyPress.bind(this)}
         role="button"
         tabIndex={tabIndex}

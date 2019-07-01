@@ -1,20 +1,27 @@
-import React, { Fragment, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import type { NodeStateType } from '../reducers/types';
+import Header from './Header/Header';
+import styles from './StatusBar.css';
 
 type Props = {
-  node: NodeStateType
+  node: NodeStateType,
+  containerClassName: string
 };
 
 class StatusBar extends PureComponent<Props> {
   render() {
-    const { node } = this.props;
+    const { node, containerClassName } = this.props;
     return (
-      <Fragment>
+      <Header
+        logoContainerClassName={styles.LogoContainerStyle}
+        title="Wallet"
+        containerClassName={containerClassName}
+      >
         <span>{node.isSynced ? 'Syncronized' : 'Unsynchronized'}</span>
         <button type="button">Setings</button>
         <button type="button">Lock</button>
-      </Fragment>
+      </Header>
     );
   }
 }
