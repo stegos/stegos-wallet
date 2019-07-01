@@ -13,6 +13,7 @@
   padding: 23px 120px 33px 120px;
   box-sizing: border-box;
   flex-grow: 1;
+  height: 100%;
 }
 
 .Title {

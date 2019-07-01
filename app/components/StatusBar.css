@@ -2,7 +2,28 @@
   background-color: #0f1017;
 }
 
+.ContentContainerStyle {
+  background: right / cover no-repeat
+    url('../../resources/img/HeaderBackground.png');
+}
+
 .Icon {
+  margin-right: 60px;
   font-size: 21px;
+  color: #bfc1c6;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+.SyncLabel {
+  background: #0f1017;
+  mix-blend-mode: normal;
+  opacity: 0.72;
+  border-radius: 21.5px;
+}
+.text {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 65px;
+  letter-spacing: 0.42px;
   color: #bfc1c6;
 }

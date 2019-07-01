@@ -1,51 +1,46 @@
 :root {
-  --menu-width: 100px;
-  --menu-border-right-width: 2px;
+  --menu-width: 406px;
 }
 
 .Menu {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: stretch;
   width: var(--menu-width);
-  height: 100vh;
-  border-right: solid black;
-  border-right-width: var(--menu-border-right-width);
   float: left;
 }
 
 .MenuItem {
-  padding: 10px;
-  position: relative;
-}
-
-.Menu > .MenuItem:last-child {
-  margin-top: auto;
-  margin-bottom: 10px;
-}
-
-.MenuItem figure {
-  text-align: center;
-  margin: 0;
-  color: black;
-}
-
-.MenuItem > a {
-  text-decoration: none;
-}
-
-.Notification {
-  position: absolute;
-  background-color: red;
-  width: 20px;
-  height: 24px;
-  border-radius: 19px;
-  right: 0;
-  top: 0;
-  text-align: center;
-  color: white;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 18px 18px 18px 160px;
+  font-style: normal;
+  font-weight: 500;
   font-size: 18px;
+  line-height: 49px;
+  letter-spacing: 0.54px;
+  color: #bfc1c6;
+}
+
+.MenuItem.Active {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 18px 18px 18px 160px;
+  font-style: normal;
   font-weight: bold;
-  padding: 6px 5px 0 5px;
-  margin: 3px;
+  font-size: 18px;
+  line-height: 49px;
+  letter-spacing: 0.54px;
+  color: #fff;
+}
+
+.MenuIcon {
+  width: 46px;
+  height: 46px;
+  margin-right: 18px;
 }

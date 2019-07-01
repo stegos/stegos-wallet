@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: 406px auto;
   grid-template-rows: 132px auto;
+  height: 100vh;
 }
 
 .StatusBar {

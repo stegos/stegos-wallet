@@ -15,12 +15,15 @@ class StatusBar extends PureComponent<Props> {
     return (
       <Header
         logoContainerClassName={styles.LogoContainerStyle}
+        contentContainerClassName={styles.ContentContainerStyle}
         title="Wallet"
         containerClassName={containerClassName}
       >
-        <span>{node.isSynced ? 'Syncronized' : 'Unsynchronized'}</span>
         <i className={`icon ion-md-settings ${styles.Icon}`} />
         <i className={`icon ion-md-lock ${styles.Icon}`} />
+        <div className="">
+          {node.isSynced ? 'Syncronized' : 'Unsynchronized'}
+        </div>
       </Header>
     );
   }
