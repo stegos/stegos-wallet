@@ -19,8 +19,8 @@ class StatusBar extends PureComponent<Props> {
         containerClassName={containerClassName}
       >
         <span>{node.isSynced ? 'Syncronized' : 'Unsynchronized'}</span>
-        <button type="button">Setings</button>
-        <button type="button">Lock</button>
+        <i className={`icon ion-md-settings ${styles.Icon}`} />
+        <i className={`icon ion-md-lock ${styles.Icon}`} />
       </Header>
     );
   }
