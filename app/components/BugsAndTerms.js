@@ -17,7 +17,8 @@ export default class BagsAndTerms extends Component<Props> {
   props: Props;
 
   state = {
-    isSentBugs: false
+    isSentBugs: false,
+    isTermsAccepted: false
   };
 
   onNext = () => {
@@ -26,10 +27,26 @@ export default class BagsAndTerms extends Component<Props> {
     setBugsAndTerms(isSentBugs);
   };
 
+  async onTermsAccepted(accepted: boolean) {
+    await this.setState({
+      isTermsAccepted: accepted
+    });
+  }
+
+  async onSendBugsChanged(send: boolean) {
+    await this.setState({
+      isSentBugs: send
+    });
+  }
+
   render() {
+    const { isSentBugs, isTermsAccepted } = this.state;
     return (
       <div className={styles.Wrapper}>
-        <Header>
+        <Header
+          logoContainerClassName={styles.HeaderContentWrapper}
+          contentContainerClassName={styles.HeaderContentWrapper}
+        >
           <div className={styles.backButton} data-tid="backButton">
             <Link to={routes.WELCOME}>
               <i className="fa fa-arrow-left fa-3x" />
@@ -66,13 +83,19 @@ export default class BagsAndTerms extends Component<Props> {
           </div>
           <div className={styles.Checkboxes}>
             <div className={styles.CheckboxWrapper}>
-              <Checkbox />
+              <Checkbox
+                value={isSentBugs}
+                onClick={this.onSendBugsChanged.bind(this)}
+              />
               <span className={styles.CheckboxLabel}>
                 Automatically send reports to help Stegos fix bugs
               </span>
             </div>
             <div className={styles.CheckboxWrapper}>
-              <Checkbox />
+              <Checkbox
+                value={isTermsAccepted}
+                onClick={this.onTermsAccepted.bind(this)}
+              />
               <span className={styles.CheckboxLabel}>
                 By continuing, you acknowledge that you have read and agree to
                 the Terms of Use and Privacy Policy.
@@ -83,7 +106,11 @@ export default class BagsAndTerms extends Component<Props> {
             <div style={{ flex: 1 }} />
             <div style={{ flex: 1 }} />
             <div className={styles.ButtonWrapper}>
-              <Button type="button" onClick={this.onNext}>
+              <Button
+                type="button"
+                onClick={this.onNext}
+                disabled={!isTermsAccepted}
+              >
                 <span>
                   Next
                   <i

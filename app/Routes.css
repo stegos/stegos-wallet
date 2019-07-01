@@ -1,0 +1,15 @@
+.Container {
+  display: grid;
+  grid-template-columns: 406px auto;
+  grid-template-rows: 132px auto;
+}
+
+.StatusBar {
+  grid-row: 1;
+  grid-column: 1 / 3;
+}
+
+.Menu {
+  grid-column: 1;
+  grid-row: 2;
+}
