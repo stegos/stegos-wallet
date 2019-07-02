@@ -2,11 +2,11 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import routes from '../constants/routes';
-import Button from './Button/Button';
-import Header from './Header/Header';
-import Input from './Input/Input';
+import Button from './common/Button/Button';
+import Header from './common/Header/Header';
+import Input from './common/Input/Input';
 import styles from './PasswordProtection.css';
-import Wizard from './Wizard/Wizard';
+import Wizard from './common/Wizard/Wizard';
 
 type Props = {
   setPassword: string => void

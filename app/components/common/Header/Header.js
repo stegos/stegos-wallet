@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import styles from './Header.css';
-import logo from '../../../resources/img/StegosLogoHorRGB.png';
+import logo from '../../../../resources/img/StegosLogoHorRGB.png';
 
 type Props = {
   containerClassName?: string,

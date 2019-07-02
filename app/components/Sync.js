@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import routes from '../constants/routes';
 import type { NodeStateType } from '../reducers/types';
-import Button from './Button/Button';
-import Header from './Header/Header';
-import ProgressBar from './ProgressBar/ProgressBar';
+import Button from './common/Button/Button';
+import Header from './common/Header/Header';
+import ProgressBar from './common/ProgressBar/ProgressBar';
 import styles from './Sync.css';
-import Wizard from './Wizard/Wizard';
+import Wizard from './common/Wizard/Wizard';
 
 type Props = {
   node: NodeStateType

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import type { AccountsStateType } from '../../reducers/types';
+import styles from './Accounts.css';
 
 type Props = {
   accounts: AccountsStateType,
@@ -15,6 +16,6 @@ export default class Account extends PureComponent<Props> {
   render() {
     const { accounts } = this.props;
     console.log(accounts);
-    return <div>Accounts</div>;
+    return <div className={styles.Accounts}>Accounts</div>;
   }
 }

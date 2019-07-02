@@ -5,8 +5,8 @@ import routes from '../constants/routes';
 import styles from './Welcome.css';
 import logo from '../../resources/img/StegosLogoVertRGB.png';
 import type { NodeStateType } from '../reducers/types';
-import Input from './Input/Input';
-import Button from './Button/Button';
+import Input from './common/Input/Input';
+import Button from './common/Button/Button';
 
 type Props = {
   node: NodeStateType,

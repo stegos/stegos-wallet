@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import type { NodeStateType } from '../reducers/types';
-import Header from './Header/Header';
+import Header from './common/Header/Header';
 import styles from './StatusBar.css';
 
 type Props = {
