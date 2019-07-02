@@ -5,9 +5,27 @@ const initialState = {
   accounts: [
     {
       id: 'default',
-      name: '',
+      name: 'Account #1',
+      key: '',
+      balance: 23.569562
+    },
+    {
+      id: 'default1',
+      name: 'Account #2',
+      key: '',
+      balance: 0.000000001
+    },
+    {
+      id: 'default2',
+      name: 'Account #3',
       key: '',
       balance: 0
+    },
+    {
+      id: 'default3',
+      name: 'Account #4',
+      key: '',
+      balance: 11.564
     }
   ],
   activeAccount: 'default'

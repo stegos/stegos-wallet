@@ -12,11 +12,15 @@
   font-style: normal;
   font-weight: bold;
   font-size: 16px;
-  line-height: 43px;
+  line-height: 41px;
   text-align: center;
   letter-spacing: 0.48px;
   color: #fff;
   cursor: pointer;
+}
+
+.Icon {
+  color: #fff;
 }
 
 .Container:focus {
@@ -30,7 +34,28 @@
   opacity: 0.53;
 }
 
+.Elevated {
+  box-shadow: 0 11px 11px rgba(0, 0, 0, 0.31698);
+}
+
 .Container:focus.Disabled {
   box-shadow: none;
   outline: none;
+}
+
+/* button types */
+.Container.OutlineDisabled {
+  border-color: #696e79;
+  opacity: 0.53;
+}
+
+.Container.FilledPrimary {
+  border-radius: 5px;
+  background-color: #ff6c00;
+  border-color: #ff6c00;
+}
+
+.Container.FilledSecondary {
+  background-color: #4e80f3;
+  border-color: #4e80f3;
 }

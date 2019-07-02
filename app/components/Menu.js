@@ -6,7 +6,6 @@ import portfolio from '../../resources/img/menu/Portfolio.svg';
 import accounts from '../../resources/img/menu/Accounts.svg';
 import send from '../../resources/img/menu/Send.svg';
 import receive from '../../resources/img/menu/Receive.svg';
-import node from '../../resources/img/menu/Node.svg';
 
 import style from './Menu.css';
 
@@ -41,11 +40,6 @@ const menuItems: MenuItem[] = [
     iconImage: receive,
     name: 'receive',
     link: routes.RECEIVE
-  },
-  {
-    iconImage: node,
-    name: 'node',
-    link: routes.NODE
   }
 ];
 
