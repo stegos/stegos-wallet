@@ -8,7 +8,8 @@
   justify-content: flex-start;
   align-items: stretch;
   width: var(--menu-width);
-  float: left;
+  background-color: #171a27;
+  overflow-y: auto;
 }
 
 .MenuItem {
@@ -16,6 +17,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
+  flex-shrink: 0;
   padding: 18px 18px 18px 160px;
   font-style: normal;
   font-weight: 500;
@@ -31,6 +33,7 @@
   align-items: center;
   justify-content: flex-start;
   padding: 18px 18px 18px 160px;
+  background-color: #1d2230;
   font-style: normal;
   font-weight: bold;
   font-size: 18px;

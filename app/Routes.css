@@ -14,3 +14,13 @@
   grid-column: 1;
   grid-row: 2;
 }
+
+.PageScrollWrapper {
+  padding: 30px 0 80px 0;
+  overflow-y: auto;
+}
+
+.Page {
+  width: 739px;
+  margin: 0 auto;
+}

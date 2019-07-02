@@ -21,8 +21,21 @@ class StatusBar extends PureComponent<Props> {
       >
         <i className={`icon ion-md-settings ${styles.Icon}`} />
         <i className={`icon ion-md-lock ${styles.Icon}`} />
-        <div className="">
-          {node.isSynced ? 'Syncronized' : 'Unsynchronized'}
+        <div className={styles.NetworkIndicator}>
+          {node.isSynced ? (
+            <i
+              className={`ionicon ion-md-checkmark ${styles.IndicatorIcon}`}
+              style={{ color: '#FF6C00' }}
+            />
+          ) : (
+            <i
+              className={`ionicon ion-md-close-circle ${styles.IndicatorIcon}`}
+              style={{ color: '#F00' }}
+            />
+          )}
+          <span className={styles.NetworkIndicatorText}>
+            {node.isSynced ? 'Syncronized' : 'Unsynchronized'}
+          </span>
         </div>
       </Header>
     );

@@ -41,3 +41,35 @@ a:hover {
   text-decoration: none;
   cursor: pointer;
 }
+
+/* Scroll bar styling */
+
+.ScrollBar::-webkit-scrollbar {
+  background-color: transparent;
+}
+
+.ScrollBar::-webkit-scrollbar-button {
+  /* default style */
+}
+
+.ScrollBar::-webkit-scrollbar-track {
+  /* default style */
+}
+
+.ScrollBar::-webkit-scrollbar-track-piece {
+  background: linear-gradient(180deg, #5b5d63, #5b5d63) no-repeat 50%;
+  background-size: 1px calc(100% - 15px);
+}
+
+.ScrollBar::-webkit-scrollbar-thumb {
+  border-radius: 7.5px;
+  background-color: #5a658e;
+}
+
+.ScrollBar::-webkit-scrollbar-corner {
+  /* default style */
+}
+
+.ScrollBar::-webkit-resizer {
+  /* default style */
+}
