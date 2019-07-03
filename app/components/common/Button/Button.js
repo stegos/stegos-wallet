@@ -17,7 +17,9 @@ type Props = {
   tabIndex?: number,
   icon?: IconName,
   elevated?: boolean,
-  type?: ButtonType
+  type?: ButtonType,
+  style?: any,
+  className?: string
 };
 
 export default class Button extends Component<Props> {
@@ -29,7 +31,9 @@ export default class Button extends Component<Props> {
     tabIndex: 0,
     icon: null,
     elevated: false,
-    type: 'OutlineDisabled'
+    type: 'OutlineDisabled',
+    style: null,
+    className: ''
   };
 
   onKeyPress(e: KeyboardEvent) {
@@ -48,7 +52,16 @@ export default class Button extends Component<Props> {
   }
 
   render() {
-    const { disabled, tabIndex, children, icon, elevated, type } = this.props;
+    const {
+      disabled,
+      tabIndex,
+      children,
+      icon,
+      elevated,
+      type,
+      style,
+      className
+    } = this.props;
     let buttonTypeClass = '';
     switch (type) {
       case 'OutlineDisabled':
@@ -71,7 +84,8 @@ export default class Button extends Component<Props> {
       styles.Button,
       buttonTypeClass,
       disabled ? styles.Disabled : undefined,
-      elevated ? styles.Elevated : undefined
+      elevated ? styles.Elevated : undefined,
+      className
     ];
 
     return (
@@ -81,6 +95,7 @@ export default class Button extends Component<Props> {
         onKeyPress={this.onKeyPress.bind(this)}
         role="button"
         tabIndex={tabIndex}
+        style={style}
       >
         {icon && (
           <div style={{ marginRight: 'auto' }}>

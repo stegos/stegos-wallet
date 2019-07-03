@@ -2,9 +2,41 @@
 import React, { PureComponent } from 'react';
 import Button from '../../common/Button/Button';
 import Icon from '../../common/Icon/Icon';
-import styles from './Account.css';
+import TransactionsList from './TransactionsList/TransactionsList';
 
+import styles from './Account.css';
 import Stg from '../../../../resources/img/Stg.svg';
+
+const txList = [
+  {
+    id: '1',
+    type: 'Send',
+    date: 'May 30, 2019',
+    time: '11:28',
+    amount: -100
+  },
+  {
+    id: '2',
+    type: 'Send',
+    date: 'May 30, 2019',
+    time: '11:28',
+    amount: 120
+  },
+  {
+    id: '3',
+    type: 'Send',
+    date: 'May 30, 2019',
+    time: '11:28',
+    amount: 250
+  },
+  {
+    id: '4',
+    type: 'Send',
+    date: 'May 30, 2019',
+    time: '11:28',
+    amount: -30
+  }
+];
 
 type Location = {
   pathname: string,
@@ -17,7 +49,8 @@ type Props = {
 
 export default class Account extends PureComponent<Props> {
   state = {
-    trendingUp: true
+    trendingUp: true,
+    transactions: txList
   };
 
   componentDidMount() {}
@@ -30,19 +63,27 @@ export default class Account extends PureComponent<Props> {
   }
 
   render() {
-    const { trendingUp } = this.state;
+    const { trendingUp, transactions } = this.state;
     const { location } = this.props;
-    console.log(location);
     if (!location.state || !location.state.account) {
       return <div>Ooops! Something went wrong!</div>;
     }
     const { account } = location.state;
+    console.log(account);
     return (
       <div className={styles.Account}>
         <div className={styles.Header}>
           <span className={styles.Title}>{account.name}</span>
           <Button type="Invisible" icon="ion-md-options">
             Account settings
+          </Button>
+        </div>
+        <div className={styles.Actions}>
+          <Button type="FilledSecondary" icon="ion-md-arrow-up" elevated>
+            Send tokens
+          </Button>
+          <Button type="FilledPrimary" icon="ion-md-arrow-down" elevated>
+            Receive tokens
           </Button>
         </div>
         <div className={styles.AccountDetailsContainer}>
@@ -56,7 +97,20 @@ export default class Account extends PureComponent<Props> {
           </div>
           <div className={styles.BalanceContainer}>
             <img src={Stg} alt="STG" className={styles.StgLogo} />
-            <div className={styles.NoTransactions}>No Stegos tokens yet?</div>
+            {!!transactions.length && (
+              <div className={styles.BalanceAmount}>
+                <div>
+                  <span className={styles.BalanceValue}>
+                    {account.balance.toFixed(4)}
+                  </span>
+                  <span className={styles.BalanceCurrency}> STG</span>
+                </div>
+                <div className={styles.BalanceUsd}>$ 132.123.100</div>
+              </div>
+            )}
+            {!transactions.length && (
+              <div className={styles.NoTransactions}>No Stegos tokens yet?</div>
+            )}
           </div>
           <button
             className={styles.ButtonSwitchTrending}
@@ -69,6 +123,41 @@ export default class Account extends PureComponent<Props> {
             />
           </button>
         </div>
+        {!!transactions.length && (
+          <TransactionsList transactions={transactions} />
+        )}
+        {!transactions.length && (
+          <div className={styles.BottomActions}>
+            <div className={styles.BottomActionContainer}>
+              <span className={styles.BottomActionDescription}>
+                {
+                  "Click 'Receive' button below to get your account address to start receiving tokens."
+                }
+              </span>
+              <Button
+                type="OutlineDisabled"
+                icon="ion-md-archive"
+                className={styles.BottomActionButton}
+              >
+                Receive account address
+              </Button>
+            </div>
+            <div className={styles.BottomActionContainer}>
+              <span className={styles.BottomActionDescription}>
+                {
+                  "Click 'Restore from recovery phrase' button to restore your existing account."
+                }
+              </span>
+              <Button
+                type="OutlineDisabled"
+                icon="ion-md-undo"
+                className={styles.BottomActionButton}
+              >
+                Restore from recovery phrase
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
