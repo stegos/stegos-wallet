@@ -1,25 +1,34 @@
+// @flow
 import React, { PureComponent } from 'react';
-import type { AccountsStateType } from '../../reducers/types';
-import Button from '../common/Button/Button';
-import Icon from '../common/Icon/Icon';
+import type { AccountsStateType } from '../../../reducers/types';
+import Button from '../../common/Button/Button';
+import Icon from '../../common/Icon/Icon';
 import AccountItem from './AccountItem/AccountItem';
-import styles from './Accounts.css';
+import styles from './AccountsList.css';
 
 type Props = {
   accounts: AccountsStateType,
   getKeys: () => void
 };
 
-export default class Account extends PureComponent<Props> {
+// type SortKey = 'balance' | 'name';
+
+// type SortDirection = 'asc' | 'desc';
+
+export default class AccountsList extends PureComponent<Props> {
   componentDidMount(): void {
     const { getKeys } = this.props;
     getKeys();
   }
 
+  // renderSortedAccounts(sortKey: SortKey, sortDirection: SortDirection) {
+  //
+  // }
+
   render() {
     const { accounts } = this.props;
     return (
-      <div className={styles.Accounts}>
+      <div className={styles.AccountsList}>
         <div className={styles.SearchBar}>
           <div className={styles.SearchFiledWrapper}>
             <input className={styles.SearchInput} placeholder="Search" />
@@ -31,7 +40,7 @@ export default class Account extends PureComponent<Props> {
         </div>
         <div className={styles.Header}>
           <span className={styles.Title}>Accounts</span>
-          <div>
+          <div className={styles.SortSelectorContainer}>
             <span
               className={`${styles.SortSelectorText} ${
                 styles.SortSelectorLabel
@@ -48,7 +57,7 @@ export default class Account extends PureComponent<Props> {
             </select>
           </div>
         </div>
-        <div className={styles.AccountsList}>
+        <div className={styles.Accounts}>
           {accounts.accounts.map(account => (
             <AccountItem account={account} key={account.id} />
           ))}

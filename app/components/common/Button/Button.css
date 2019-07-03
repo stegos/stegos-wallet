@@ -1,4 +1,4 @@
-.Container {
+.Button {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -17,14 +17,18 @@
   letter-spacing: 0.48px;
   color: #fff;
   cursor: pointer;
+  user-select: none;
+}
+
+.Button * {
+  user-select: none;
 }
 
 .Icon {
   color: #fff;
 }
 
-.Container:focus {
-  box-shadow: 0 0 1px #ff6c00;
+.Button:focus {
   outline: none;
 }
 
@@ -36,26 +40,58 @@
 
 .Elevated {
   box-shadow: 0 11px 11px rgba(0, 0, 0, 0.31698);
+  transition-duration: 0.3s;
+  transition-property: box-shadow;
 }
 
-.Container:focus.Disabled {
+.Elevated:active {
+  box-shadow: 0 5px 11px rgba(0, 0, 0, 0.31698);
+}
+
+.Button:focus.Disabled {
   box-shadow: none;
   outline: none;
 }
 
 /* button types */
-.Container.OutlineDisabled {
+.Button.OutlineDisabled {
   border-color: #696e79;
   opacity: 0.53;
 }
 
-.Container.FilledPrimary {
+.Button.OutlineDisabled .Icon {
+  color: #dc6006;
+}
+
+.Button.FilledPrimary {
   border-radius: 5px;
   background-color: #ff6c00;
   border-color: #ff6c00;
 }
 
-.Container.FilledSecondary {
+.Button.FilledPrimary:hover {
+  background-color: #6ba94c;
+  border-color: #6ba94c;
+}
+
+.Button.FilledSecondary {
   background-color: #4e80f3;
   border-color: #4e80f3;
+}
+
+.Button.FilledSecondary:hover {
+  background-color: #6ba94c;
+  border-color: #6ba94c;
+}
+
+.Button.Invisible {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: 0.39px;
+  color: #fff;
 }

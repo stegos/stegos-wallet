@@ -1,10 +1,13 @@
 import React, { PureComponent } from 'react';
+import { Link } from 'react-router-dom';
 
+import routes from '../../../../constants/routes';
 import styles from './AccountItem.css';
-import Stg from '../../../../resources/img/Stg.svg';
+import Stg from '../../../../../resources/img/Stg.svg';
+import { Account as AccountType } from '../../../../reducers/types';
 
 type Props = {
-  account: Account
+  account: AccountType
 };
 
 export default class Account extends PureComponent<Props> {
@@ -12,7 +15,13 @@ export default class Account extends PureComponent<Props> {
     const { account } = this.props;
 
     return (
-      <div className={styles.AccountItem}>
+      <Link
+        className={styles.AccountItem}
+        to={{
+          pathname: routes.ACCOUNT,
+          state: { account }
+        }}
+      >
         <div className={styles.NameContainer}>
           <span className={styles.Name}>{account.name}</span>
         </div>
@@ -22,7 +31,7 @@ export default class Account extends PureComponent<Props> {
             {account.balance.toFixed(4)} STG
           </span>
         </div>
-      </div>
+      </Link>
     );
   }
 }

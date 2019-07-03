@@ -17,7 +17,8 @@ type Props = {
 type MenuItem = {
   iconImage?: string,
   name: string,
-  link?: string
+  link?: string,
+  aliases?: string[]
 };
 
 const menuItems: MenuItem[] = [
@@ -29,7 +30,8 @@ const menuItems: MenuItem[] = [
   {
     iconImage: accounts,
     name: 'accounts',
-    link: routes.ACCOUNTS
+    link: routes.ACCOUNTS,
+    aliases: [routes.ACCOUNT]
   },
   {
     iconImage: send,
@@ -48,19 +50,25 @@ class Menu extends Component<Props> {
     className: ''
   };
 
-  componentDidUpdate(): void {
+  matchAliases(menuItem: MenuItem): boolean {
     const { location } = this.props;
-    console.log(location);
+    const { pathname } = location || '';
+    return (
+      menuItem.link === pathname ||
+      (Array.isArray(menuItem.aliases) &&
+        menuItem.aliases.includes(pathname)) ||
+      false
+    );
   }
 
   render() {
-    const { location, className } = this.props;
-    const { pathname } = location || '';
+    const { className } = this.props;
     const menu = menuItems.map(item => (
       <Link
         to={item.link}
-        className={`${style.MenuItem} ${pathname === item.link &&
-          style.Active}`}
+        className={`${style.MenuItem} ${
+          this.matchAliases(item) ? style.Active : ''
+        }`}
         key={item.link}
       >
         <img src={item.iconImage} className={style.MenuIcon} alt={item.name} />

@@ -1,0 +1,132 @@
+.Account {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.Header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Title {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 28px;
+  line-height: 65px;
+  letter-spacing: 0.84px;
+  color: #fff;
+}
+
+.AccountSettings {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.AccountDetailsContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin-top: 70px;
+  padding: 23px 28px 35px 52px;
+  border-radius: 5px;
+  background: linear-gradient(2.78deg, #252c46 -46.39%, #383f59 180.75%);
+  box-shadow: 2px 12px 17px rgba(0, 0, 0, 0.120384);
+}
+
+.AccountDetailsHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.DetailsHeaderText {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0.36px;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.Chip {
+  display: inline-block;
+  margin-right: 9px;
+  padding: 5px 17px;
+  background: rgba(20, 22, 27, 0.25);
+  border-radius: 13.5px;
+  text-align: center;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0.36px;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+}
+
+.Chip.Active {
+  background-color: #14161b;
+  color: #ff6c00;
+}
+
+.BalanceContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-top: 32px;
+}
+
+.StgLogo {
+  width: 71px;
+  height: 71px;
+  margin-right: 80px;
+  object-fit: contain;
+}
+
+.NoTransactions {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 32px;
+  line-height: 65px;
+  letter-spacing: 0.96px;
+  color: #fff;
+  transform: translate(-50%, -50%);
+}
+
+.ButtonSwitchTrending {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  width: 70px;
+  height: 70px;
+  border: none;
+  border-radius: 50%;
+  background-color: #3e4972;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transform: translateY(calc(35px + 50%));
+  transition-duration: 0.1s;
+  transition-property: background-color, color;
+}
+
+.ButtonSwitchTrending:hover {
+  background-color: #4e5d93;
+  color: #ff6c00;
+}
+
+.ButtonSwitchTrending:focus {
+  outline: none;
+}

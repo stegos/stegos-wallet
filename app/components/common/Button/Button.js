@@ -8,7 +8,8 @@ export type ButtonType =
   | 'OutlineDisabled'
   | 'OutlinePrimary'
   | 'FilledPrimary'
-  | 'FilledSecondary';
+  | 'FilledSecondary'
+  | 'Invisible';
 
 type Props = {
   disabled?: boolean,
@@ -59,12 +60,15 @@ export default class Button extends Component<Props> {
       case 'FilledSecondary':
         buttonTypeClass = styles.FilledSecondary;
         break;
+      case 'Invisible':
+        buttonTypeClass = styles.Invisible;
+        break;
       default:
         buttonTypeClass = '';
     }
 
     const classes = [
-      styles.Container,
+      styles.Button,
       buttonTypeClass,
       disabled ? styles.Disabled : undefined,
       elevated ? styles.Elevated : undefined

@@ -10,6 +10,7 @@
   width: var(--menu-width);
   background-color: #171a27;
   overflow-y: auto;
+  user-select: none;
 }
 
 .MenuItem {
@@ -46,4 +47,9 @@
   width: 46px;
   height: 46px;
   margin-right: 18px;
+  filter: grayscale(100%) brightness(1000%);
+}
+
+.MenuItem.Active .MenuIcon {
+  filter: none;
 }

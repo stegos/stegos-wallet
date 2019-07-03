@@ -1,4 +1,4 @@
-.Accounts {
+.AccountsList {
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -63,6 +63,10 @@
   color: #fff;
 }
 
+.SortSelectorContainer {
+  margin-right: 30px;
+}
+
 .SortSelectorText {
   font-style: normal;
   font-weight: normal;
@@ -81,7 +85,7 @@
   border: none;
 }
 
-.AccountsList {
+.Accounts {
   display: grid;
   grid-template-columns: 1fr;
   grid-auto-rows: max-content;

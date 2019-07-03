@@ -9,8 +9,6 @@
 
 .Icon {
   margin-right: 60px;
-  font-size: 21px;
-  color: #bfc1c6;
   text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
@@ -29,6 +27,7 @@
 }
 
 .IndicatorIcon {
+  display: inline-block !important;
   margin-right: 10px;
 }
 
