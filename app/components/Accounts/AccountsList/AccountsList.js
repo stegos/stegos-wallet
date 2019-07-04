@@ -11,19 +11,11 @@ type Props = {
   getKeys: () => void
 };
 
-// type SortKey = 'balance' | 'name';
-
-// type SortDirection = 'asc' | 'desc';
-
 export default class AccountsList extends PureComponent<Props> {
   componentDidMount(): void {
     const { getKeys } = this.props;
     getKeys();
   }
-
-  // renderSortedAccounts(sortKey: SortKey, sortDirection: SortDirection) {
-  //
-  // }
 
   render() {
     const { accounts } = this.props;

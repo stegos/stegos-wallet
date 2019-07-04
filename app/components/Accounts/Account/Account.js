@@ -1,9 +1,12 @@
 // @flow
 import React, { PureComponent } from 'react';
+import { Link } from 'react-router-dom';
+import Alert from '../../Alert/Alert';
 import Button from '../../common/Button/Button';
 import Icon from '../../common/Icon/Icon';
 import TransactionsList from './TransactionsList/TransactionsList';
 
+import routes from '../../../constants/routes';
 import styles from './Account.css';
 import Stg from '../../../../resources/img/Stg.svg';
 
@@ -53,7 +56,18 @@ export default class Account extends PureComponent<Props> {
     transactions: txList
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    const { location } = this.props;
+    if (!location.state || !location.state.account) {
+      this.alertRef.current.show({
+        title: 'Oooops!',
+        body: 'Something went wrong. please try again later.',
+        onClose: () => console.log('ON CLOSE!!!')
+      });
+    }
+  }
+
+  alertRef = React.createRef();
 
   switchTranding() {
     const { trendingUp } = this.state;
@@ -66,10 +80,14 @@ export default class Account extends PureComponent<Props> {
     const { trendingUp, transactions } = this.state;
     const { location } = this.props;
     if (!location.state || !location.state.account) {
-      return <div>Ooops! Something went wrong!</div>;
+      return (
+        <div>
+          <div>Ooops! Something went wrong!</div>
+          <Alert ref={this.alertRef} />
+        </div>
+      );
     }
     const { account } = location.state;
-    console.log(account);
     return (
       <div className={styles.Account}>
         <div className={styles.Header}>
@@ -80,10 +98,24 @@ export default class Account extends PureComponent<Props> {
         </div>
         <div className={styles.Actions}>
           <Button type="FilledSecondary" icon="ion-md-arrow-up" elevated>
-            Send tokens
+            <Link
+              to={{
+                pathname: routes.SEND,
+                state: { account }
+              }}
+            >
+              Send tokens
+            </Link>
           </Button>
           <Button type="FilledPrimary" icon="ion-md-arrow-down" elevated>
-            Receive tokens
+            <Link
+              to={{
+                pathname: routes.RECEIVE,
+                state: { account }
+              }}
+            >
+              Receive tokens
+            </Link>
           </Button>
         </div>
         <div className={styles.AccountDetailsContainer}>

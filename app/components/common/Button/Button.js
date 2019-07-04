@@ -16,6 +16,7 @@ type Props = {
   onClick?: MouseEvent => void,
   tabIndex?: number,
   icon?: IconName,
+  iconRight?: IconName,
   elevated?: boolean,
   type?: ButtonType,
   style?: any,
@@ -30,6 +31,7 @@ export default class Button extends Component<Props> {
     onClick: undefined,
     tabIndex: 0,
     icon: null,
+    iconRight: null,
     elevated: false,
     type: 'OutlineDisabled',
     style: null,
@@ -51,12 +53,41 @@ export default class Button extends Component<Props> {
     return !disabled && typeof onClick === 'function' && onClick();
   }
 
+  renderIconLeft() {
+    const { icon } = this.props;
+    return (
+      <div style={{ marginRight: 'auto' }}>
+        <Icon
+          name={icon}
+          size={25}
+          style={{ marginRight: '20px' }}
+          className={styles.Icon}
+        />
+      </div>
+    );
+  }
+
+  renderIconRight() {
+    const { iconRight } = this.props;
+    return (
+      <div style={{ marginLeft: 'auto' }}>
+        <Icon
+          name={iconRight}
+          size={25}
+          style={{ marginLeft: '20px' }}
+          className={styles.Icon}
+        />
+      </div>
+    );
+  }
+
   render() {
     const {
       disabled,
       tabIndex,
       children,
       icon,
+      iconRight,
       elevated,
       type,
       style,
@@ -97,17 +128,9 @@ export default class Button extends Component<Props> {
         tabIndex={tabIndex}
         style={style}
       >
-        {icon && (
-          <div style={{ marginRight: 'auto' }}>
-            <Icon
-              name={icon}
-              size={25}
-              style={{ marginRight: '20px' }}
-              className={styles.Icon}
-            />
-          </div>
-        )}
+        {icon && this.renderIconLeft()}
         {children}
+        {iconRight && this.renderIconRight()}
       </div>
     );
   }

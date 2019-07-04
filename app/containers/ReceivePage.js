@@ -1,11 +1,4 @@
-import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import AccountsList from '../components/Receive/Receive';
 
-type Props = {};
-
-export default class ReceivePage extends Component<Props> {
-  props: Props;
-
-  render() {
-    return <div>Receive</div>;
-  }
-}
+export default connect()(AccountsList);
