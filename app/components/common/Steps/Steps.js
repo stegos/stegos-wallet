@@ -19,6 +19,7 @@ export default class Steps extends Component<Props> {
     return steps.map((step, index) => (
       <div
         className={`${styles.Step} ${activeStep >= index ? styles.Active : ''}`}
+        key={step}
       >
         <div className={styles.Label}>{step}</div>
       </div>
