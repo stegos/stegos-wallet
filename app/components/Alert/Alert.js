@@ -35,7 +35,6 @@ export default class Alert extends Component<Props> {
   }
 
   hide() {
-    console.log('HIDE MODAL!!!');
     const { onClose } = this.state;
     if (typeof onClose === 'function') {
       onClose();

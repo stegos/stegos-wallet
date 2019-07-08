@@ -166,3 +166,63 @@
 .ActionsContainer > * {
   margin-left: 26px;
 }
+
+.ModalBody {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 384px;
+}
+
+.LostPassword {
+  margin-top: 35px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 22px;
+  text-align: center;
+  letter-spacing: 0.89px;
+  color: #fff;
+}
+
+.ActionsContainerModal {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.ActionsContainerModal > div {
+  margin: 0 15px;
+}
+
+.TransactionSentContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 32px 102px 84px 102px;
+  background-color: #1e2338;
+}
+
+.TransactionSentTitle {
+  margin-bottom: 28px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 29px;
+  line-height: 22px;
+  text-align: center;
+  letter-spacing: 0.87px;
+  text-transform: uppercase;
+  color: #ff6c00;
+}
+
+.TransactionSentText {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+  letter-spacing: 0.48px;
+  color: #fff;
+}
