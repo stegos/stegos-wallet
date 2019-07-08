@@ -2,12 +2,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import routes from '../constants/routes';
-import Button from './Button/Button';
-import Checkbox from './Checkbox/Checkbox';
-import Header from './Header/Header';
+import Button from './common/Button/Button';
+import Checkbox from './common/Checkbox/Checkbox';
+import Header from './common/Header/Header';
 import styles from './BugsAndTerms.css';
-import ProgressBar from './ProgressBar/ProgressBar';
-import Wizard from './Wizard/Wizard';
+import ProgressBar from './common/ProgressBar/ProgressBar';
+import Wizard from './common/Wizard/Wizard';
 
 type Props = {
   setBugsAndTerms: boolean => void

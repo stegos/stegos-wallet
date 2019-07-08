@@ -16,7 +16,7 @@ import log from 'electron-log';
 import { spawn } from 'child_process';
 import path from 'path';
 import fs from 'fs';
-import MenuBuilder from './menu';
+// import MenuBuilder from './menu';
 import { TOKEN_RECEIVED } from './actions/node';
 
 export default class AppUpdater {
@@ -76,7 +76,9 @@ app.on('ready', async () => {
   mainWindow = new BrowserWindow({
     show: false,
     width: 1440,
-    height: 877
+    height: 877,
+    minWidth: 1280,
+    minHeight: 320
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
@@ -99,8 +101,12 @@ app.on('ready', async () => {
     mainWindow = null;
   });
 
-  const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
+  // Disable default electron menu bar
+  // const menuBuilder = new MenuBuilder(mainWindow);
+  // menuBuilder.buildMenu();
+
+  // No menu bar specified in design, remove unused menu builder file app/menu.js?
+  mainWindow.setMenu(null);
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line

@@ -1,3 +1,41 @@
 .LogoContainerStyle {
   background-color: #0f1017;
 }
+
+.ContentContainerStyle {
+  background: right / cover no-repeat
+    url('../../resources/img/HeaderBackground.png');
+}
+
+.Icon {
+  margin-right: 60px;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.NetworkIndicator {
+  padding: 12px 15px;
+  border-radius: 21.5px;
+  background-color: rgba(15, 16, 23, 0.72);
+  user-select: none;
+}
+
+.NetworkIndicatorText {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  letter-spacing: 0.42px;
+}
+
+.IndicatorIcon {
+  display: inline-block !important;
+  margin-right: 10px;
+}
+
+.text {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 65px;
+  letter-spacing: 0.42px;
+  color: #bfc1c6;
+}

@@ -5,6 +5,7 @@
   "BAGS_AND_TERMS": "/bagsAndTerms",
   "PORTFOLIO": "/portfolio",
   "ACCOUNTS": "/",
+  "ACCOUNT": "/account",
   "SEND": "/send",
   "RECEIVE": "/receive",
   "NODE": "/node"
