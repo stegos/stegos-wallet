@@ -1,0 +1,44 @@
+.Container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 587px;
+}
+
+.InputStyle {
+  display: flex;
+}
+
+.InputStyle > input {
+  width: 100%;
+}
+
+.WarnContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-top: 70px;
+  margin-bottom: 60px;
+}
+
+.WarnText {
+  margin-left: 77px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 26px;
+  letter-spacing: 0.48px;
+  color: #ff6c00;
+}
+
+.WarnIcon {
+  transform: scaleY(-1);
+}
+
+.ActionsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 105px;
+}

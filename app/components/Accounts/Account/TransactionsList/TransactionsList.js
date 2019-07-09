@@ -1,6 +1,7 @@
 // @flow
 import React, { PureComponent } from 'react';
 import Icon from '../../../common/Icon/Icon';
+import PaymentCertificate from '../../../PaymentCertificate/PaymentCertificate';
 import styles from './TransactionsList.css';
 
 type Props = {
@@ -8,6 +9,12 @@ type Props = {
 };
 
 export default class TransactionsList extends PureComponent<Props> {
+  paymentCertificateRef = React.createRef();
+
+  showCertificate(tx) {
+    this.paymentCertificateRef.current.show(tx);
+  }
+
   renderTransactions() {
     const { transactions } = this.props;
     if (!transactions || transactions.length === 0) {
@@ -38,7 +45,13 @@ export default class TransactionsList extends PureComponent<Props> {
               <span className={styles.TransactionText}>{item.time}</span>
             </div>
           </div>
-          <div className={styles.TransactionCertificate}>
+          <div
+            className={styles.TransactionCertificate}
+            onClick={() => this.showCertificate(item)}
+            role="button"
+            tabIndex="-1"
+            onKeyPress={() => false}
+          >
             <Icon
               name="ion-md-stats"
               color="rgba(0, 0, 0, 0.7)"
@@ -69,6 +82,7 @@ export default class TransactionsList extends PureComponent<Props> {
       <div className={styles.TransactionsList}>
         <span className={styles.Title}>Last operations</span>
         {this.renderTransactions()}
+        <PaymentCertificate ref={this.paymentCertificateRef} />
       </div>
     );
   }
