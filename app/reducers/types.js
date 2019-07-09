@@ -1,14 +1,13 @@
 import type { Dispatch as ReduxDispatch, Store as ReduxStore } from 'redux';
 
 export type SettingsStateType = {
-  isPasswordSet: boolean,
+  isPasswordSet: boolean | null,
   password: string,
   isSendBugReport: boolean,
   isTermsAccepted: boolean
 };
 
 export type NodeStateType = {
-  hasKey: boolean | null,
   isStarted: boolean,
   isConnected: boolean,
   isSynced: boolean,

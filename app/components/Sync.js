@@ -10,11 +10,17 @@ import styles from './Sync.css';
 import Wizard from './common/Wizard/Wizard';
 
 type Props = {
-  node: NodeStateType
+  node: NodeStateType,
+  runNode: () => void
 };
 
 export default class Sync extends Component<Props> {
   props: Props;
+
+  componentDidMount(): void {
+    const { runNode } = this.props;
+    runNode();
+  }
 
   render() {
     const { node } = this.props;
