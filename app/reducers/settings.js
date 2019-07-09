@@ -9,7 +9,7 @@ const initialState = {
   isPasswordSet: false,
   password: null,
   isSendBugReport: false,
-  isTermsAccepted: true
+  isTermsAccepted: false
 };
 
 export default function settings(
