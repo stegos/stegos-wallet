@@ -2,33 +2,8 @@ import type { AccountsStateType, Action } from './types';
 import { WS_MESSAGE } from '../ws/actionsTypes';
 
 const initialState = {
-  accounts: [
-    {
-      id: 'default',
-      name: 'Account #1',
-      key: '',
-      balance: 23.569562
-    },
-    {
-      id: 'default1',
-      name: 'Account #2',
-      key: '',
-      balance: 0.000000001
-    },
-    {
-      id: 'default2',
-      name: 'Account #3',
-      key: '',
-      balance: 0
-    },
-    {
-      id: 'default3',
-      name: 'Account #4',
-      key: '',
-      balance: 11.564
-    }
-  ],
-  activeAccount: 'default'
+  accounts: new Map(),
+  activeAccount: null
 };
 
 export default function accounts(
@@ -51,6 +26,17 @@ const handleMessage = (state: AccountsStateType, payload) => {
   console.log(JSON.stringify(payload));
   const { response } = payload;
   switch (response) {
+    case 'wallets_info':
+      return {
+        ...state,
+        accounts: payload.wallets.reduce((map, w) => {
+          map.set(
+            w,
+            state.accounts[w] || { name: `Account #${w}`, balance: 0 }
+          );
+          return map;
+        }, new Map())
+      };
     case 'keys_info':
       return {
         ...state,

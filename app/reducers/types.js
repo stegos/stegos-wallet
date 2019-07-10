@@ -18,12 +18,11 @@ export type NodeStateType = {
 };
 
 export type AccountsStateType = {
-  accounts: Account[],
+  accounts: Map<string, Account>,
   activeAccount: string | null
 };
 
 export type Account = {
-  id: string,
   name: string,
   key: string,
   balance: string

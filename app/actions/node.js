@@ -1,4 +1,3 @@
-import { push } from 'connected-react-router';
 import { send } from 'redux-electron-ipc';
 import type { Dispatch } from '../reducers/types';
 import { connect } from '../ws/actions';
@@ -15,9 +14,8 @@ export const runNode = () => (dispatch: Dispatch) => {
 };
 
 export const connectToRunningNode = token => (dispatch: Dispatch) => {
-  dispatch({ type: NODE_RUNNING });
-  dispatch(push('/sync'));
   dispatch({ type: TOKEN_RECEIVED, payload: { token } });
+  dispatch({ type: NODE_RUNNING });
   dispatch(connect(WS_ENDPOINT));
 };
 

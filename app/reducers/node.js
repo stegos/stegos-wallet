@@ -49,8 +49,6 @@ export default function node(
 }
 
 const handleMessage = (state: NodeStateType, payload) => {
-  console.log('HANDLE MSG');
-  console.log(JSON.stringify(payload));
   const { notification } = payload;
   switch (notification) {
     case 'sync_changed':

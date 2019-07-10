@@ -23,12 +23,12 @@ export default class Account extends PureComponent<Props> {
         }}
       >
         <div className={styles.NameContainer}>
-          <span className={styles.Name}>{account.name}</span>
+          <span className={styles.Name}>{account.name || ''}</span>
         </div>
         <div className={styles.BalanceContainer}>
           <img src={Stg} alt="STG" className={styles.StgIcon} />
           <span className={styles.Balance}>
-            {account.balance.toFixed(4)} STG
+            {(account.balance || 0).toFixed(4)} STG
           </span>
         </div>
       </Link>

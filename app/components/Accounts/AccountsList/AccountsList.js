@@ -8,17 +8,20 @@ import styles from './AccountsList.css';
 
 type Props = {
   accounts: AccountsStateType,
-  getKeys: () => void
+  getAccounts: () => void
 };
 
 export default class AccountsList extends PureComponent<Props> {
   componentDidMount(): void {
-    const { getKeys } = this.props;
-    getKeys();
+    const { getAccounts } = this.props;
+    getAccounts();
   }
 
   render() {
-    const { accounts } = this.props;
+    const {
+      accounts: { accounts }
+    } = this.props;
+    const keys = Array.from(accounts.keys());
     return (
       <div className={styles.AccountsList}>
         <div className={styles.SearchBar}>
@@ -50,8 +53,8 @@ export default class AccountsList extends PureComponent<Props> {
           </div>
         </div>
         <div className={styles.Accounts}>
-          {accounts.accounts.map(account => (
-            <AccountItem account={account} key={account.id} />
+          {keys.map(key => (
+            <AccountItem account={accounts.get(key)} key={key} />
           ))}
         </div>
       </div>
