@@ -39,28 +39,25 @@ class StatusBar extends PureComponent<Props> {
           role="button"
         >
           <Icon
-            name="ion-md-settings"
+            name="settings"
             color="#bfc1c6"
             size="24"
             className={styles.Icon}
           />
         </div>
-        <Icon
-          name="ion-md-lock"
-          color="#bfc1c6"
-          size="24"
-          className={styles.Icon}
-        />
+        <Icon name="lock" color="#bfc1c6" size="24" className={styles.Icon} />
         <div className={styles.NetworkIndicator}>
           {node.isSynced ? (
             <Icon
-              name="ion-md-checkmark"
+              name="done"
+              size={20}
               className={styles.IndicatorIcon}
               color="#FF6C00"
             />
           ) : (
             <Icon
-              name="ion-md-close-circle"
+              name="cancel"
+              size={20}
               className={styles.IndicatorIcon}
               color="#F00"
             />

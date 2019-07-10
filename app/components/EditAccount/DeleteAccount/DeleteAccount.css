@@ -31,10 +31,6 @@
   color: #ff6c00;
 }
 
-.WarnIcon {
-  transform: scaleY(-1);
-}
-
 .ActionsContainer {
   display: flex;
   flex-direction: row;

@@ -7,7 +7,9 @@ type Props = {
   size?: number,
   color?: string,
   className?: string,
-  style?: any
+  style?: any,
+  mirrorVert?: boolean,
+  mirrorHor?: boolean
 };
 
 export default class Icon extends Component<Props> {
@@ -17,23 +19,38 @@ export default class Icon extends Component<Props> {
     size: 'inherit',
     color: 'inherit',
     className: '',
-    style: null
+    style: null,
+    mirrorVert: false,
+    mirrorHor: false
   };
 
   render() {
-    const { name, size, color, className, style } = this.props;
+    const {
+      name,
+      size,
+      color,
+      className,
+      style,
+      mirrorVert,
+      mirrorHor
+    } = this.props;
     const pxSize = `${size.toString()}px`;
     return (
       <i
-        className={`ionicon ${name} ${className}`}
+        className={`material-icons ${className}`}
         style={{
           display: 'block',
           lineHeight: pxSize,
           fontSize: pxSize,
           color,
+          transform: `scale(${mirrorHor ? '-1' : '1'}, ${
+            mirrorVert ? '-1' : '1'
+          })`,
           ...style
         }}
-      />
+      >
+        {name}
+      </i>
     );
   }
 }

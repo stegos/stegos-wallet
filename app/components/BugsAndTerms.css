@@ -64,9 +64,8 @@
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  justify-content: space-around;
-  padding-right: 10%;
-  padding-left: 30%;
+  justify-content: flex-end;
+  margin-right: 120px;
 }
 
 .NextButtonIcon {

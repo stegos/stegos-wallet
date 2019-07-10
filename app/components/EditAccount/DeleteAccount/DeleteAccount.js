@@ -30,12 +30,7 @@ export default class DeleteAccount extends Component<Props> {
     return (
       <div className={styles.Container}>
         <div className={styles.WarnContainer}>
-          <Icon
-            name="ion-md-information-circle"
-            color="#FF6C00"
-            className={styles.WarnIcon}
-            size="30"
-          />
+          <Icon name="error" color="#FF6C00" size="24" />
           <span className={styles.WarnText}>
             Your account “{account.name}” will be removed from this device. You
             cannot revert this operation!
@@ -49,7 +44,7 @@ export default class DeleteAccount extends Component<Props> {
         <div className={styles.ActionsContainer} key="actions">
           <Button
             type="FilledPrimary"
-            icon="ion-md-close-circle"
+            icon="cancel"
             onClick={() => this.deleteAccount()}
           >
             Delete account

@@ -1,5 +1,6 @@
 // @flow
 import React, { Component } from 'react';
+import Icon from '../Icon/Icon';
 import styles from './Checkbox.css';
 
 type Props = {
@@ -68,7 +69,7 @@ export default class Checkbox extends Component<Props> {
         role="button"
         tabIndex={tabIndex}
       >
-        {value && <i className={`icon ion-md-checkmark ${styles.Checkmark}`} />}
+        {value && <Icon name="check" color="#fe6b00" />}
       </div>
     );
   }

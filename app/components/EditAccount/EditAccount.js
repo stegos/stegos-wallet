@@ -124,7 +124,7 @@ export default class EditAccount extends Component<Props> {
       <div className={styles.ActionsContainer} key="actions">
         <Button
           type="FilledPrimary"
-          icon="ion-md-close-circle"
+          icon="cancel"
           onClick={() => this.deleteAccount()}
         >
           Delete account

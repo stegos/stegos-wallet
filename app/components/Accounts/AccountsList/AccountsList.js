@@ -24,9 +24,9 @@ export default class AccountsList extends PureComponent<Props> {
         <div className={styles.SearchBar}>
           <div className={styles.SearchFiledWrapper}>
             <input className={styles.SearchInput} placeholder="Search" />
-            <Icon name="ion-md-search" size={24} />
+            <Icon name="search" size={24} />
           </div>
-          <Button icon="ion-md-add" type="FilledPrimary" elevated>
+          <Button icon="add" type="FilledPrimary" elevated>
             Add account
           </Button>
         </div>

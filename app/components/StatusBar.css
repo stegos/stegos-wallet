@@ -13,6 +13,9 @@
 }
 
 .NetworkIndicator {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   padding: 12px 15px;
   border-radius: 21.5px;
   background-color: rgba(15, 16, 23, 0.72);

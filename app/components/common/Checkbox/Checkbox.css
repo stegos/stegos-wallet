@@ -9,11 +9,6 @@
   cursor: pointer;
 }
 
-.Checkmark {
-  color: #fe6b00;
-  font-size: 24px;
-}
-
 .Container:focus {
   box-shadow: 0 0 1px #fff;
   outline: none;

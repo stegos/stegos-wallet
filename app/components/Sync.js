@@ -5,6 +5,7 @@ import routes from '../constants/routes';
 import type { NodeStateType } from '../reducers/types';
 import Button from './common/Button/Button';
 import Header from './common/Header/Header';
+import Icon from './common/Icon/Icon';
 import ProgressBar from './common/ProgressBar/ProgressBar';
 import styles from './Sync.css';
 import Wizard from './common/Wizard/Wizard';
@@ -27,9 +28,9 @@ export default class Sync extends Component<Props> {
     return (
       <div className={styles.Wrapper}>
         <Header>
-          <div className={styles.backButton} data-tid="backButton">
+          <div data-tid="backButton">
             <Link to={routes.PROTECT}>
-              <i className="fa fa-arrow-left fa-3x" />
+              <Icon name="arrow_back" size={48} />
             </Link>
           </div>
         </Header>
@@ -71,20 +72,19 @@ export default class Sync extends Component<Props> {
           <div className={styles.FooterWrapper}>
             <div style={{ flex: 1 }} />
             <div style={{ flex: 1 }} />
-            <div
-              className={styles.ButtonWrapper}
-              style={{ visibility: node.isSynced ? 'visible' : 'hidden' }}
-            >
-              <Button type="button">
-                <span>
-                  <Link to={routes.BAGS_AND_TERMS}>Next</Link>{' '}
-                  <i
-                    className={`icon ion-md-arrow-round-forward ${
-                      styles.NextButtonIcon
-                    }`}
-                  />
-                </span>
-              </Button>
+            <div className={styles.ButtonWrapper}>
+              <Link
+                to={routes.BAGS_AND_TERMS}
+                style={{ visibility: node.isSynced ? 'visible' : 'hidden' }}
+              >
+                <Button
+                  type="button"
+                  iconRight="keyboard_backspace"
+                  iconRightMirrorHor
+                >
+                  Next
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

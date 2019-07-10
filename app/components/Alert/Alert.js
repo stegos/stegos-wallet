@@ -55,10 +55,10 @@ export default class Alert extends Component<Props> {
       >
         <div className={styles.Container}>
           <Icon
-            name="ion-md-warning"
+            name="report_problem"
             color="#FF6C00"
             className={styles.HeaderIcon}
-            size="20"
+            size="30"
           />
           <div className={styles.Header}>
             <div>{title}</div>
