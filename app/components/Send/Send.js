@@ -62,7 +62,6 @@ export default class Send extends Component<Props> {
     const { target } = event;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const { name } = target;
-    console.log(name, value);
 
     this.setState({
       [name]: value

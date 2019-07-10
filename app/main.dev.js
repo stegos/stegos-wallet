@@ -125,65 +125,33 @@ app.on('quit', () => {
  * IPC listeners
  */
 
-ipcMain.on('RUN_NODE', (event, pass) => {
-  runNodeProcess(pass)
-    .then(() => {
-      event.sender.send('NODE_RUNNING');
-      return true;
-    })
+ipcMain.on('RUN_NODE', event => {
+  runNodeProcess()
+    .then(() => event.sender.send('NODE_RUNNING'))
     .catch(e => {
-      dialog.showErrorBox('Error', e.message);
+      console.log(e);
+      dialog.showErrorBox('Error', 'An error occurred');
       event.sender.send('RUN_NODE_FAILED');
     });
 });
 
-ipcMain.on('CHECK_KEY_EXISTENCE', event => {
-  event.sender.send('CHECK_KEY_EXISTENCE', checkKeyExistence());
-});
-
-function checkKeyExistence(): boolean {
-  const nodePath = path.resolve(__dirname, '../node/');
-  const keyFile = `${nodePath}/wallet.pkey`; // todo config
-  return fs.existsSync(keyFile);
-}
-
-// todo refactor
-function runNodeProcess(pass: string): Promise<void> {
+function runNodeProcess(): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
       const nodePath = path.resolve(__dirname, '../node/');
-      const passFile = `${nodePath}/pass`; // todo config
-      fs.writeFileSync(passFile, pass || '');
       const tokenFile = `${nodePath}/api_token.txt`; // todo config
       if (fs.existsSync(tokenFile)) fs.unlinkSync(tokenFile);
-      nodeProcess = spawn(
-        `./stegosd`,
-        [],
-        { cwd: nodePath, stdio: ['inherit', 'pipe', 'pipe'] },
-        err => {
-          if (err) {
-            if (fs.existsSync(passFile)) fs.unlinkSync(passFile);
-            reject(err);
-          }
-        }
-      );
+      nodeProcess = spawn(`./stegosd`, ['--chain', 'devnet'], {
+        cwd: nodePath
+      });
       nodeProcess.stdout.on('data', data => {
         const str = data.toString('utf8');
         console.log(str);
-        if (
-          str.includes('Network endpoints:') ||
-          str.includes('Adding node from seed pool')
-        ) {
-          if (fs.existsSync(passFile)) fs.unlinkSync(passFile);
-          resolve();
-          if (!isTokenCapturing) {
-            isTokenCapturing = true;
-            captureToken();
-          }
-        }
-        if (str.includes('Invalid password:')) {
-          if (fs.existsSync(passFile)) fs.unlinkSync(passFile);
-          reject(new Error('Invalid password'));
+        if (str.includes('ERROR [stegos'))
+          reject(new Error('An error occurred'));
+        if (!isTokenCapturing) {
+          isTokenCapturing = true;
+          captureToken(resolve); // todo rid off NODE_RUNNING action
         }
       });
       nodeProcess.stderr.on('data', data => {
@@ -195,7 +163,7 @@ function runNodeProcess(pass: string): Promise<void> {
   });
 }
 
-function captureToken(): void {
+function captureToken(resolve): void {
   const nodePath = path.resolve(__dirname, '../node/');
   let token;
   let checkingInterval;
@@ -205,6 +173,7 @@ function captureToken(): void {
     if (token) {
       clearInterval(checkingInterval);
       checkingInterval = null;
+      resolve();
       mainWindow.webContents.send(TOKEN_RECEIVED, token);
     }
   }, 300);
