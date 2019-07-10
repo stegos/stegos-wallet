@@ -24,6 +24,12 @@
   border-radius: 10px;
 }
 
+.ContainerBig {
+  padding-top: 20px;
+  border-radius: 0;
+  border-color: transparent;
+}
+
 .Title {
   margin-bottom: 40px;
   font-style: normal;
@@ -40,4 +46,24 @@
   top: 26px;
   right: 23px;
   cursor: pointer;
+}
+
+.TitleBig {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 37px;
+  line-height: 65px;
+  text-align: center;
+  letter-spacing: 1.11px;
+  color: #fff;
+}
+
+.Subtitle {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 22px;
+  text-align: center;
+  letter-spacing: 0.39px;
+  color: #fff;
 }

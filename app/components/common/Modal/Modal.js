@@ -2,10 +2,14 @@ import React, { Component } from 'react';
 import Icon from '../Icon/Icon';
 import styles from './Modal.css';
 
-type Props = {};
+type Props = {
+  style?: any
+};
 
 type ModalProps = {
   title?: string,
+  subtitle?: string,
+  type?: 'big' | 'small',
   onClose?: Function
 };
 
@@ -21,8 +25,14 @@ export default class Modal extends Component<Props> {
     return maxZ + 1;
   }
 
+  static defaultProps = {
+    style: null
+  };
+
   state = {
     title: '',
+    subtitle: '',
+    type: 'small',
     onClose: null,
     visible: false
   };
@@ -40,16 +50,24 @@ export default class Modal extends Component<Props> {
   }
 
   render() {
-    const { visible, title } = this.state;
-    const { children } = this.props;
+    const { visible, title, subtitle, type } = this.state;
+    const { children, style } = this.props;
     if (!visible) {
       return null;
     }
     const zIndex = Modal.getHigestZindex();
     return (
       <div className={styles.Modal} style={{ zIndex }}>
-        <div className={styles.Container}>
-          <div className={styles.Title}>{title}</div>
+        <div
+          className={`${styles.Container} ${
+            type === 'big' ? styles.ContainerBig : ''
+          }`}
+          style={style}
+        >
+          <div className={type === 'small' ? styles.Title : styles.TitleBig}>
+            {title}
+          </div>
+          {type === 'big' && <div className={styles.Subtitle}>{subtitle}</div>}
           <div
             onClick={() => this.hide()}
             onKeyPress={() => false}

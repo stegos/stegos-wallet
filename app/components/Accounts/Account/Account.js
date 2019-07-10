@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import Alert from '../../Alert/Alert';
 import Button from '../../common/Button/Button';
 import Icon from '../../common/Icon/Icon';
+import EditAccount from '../../EditAccount/EditAccount';
+import RestoreAccount from '../../RestoreAccount/RestoreAccount';
 import TransactionsList from './TransactionsList/TransactionsList';
 
 import routes from '../../../constants/routes';
@@ -69,11 +71,23 @@ export default class Account extends PureComponent<Props> {
 
   alertRef = React.createRef();
 
+  restoreAccountRef = React.createRef();
+
+  editAccountRef = React.createRef();
+
   switchTranding() {
     const { trendingUp } = this.state;
     this.setState({
       trendingUp: !trendingUp
     });
+  }
+
+  restoreAccount() {
+    this.restoreAccountRef.current.show();
+  }
+
+  editAccount() {
+    this.editAccountRef.current.show();
   }
 
   render() {
@@ -92,7 +106,11 @@ export default class Account extends PureComponent<Props> {
       <div className={styles.Account}>
         <div className={styles.Header}>
           <span className={styles.Title}>{account.name}</span>
-          <Button type="Invisible" icon="ion-md-options">
+          <Button
+            type="Invisible"
+            icon="ion-md-options"
+            onClick={() => this.editAccount()}
+          >
             Account settings
           </Button>
         </div>
@@ -171,7 +189,14 @@ export default class Account extends PureComponent<Props> {
                 icon="ion-md-archive"
                 className={styles.BottomActionButton}
               >
-                Receive account address
+                <Link
+                  to={{
+                    pathname: routes.RECEIVE,
+                    state: { account }
+                  }}
+                >
+                  Receive account address
+                </Link>
               </Button>
             </div>
             <div className={styles.BottomActionContainer}>
@@ -184,12 +209,15 @@ export default class Account extends PureComponent<Props> {
                 type="OutlineDisabled"
                 icon="ion-md-undo"
                 className={styles.BottomActionButton}
+                onClick={() => this.restoreAccount()}
               >
                 Restore from recovery phrase
               </Button>
             </div>
           </div>
         )}
+        <RestoreAccount ref={this.restoreAccountRef} account={account} />
+        <EditAccount ref={this.editAccountRef} account={account} />
       </div>
     );
   }

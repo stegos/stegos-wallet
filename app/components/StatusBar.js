@@ -4,6 +4,7 @@ import type { NodeStateType } from '../reducers/types';
 import Header from './common/Header/Header';
 import Icon from './common/Icon/Icon';
 import styles from './StatusBar.css';
+import WalletSettings from './WalletSettings/WalletSettings';
 
 type Props = {
   node: NodeStateType,
@@ -11,6 +12,17 @@ type Props = {
 };
 
 class StatusBar extends PureComponent<Props> {
+  constructor(props) {
+    super(props);
+    this.modalRef = React.createRef();
+  }
+
+  modalRef = null;
+
+  openWalletSettings() {
+    this.modalRef.current.show();
+  }
+
   render() {
     const { node, className } = this.props;
     return (
@@ -20,12 +32,19 @@ class StatusBar extends PureComponent<Props> {
         title="Wallet"
         containerClassName={className}
       >
-        <Icon
-          name="ion-md-settings"
-          color="#bfc1c6"
-          size="24"
-          className={styles.Icon}
-        />
+        <div
+          onClick={() => this.openWalletSettings()}
+          onKeyPress={() => false}
+          tabIndex="-1"
+          role="button"
+        >
+          <Icon
+            name="ion-md-settings"
+            color="#bfc1c6"
+            size="24"
+            className={styles.Icon}
+          />
+        </div>
         <Icon
           name="ion-md-lock"
           color="#bfc1c6"
@@ -50,6 +69,7 @@ class StatusBar extends PureComponent<Props> {
             {node.isSynced ? 'Syncronized' : 'Unsynchronized'}
           </span>
         </div>
+        <WalletSettings ref={this.modalRef} />
       </Header>
     );
   }
