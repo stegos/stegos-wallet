@@ -102,7 +102,7 @@ const onMessage = (
       messages[id] = null;
     }
   }
-  dispatch({ type: WS_MESSAGE, payload: data }); // todo handle data
+  dispatch({ type: WS_MESSAGE, payload: data });
 };
 
 const onClose = (store: MiddlewareAPI) => {

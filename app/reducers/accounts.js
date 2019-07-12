@@ -22,14 +22,20 @@ export default function accounts(
 }
 
 const handleMessage = (state: AccountsStateType, payload) => {
-  console.log('HANDLE MSG');
-  console.log(JSON.stringify(payload));
   const { type } = payload;
+  if (
+    type !== 'new_micro_block' &&
+    type !== 'new_macro_block' &&
+    type !== 'sync_changed'
+  ) {
+    console.log('HANDLE MSG');
+    console.log(JSON.stringify(payload));
+  }
   switch (type) {
-    case 'wallets_info':
+    case 'accounts_info':
       return {
         ...state,
-        accounts: payload.wallets.reduce((map, w) => {
+        accounts: payload.accounts.reduce((map, w) => {
           map.set(
             w,
             state.accounts[w] || { name: `Account #${w}`, balance: 0 }
@@ -45,6 +51,14 @@ const handleMessage = (state: AccountsStateType, payload) => {
             ? { ...acc, key: payload.wallet_pkey }
             : acc
         )
+      };
+    case 'account_created':
+      return {
+        ...state,
+        accounts: state.accounts.set(payload.account_id, {
+          name: `Account #${payload.account_id}`,
+          balance: 0
+        })
       };
     default:
       return {};

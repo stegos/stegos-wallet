@@ -13,13 +13,23 @@ export const getAccounts = () => (dispatch: Dispatch, getState: GetState) => {
         const state = getState();
         const { settings } = state;
         const { password } = settings;
-        resp.accounts.forEach(a => {
-          dispatch(send({ type: 'unseal', password, wallet: a }));
+        resp.accounts.forEach(account => {
+          dispatch(send({ type: 'unseal', password, account_id: account }));
         });
       }
       return resp;
     })
     .catch(console.log);
+};
+
+export const createAccount = () => async (
+  dispatch: Dispatch,
+  getState: GetState
+) => {
+  const state = getState();
+  const { settings } = state;
+  const { password } = settings;
+  await sendSync({ type: 'create_wallet', password }, getState);
 };
 
 export const getBalance = () => (dispatch: Dispatch) => {
