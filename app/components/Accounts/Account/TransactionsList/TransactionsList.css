@@ -1,0 +1,107 @@
+.TransactionsList {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.Title {
+  margin-bottom: 16px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 17px;
+  line-height: 18px;
+  letter-spacing: 0.51px;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.Transaction {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #979797;
+}
+
+.TransactionDirection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  margin-right: 54px;
+  background: #242b43;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.TransactionTitle {
+  display: inline-block;
+  width: 100px;
+  margin-right: 50px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 18px;
+  letter-spacing: 0.6px;
+  color: #fff;
+}
+
+.TransactionDate {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 180px;
+  margin-right: 50px;
+}
+
+.TransactionTime {
+  display: flex;
+  flex-direction: row;
+}
+
+.TransactionCertificate {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 120px;
+  margin-right: auto;
+}
+
+.TransactionText {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: 0.42px;
+  color: #fff;
+}
+
+.TransactionAmountContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.TransactionAmount {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 18px;
+  text-align: right;
+  letter-spacing: 0.54px;
+  color: #fff;
+}
+
+.TransactionAmountCurrency {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 18px;
+  text-align: right;
+  letter-spacing: 0.54px;
+  color: #fff;
+}

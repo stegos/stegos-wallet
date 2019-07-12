@@ -1,14 +1,13 @@
 import type { Dispatch as ReduxDispatch, Store as ReduxStore } from 'redux';
 
 export type SettingsStateType = {
-  isPasswordSet: boolean,
+  isPasswordSet: boolean | null,
   password: string,
   isSendBugReport: boolean,
   isTermsAccepted: boolean
 };
 
 export type NodeStateType = {
-  hasKey: boolean | null,
   isStarted: boolean,
   isConnected: boolean,
   isSynced: boolean,
@@ -16,6 +15,17 @@ export type NodeStateType = {
   apiToken: string | null,
   firstReceivedBlockTimestamp: number | null,
   lastReceivedBlockTimestamp: number | null
+};
+
+export type AccountsStateType = {
+  accounts: Map<string, Account> // todo leave only map
+};
+
+export type Account = {
+  id: string,
+  name: string,
+  address: string,
+  balance: string
 };
 
 export type State = { settings: SettingsStateType, node: NodeStateType };

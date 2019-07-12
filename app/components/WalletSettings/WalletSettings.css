@@ -1,0 +1,72 @@
+.Container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 384px;
+  padding-top: 40px;
+}
+
+.Input {
+  margin-bottom: 30px;
+  margin-top: 0;
+}
+
+.AutoLockContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.AutoLockLabel {
+  width: 201px;
+  margin-right: 20px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0.48px;
+  color: #fff;
+}
+
+.AutoLockPostfix {
+  margin-left: 15px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 65px;
+  text-align: center;
+  letter-spacing: 0.48px;
+  color: #fff;
+}
+
+.AutoLockInput {
+  max-width: 65px;
+  box-sizing: border-box;
+  padding: 0 20px;
+  background: #14161b;
+  border-radius: 5px;
+  border: none;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 43px;
+  text-align: center;
+  letter-spacing: 0.48px;
+  color: #afb0b3;
+}
+
+.AutoLockInput:focus {
+  outline: none;
+}
+
+.ActionsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 128px;
+}
+
+.ActionsContainer > div {
+  margin-left: 25px;
+}

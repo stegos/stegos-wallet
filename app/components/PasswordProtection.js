@@ -2,11 +2,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import routes from '../constants/routes';
-import Button from './Button/Button';
-import Header from './Header/Header';
-import Input from './Input/Input';
+import Button from './common/Button/Button';
+import Header from './common/Header/Header';
+import Icon from './common/Icon/Icon';
+import Input from './common/Input/Input';
 import styles from './PasswordProtection.css';
-import Wizard from './Wizard/Wizard';
+import Wizard from './common/Wizard/Wizard';
 
 type Props = {
   setPassword: string => void
@@ -62,9 +63,9 @@ export default class PasswordProtection extends Component<Props> {
     return (
       <div className={styles.Wrapper}>
         <Header>
-          <div className={styles.backButton} data-tid="backButton">
+          <div data-tid="backButton">
             <Link to={routes.WELCOME}>
-              <i className="fa fa-arrow-left fa-3x" />
+              <Icon name="arrow_back" size={48} />
             </Link>
           </div>
         </Header>
@@ -113,7 +114,9 @@ export default class PasswordProtection extends Component<Props> {
           <div className={styles.FooterWrapper}>
             <div style={{ flex: 1 }} />
             <div className={styles.Warning}>
-              <i className={`icon ion-md-warning ${styles.WarningIcon}`} />
+              <div className={styles.WarningIcon}>
+                <Icon name="report_problem" size="32" color="#ff6c00" />
+              </div>
               <p>
                 Make sure you remeber your password. Do not share it. Losing
                 your password requires resetting Stegos Wallet and re-adding
@@ -129,15 +132,10 @@ export default class PasswordProtection extends Component<Props> {
                 type="button"
                 onClick={this.onNext}
                 disabled={passError || confirmPassError}
+                iconRight="keyboard_backspace"
+                iconRightMirrorHor
               >
-                <span>
-                  Next
-                  <i
-                    className={`icon ion-md-arrow-round-forward ${
-                      styles.NextButtonIcon
-                    }`}
-                  />
-                </span>
+                Next
               </Button>
             </div>
           </div>

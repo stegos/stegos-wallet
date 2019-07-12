@@ -16,7 +16,7 @@ import log from 'electron-log';
 import { spawn } from 'child_process';
 import path from 'path';
 import fs from 'fs';
-import MenuBuilder from './menu';
+// import MenuBuilder from './menu';
 import { TOKEN_RECEIVED } from './actions/node';
 
 export default class AppUpdater {
@@ -76,7 +76,9 @@ app.on('ready', async () => {
   mainWindow = new BrowserWindow({
     show: false,
     width: 1440,
-    height: 877
+    height: 877,
+    minWidth: 1280,
+    minHeight: 320
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
@@ -99,8 +101,12 @@ app.on('ready', async () => {
     mainWindow = null;
   });
 
-  const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
+  // Disable default electron menu bar
+  // const menuBuilder = new MenuBuilder(mainWindow);
+  // menuBuilder.buildMenu();
+
+  // No menu bar specified in design, remove unused menu builder file app/menu.js?
+  mainWindow.setMenu(null);
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
@@ -119,65 +125,33 @@ app.on('quit', () => {
  * IPC listeners
  */
 
-ipcMain.on('RUN_NODE', (event, pass) => {
-  runNodeProcess(pass)
-    .then(() => {
-      event.sender.send('NODE_RUNNING');
-      return true;
-    })
+ipcMain.on('RUN_NODE', event => {
+  runNodeProcess()
+    .then(() => event.sender.send('NODE_RUNNING'))
     .catch(e => {
-      dialog.showErrorBox('Error', e.message);
+      console.log(e);
+      dialog.showErrorBox('Error', 'An error occurred');
       event.sender.send('RUN_NODE_FAILED');
     });
 });
 
-ipcMain.on('CHECK_KEY_EXISTENCE', event => {
-  event.sender.send('CHECK_KEY_EXISTENCE', checkKeyExistence());
-});
-
-function checkKeyExistence(): boolean {
-  const nodePath = path.resolve(__dirname, '../node/');
-  const keyFile = `${nodePath}/wallet.pkey`; // todo config
-  return fs.existsSync(keyFile);
-}
-
-// todo refactor
-function runNodeProcess(pass: string): Promise<void> {
+function runNodeProcess(): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
       const nodePath = path.resolve(__dirname, '../node/');
-      const passFile = `${nodePath}/pass`; // todo config
-      fs.writeFileSync(passFile, pass || '');
-      const tokenFile = `${nodePath}/api_token.txt`; // todo config
+      const tokenFile = `${nodePath}/api.token`; // todo config
       if (fs.existsSync(tokenFile)) fs.unlinkSync(tokenFile);
-      nodeProcess = spawn(
-        `./stegosd`,
-        [],
-        { cwd: nodePath, stdio: ['inherit', 'pipe', 'pipe'] },
-        err => {
-          if (err) {
-            if (fs.existsSync(passFile)) fs.unlinkSync(passFile);
-            reject(err);
-          }
-        }
-      );
+      nodeProcess = spawn(`./stegosd`, ['--chain', 'devnet'], {
+        cwd: nodePath
+      });
       nodeProcess.stdout.on('data', data => {
         const str = data.toString('utf8');
         console.log(str);
-        if (
-          str.includes('Network endpoints:') ||
-          str.includes('Adding node from seed pool')
-        ) {
-          if (fs.existsSync(passFile)) fs.unlinkSync(passFile);
-          resolve();
-          if (!isTokenCapturing) {
-            isTokenCapturing = true;
-            captureToken();
-          }
-        }
-        if (str.includes('Invalid password:')) {
-          if (fs.existsSync(passFile)) fs.unlinkSync(passFile);
-          reject(new Error('Invalid password'));
+        if (str.includes('ERROR [stegos'))
+          reject(new Error('An error occurred'));
+        if (!isTokenCapturing) {
+          isTokenCapturing = true;
+          captureToken(resolve); // todo rid off NODE_RUNNING action
         }
       });
       nodeProcess.stderr.on('data', data => {
@@ -189,16 +163,17 @@ function runNodeProcess(pass: string): Promise<void> {
   });
 }
 
-function captureToken(): void {
+function captureToken(resolve): void {
   const nodePath = path.resolve(__dirname, '../node/');
   let token;
   let checkingInterval;
-  const tokenFile = `${nodePath}/api_token.txt`; // todo config
+  const tokenFile = `${nodePath}/api.token`; // todo config
   checkingInterval = setInterval(() => {
     token = readFile(tokenFile);
     if (token) {
       clearInterval(checkingInterval);
       checkingInterval = null;
+      resolve();
       mainWindow.webContents.send(TOKEN_RECEIVED, token);
     }
   }, 300);

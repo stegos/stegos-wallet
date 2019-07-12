@@ -1,0 +1,26 @@
+.Container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #fff;
+  cursor: pointer;
+}
+
+.Container:focus {
+  box-shadow: 0 0 1px #fff;
+  outline: none;
+}
+
+.Disabled {
+  cursor: default;
+  border-color: #696e79;
+  opacity: 0.53;
+}
+
+.Container:focus.Disabled {
+  box-shadow: none;
+  outline: none;
+}

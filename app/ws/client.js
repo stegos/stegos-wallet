@@ -11,6 +11,8 @@ const reconnectInterval: number = 2000; // todo param
 let reconnectionInterval = null;
 const algorithm = 'aes-128-ctr'; // todo config
 const tokenLength = 16; // todo config
+let messageCounter = 1;
+const messages = {};
 
 export const connect = (store: MiddlewareAPI, { payload }: Action) => {
   close();
@@ -20,7 +22,7 @@ export const connect = (store: MiddlewareAPI, { payload }: Action) => {
   ws = new WebSocket(url);
   ws.onopen = () => onOpen(dispatch);
   ws.onmessage = evt => onMessage(dispatch, getState, evt);
-  ws.onclose = () => onClose(dispatch);
+  ws.onclose = () => onClose(store);
   ws.onerror = () => onError(store);
 };
 
@@ -32,13 +34,37 @@ export const disconnect = () => {
   }
 };
 
-export const send = (_store: MiddlewareAPI, { payload }: Action) => {
+export const send = (store: MiddlewareAPI, { payload }: Action) => {
   if (ws) {
-    ws.send(JSON.stringify(payload));
+    const state = store.getState();
+    const { node } = state;
+    const { apiToken } = node;
+    if (!apiToken) return;
+    ws.send(encrypt(JSON.stringify(payload), apiToken).toString('utf8'));
   } else {
     throw new Error('Socket connection not initialized.');
   }
 };
+
+export const sendSync = (payload: any, getState: GetState) =>
+  new Promise((resolve, reject) => {
+    if (ws) {
+      const state = getState();
+      const { node } = state;
+      const { apiToken } = node;
+      if (!apiToken) return;
+      ws.send(
+        encrypt(
+          JSON.stringify({ ...payload, id: messageCounter }),
+          apiToken
+        ).toString('utf8')
+      );
+      messages[messageCounter] = { resolve, reject };
+      messageCounter += 1;
+    } else {
+      reject(new Error('Socket connection not initialized.'));
+    }
+  });
 
 const close = (code?: number, reason?: string) => {
   if (ws) {
@@ -66,13 +92,29 @@ const onMessage = (
   const { node } = state;
   const { apiToken } = node;
   if (!apiToken) return;
-  const mes = decode(base64ToArrayBuffer(evt.data), apiToken);
+  const mes = decrypt(base64ToArrayBuffer(evt.data), apiToken);
   const data = JSON.parse(mes);
-  dispatch({ type: WS_MESSAGE, payload: data }); // todo handle data
+  const { id } = data;
+  dispatch({ type: WS_MESSAGE, payload: data });
+  if (id !== null) {
+    if (messages[id]) {
+      if (!data.error) messages[id].resolve(data);
+      else messages[id].reject(data);
+      messages[id] = null;
+    }
+  }
 };
 
-const onClose = (dispatch: Dispatch) => {
-  dispatch({ type: WS_CLOSED });
+const onClose = (store: MiddlewareAPI) => {
+  store.dispatch({ type: WS_CLOSED });
+  Object.keys(messages).forEach(id => {
+    if (messages[id] !== null) {
+      messages[id].reject();
+    }
+  });
+  if (isOpened || shouldReconnect) {
+    reconnect(store);
+  }
 };
 
 const onError = (store: MiddlewareAPI) => {
@@ -98,7 +140,24 @@ const reconnect = (store: MiddlewareAPI) => {
   }, reconnectInterval);
 };
 
-const decode = (buffer, key) => {
+const encrypt = (plaintext, key) => {
+  const resizedIV = Buffer.allocUnsafe(tokenLength);
+  const iv = crypto
+    .createHash('sha256')
+    .update(plaintext)
+    .digest();
+  iv.copy(resizedIV);
+  const encryptor = crypto.createCipheriv(
+    algorithm,
+    Buffer.from(base64ToArrayBuffer(key)),
+    resizedIV
+  );
+  return arrayBufferToBase64(
+    Buffer.concat([resizedIV, encryptor.update(plaintext), encryptor.final()])
+  );
+};
+
+const decrypt = (buffer, key) => {
   const resizedIV = Buffer.allocUnsafe(tokenLength);
   Buffer.from(buffer, 0, tokenLength).copy(resizedIV);
   const ct = Buffer.from(buffer, tokenLength);
@@ -119,4 +178,14 @@ const base64ToArrayBuffer = base64 => {
     bytes[i] = binaryString.charCodeAt(i);
   }
   return bytes.buffer;
+};
+
+const arrayBufferToBase64 = buffer => {
+  let binary = '';
+  const bytes = new Uint8Array(buffer);
+  const len = bytes.byteLength;
+  for (let i = 0; i < len; i += 1) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
 };
