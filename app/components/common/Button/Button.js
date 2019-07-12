@@ -17,6 +17,7 @@ type Props = {
   tabIndex?: number,
   icon?: IconName,
   iconRight?: IconName,
+  iconRightMirrorHor?: boolean,
   elevated?: boolean,
   type?: ButtonType,
   style?: any,
@@ -32,6 +33,7 @@ export default class Button extends Component<Props> {
     tabIndex: 0,
     icon: null,
     iconRight: null,
+    iconRightMirrorHor: false,
     elevated: false,
     type: 'OutlineDisabled',
     style: null,
@@ -68,7 +70,7 @@ export default class Button extends Component<Props> {
   }
 
   renderIconRight() {
-    const { iconRight } = this.props;
+    const { iconRight, iconRightMirrorHor } = this.props;
     return (
       <div style={{ marginLeft: 'auto' }}>
         <Icon
@@ -76,6 +78,7 @@ export default class Button extends Component<Props> {
           size={25}
           style={{ marginLeft: '20px' }}
           className={styles.Icon}
+          mirrorHor={iconRightMirrorHor}
         />
       </div>
     );

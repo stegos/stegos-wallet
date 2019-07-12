@@ -22,7 +22,7 @@ const txList = [
   },
   {
     id: '2',
-    type: 'Send',
+    type: 'Receive',
     date: 'May 30, 2019',
     time: '11:28',
     amount: 120
@@ -108,14 +108,14 @@ export default class Account extends PureComponent<Props> {
           <span className={styles.Title}>{account.name}</span>
           <Button
             type="Invisible"
-            icon="ion-md-options"
+            icon="tune"
             onClick={() => this.editAccount()}
           >
             Account settings
           </Button>
         </div>
         <div className={styles.Actions}>
-          <Button type="FilledSecondary" icon="ion-md-arrow-up" elevated>
+          <Button type="FilledSecondary" icon="file_upload" elevated>
             <Link
               to={{
                 pathname: routes.SEND,
@@ -125,7 +125,7 @@ export default class Account extends PureComponent<Props> {
               Send tokens
             </Link>
           </Button>
-          <Button type="FilledPrimary" icon="ion-md-arrow-down" elevated>
+          <Button type="FilledPrimary" icon="file_download" elevated>
             <Link
               to={{
                 pathname: routes.RECEIVE,
@@ -168,8 +168,8 @@ export default class Account extends PureComponent<Props> {
             type="button"
           >
             <Icon
-              name={trendingUp ? 'ion-md-trending-up' : 'ion-md-trending-down'}
-              size={30.5}
+              name={trendingUp ? 'trending_up' : 'trending_down'}
+              size={32}
             />
           </button>
         </div>
@@ -184,20 +184,21 @@ export default class Account extends PureComponent<Props> {
                   "Click 'Receive' button below to get your account address to start receiving tokens."
                 }
               </span>
-              <Button
-                type="OutlineDisabled"
-                icon="ion-md-archive"
-                className={styles.BottomActionButton}
+
+              <Link
+                to={{
+                  pathname: routes.RECEIVE,
+                  state: { account }
+                }}
               >
-                <Link
-                  to={{
-                    pathname: routes.RECEIVE,
-                    state: { account }
-                  }}
+                <Button
+                  type="OutlineDisabled"
+                  icon="open_in_browser"
+                  className={styles.BottomActionButton}
                 >
                   Receive account address
-                </Link>
-              </Button>
+                </Button>
+              </Link>
             </div>
             <div className={styles.BottomActionContainer}>
               <span className={styles.BottomActionDescription}>
@@ -207,7 +208,7 @@ export default class Account extends PureComponent<Props> {
               </span>
               <Button
                 type="OutlineDisabled"
-                icon="ion-md-undo"
+                icon="undo"
                 className={styles.BottomActionButton}
                 onClick={() => this.restoreAccount()}
               >

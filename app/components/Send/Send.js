@@ -33,7 +33,7 @@ export default class Send extends Component<Props> {
             </option>
           ))}
         </select>
-        <Icon name="ion-ios-arrow-down" />
+        <Icon name="expand_more" />
       </div>
     );
   }
@@ -153,7 +153,7 @@ export default class Send extends Component<Props> {
             fees,
             e => this.handleInputChange(e)
           )}
-          <Icon name="ion-md-add" style={{ padding: '0 8px' }} />
+          <Icon name="add" style={{ padding: '0 8px' }} size={16} />
           <input
             className={styles.FormField}
             value="0.01 STG per UTXO"
@@ -171,9 +171,7 @@ export default class Send extends Component<Props> {
           tabIndex={-1}
         >
           <Icon
-            name={
-              generateCertificate ? 'ion-md-checkbox' : 'ion-md-square-outline'
-            }
+            name={generateCertificate ? 'check_box' : 'check_box_outline_blank'}
             color="rgba(255, 255, 255, 0.7)"
             size={18}
           />
@@ -186,7 +184,8 @@ export default class Send extends Component<Props> {
         <Button type="OutlineDisabled">Cancel</Button>
         <Button
           type="OutlinePrimary"
-          iconRight="ion-md-arrow-forward"
+          iconRight="keyboard_backspace"
+          iconRightMirrorHor
           onClick={() => this.showConfirmationModal()}
         >
           Next
@@ -247,20 +246,18 @@ export default class Send extends Component<Props> {
     return (
       <div className={styles.Send}>
         <span className={styles.Title}>{account.name}</span>
-        <Button
-          type="Invisible"
-          icon="ion-ios-arrow-round-back"
+
+        <Link
+          to={{
+            pathname: routes.ACCOUNT,
+            state: { account }
+          }}
           style={{ alignSelf: 'flex-start', paddingLeft: 0 }}
         >
-          <Link
-            to={{
-              pathname: routes.ACCOUNT,
-              state: { account }
-            }}
-          >
+          <Button type="Invisible" icon="keyboard_backspace">
             Back to the account
-          </Link>
-        </Button>
+          </Button>
+        </Link>
         <div className={styles.SendForm}>
           <div className={styles.FormTitle}>Send</div>
           <div

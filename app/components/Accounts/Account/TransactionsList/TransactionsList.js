@@ -26,10 +26,8 @@ export default class TransactionsList extends PureComponent<Props> {
         <div className={styles.Transaction} key={item.id}>
           <div className={styles.TransactionDirection}>
             <Icon
-              name={
-                item.type === 'Send' ? 'ion-md-arrow-up' : 'ion-md-arrow-down'
-              }
-              size="22"
+              name={item.type === 'Send' ? 'file_upload' : 'file_download'}
+              size="24"
             />
           </div>
           <span className={styles.TransactionTitle}>{item.type}</span>
@@ -37,7 +35,7 @@ export default class TransactionsList extends PureComponent<Props> {
             <span className={styles.TransactionText}>{item.date}</span>
             <div className={styles.TransactionTime}>
               <Icon
-                name="ion-md-time"
+                name="schedule"
                 color="rgba(130, 130, 130, 0.7)"
                 size="20"
                 style={{ marginRight: 10 }}
@@ -52,15 +50,7 @@ export default class TransactionsList extends PureComponent<Props> {
             tabIndex="-1"
             onKeyPress={() => false}
           >
-            <Icon
-              name="ion-md-stats"
-              color="rgba(0, 0, 0, 0.7)"
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.7)',
-                borderRadius: 3,
-                padding: '0 4px'
-              }}
-            />
+            <Icon name="poll" size={24} color="rgba(255,255,255,0.7)" />
             <span className={styles.TransactionText}>Certificate</span>
           </div>
           <div className={styles.TransactionAmountContainer}>

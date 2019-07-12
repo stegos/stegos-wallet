@@ -75,7 +75,7 @@ export default class Modal extends Component<Props> {
             tabIndex="-1"
           >
             <Icon
-              name="ion-md-close"
+              name="close"
               color="#90949B"
               size={31}
               className={styles.Close}

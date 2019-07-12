@@ -79,14 +79,15 @@ export default class Receive extends Component<Props> {
               </option>
             ))}
           </select>
-          <Icon name="ion-ios-arrow-down" />
+          <Icon name="expand_more" />
         </div>
       </div>,
       <div className={styles.ActionsContainer} key="Actions">
         <Button type="OutlineDisabled">Cancel</Button>
         <Button
           type="OutlinePrimary"
-          iconRight="ion-md-arrow-forward"
+          iconRight="keyboard_backspace"
+          iconRightMirrorHor
           onClick={() => this.onAccountSelected()}
         >
           Next
@@ -150,20 +151,17 @@ export default class Receive extends Component<Props> {
     return (
       <div className={styles.Receive}>
         <span className={styles.Title}>{account.name}</span>
-        <Button
-          type="Invisible"
-          icon="ion-ios-arrow-round-back"
+        <Link
+          to={{
+            pathname: routes.ACCOUNT,
+            state: { account }
+          }}
           style={{ alignSelf: 'flex-start', paddingLeft: 0 }}
         >
-          <Link
-            to={{
-              pathname: routes.ACCOUNT,
-              state: { account }
-            }}
-          >
+          <Button type="Invisible" icon="keyboard_backspace">
             Back to the account
-          </Link>
-        </Button>
+          </Button>
+        </Link>
         <div className={styles.ReceiveForm}>
           <div className={styles.FormTitle}>Receive</div>
           <div
