@@ -46,11 +46,10 @@ const handleMessage = (state: AccountsStateType, payload) => {
     case 'keys_info':
       return {
         ...state,
-        accounts: state.accounts.map(acc =>
-          acc.id === state.activeAccount
-            ? { ...acc, key: payload.wallet_pkey }
-            : acc
-        )
+        accounts: state.accounts.set(payload.account_id, {
+          ...state.accounts.get(payload.account_id),
+          address: payload.account_address
+        })
       };
     case 'account_created':
       return {
@@ -58,7 +57,8 @@ const handleMessage = (state: AccountsStateType, payload) => {
         accounts: state.accounts.set(payload.account_id, {
           name: `Account #${payload.account_id}`,
           balance: 0
-        })
+        }),
+        activeAccount: payload.account_id
       };
     default:
       return {};

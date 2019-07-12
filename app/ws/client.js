@@ -95,6 +95,7 @@ const onMessage = (
   const mes = decrypt(base64ToArrayBuffer(evt.data), apiToken);
   const data = JSON.parse(mes);
   const { id } = data;
+  dispatch({ type: WS_MESSAGE, payload: data });
   if (id !== null) {
     if (messages[id]) {
       if (!data.error) messages[id].resolve(data);
@@ -102,7 +103,6 @@ const onMessage = (
       messages[id] = null;
     }
   }
-  dispatch({ type: WS_MESSAGE, payload: data });
 };
 
 const onClose = (store: MiddlewareAPI) => {

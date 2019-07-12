@@ -24,7 +24,7 @@ export type AccountsStateType = {
 
 export type Account = {
   name: string,
-  key: string,
+  address: string,
   balance: string
 };
 
