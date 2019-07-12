@@ -139,7 +139,7 @@ function runNodeProcess(): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
       const nodePath = path.resolve(__dirname, '../node/');
-      const tokenFile = `${nodePath}/api_token.txt`; // todo config
+      const tokenFile = `${nodePath}/api.token`; // todo config
       if (fs.existsSync(tokenFile)) fs.unlinkSync(tokenFile);
       nodeProcess = spawn(`./stegosd`, ['--chain', 'devnet'], {
         cwd: nodePath
@@ -167,7 +167,7 @@ function captureToken(resolve): void {
   const nodePath = path.resolve(__dirname, '../node/');
   let token;
   let checkingInterval;
-  const tokenFile = `${nodePath}/api_token.txt`; // todo config
+  const tokenFile = `${nodePath}/api.token`; // todo config
   checkingInterval = setInterval(() => {
     token = readFile(tokenFile);
     if (token) {

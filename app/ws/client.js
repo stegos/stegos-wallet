@@ -11,6 +11,8 @@ const reconnectInterval: number = 2000; // todo param
 let reconnectionInterval = null;
 const algorithm = 'aes-128-ctr'; // todo config
 const tokenLength = 16; // todo config
+let messageCounter = 1;
+const messages = {};
 
 export const connect = (store: MiddlewareAPI, { payload }: Action) => {
   close();
@@ -44,6 +46,26 @@ export const send = (store: MiddlewareAPI, { payload }: Action) => {
   }
 };
 
+export const sendSync = (payload: any, getState: GetState) =>
+  new Promise((resolve, reject) => {
+    if (ws) {
+      const state = getState();
+      const { node } = state;
+      const { apiToken } = node;
+      if (!apiToken) return;
+      ws.send(
+        encrypt(
+          JSON.stringify({ ...payload, id: messageCounter }),
+          apiToken
+        ).toString('utf8')
+      );
+      messages[messageCounter] = { resolve, reject };
+      messageCounter += 1;
+    } else {
+      reject(new Error('Socket connection not initialized.'));
+    }
+  });
+
 const close = (code?: number, reason?: string) => {
   if (ws) {
     ws.close(code || 1000, reason || 'WebSocket connection closed.');
@@ -72,11 +94,24 @@ const onMessage = (
   if (!apiToken) return;
   const mes = decrypt(base64ToArrayBuffer(evt.data), apiToken);
   const data = JSON.parse(mes);
+  const { id } = data;
+  if (id !== null) {
+    if (messages[id]) {
+      if (!data.error) messages[id].resolve(data);
+      else messages[id].reject(data);
+      messages[id] = null;
+    }
+  }
   dispatch({ type: WS_MESSAGE, payload: data }); // todo handle data
 };
 
 const onClose = (store: MiddlewareAPI) => {
   store.dispatch({ type: WS_CLOSED });
+  Object.keys(messages).forEach(id => {
+    if (messages[id] !== null) {
+      messages[id].reject();
+    }
+  });
   if (isOpened || shouldReconnect) {
     reconnect(store);
   }

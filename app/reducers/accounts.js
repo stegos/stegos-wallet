@@ -24,8 +24,8 @@ export default function accounts(
 const handleMessage = (state: AccountsStateType, payload) => {
   console.log('HANDLE MSG');
   console.log(JSON.stringify(payload));
-  const { response } = payload;
-  switch (response) {
+  const { type } = payload;
+  switch (type) {
     case 'wallets_info':
       return {
         ...state,
