@@ -12,36 +12,7 @@ import routes from '../../../constants/routes';
 import styles from './Account.css';
 import Stg from '../../../../resources/img/Stg.svg';
 
-const txList = [
-  {
-    id: '1',
-    type: 'Send',
-    date: 'May 30, 2019',
-    time: '11:28',
-    amount: -100
-  },
-  {
-    id: '2',
-    type: 'Receive',
-    date: 'May 30, 2019',
-    time: '11:28',
-    amount: 120
-  },
-  {
-    id: '3',
-    type: 'Send',
-    date: 'May 30, 2019',
-    time: '11:28',
-    amount: 250
-  },
-  {
-    id: '4',
-    type: 'Send',
-    date: 'May 30, 2019',
-    time: '11:28',
-    amount: -30
-  }
-];
+const txList = [];
 
 type Location = {
   pathname: string,
@@ -49,7 +20,8 @@ type Location = {
 };
 
 type Props = {
-  location: Location
+  location: Location,
+  deleteAccount: string => void
 };
 
 export default class Account extends PureComponent<Props> {
@@ -92,7 +64,7 @@ export default class Account extends PureComponent<Props> {
 
   render() {
     const { trendingUp, transactions } = this.state;
-    const { location } = this.props;
+    const { location, deleteAccount } = this.props;
     if (!location.state || !location.state.account) {
       return (
         <div>
@@ -218,7 +190,11 @@ export default class Account extends PureComponent<Props> {
           </div>
         )}
         <RestoreAccount ref={this.restoreAccountRef} account={account} />
-        <EditAccount ref={this.editAccountRef} account={account} />
+        <EditAccount
+          ref={this.editAccountRef}
+          account={account}
+          onDelete={deleteAccount}
+        />
       </div>
     );
   }

@@ -2,8 +2,7 @@ import type { AccountsStateType, Action } from './types';
 import { WS_MESSAGE } from '../ws/actionsTypes';
 
 const initialState = {
-  accounts: new Map(),
-  activeAccount: null
+  accounts: new Map()
 };
 
 export default function accounts(
@@ -38,7 +37,7 @@ const handleMessage = (state: AccountsStateType, payload) => {
         accounts: payload.accounts.reduce((map, w) => {
           map.set(
             w,
-            state.accounts[w] || { name: `Account #${w}`, balance: 0 }
+            state.accounts[w] || { id: w, name: `Account #${w}`, balance: 0 }
           );
           return map;
         }, new Map())
@@ -55,10 +54,10 @@ const handleMessage = (state: AccountsStateType, payload) => {
       return {
         ...state,
         accounts: state.accounts.set(payload.account_id, {
+          id: payload.account_id,
           name: `Account #${payload.account_id}`,
           balance: 0
-        }),
-        activeAccount: payload.account_id
+        })
       };
     default:
       return {};

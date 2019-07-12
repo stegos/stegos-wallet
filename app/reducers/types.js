@@ -18,11 +18,11 @@ export type NodeStateType = {
 };
 
 export type AccountsStateType = {
-  accounts: Map<string, Account>,
-  activeAccount: string | null
+  accounts: Map<string, Account> // todo leave only map
 };
 
 export type Account = {
+  id: string,
   name: string,
   address: string,
   balance: string

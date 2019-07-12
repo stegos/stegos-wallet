@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import type { Account } from '../../reducers/types';
 import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
@@ -9,10 +9,11 @@ import DeleteAccount from './DeleteAccount/DeleteAccount';
 import styles from './EditAccount.css';
 
 type Props = {
-  account: Account
+  account: Account,
+  onDelete: string => void
 };
 
-export default class EditAccount extends Component<Props> {
+export default class EditAccount extends PureComponent<Props> {
   props: Props;
 
   constructor(props) {
@@ -45,8 +46,13 @@ export default class EditAccount extends Component<Props> {
   }
 
   hide() {
-    this.modalRef.current.hide();
+    this.setState({ form: '' }, this.modalRef.current.hide);
   }
+
+  onDelete = () => {
+    const { onDelete, account } = this.props;
+    onDelete(account.id);
+  };
 
   deleteAccount() {
     this.setState({
@@ -145,7 +151,7 @@ export default class EditAccount extends Component<Props> {
         {form === 'delete' && (
           <DeleteAccount
             account={account}
-            onDelete={this.hide.bind(this)}
+            onDelete={this.onDelete}
             onCancel={this.cancelDeleting.bind(this)}
           />
         )}

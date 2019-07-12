@@ -4,12 +4,8 @@ import type { Dispatch, GetState } from '../reducers/types';
 import { send } from '../ws/actions';
 import { sendSync } from '../ws/client';
 
-export const getKeys = () => (dispatch: Dispatch) => {
-  dispatch(send({ type: 'keys_info' }));
-};
-
 export const getAccounts = () => (dispatch: Dispatch, getState: GetState) => {
-  sendSync({ type: 'list_wallets' }, getState)
+  sendSync({ type: 'list_accounts' }, getState)
     .then(resp => {
       if (resp.accounts) {
         const state = getState();
@@ -36,7 +32,7 @@ export const createAccount = () => async (
   const state = getState();
   const { settings } = state;
   const { password } = settings;
-  await sendSync({ type: 'create_wallet', password }, getState).then(resp =>
+  await sendSync({ type: 'create_account', password }, getState).then(resp =>
     sendSync(
       { type: 'unseal', password, account_id: resp.account_id },
       getState
@@ -57,6 +53,11 @@ export const createAccount = () => async (
   );
 };
 
-export const getBalance = () => (dispatch: Dispatch) => {
-  dispatch(send({ type: 'balance_info' }));
+export const deleteAccount = id => (dispatch: Dispatch, getState: GetState) => {
+  sendSync({ type: 'delete_account', account_id: id }, getState)
+    .then(resp => {
+      dispatch(push(routes.ACCOUNTS));
+      return resp;
+    })
+    .catch(console.log);
 };
