@@ -5,4 +5,4 @@ export const connect = (url: string) => ({
   payload: { url }
 });
 export const disconnect = () => ({ type: WS_DISCONNECT });
-export const send = msg => ({ type: WS_SEND, payload: { msg } });
+export const send = msg => ({ type: WS_SEND, payload: msg });

@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: 406px auto;
   grid-template-rows: 132px auto;
+  height: 100vh;
 }
 
 .StatusBar {
@@ -12,4 +13,14 @@
 .Menu {
   grid-column: 1;
   grid-row: 2;
+}
+
+.PageScrollWrapper {
+  padding: 30px 0 80px 0;
+  overflow-y: auto;
+}
+
+.Page {
+  margin: 0 auto;
+  padding: 0 120px 0 120px;
 }

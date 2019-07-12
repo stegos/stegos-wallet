@@ -1,0 +1,35 @@
+.Container {
+  display: grid;
+  grid-template-columns: 180px 282px;
+  grid-gap: 24px;
+  padding-top: 40px;
+}
+
+.Input {
+  margin-top: 0;
+}
+
+.InputLabel {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 22px;
+  letter-spacing: 0.45px;
+  color: #fff;
+}
+
+.InputLabel b {
+  font-size: 15px;
+}
+
+.ActionsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 128px;
+}
+
+.ActionsContainer > div {
+  margin-left: 25px;
+}

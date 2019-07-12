@@ -1,0 +1,45 @@
+.Container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 384px;
+  margin-top: 30px;
+}
+
+.ActionsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 128px;
+}
+
+.ActionsContainer > div {
+  margin-left: 25px;
+}
+
+.QrcodeContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin-top: 64px;
+}
+
+.Qrcode {
+  width: 218px;
+  height: 218px;
+  align-self: center;
+  image-rendering: pixelated;
+}
+
+.AccountAddress {
+  margin-top: 32px;
+  padding: 0 30px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 30px;
+  text-align: center;
+  letter-spacing: 0.39px;
+  color: #fff;
+}

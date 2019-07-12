@@ -1,10 +1,5 @@
 import type { Action, NodeStateType } from './types';
-import {
-  NODE_RUNNING,
-  ON_CHECK_KEY_EXISTENCE,
-  RUN_NODE_FAILED,
-  TOKEN_RECEIVED
-} from '../actions/node';
+import { NODE_RUNNING, RUN_NODE_FAILED, TOKEN_RECEIVED } from '../actions/node';
 import { WS_MESSAGE, WS_OPEN } from '../ws/actionsTypes';
 
 const initialState = {
@@ -23,11 +18,6 @@ export default function node(
   action: Action
 ) {
   switch (action.type) {
-    case ON_CHECK_KEY_EXISTENCE:
-      return {
-        ...state,
-        hasKey: action.payload
-      };
     case RUN_NODE_FAILED:
       return {
         ...state,
@@ -59,10 +49,8 @@ export default function node(
 }
 
 const handleMessage = (state: NodeStateType, payload) => {
-  console.log('HANDLE MSG');
-  console.log(JSON.stringify(payload));
-  const { notification } = payload;
-  switch (notification) {
+  const { type } = payload;
+  switch (type) {
     case 'sync_changed':
       return payload.is_synchronized
         ? { ...state, isSynced: true, syncingProgress: 100 }

@@ -1,16 +1,16 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as NodeActions from '../actions/node';
+import * as SettingsActions from '../actions/settings';
 import Welcome from '../components/Welcome';
 
 function mapStateToProps(state) {
   return {
-    node: state.node
+    settings: state.settings
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(NodeActions, dispatch);
+  return bindActionCreators(SettingsActions, dispatch);
 }
 
 export default connect(

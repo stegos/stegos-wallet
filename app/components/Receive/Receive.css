@@ -1,0 +1,128 @@
+.Receive {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.Title {
+  margin-bottom: 57px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 28px;
+  line-height: 65px;
+  letter-spacing: 0.84px;
+  color: #fff;
+}
+
+.ReceiveForm {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding-top: 24px;
+  margin-top: 38px;
+  background: linear-gradient(5.23deg, #252c46 -46.39%, #383f59 180.75%);
+  border-radius: 5px;
+}
+
+.FormTitle {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 37px;
+  line-height: 65px;
+  text-align: center;
+  letter-spacing: 1.11px;
+  color: #fff;
+}
+
+.SelectAccountContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  background-color: #1e2338;
+}
+
+.AccountCredit {
+  margin-right: 30px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: 0.42px;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.AccountDropdown {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 8px;
+  width: 384px;
+  background: transparent;
+  border: 1px solid #5b5d63;
+  color: #fff;
+}
+
+.AccountDropdown select {
+  flex-grow: 1;
+  padding: 5px 8px;
+  background: none;
+  border: none;
+  -webkit-appearance: none;
+  font-family: Montserrat, serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0.48px;
+  color: #fff;
+}
+
+.AccountDropdown select option {
+  color: #1e2338;
+}
+
+.AccountDropdown select:focus {
+  outline: none;
+}
+
+.QrcodeContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin-top: 64px;
+}
+
+.Qrcode {
+  width: 218px;
+  height: 218px;
+  align-self: center;
+  image-rendering: pixelated;
+}
+
+.AccountAddress {
+  margin-top: 32px;
+  padding: 0 30px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 30px;
+  text-align: center;
+  letter-spacing: 0.39px;
+  color: #fff;
+}
+
+.ActionsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 38px 65px;
+}
+
+.ActionsContainer > * {
+  margin-left: 26px;
+}

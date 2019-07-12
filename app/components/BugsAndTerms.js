@@ -2,12 +2,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import routes from '../constants/routes';
-import Button from './Button/Button';
-import Checkbox from './Checkbox/Checkbox';
-import Header from './Header/Header';
+import Button from './common/Button/Button';
+import Checkbox from './common/Checkbox/Checkbox';
+import Header from './common/Header/Header';
 import styles from './BugsAndTerms.css';
-import ProgressBar from './ProgressBar/ProgressBar';
-import Wizard from './Wizard/Wizard';
+import Icon from './common/Icon/Icon';
+import ProgressBar from './common/ProgressBar/ProgressBar';
+import Wizard from './common/Wizard/Wizard';
 
 type Props = {
   setBugsAndTerms: boolean => void
@@ -47,9 +48,9 @@ export default class BagsAndTerms extends Component<Props> {
           logoContainerClassName={styles.HeaderContentWrapper}
           contentContainerClassName={styles.HeaderContentWrapper}
         >
-          <div className={styles.backButton} data-tid="backButton">
+          <div data-tid="backButton">
             <Link to={routes.WELCOME}>
-              <i className="fa fa-arrow-left fa-3x" />
+              <Icon name="arrow_back" size={48} />
             </Link>
           </div>
         </Header>
@@ -110,15 +111,10 @@ export default class BagsAndTerms extends Component<Props> {
                 type="button"
                 onClick={this.onNext}
                 disabled={!isTermsAccepted}
+                iconRight="keyboard_backspace"
+                iconRightMirrorHor
               >
-                <span>
-                  Next
-                  <i
-                    className={`icon ion-md-arrow-round-forward ${
-                      styles.NextButtonIcon
-                    }`}
-                  />
-                </span>
+                Next
               </Button>
             </div>
           </div>

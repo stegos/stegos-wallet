@@ -1,19 +1,19 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as NodeActions from '../actions/node';
-import Account from '../components/Accounts/Account';
+import * as AccountsActions from '../actions/accounts';
+import AccountsList from '../components/Accounts/AccountsList/AccountsList';
 
 function mapStateToProps(state) {
   return {
-    node: state.node
+    accounts: state.accounts
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(NodeActions, dispatch);
+  return bindActionCreators(AccountsActions, dispatch);
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Account);
+)(AccountsList);

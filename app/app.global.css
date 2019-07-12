@@ -2,7 +2,45 @@
  * @NOTE: Prepend a `~` to css file paths that are in your node_modules
  *        See https://github.com/webpack-contrib/sass-loader#imports
  */
-@import '~@fortawesome/fontawesome-free/css/all.css';
+
+/* @import '~@fortawesome/fontawesome-free/css/all.css';
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../resources/fonts/MaterialIcons-Regular.eot);
+  src: local('Material Icons'), local('MaterialIcons-Regular'),
+    url(../resources/fonts/MaterialIcons-Regular.woff2) format('woff2'),
+    url(../resources/fonts/MaterialIcons-Regular.woff) format('woff'),
+    url(../resources/fonts/MaterialIcons-Regular.ttf) format('truetype');
+} */
+
+.material-icons {
+  font-family: 'Material Icons', sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px; /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
 
 body {
   position: relative;
@@ -40,4 +78,36 @@ a:hover {
   opacity: 1;
   text-decoration: none;
   cursor: pointer;
+}
+
+/* Scroll bar styling */
+
+.ScrollBar::-webkit-scrollbar {
+  background-color: transparent;
+}
+
+.ScrollBar::-webkit-scrollbar-button {
+  /* default style */
+}
+
+.ScrollBar::-webkit-scrollbar-track {
+  /* default style */
+}
+
+.ScrollBar::-webkit-scrollbar-track-piece {
+  background: linear-gradient(180deg, #5b5d63, #5b5d63) no-repeat 50%;
+  background-size: 1px calc(100% - 15px);
+}
+
+.ScrollBar::-webkit-scrollbar-thumb {
+  border-radius: 7.5px;
+  background-color: #5a658e;
+}
+
+.ScrollBar::-webkit-scrollbar-corner {
+  /* default style */
+}
+
+.ScrollBar::-webkit-resizer {
+  /* default style */
 }
