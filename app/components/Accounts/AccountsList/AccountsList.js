@@ -13,10 +13,41 @@ type Props = {
 };
 
 export default class AccountsList extends PureComponent<Props> {
+  state = {
+    search: '',
+    sort: 'balance'
+  };
+
   componentDidMount(): void {
     const { getAccounts } = this.props;
     getAccounts();
   }
+
+  onSortingChange = e => this.setState({ sort: e.target.value });
+
+  onSearchingChange = e => this.setState({ search: e.target.value });
+
+  getFilteredAccounts = () => {
+    const { search } = this.state;
+    const {
+      accounts: { accounts }
+    } = this.props;
+    return new Map(
+      [...accounts.entries()].filter(a => a[1].name.includes(search))
+    );
+  };
+
+  getFilteredAndSortedAccounts = () => {
+    const { sort } = this.state;
+    const accounts = this.getFilteredAccounts();
+    return new Map(
+      [...accounts.entries()].sort((a, b) => {
+        if (sort === 'name') return a[1].name.localeCompare(b[1].name);
+        if (sort === 'balance') return a[1].balance > b[1].balance;
+        return a > b;
+      })
+    );
+  };
 
   onCreateAccount = () => {
     const { createAccount } = this.props;
@@ -24,15 +55,19 @@ export default class AccountsList extends PureComponent<Props> {
   };
 
   render() {
-    const {
-      accounts: { accounts }
-    } = this.props;
+    const { sort, search } = this.state;
+    const accounts = this.getFilteredAndSortedAccounts();
     const keys = Array.from(accounts.keys());
     return (
       <div className={styles.AccountsList}>
         <div className={styles.SearchBar}>
           <div className={styles.SearchFiledWrapper}>
-            <input className={styles.SearchInput} placeholder="Search" />
+            <input
+              className={styles.SearchInput}
+              placeholder="Search"
+              value={search}
+              onChange={this.onSearchingChange}
+            />
             <Icon name="search" size={24} />
           </div>
           <Button
@@ -55,8 +90,9 @@ export default class AccountsList extends PureComponent<Props> {
               Sort by:
             </span>
             <select
+              onChange={this.onSortingChange}
               className={`${styles.SortSelectorText} ${styles.SortSelector}`}
-              defaultValue="balance"
+              defaultValue={sort}
             >
               <option value="balance">Account balance</option>
               <option value="name">Account name</option>
