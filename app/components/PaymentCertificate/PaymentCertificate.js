@@ -4,38 +4,36 @@ import Button from '../common/Button/Button';
 import Modal from '../common/Modal/Modal';
 import styles from './PaymentCertificate.css';
 
-type Props = {};
+type Props = {
+  visible: boolean,
+  onClose: () => void,
+  tx: any
+};
 
 export default class PaymentCertificate extends Component<Props> {
   props: Props;
 
-  constructor(props) {
-    super(props);
-    this.modalRef = React.createRef<Modal>();
-  }
-
-  state = {
-    tx: null
-  };
-
-  modalRef = null;
-
-  show(tx) {
-    this.modalRef.current.show({
-      title: 'Payment Certificate',
-      subtitle: 'Generated on June, 5th, 2019 at 10:17am',
-      type: 'big'
-    });
-    this.setState({
-      tx
-    });
+  close() {
+    const { onClose } = this.props;
+    if (typeof onClose === 'function') {
+      onClose();
+    }
   }
 
   render() {
-    const { tx } = this.state;
+    const { visible, tx } = this.props;
     console.log(tx);
     return (
-      <Modal ref={this.modalRef} style={{ width: '55%' }}>
+      <Modal
+        options={{
+          title: 'Payment Certificate',
+          subtitle: 'Generated on June, 5th, 2019 at 10:17am',
+          type: 'big',
+          visible,
+          onClose: this.close.bind(this)
+        }}
+        style={{ width: '55%' }}
+      >
         <div className={styles.Container}>
           <span
             className={styles.LabelBold}

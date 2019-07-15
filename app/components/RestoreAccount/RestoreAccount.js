@@ -11,7 +11,10 @@ import RecoveryPhrase from './RecoveryPhraze/RecoveryPhrase';
 import styles from './RestoreAccount.css';
 
 type Props = {
-  account: Account
+  account: Account,
+  visible: boolean,
+  onRestored: () => void,
+  onClose: () => void
 };
 
 export default class RestoreAccount extends Component<Props> {
@@ -19,7 +22,6 @@ export default class RestoreAccount extends Component<Props> {
 
   constructor(props) {
     super(props);
-    this.modalRef = React.createRef<Modal>();
     this.alertRef = React.createRef<Alert>();
   }
 
@@ -29,32 +31,11 @@ export default class RestoreAccount extends Component<Props> {
     qrcodeDataUrl: null
   };
 
-  modalRef = null;
-
   alertRef = null;
-
-  handleInputChange(event) {
-    const { target } = event;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const { name } = target;
-
-    this.setState({
-      [name]: value
-    });
-  }
 
   handleRecoveryChange(phrase: string[]) {
     this.setState({
       phrase
-    });
-  }
-
-  show() {
-    this.modalRef.current.show({
-      title: 'Restore Account',
-      subtitle:
-        'In order to restore your existing account, please fill all words from the recovery phrase in correct order.',
-      type: 'big'
     });
   }
 
@@ -64,7 +45,10 @@ export default class RestoreAccount extends Component<Props> {
       step: 0,
       qrcodeDataUrl: null
     });
-    this.modalRef.current.hide();
+    const { onClose } = this.props;
+    if (typeof onClose === 'function') {
+      onClose();
+    }
   }
 
   restore() {
@@ -126,12 +110,27 @@ export default class RestoreAccount extends Component<Props> {
     const { account } = this.props;
     clipboard.writeText(account.id);
     this.setState({ step: 2 });
+    const { onRestored } = this.props;
+    if (typeof onRestored === 'function') {
+      onRestored();
+    }
   }
 
   render() {
     const { phrase, step } = this.state;
+    const { visible } = this.props;
     return (
-      <Modal ref={this.modalRef} style={{ width: '55%' }}>
+      <Modal
+        options={{
+          title: 'Restore Account',
+          subtitle:
+            'In order to restore your existing account, please fill all words from the recovery phrase in correct order.',
+          type: 'big',
+          visible,
+          onClose: this.close.bind(this)
+        }}
+        style={{ width: '55%' }}
+      >
         <div className={styles.Container}>
           <Steps
             steps={['Accout', 'Copy Address', 'Receive']}

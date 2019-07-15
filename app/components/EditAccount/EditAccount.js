@@ -10,43 +10,32 @@ import styles from './EditAccount.css';
 
 type Props = {
   account: Account,
-  onDelete: string => void
+  onDelete: string => void,
+  visible: boolean,
+  onApply: () => void,
+  onCancel: () => void
 };
 
 export default class EditAccount extends PureComponent<Props> {
   props: Props;
 
-  constructor(props) {
-    super(props);
-    this.modalRef = React.createRef<Modal>();
-  }
-
   state = {
     form: ''
   };
 
-  modalRef = null;
-
-  handleInputChange(event) {
-    const { target } = event;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const { name } = target;
-
-    this.setState({
-      [name]: value
-    });
-  }
-
-  show() {
-    this.modalRef.current.show({ title: 'Wallet Settings', type: 'big' });
-  }
-
   apply() {
-    this.modalRef.current.hide();
+    const { onApply } = this.props;
+    if (typeof onApply === 'function') {
+      onApply();
+    }
   }
 
   hide() {
-    this.setState({ form: '' }, this.modalRef.current.hide);
+    this.setState({ form: '' });
+    const { onCancel } = this.props;
+    if (typeof onCancel === 'function') {
+      onCancel();
+    }
   }
 
   onDelete = () => {
@@ -124,9 +113,17 @@ export default class EditAccount extends PureComponent<Props> {
 
   render() {
     const { form } = this.state;
-    const { account } = this.props;
+    const { account, visible } = this.props;
     return (
-      <Modal ref={this.modalRef} style={{ width: '55%' }}>
+      <Modal
+        options={{
+          title: 'Wallet Settings',
+          type: 'big',
+          visible,
+          onClose: this.hide.bind(this)
+        }}
+        style={{ width: '55%' }}
+      >
         {form === '' && this.renderMain()}
         {form === 'delete' && (
           <DeleteAccount

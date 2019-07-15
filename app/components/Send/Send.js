@@ -40,7 +40,6 @@ export default class Send extends Component<Props> {
 
   constructor(props) {
     super(props);
-    this.modalRef = React.createRef();
     this.alertRef = React.createRef();
   }
 
@@ -51,10 +50,9 @@ export default class Send extends Component<Props> {
     amount: undefined,
     comment: undefined,
     fees: undefined,
-    generateCertificate: false
+    generateCertificate: false,
+    showConfirmationModal: false
   };
-
-  modalRef = null;
 
   alertRef = null;
 
@@ -77,30 +75,24 @@ export default class Send extends Component<Props> {
 
   showConfirmationModal() {
     console.log(this.state);
-    this.setState(
-      {
-        step: 1
-      },
-      () => this.modalRef.current.show({ title: 'Transaction confirmation' })
-    );
+    this.setState({
+      step: 1,
+      showConfirmationModal: true
+    });
   }
 
   onCancelConfirm() {
-    this.setState(
-      {
-        step: 0
-      },
-      () => this.modalRef.current.hide()
-    );
+    this.setState({
+      step: 0,
+      showConfirmationModal: false
+    });
   }
 
   confirmed() {
-    this.setState(
-      {
-        step: 2
-      },
-      () => this.modalRef.current.hide()
-    );
+    this.setState({
+      step: 2,
+      showConfirmationModal: false
+    });
   }
 
   sendForm() {
@@ -242,7 +234,7 @@ export default class Send extends Component<Props> {
       );
     }
     const { account } = location.state;
-    const { step } = this.state;
+    const { step, showConfirmationModal } = this.state;
     return (
       <div className={styles.Send}>
         <span className={styles.Title}>{account.name}</span>
@@ -276,7 +268,13 @@ export default class Send extends Component<Props> {
           {(step === 0 || step === 1) && this.sendForm()}
           {step === 2 && this.transactionSent()}
         </div>
-        <Modal title="" ref={this.modalRef}>
+        <Modal
+          options={{
+            title: 'Transaction confirmation',
+            visible: showConfirmationModal,
+            onClose: () => this.onCancelConfirm()
+          }}
+        >
           <div className={styles.ModalBody}>
             <input
               className={styles.FormField}

@@ -27,7 +27,9 @@ type Props = {
 export default class Account extends PureComponent<Props> {
   state = {
     trendingUp: true,
-    transactions: txList
+    transactions: txList,
+    editAccountVisible: false,
+    restoreAccountVisible: false
   };
 
   componentDidMount() {
@@ -43,10 +45,6 @@ export default class Account extends PureComponent<Props> {
 
   alertRef = React.createRef();
 
-  restoreAccountRef = React.createRef();
-
-  editAccountRef = React.createRef();
-
   switchTranding() {
     const { trendingUp } = this.state;
     this.setState({
@@ -55,15 +53,24 @@ export default class Account extends PureComponent<Props> {
   }
 
   restoreAccount() {
-    this.restoreAccountRef.current.show();
+    this.setState({
+      restoreAccountVisible: true
+    });
   }
 
   editAccount() {
-    this.editAccountRef.current.show();
+    this.setState({
+      editAccountVisible: true
+    });
   }
 
   render() {
-    const { trendingUp, transactions } = this.state;
+    const {
+      trendingUp,
+      transactions,
+      editAccountVisible,
+      restoreAccountVisible
+    } = this.state;
     const { location, deleteAccount } = this.props;
     if (!location.state || !location.state.account) {
       return (
@@ -189,11 +196,18 @@ export default class Account extends PureComponent<Props> {
             </div>
           </div>
         )}
-        <RestoreAccount ref={this.restoreAccountRef} account={account} />
+        <RestoreAccount
+          visible={restoreAccountVisible}
+          account={account}
+          onRestored={() => this.setState({ restoreAccountVisible: false })}
+          onClose={() => this.setState({ restoreAccountVisible: false })}
+        />
         <EditAccount
-          ref={this.editAccountRef}
+          visible={editAccountVisible}
           account={account}
           onDelete={deleteAccount}
+          onApply={() => this.setState({ editAccountVisible: false })}
+          onCancel={() => this.setState({ editAccountVisible: false })}
         />
       </div>
     );

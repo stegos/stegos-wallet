@@ -9,10 +9,22 @@ type Props = {
 };
 
 export default class TransactionsList extends PureComponent<Props> {
-  paymentCertificateRef = React.createRef();
+  state = {
+    tx: null,
+    showCertificate: false
+  };
 
   showCertificate(tx) {
-    this.paymentCertificateRef.current.show(tx);
+    this.setState({
+      tx,
+      showCertificate: true
+    });
+  }
+
+  hideCertificate() {
+    this.setState({
+      showCertificate: false
+    });
   }
 
   renderTransactions() {
@@ -68,11 +80,16 @@ export default class TransactionsList extends PureComponent<Props> {
   }
 
   render() {
+    const { tx, showCertificate } = this.state;
     return (
       <div className={styles.TransactionsList}>
         <span className={styles.Title}>Last operations</span>
         {this.renderTransactions()}
-        <PaymentCertificate ref={this.paymentCertificateRef} />
+        <PaymentCertificate
+          tx={tx}
+          visible={showCertificate}
+          onClose={() => this.hideCertificate()}
+        />
       </div>
     );
   }
