@@ -1,6 +1,7 @@
 import type { Action, SettingsStateType } from './types';
 import {
   CHECK_PASSWORD_EXISTENCE,
+  SET_AUTO_LOCK_TIMEOUT,
   SET_BUGS_AND_TERMS,
   SET_PASSWORD
 } from '../actions/settings';
@@ -9,7 +10,8 @@ const initialState = {
   isPasswordSet: null,
   password: null,
   isSendBugReport: false,
-  isTermsAccepted: false
+  isTermsAccepted: false,
+  autoLockTimeout: 5 // todo config
 };
 
 export default function settings(
@@ -34,6 +36,11 @@ export default function settings(
         ...state,
         isTermsAccepted: true,
         isSendBugReport: payload.sentBugs
+      };
+    case SET_AUTO_LOCK_TIMEOUT:
+      return {
+        ...state,
+        autoLockTimeout: payload
       };
     default:
       return state;

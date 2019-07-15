@@ -8,16 +8,31 @@ import styles from './DeleteAccount.css';
 
 type Props = {
   account: Account,
-  onDelete: Function,
-  onCancel: Function
+  onDelete: () => void,
+  onCancel: () => void
 };
 
 export default class DeleteAccount extends Component<Props> {
   props: Props;
 
+  state = {
+    accountName: '',
+    disableDeleteButton: true
+  };
+
+  onChangeAccountName = e => {
+    const { account } = this.props;
+    const newVal = e.target.value;
+    this.setState({
+      accountName: newVal,
+      disableDeleteButton: account.name !== newVal
+    });
+  };
+
   deleteAccount() {
-    const { onDelete } = this.props;
-    onDelete();
+    const { onDelete, account } = this.props;
+    const { accountName } = this.state;
+    if (account.name === accountName) onDelete();
   }
 
   cancel() {
@@ -27,6 +42,7 @@ export default class DeleteAccount extends Component<Props> {
 
   render() {
     const { account } = this.props;
+    const { accountName, disableDeleteButton } = this.state;
     return (
       <div className={styles.Container}>
         <div className={styles.WarnContainer}>
@@ -39,11 +55,13 @@ export default class DeleteAccount extends Component<Props> {
         <Input
           placeholder="If your are sure, please enter account name to proceed"
           noLabel
+          value={accountName}
+          onChange={this.onChangeAccountName}
           className={styles.InputStyle}
         />
         <div className={styles.ActionsContainer} key="actions">
           <Button
-            type="FilledPrimary"
+            type={disableDeleteButton ? 'OutlinePrimary' : 'FilledPrimary'}
             icon="cancel"
             onClick={() => this.deleteAccount()}
           >

@@ -4,8 +4,11 @@ import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
 import Modal from '../common/Modal/Modal';
 import styles from './WalletSettings.css';
+import type { SettingsStateType } from '../../reducers/types';
 
-type Props = {};
+type Props = {
+  settings: SettingsStateType
+};
 
 export default class WalletSettings extends Component<Props> {
   props: Props;
@@ -13,23 +16,22 @@ export default class WalletSettings extends Component<Props> {
   constructor(props) {
     super(props);
     this.modalRef = React.createRef<Modal>();
+    const { settings } = props;
+    const { autoLockTimeout, isPasswordSet } = settings;
+    this.state = {
+      isPasswordSet,
+      oldPassword: '',
+      newPassword: '',
+      newPasswordRepeat: '',
+      autoLockTimeout
+    };
   }
-
-  state = {
-    isPasswordSet: true,
-    oldPassword: '',
-    newPassword: '',
-    newPasswordRepeat: '',
-    autoLock: 25
-  };
 
   modalRef = null;
 
   handleInputChange(event) {
     const { target } = event;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const { name } = target;
-
+    const { name, value } = target;
     this.setState({
       [name]: value
     });
@@ -43,11 +45,24 @@ export default class WalletSettings extends Component<Props> {
     });
   }
 
+  reset = () => {
+    const { settings } = this.props;
+    const { autoLockTimeout, isPasswordSet } = settings;
+    this.setState({
+      isPasswordSet,
+      oldPassword: '',
+      newPassword: '',
+      newPasswordRepeat: '',
+      autoLockTimeout
+    });
+  };
+
   apply() {
     this.modalRef.current.hide();
   }
 
   cancel() {
+    this.reset();
     this.modalRef.current.hide();
   }
 
@@ -56,7 +71,7 @@ export default class WalletSettings extends Component<Props> {
       oldPassword,
       newPassword,
       newPasswordRepeat,
-      autoLock,
+      autoLockTimeout,
       isPasswordSet
     } = this.state;
     return (
@@ -93,8 +108,8 @@ export default class WalletSettings extends Component<Props> {
               <b>Wallet auto-lock</b> Set auto-lock timeout
             </span>
             <input
-              name="autoLock"
-              value={autoLock}
+              name="autoLockTimeout"
+              value={autoLockTimeout}
               onChange={e => this.handleInputChange(e)}
               className={styles.AutoLockInput}
             />
@@ -113,3 +128,8 @@ export default class WalletSettings extends Component<Props> {
     );
   }
 }
+
+// export default connect(
+//   state => ({ settings: state.settings }),
+//   () => ({})
+// )(WalletSettings)

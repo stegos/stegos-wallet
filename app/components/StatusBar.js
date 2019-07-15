@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import type { NodeStateType } from '../reducers/types';
+import type { NodeStateType, SettingsStateType } from '../reducers/types';
 import Header from './common/Header/Header';
 import Icon from './common/Icon/Icon';
 import styles from './StatusBar.css';
@@ -8,6 +8,7 @@ import WalletSettings from './WalletSettings/WalletSettings';
 
 type Props = {
   node: NodeStateType,
+  settings: SettingsStateType,
   className: string
 };
 
@@ -24,7 +25,7 @@ class StatusBar extends PureComponent<Props> {
   }
 
   render() {
-    const { node, className } = this.props;
+    const { node, className, settings } = this.props;
     return (
       <Header
         logoContainerClassName={styles.LogoContainerStyle}
@@ -66,13 +67,13 @@ class StatusBar extends PureComponent<Props> {
             {node.isSynced ? 'Syncronized' : 'Unsynchronized'}
           </span>
         </div>
-        <WalletSettings ref={this.modalRef} />
+        <WalletSettings ref={this.modalRef} settings={settings} />
       </Header>
     );
   }
 }
 
 export default connect(
-  state => ({ node: state.node }),
+  state => ({ node: state.node, settings: state.settings }),
   () => ({})
 )(StatusBar);

@@ -93,26 +93,6 @@ export default class EditAccount extends PureComponent<Props> {
 
         <div className={styles.InputLabel}>
           <div>
-            <b>Password protection</b>
-          </div>
-          Set account password
-        </div>
-        <div>
-          <Input
-            className={styles.Input}
-            placeholder="Password"
-            noLabel
-            type="password"
-          />
-          <Input
-            className={styles.Input}
-            placeholder="Confirm password"
-            noLabel
-            type="password"
-          />
-        </div>
-        <div className={styles.InputLabel}>
-          <div>
             <b>Account Backup</b>
           </div>
           Write down recovery phrase

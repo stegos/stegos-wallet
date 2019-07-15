@@ -4,7 +4,8 @@ export type SettingsStateType = {
   isPasswordSet: boolean | null,
   password: string,
   isSendBugReport: boolean,
-  isTermsAccepted: boolean
+  isTermsAccepted: boolean,
+  autoLockTimeout: number
 };
 
 export type NodeStateType = {
@@ -28,7 +29,11 @@ export type Account = {
   balance: string
 };
 
-export type State = { settings: SettingsStateType, node: NodeStateType };
+export type State = {
+  settings: SettingsStateType,
+  node: NodeStateType,
+  accounts: AccountsStateType
+};
 
 export type Action = {
   +type: string,
