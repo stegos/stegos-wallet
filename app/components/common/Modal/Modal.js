@@ -10,7 +10,7 @@ type ModalProps = {
   title?: string,
   subtitle?: string,
   type?: 'big' | 'small',
-  onClose?: Function
+  onClose?: () => void
 };
 
 export default class Modal extends Component<Props> {
