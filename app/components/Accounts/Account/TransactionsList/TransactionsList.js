@@ -9,6 +9,20 @@ type Props = {
 };
 
 export default class TransactionsList extends PureComponent<Props> {
+  static getDate(date: Date) {
+    const locale = 'en-us';
+    const month = date.toLocaleString(locale, { month: 'short' });
+    const day = `0${date.getDate()}`.substr(-2);
+    const year = date.getFullYear();
+    return `${month} ${day}, ${year}`;
+  }
+
+  static getTime(date: Date) {
+    const hours = `0${date.getHours()}`.substr(-2);
+    const minutes = `0${date.getMinutes()}`.substr(-2);
+    return `${hours}:${minutes}`;
+  }
+
   state = {
     tx: null,
     showCertificate: false
@@ -44,7 +58,9 @@ export default class TransactionsList extends PureComponent<Props> {
           </div>
           <span className={styles.TransactionTitle}>{item.type}</span>
           <div className={styles.TransactionDate}>
-            <span className={styles.TransactionText}>{item.date}</span>
+            <span className={styles.TransactionText}>
+              {TransactionsList.getDate(item.date)}
+            </span>
             <div className={styles.TransactionTime}>
               <Icon
                 name="schedule"
@@ -52,7 +68,9 @@ export default class TransactionsList extends PureComponent<Props> {
                 size="20"
                 style={{ marginRight: 10 }}
               />
-              <span className={styles.TransactionText}>{item.time}</span>
+              <span className={styles.TransactionText}>
+                {TransactionsList.getTime(item.date)}
+              </span>
             </div>
           </div>
           <div
