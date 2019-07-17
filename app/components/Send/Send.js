@@ -76,7 +76,6 @@ export default class Send extends Component<Props> {
   }
 
   showConfirmationModal() {
-    console.log(this.state);
     this.setState(
       {
         step: 1

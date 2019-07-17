@@ -3,12 +3,12 @@ import thunk from 'redux-thunk';
 import { createHashHistory } from 'history';
 import { routerActions, routerMiddleware } from 'connected-react-router';
 import { createLogger } from 'redux-logger';
-import createIpc from 'redux-electron-ipc';
 import createRootReducer from '../reducers';
 import * as settingsActions from '../actions/settings';
 import * as nodeActions from '../actions/node';
 import type { State } from '../reducers/types';
 import { wsMiddleware } from '../ws/wsMiddleware';
+import createIpcMiddleware from './ipcMiddleware';
 
 const history = createHashHistory();
 
@@ -37,13 +37,7 @@ const configureStore = (initialState?: State) => {
   const router = routerMiddleware(history);
   middleware.push(router);
 
-  // IPC Middleware
-  const ipc = createIpc({
-    NODE_RUNNING: nodeActions.onNodeRunning,
-    RUN_NODE_FAILED: nodeActions.onRunNodeFailed,
-    TOKEN_RECEIVED: nodeActions.onTokenReceived
-  });
-  middleware.push(ipc);
+  middleware.push(createIpcMiddleware());
 
   middleware.push(wsMiddleware);
 

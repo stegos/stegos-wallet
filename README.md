@@ -8,3 +8,7 @@ Electron-based wallet for Stegos blockchain
 2. `cd` to cloned repository
 3. `yarn`
 4. `yarn dev`
+
+## Package prod
+
+`yarn package` or `yarn package-all` to multiple platforms

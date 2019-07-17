@@ -99,6 +99,9 @@
       "buildResources": "resources",
       "output": "release"
     },
+    "extraResources": [
+      "node"
+    ],
     "publish": {
       "provider": "github",
       "owner": "stegos",

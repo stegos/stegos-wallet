@@ -30,6 +30,11 @@ export default class AppUpdater {
 let mainWindow = null;
 let nodeProcess = null;
 let isTokenCapturing = false;
+const nodePath =
+  process.env.NODE_ENV === 'production'
+    ? path.resolve(__dirname, '../../node/')
+    : path.resolve(__dirname, '../node/');
+const tokenFile = `${nodePath}/api.token`; // todo config
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -138,8 +143,6 @@ ipcMain.on('RUN_NODE', event => {
 function runNodeProcess(): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
-      const nodePath = path.resolve(__dirname, '../node/');
-      const tokenFile = `${nodePath}/api.token`; // todo config
       if (fs.existsSync(tokenFile)) fs.unlinkSync(tokenFile);
       nodeProcess = spawn(`./stegosd`, ['--chain', 'devnet'], {
         cwd: nodePath
@@ -164,10 +167,8 @@ function runNodeProcess(): Promise<void> {
 }
 
 function captureToken(resolve): void {
-  const nodePath = path.resolve(__dirname, '../node/');
   let token;
   let checkingInterval;
-  const tokenFile = `${nodePath}/api.token`; // todo config
   checkingInterval = setInterval(() => {
     token = readFile(tokenFile);
     if (token) {
