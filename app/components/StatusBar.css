@@ -42,3 +42,12 @@
   letter-spacing: 0.42px;
   color: #bfc1c6;
 }
+
+.IconButton {
+  cursor: pointer;
+  user-select: none;
+}
+
+.IconButton:focus {
+  outline: none;
+}

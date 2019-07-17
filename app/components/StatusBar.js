@@ -13,18 +13,24 @@ type Props = {
 };
 
 class StatusBar extends PureComponent<Props> {
-  constructor(props) {
-    super(props);
-    this.modalRef = React.createRef();
-  }
-
-  modalRef = null;
+  state = {
+    showSettings: false
+  };
 
   openWalletSettings() {
-    this.modalRef.current.show();
+    this.setState({
+      showSettings: true
+    });
+  }
+
+  closeWalletSettings() {
+    this.setState({
+      showSettings: false
+    });
   }
 
   render() {
+    const { showSettings } = this.state;
     const { node, className, settings } = this.props;
     return (
       <Header
@@ -38,6 +44,7 @@ class StatusBar extends PureComponent<Props> {
           onKeyPress={() => false}
           tabIndex="-1"
           role="button"
+          className={styles.IconButton}
         >
           <Icon
             name="settings"
@@ -67,7 +74,12 @@ class StatusBar extends PureComponent<Props> {
             {node.isSynced ? 'Syncronized' : 'Unsynchronized'}
           </span>
         </div>
-        <WalletSettings ref={this.modalRef} settings={settings} />
+        <WalletSettings
+          settings={settings}
+          onClose={() => this.closeWalletSettings()}
+          visible={showSettings}
+          onApply={() => this.closeWalletSettings()}
+        />
       </Header>
     );
   }

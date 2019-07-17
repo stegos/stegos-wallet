@@ -207,3 +207,13 @@
   letter-spacing: 0.36px;
   color: #fff;
 }
+
+.ChartTooltip {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: 0.39px;
+  text-transform: uppercase;
+  color: #fff;
+}

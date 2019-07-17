@@ -3,14 +3,16 @@ import Icon from '../Icon/Icon';
 import styles from './Modal.css';
 
 type Props = {
-  style?: any
+  style?: any,
+  options?: ModalProps
 };
 
 type ModalProps = {
   title?: string,
   subtitle?: string,
   type?: 'big' | 'small',
-  onClose?: () => void
+  onClose?: () => void,
+  visible?: boolean
 };
 
 export default class Modal extends Component<Props> {
@@ -26,31 +28,27 @@ export default class Modal extends Component<Props> {
   }
 
   static defaultProps = {
-    style: null
+    style: null,
+    options: {
+      title: '',
+      subtitle: '',
+      type: 'big',
+      onClose: undefined,
+      visible: false
+    }
   };
-
-  state = {
-    title: '',
-    subtitle: '',
-    type: 'small',
-    onClose: null,
-    visible: false
-  };
-
-  show(props: ModalProps) {
-    this.setState({ ...props, visible: true });
-  }
 
   hide() {
-    const { onClose } = this.state;
+    const { options } = this.props;
+    const { onClose } = options;
     if (typeof onClose === 'function') {
       onClose();
     }
-    this.setState({ visible: false });
   }
 
   render() {
-    const { visible, title, subtitle, type } = this.state;
+    const { options } = this.props;
+    const { visible, title, subtitle, type } = options;
     const { children, style } = this.props;
     if (!visible) {
       return null;

@@ -8,7 +8,7 @@ type Props = {};
 type AlertProps = {
   title?: string,
   body?: string,
-  onClose?: Function
+  onClose?: () => void
 };
 
 export default class Alert extends Component<Props> {

@@ -7,7 +7,10 @@ import styles from './WalletSettings.css';
 import type { SettingsStateType } from '../../reducers/types';
 
 type Props = {
-  settings: SettingsStateType
+  settings: SettingsStateType,
+  visible: boolean,
+  onClose: () => void,
+  onApply: () => void
 };
 
 export default class WalletSettings extends Component<Props> {
@@ -15,7 +18,6 @@ export default class WalletSettings extends Component<Props> {
 
   constructor(props) {
     super(props);
-    this.modalRef = React.createRef<Modal>();
     const { settings } = props;
     const { autoLockTimeout, isPasswordSet } = settings;
     this.state = {
@@ -27,21 +29,11 @@ export default class WalletSettings extends Component<Props> {
     };
   }
 
-  modalRef = null;
-
   handleInputChange(event) {
     const { target } = event;
     const { name, value } = target;
     this.setState({
       [name]: value
-    });
-  }
-
-  show() {
-    this.modalRef.current.show({
-      title: 'Wallet Settings',
-      subtitle: 'Set wallet password',
-      type: 'big'
     });
   }
 
@@ -58,12 +50,18 @@ export default class WalletSettings extends Component<Props> {
   };
 
   apply() {
-    this.modalRef.current.hide();
+    const { onApply } = this.props;
+    if (typeof onApply === 'function') {
+      onApply();
+    }
   }
 
   cancel() {
     this.reset();
-    this.modalRef.current.hide();
+    const { onClose } = this.props;
+    if (typeof onClose === 'function') {
+      onClose();
+    }
   }
 
   render() {
@@ -74,8 +72,18 @@ export default class WalletSettings extends Component<Props> {
       autoLockTimeout,
       isPasswordSet
     } = this.state;
+    const { visible } = this.props;
     return (
-      <Modal ref={this.modalRef} style={{ width: '55%' }}>
+      <Modal
+        options={{
+          title: 'Wallet Settings',
+          subtitle: 'Set wallet password',
+          type: 'big',
+          visible,
+          onClose: this.cancel.bind(this)
+        }}
+        style={{ width: '55%' }}
+      >
         <div className={styles.Container}>
           {isPasswordSet && (
             <Input
