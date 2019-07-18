@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import type { NodeStateType, SettingsStateType } from '../reducers/types';
+import type { NodeStateType } from '../reducers/types';
 import Header from './common/Header/Header';
 import Icon from './common/Icon/Icon';
 import styles from './StatusBar.css';
@@ -8,7 +8,6 @@ import WalletSettings from './WalletSettings/WalletSettings';
 
 type Props = {
   node: NodeStateType,
-  settings: SettingsStateType,
   className: string
 };
 
@@ -31,7 +30,7 @@ class StatusBar extends PureComponent<Props> {
 
   render() {
     const { showSettings } = this.state;
-    const { node, className, settings } = this.props;
+    const { node, className } = this.props;
     return (
       <Header
         logoContainerClassName={styles.LogoContainerStyle}
@@ -75,10 +74,8 @@ class StatusBar extends PureComponent<Props> {
           </span>
         </div>
         <WalletSettings
-          settings={settings}
-          onClose={() => this.closeWalletSettings()}
+          onCloseRequest={() => this.closeWalletSettings()}
           visible={showSettings}
-          onApply={() => this.closeWalletSettings()}
         />
       </Header>
     );
@@ -86,6 +83,6 @@ class StatusBar extends PureComponent<Props> {
 }
 
 export default connect(
-  state => ({ node: state.node, settings: state.settings }),
+  state => ({ node: state.node }),
   () => ({})
 )(StatusBar);

@@ -1,5 +1,6 @@
 // @flow
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
 import Modal from '../common/Modal/Modal';
@@ -9,11 +10,23 @@ import type { SettingsStateType } from '../../reducers/types';
 type Props = {
   settings: SettingsStateType,
   visible: boolean,
-  onClose: () => void,
-  onApply: () => void
+  onCloseRequest: () => void
 };
 
-export default class WalletSettings extends Component<Props> {
+const noErrorsState = {
+  oldPasswordError: '',
+  newPasswordError: '',
+  newPasswordRepeatError: ''
+};
+
+const initialState = {
+  oldPassword: '',
+  newPassword: '',
+  newPasswordRepeat: '',
+  ...noErrorsState
+};
+
+class WalletSettings extends Component<Props> {
   props: Props;
 
   constructor(props) {
@@ -21,10 +34,8 @@ export default class WalletSettings extends Component<Props> {
     const { settings } = props;
     const { autoLockTimeout, isPasswordSet } = settings;
     this.state = {
+      ...initialState,
       isPasswordSet,
-      oldPassword: '',
-      newPassword: '',
-      newPasswordRepeat: '',
       autoLockTimeout
     };
   }
@@ -33,42 +44,53 @@ export default class WalletSettings extends Component<Props> {
     const { target } = event;
     const { name, value } = target;
     this.setState({
-      [name]: value
+      [name]: value,
+      ...noErrorsState
     });
   }
+
+  handleAutoLockTimeoutChange = event => {
+    this.setState({
+      autoLockTimeout: event.target.value
+    });
+  };
 
   reset = () => {
     const { settings } = this.props;
     const { autoLockTimeout, isPasswordSet } = settings;
     this.setState({
+      ...initialState,
       isPasswordSet,
-      oldPassword: '',
-      newPassword: '',
-      newPasswordRepeat: '',
       autoLockTimeout
     });
   };
 
   apply() {
-    const { onApply } = this.props;
-    if (typeof onApply === 'function') {
-      onApply();
-    }
+    this.close();
   }
 
   cancel() {
     this.reset();
-    const { onClose } = this.props;
-    if (typeof onClose === 'function') {
-      onClose();
-    }
+    this.close();
   }
+
+  close = () => {
+    const { onCloseRequest } = this.props;
+    onCloseRequest();
+  };
+
+  validate = () => {
+    // const { oldPassword, newPassword, newPasswordRepeat, autoLockTimeout } = this.state;
+  };
 
   render() {
     const {
       oldPassword,
       newPassword,
       newPasswordRepeat,
+      oldPasswordError,
+      newPasswordError,
+      newPasswordRepeatError,
       autoLockTimeout,
       isPasswordSet
     } = this.state;
@@ -93,6 +115,7 @@ export default class WalletSettings extends Component<Props> {
               onChange={e => this.handleInputChange(e)}
               className={styles.Input}
               type="password"
+              error={oldPasswordError}
             />
           )}
           <Input
@@ -102,6 +125,7 @@ export default class WalletSettings extends Component<Props> {
             onChange={e => this.handleInputChange(e)}
             className={styles.Input}
             type="password"
+            error={newPasswordError}
           />
           <Input
             placeholder="Confirm password"
@@ -110,6 +134,7 @@ export default class WalletSettings extends Component<Props> {
             onChange={e => this.handleInputChange(e)}
             className={styles.Input}
             type="password"
+            error={newPasswordRepeatError}
           />
           <div className={styles.AutoLockContainer}>
             <span className={styles.AutoLockLabel}>
@@ -118,7 +143,7 @@ export default class WalletSettings extends Component<Props> {
             <input
               name="autoLockTimeout"
               value={autoLockTimeout}
-              onChange={e => this.handleInputChange(e)}
+              onChange={this.handleAutoLockTimeoutChange}
               className={styles.AutoLockInput}
             />
             <span className={styles.AutoLockPostfix}>min</span>
@@ -137,7 +162,7 @@ export default class WalletSettings extends Component<Props> {
   }
 }
 
-// export default connect(
-//   state => ({ settings: state.settings }),
-//   () => ({})
-// )(WalletSettings)
+export default connect(
+  state => ({ settings: state.settings }),
+  () => ({})
+)(WalletSettings);
