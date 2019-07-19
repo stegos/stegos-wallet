@@ -10,8 +10,8 @@ import Button from './common/Button/Button';
 
 type Props = {
   settings: SettingsStateType,
-  checkPasswordExistence: () => void,
-  setPassword: string => void
+  checkDbExistence: () => void,
+  setPassword: string => Promise<void>
 };
 
 export default class Welcome extends Component<Props> {
@@ -22,8 +22,8 @@ export default class Welcome extends Component<Props> {
   };
 
   componentDidMount(): void {
-    const { checkPasswordExistence } = this.props;
-    checkPasswordExistence();
+    const { checkDbExistence } = this.props;
+    checkDbExistence();
   }
 
   onNext = () => {
@@ -46,13 +46,13 @@ export default class Welcome extends Component<Props> {
           <div className={styles.Container}>
             <span className={styles.StatusBar}>Welcome to Stegos Wallet</span>
           </div>
-          {settings.isPasswordSet === false && (
+          {settings.isDbExist === false && (
             <Link to={routes.PROTECT}>
               <span className={styles.StatusBar}>Get Started</span>
             </Link>
           )}
 
-          {settings.isPasswordSet === true && (
+          {settings.isDbExist === true && (
             <Fragment>
               <span>Enter your password to continue</span>
               <Input

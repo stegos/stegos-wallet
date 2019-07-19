@@ -10,12 +10,14 @@ import ReceivePage from './containers/ReceivePage';
 import Menu from './components/Menu';
 import StatusBar from './components/StatusBar';
 import styles from './Routes.css';
+import AlertModal from './components/Alert/AlertModal';
 
 export default () => (
   <App>
     <div className={styles.Container}>
       <StatusBar className={styles.StatusBar} />
       <Menu className={styles.Menu} />
+      <AlertModal />
       <div className={`${styles.PageScrollWrapper} ScrollBar`}>
         <div className={styles.Page}>
           <Switch>
