@@ -124,7 +124,7 @@ export default class TransactionsList extends PureComponent<Props> {
         {this.renderTransactions()}
         <PaymentCertificate
           tx={tx}
-          sender={sender}
+          sender={sender || (tx && tx.sender)}
           visible={showCertificate}
           onClose={() => this.hideCertificate()}
         />

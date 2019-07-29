@@ -6,9 +6,9 @@ export const to101Date = (date: Date) =>
   )}/${date.getFullYear()}`;
 
 export const to108Time = (date: Date) =>
-  `${toTwoDigits(date.getHours())}/${toTwoDigits(
+  `${toTwoDigits(date.getHours())}:${toTwoDigits(
     date.getMinutes()
-  )}/${date.getSeconds()}`;
+  )}:${date.getSeconds()}`;
 
 export const getCertificateVerificationDate = date =>
   `${to101Date(date)} ${to108Time(date)}`;

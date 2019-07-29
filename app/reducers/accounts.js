@@ -57,6 +57,9 @@ const handleMessage = (state: AccountsStateType, payload) => {
     console.log('HANDLE MSG');
     console.log(JSON.stringify(payload));
   }
+  const account = payload.account_id
+    ? state.accounts.get(payload.account_id)
+    : null;
   switch (type) {
     case 'accounts_info':
       return {
@@ -122,7 +125,7 @@ const handleMessage = (state: AccountsStateType, payload) => {
       return {
         ...state,
         accounts: state.accounts.set(payload.account_id, {
-          ...state.accounts.get(payload.account_id),
+          ...account,
           transactions: payload.log
             .map(t =>
               t.type.toLowerCase() === 'outgoing'
@@ -136,7 +139,8 @@ const handleMessage = (state: AccountsStateType, payload) => {
                     ),
                     utxo: t.outputs.filter(o => !o.is_change)[0],
                     id: t.timestamp,
-                    rvalue: t.outputs.filter(o => !o.is_change)[0].rvalue
+                    rvalue: t.outputs.filter(o => !o.is_change)[0].rvalue,
+                    sender: account && account.address
                   }
                 : {
                     ...t,
