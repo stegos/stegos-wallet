@@ -1,0 +1,88 @@
+// @flow
+import React, { Component } from 'react';
+import type { NodeStateType } from '../reducers/types';
+import Button from './common/Button/Button';
+import Header from './common/Header/Header';
+import ProgressBar from './common/ProgressBar/ProgressBar';
+import styles from './Sync.css';
+import Wizard from './common/Wizard/Wizard';
+
+type Props = {
+  node: NodeStateType,
+  runNode: () => void,
+  onSync: () => void
+};
+
+export default class Sync extends Component<Props> {
+  props: Props;
+
+  componentDidMount(): void {
+    const { runNode } = this.props;
+    runNode();
+  }
+
+  onNext = () => {
+    const { onSync } = this.props;
+    onSync();
+  };
+
+  render() {
+    const { node } = this.props;
+    return (
+      <div className={styles.Wrapper}>
+        <Header />
+        <Wizard
+          steps={[
+            {
+              number: 1,
+              label: 'Password protection',
+              active: true
+            },
+            {
+              number: 2,
+              label: 'Sync',
+              active: true
+            },
+            {
+              number: 3,
+              label: 'Bugs & Terms of Use',
+              active: false
+            }
+          ]}
+        />
+        <div className={styles.Main}>
+          <span className={styles.Title}>
+            {node.isSynced
+              ? 'Your wallet is synchronized!'
+              : 'Your wallet is synchronizing with the blockchain...'}
+          </span>
+          <div className={styles.ProgressBarWrapper}>
+            <span className={styles.Progress}>{node.syncingProgress}%</span>
+            <ProgressBar
+              progress={node.syncingProgress}
+              className={styles.ProgressBar}
+            />
+          </div>
+          {!node.isSynced && (
+            <span className={styles.Label}>Please wait...</span>
+          )}
+          <div className={styles.FooterWrapper}>
+            <div style={{ flex: 1 }} />
+            <div style={{ flex: 1 }} />
+            <div className={styles.ButtonWrapper}>
+              <Button
+                type="button"
+                iconRight="keyboard_backspace"
+                iconRightMirrorHor
+                onClick={this.onNext}
+                style={{ visibility: node.isSynced ? 'visible' : 'hidden' }}
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}

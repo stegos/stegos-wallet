@@ -1,0 +1,18 @@
+.Container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+.ActionsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.ActionsContainer > *[role='button'] {
+  margin-left: 25px;
+}

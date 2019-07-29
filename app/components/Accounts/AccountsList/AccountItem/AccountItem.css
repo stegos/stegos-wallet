@@ -1,0 +1,60 @@
+.AccountItem {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  padding: 21px 31px;
+  background: #232737;
+  box-shadow: 2px 12px 17px rgba(0, 0, 0, 0.171902);
+  border-radius: 5px 5px;
+  user-select: none;
+}
+
+.AccountItem:hover {
+  background-color: #30354b;
+}
+
+.NameContainer {
+  width: 25%;
+  padding-right: 70px;
+  border-right: 1px solid #4a516c;
+}
+
+.Name {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 65px;
+  letter-spacing: 0.54px;
+  white-space: nowrap;
+  color: #bfc1c6;
+}
+
+.BalanceContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-left: 37px;
+  white-space: nowrap;
+}
+
+.StgIcon {
+  width: 30px;
+  height: 30px;
+  margin-right: 20px;
+}
+
+.Balance {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 65px;
+  letter-spacing: 0.6px;
+  color: #bfc1c6;
+}
+
+.ChartContainer {
+  margin: -21px -31px -21px 0;
+  border-radius: 0 5px 5px 0;
+  overflow: hidden;
+}

@@ -1,0 +1,28 @@
+.Container {
+  position: relative;
+  padding: 2px;
+  height: 17px;
+  border-radius: 13px;
+  background-color: #000;
+}
+
+.Container::before {
+  content: '';
+  position: absolute;
+  background-color: #252a39;
+  width: 100%;
+  height: 100%;
+  border-radius: 13px;
+  transform: translate(-2px, -1px);
+  z-index: -1;
+}
+
+.Progress {
+  height: 100%;
+  border-radius: 13px;
+  background: linear-gradient(
+    270deg,
+    #ff6c00 0%,
+    rgba(255, 108, 0, 0.201459) 100%
+  );
+}

@@ -1,0 +1,46 @@
+.Steps {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 36px;
+  background: linear-gradient(90deg, #5b5d63, #5b5d63) no-repeat 50%;
+  background-size: 100% 1px;
+}
+
+.Step {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: #2b324c;
+  border: 1px solid #5b5d63;
+  border-radius: 9px;
+}
+
+.Label {
+  position: absolute;
+  bottom: -36px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.Step.Active {
+  border-color: #ff6c00;
+}
+
+.Step.Active .Label {
+  color: #ff6c00;
+}
+
+.Step:first-child .Label {
+  left: 0;
+  text-align: left;
+}
+
+.Step:last-child .Label {
+  right: 0;
+  text-align: right;
+}

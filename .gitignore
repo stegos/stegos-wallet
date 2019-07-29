@@ -51,4 +51,7 @@ main.js.map
 npm-debug.log.*
 test
 internals
-resources
+resources/*
+!resources/img/
+!resources/fonts/
+node/*

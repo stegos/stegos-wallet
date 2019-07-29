@@ -1,0 +1,76 @@
+.ChartContainer {
+  margin: 35px -28px -35px -52px;
+  background-color: #1e2338;
+}
+
+.XaxisLabel {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: 0.39px;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.ChartTooltip {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: 0.39px;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.LegendContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 20px;
+}
+
+.LegendWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 20px;
+}
+
+.LegendLabel {
+  margin-left: 10px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: 0.39px;
+  text-transform: uppercase;
+  color: #9a9a9a;
+}
+
+.LegendBTC {
+  width: 12px;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to left,
+    rgba(0, 67, 255, 0.4),
+    rgba(255, 67, 0, 0.4)
+  );
+}
+
+.LegendSTG {
+  width: 12px;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to left,
+    rgba(70, 255, 0, 0.64),
+    rgba(255, 108, 0, 0.64)
+  );
+}
+
+.ChartLegendWrapperStyle {
+  margin-top: 13px;
+}

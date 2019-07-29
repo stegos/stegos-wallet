@@ -10,10 +10,15 @@
  *
  * @flow
  */
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import MenuBuilder from './menu';
+import { spawn } from 'child_process';
+import path from 'path';
+import fs from 'fs';
+// import MenuBuilder from './menu';
+import { TOKEN_RECEIVED } from './actions/node';
+import { wsEndpoint } from './constants/config';
 
 export default class AppUpdater {
   constructor() {
@@ -24,6 +29,14 @@ export default class AppUpdater {
 }
 
 let mainWindow = null;
+let nodeProcess = null;
+let isTokenCapturing = false;
+const nodePath =
+  process.env.NODE_ENV === 'production'
+    ? path.resolve(__dirname, '../../node/')
+    : path.resolve(__dirname, '../node/');
+const appDataPath = `${app.getPath('appData')}/stegos/`;
+const tokenFile = `${appDataPath}/api.token`; // todo config
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -69,8 +82,11 @@ app.on('ready', async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728
+    width: 1440,
+    height: 877,
+    minWidth: 1280,
+    minHeight: 320,
+    icon: path.join(__dirname, '../resources/icons/64x64.png')
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
@@ -93,10 +109,93 @@ app.on('ready', async () => {
     mainWindow = null;
   });
 
-  const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
+  // Disable default electron menu bar
+  // const menuBuilder = new MenuBuilder(mainWindow);
+  // menuBuilder.buildMenu();
+
+  // No menu bar specified in design, remove unused menu builder file app/menu.js?
+  mainWindow.setMenu(null);
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
 });
+
+app.on('quit', () => {
+  if (nodeProcess != null) {
+    nodeProcess.kill('SIGKILL');
+    nodeProcess = null;
+  }
+  app.exit(0);
+});
+
+/**
+ * IPC listeners
+ */
+
+ipcMain.on('RUN_NODE', event => {
+  runNodeProcess()
+    .then(() => event.sender.send('NODE_RUNNING'))
+    .catch(e => {
+      console.log(e);
+      dialog.showErrorBox('Error', 'An error occurred');
+      event.sender.send('RUN_NODE_FAILED');
+    });
+});
+
+function runNodeProcess(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    try {
+      if (fs.existsSync(tokenFile)) fs.unlinkSync(tokenFile);
+      nodeProcess = spawn(
+        `./stegosd`,
+        [
+          '--chain',
+          'devnet',
+          '--data-dir',
+          appDataPath,
+          '--api-endpoint',
+          wsEndpoint
+        ],
+        {
+          cwd: nodePath
+        }
+      );
+      nodeProcess.stdout.on('data', data => {
+        const str = data.toString('utf8');
+        console.log(str);
+        if (str.includes('ERROR [stegos'))
+          reject(new Error('An error occurred'));
+        if (!isTokenCapturing) {
+          isTokenCapturing = true;
+          captureToken(resolve); // todo rid off NODE_RUNNING action
+        }
+      });
+      nodeProcess.stderr.on('data', data => {
+        reject(data.toString('utf8'));
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
+
+function captureToken(resolve): void {
+  let token;
+  let checkingInterval;
+  checkingInterval = setInterval(() => {
+    token = readFile(tokenFile);
+    if (token) {
+      clearInterval(checkingInterval);
+      checkingInterval = null;
+      resolve();
+      mainWindow.webContents.send(TOKEN_RECEIVED, token);
+    }
+  }, 300);
+}
+
+function readFile(filePath: string): string | null {
+  return fs.existsSync(filePath)
+    ? fs.readFileSync(filePath).toString('utf8')
+    : null;
+}
