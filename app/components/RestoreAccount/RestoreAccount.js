@@ -112,7 +112,7 @@ class RestoreAccount extends Component<Props> {
 
   copyAddressToClipboard() {
     const { account } = this.props;
-    clipboard.writeText(account.id);
+    clipboard.writeText(account.address);
     this.setState({ step: 2 });
   }
 
