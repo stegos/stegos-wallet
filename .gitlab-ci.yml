@@ -1,3 +1,7 @@
+variables:
+  STEGOS_PROJECT_ID: 25
+  STEGOS_BRANCH: dev
+
 stages:
   - build
 
@@ -23,6 +27,10 @@ build:linux:
   script:
     - node --version
     - yarn --version
+    - mkdir node
+    - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/linux/stegosd?job=release:linux -o node/stegosd
+    - chmod a+x node/stegosd
+    - node/stegosd --version
     - yarn install
     - apt-get update && apt-get install -y --no-install-recommends libopenjp2-tools binutils rpm ruby
     - yarn package-linux
