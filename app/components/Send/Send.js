@@ -2,6 +2,7 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import type { AccountsStateType } from '../../reducers/types';
+import Busy from '../common/Busy/Busy';
 import Button from '../common/Button/Button';
 import Dropdown from '../common/dropdown/Dropdown';
 import Icon from '../common/Icon/Icon';
@@ -79,7 +80,8 @@ export default class Send extends Component<Props> {
       comment: '',
       fee: fees[0],
       feeError: '',
-      generateCertificate: false
+      generateCertificate: false,
+      isBusy: false
     };
   }
 
@@ -173,6 +175,7 @@ export default class Send extends Component<Props> {
       generateCertificate,
       fee
     } = this.state;
+    this.setState({ isBusy: true });
     sendTransaction(
       recipientAddress,
       amount * POWER_DIVISIBILITY,
@@ -182,6 +185,7 @@ export default class Send extends Component<Props> {
       fee.fee * POWER_DIVISIBILITY
     )
       .then(resp => {
+        this.setState({ isBusy: false });
         this.confirmed();
         return resp;
       })
@@ -387,44 +391,47 @@ export default class Send extends Component<Props> {
   }
 
   render() {
-    const { titledAccount, step } = this.state;
+    const { titledAccount, step, isBusy } = this.state;
     return (
-      <div className={styles.Send}>
-        {titledAccount && (
-          <Fragment>
-            <span className={styles.Title}>{titledAccount.name}</span>
-            <Link
-              to={{
-                pathname: routes.ACCOUNT,
-                state: { accountId: titledAccount.id }
+      <Fragment>
+        <div className={styles.Send}>
+          {titledAccount && (
+            <Fragment>
+              <span className={styles.Title}>{titledAccount.name}</span>
+              <Link
+                to={{
+                  pathname: routes.ACCOUNT,
+                  state: { accountId: titledAccount.id }
+                }}
+                style={{ alignSelf: 'flex-start', paddingLeft: 0 }}
+              >
+                <Button type="Invisible" icon="keyboard_backspace">
+                  Back to the account
+                </Button>
+              </Link>
+            </Fragment>
+          )}
+          <div className={styles.SendForm}>
+            <div className={styles.FormTitle}>Send</div>
+            <div
+              style={{
+                width: 384,
+                alignSelf: 'center',
+                marginTop: 7,
+                marginBottom: 30
               }}
-              style={{ alignSelf: 'flex-start', paddingLeft: 0 }}
             >
-              <Button type="Invisible" icon="keyboard_backspace">
-                Back to the account
-              </Button>
-            </Link>
-          </Fragment>
-        )}
-        <div className={styles.SendForm}>
-          <div className={styles.FormTitle}>Send</div>
-          <div
-            style={{
-              width: 384,
-              alignSelf: 'center',
-              marginTop: 7,
-              marginBottom: 30
-            }}
-          >
-            <Steps
-              steps={['Details', 'Verification', 'Confirmation']}
-              activeStep={step}
-            />
+              <Steps
+                steps={['Details', 'Verification', 'Confirmation']}
+                activeStep={step}
+              />
+            </div>
+            {(step === 0 || step === 1) && this.sendForm()}
+            {step === 2 && this.transactionSent()}
           </div>
-          {(step === 0 || step === 1) && this.sendForm()}
-          {step === 2 && this.transactionSent()}
         </div>
-      </div>
+        <Busy visible={isBusy} title="Sending transaction" />
+      </Fragment>
     );
   }
 }

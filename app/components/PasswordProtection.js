@@ -103,6 +103,7 @@ export default class PasswordProtection extends Component<Props> {
                 error={passError}
                 showError
                 type="password"
+                autoFocus
               />
               <Input
                 onInput={this.onConfirmPassChange}
