@@ -24,3 +24,5 @@ export const formatDigit = (value: number | string) => {
   parts[0] = parts[0].replace(DIGIT_NUMBER_FORMAT, ',');
   return parts.join('.');
 };
+
+export const NUMBER_FORMAT = /^(\d+)((\.(?=\d+)(\d*))|$)$/;

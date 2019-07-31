@@ -18,19 +18,36 @@ class Blocker extends Component<Props> {
   props: Props;
 
   state = {
-    password: ''
+    password: '',
+    unlocking: false
   };
 
   onUnlock() {
-    const { unlockWallet } = this.props;
+    const { unlockWallet, showError } = this.props;
     const { password } = this.state;
-    unlockWallet(password);
+    this.setState({
+      unlocking: true
+    });
+    unlockWallet(password)
+      .then(() =>
+        this.setState({
+          password: '',
+          unlocking: false
+        })
+      )
+      .catch(e => {
+        showError(e.message || 'Unlock wallet failed, please try again.');
+        this.setState({
+          password: '',
+          unlocking: false
+        });
+      });
   }
 
   render() {
     const { settings } = this.props;
     const { isLocked } = settings;
-    const { password } = this.state;
+    const { password, unlocking } = this.state;
     return (
       <Modal
         options={{
@@ -42,15 +59,22 @@ class Blocker extends Component<Props> {
         style={{ width: 300 }}
       >
         <div className={styles.Container}>
-          <Input
-            placeholder="Enter password"
-            value={password}
-            type="password"
-            onChange={e => this.setState({ password: e.currentTarget.value })}
-          />
+          {!unlocking && (
+            <Input
+              placeholder="Enter password"
+              value={password}
+              type="password"
+              onChange={e => this.setState({ password: e.currentTarget.value })}
+            />
+          )}
+          {unlocking && <span>Unlocking wallet...</span>}
         </div>
         <div className={styles.ActionsContainer}>
-          <Button type="OutlinePrimary" onClick={() => this.onUnlock()}>
+          <Button
+            type="OutlinePrimary"
+            onClick={() => this.onUnlock()}
+            disabled={unlocking}
+          >
             Unlock
           </Button>
         </div>

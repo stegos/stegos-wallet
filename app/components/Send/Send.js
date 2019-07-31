@@ -10,7 +10,7 @@ import Steps from '../common/Steps/Steps';
 import styles from './Send.css';
 import routes from '../../constants/routes';
 import { POWER_DIVISIBILITY } from '../../constants/config';
-import { formatDigit, isBase58 } from '../../utils/format';
+import { formatDigit, isBase58, NUMBER_FORMAT } from '../../utils/format';
 
 type Location = {
   pathname: string,
@@ -95,7 +95,7 @@ export default class Send extends Component<Props> {
       this.setState({ recipientAddressError: 'Incorrect address' });
       return false;
     }
-    if (!amount) {
+    if (!amount || !NUMBER_FORMAT.test(amount)) {
       this.setState({ amountError: 'Incorrect value' });
       return false;
     }
