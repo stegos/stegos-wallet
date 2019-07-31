@@ -41,8 +41,30 @@ export type Transaction = {
   type: TransactionType,
   timestamp: string,
   amount: number,
-  hasCertificate: boolean
+  hasCertificate: boolean,
+  status?: TransactionStatus
 };
+
+export type TransactionStatus =
+  | 'created'
+  | 'accepted'
+  | 'rejected'
+  | 'prepare'
+  | 'rollback'
+  | 'committed'
+  | 'conflicted';
+
+// const TransactionStatuses = {
+//   created: 'Created',
+//   accepted: 'Accepted',
+//   rejected: 'Rejected',
+//   prepare: 'Prepare',
+//   rollback: 'Rollback',
+//   committed: 'Committed',
+//   conflicted: 'Conflicted',
+// };
+//
+// export type TransactionStatus = $Keys<typeof TransactionStatuses>;
 
 export type TransactionType = 'Send' | 'Receive';
 

@@ -33,7 +33,6 @@
   flex-shrink: 0;
   width: 48px;
   height: 48px;
-  margin-right: 54px;
   background: #242b43;
   border-radius: 5px;
   color: #fff;
@@ -41,35 +40,54 @@
 
 .TransactionTitle {
   display: inline-block;
-  width: 100px;
-  margin-right: 50px;
+  width: 87px;
   font-style: normal;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 1.38888888889vw;
   line-height: 18px;
   letter-spacing: 0.6px;
   color: #fff;
 }
 
+.TransactionStatus {
+  position: absolute;
+  bottom: 100%;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0.42px;
+  color: #aaa;
+}
+
 .TransactionDate {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 160px;
+}
+
+.TransactionDateTime {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  width: 180px;
-  margin-right: 50px;
+  align-items: center;
 }
 
 .TransactionTime {
   display: flex;
   flex-direction: row;
+  margin-left: 8px;
 }
 
 .TransactionCertificate {
   display: flex;
   flex-direction: row;
+  align-items: center;
   justify-content: space-between;
-  width: 120px;
-  margin-right: auto;
+  width: 8.33333333333vw;
+  min-width: 100px;
 }
 
 .TransactionText {
@@ -85,12 +103,14 @@
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  width: 120px;
+  font-size: 1.25vw;
 }
 
 .TransactionAmount {
   font-style: normal;
   font-weight: bold;
-  font-size: 18px;
+  font-size: inherit;
   line-height: 18px;
   text-align: right;
   letter-spacing: 0.54px;
@@ -100,7 +120,7 @@
 .TransactionAmountCurrency {
   font-style: normal;
   font-weight: normal;
-  font-size: 18px;
+  font-size: inherit;
   line-height: 18px;
   text-align: right;
   letter-spacing: 0.54px;
