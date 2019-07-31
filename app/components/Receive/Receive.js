@@ -86,7 +86,7 @@ export default class Receive extends Component<Props> {
             <Dropdown
               onChange={e => this.onSelectAccount(e)}
               value={selectedAccount && selectedAccount.name}
-              options={Array.from(accounts).map(acc => ({
+              options={Object.entries(accounts).map(acc => ({
                 value: acc[1],
                 name: acc[1].name
               }))}

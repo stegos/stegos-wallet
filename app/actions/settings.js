@@ -109,7 +109,7 @@ export const showError = (error: string) => (dispatch: Dispatch) => {
 };
 
 export const lockWallet = () => (dispatch: Dispatch, getState: GetState) => {
-  Array.from(getState().accounts.items).map(account =>
+  Object.entries(getState().accounts.items).map(account =>
     sendSync({ type: 'seal', account_id: account[0] }, getState)
   );
   dispatch({ type: LOCK_WALLET });
@@ -127,7 +127,7 @@ export const unlockWallet = (password: string) => async (
   } else {
     try {
       await Promise.all(
-        Array.from(getState().accounts.items).map(account =>
+        Object.entries(getState().accounts.items).map(account =>
           sendSync(
             { type: 'unseal', password, account_id: account[0] },
             getState
@@ -159,7 +159,7 @@ export const changePassword = (newPass: string, oldPass: string) => (
       }
       await setNewPassword(newPass, async () => {
         await Promise.all(
-          Array.from(getState().accounts.items).map(account =>
+          Object.entries(getState().accounts.items).map(account =>
             sendSync(
               {
                 type: 'change_password',

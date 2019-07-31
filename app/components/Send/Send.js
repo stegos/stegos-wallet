@@ -200,7 +200,7 @@ export default class Send extends Component<Props> {
         <div className={styles.SendFormContainer} key="Accounts">
           <span className={styles.FieldLabel}>Account credit</span>
           {Send.renderDropdown(
-            Array.from(accounts).map(acc => ({
+            Object.entries(accounts).map(acc => ({
               value: acc[1],
               name: acc[1].name
             })),

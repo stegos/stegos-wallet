@@ -29,7 +29,7 @@ export const getAccounts = () => (dispatch: Dispatch, getState: GetState) => {
       const { accounts, settings } = state;
       const { password } = settings;
       await Promise.all(
-        Array.from(accounts.items)
+        Object.entries(accounts.items)
           .filter(a => a[1].isLocked === true)
           .map(
             account =>
