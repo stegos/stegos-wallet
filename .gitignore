@@ -55,3 +55,5 @@ resources/*
 !resources/img/
 !resources/fonts/
 node/*
+app/stegos.db
+*~
