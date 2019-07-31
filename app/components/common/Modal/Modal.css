@@ -1,0 +1,69 @@
+.Modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(22, 22, 31, 0.7);
+}
+
+.Container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 38px 60px 30px 60px;
+  min-width: 588px;
+  background: linear-gradient(14.63deg, #252c46 -1.44%, #383f59 163.29%);
+  border: 1px solid #cc5e11;
+  box-sizing: border-box;
+  box-shadow: 2px 13px 17px rgba(0, 0, 0, 0.3865);
+  border-radius: 10px;
+}
+
+.ContainerBig {
+  padding-top: 20px;
+  border-radius: 0;
+  border-color: transparent;
+}
+
+.Title {
+  margin-bottom: 40px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 16px;
+  text-align: center;
+  letter-spacing: 0.6px;
+  color: #fff;
+}
+
+.Close {
+  position: absolute;
+  top: 26px;
+  right: 23px;
+  cursor: pointer;
+}
+
+.TitleBig {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 37px;
+  line-height: 65px;
+  text-align: center;
+  letter-spacing: 1.11px;
+  color: #fff;
+}
+
+.Subtitle {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 22px;
+  text-align: center;
+  letter-spacing: 0.39px;
+  color: #fff;
+}

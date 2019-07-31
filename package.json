@@ -57,8 +57,8 @@
   },
   "main": "./app/main.prod.js",
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.develar.ElectronReact",
+    "productName": "StegosWallet",
+    "appId": "com.stegos.wallet",
     "files": [
       "app/dist/",
       "app/app.html",
@@ -99,6 +99,9 @@
       "buildResources": "resources",
       "output": "release"
     },
+    "extraResources": [
+      "node"
+    ],
     "publish": {
       "provider": "github",
       "owner": "stegos",
@@ -218,22 +221,27 @@
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.10",
     "webpack-merge": "^4.1.4",
-    "yarn": "^1.12.3"
+    "yarn": "^1.16.0"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.5.0",
+    "bs58": "^4.0.1",
     "devtron": "^1.4.0",
     "electron-debug": "^2.0.0",
     "electron-log": "^2.2.17",
     "electron-updater": "^3.2.3",
     "history": "^4.7.2",
+    "nedb": "^1.8.0",
+    "qrcode-generator": "^1.4.3",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-hot-loader": "^4.3.12",
     "react-redux": "^5.1.1",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
+    "recharts": "^1.6.2",
     "redux": "^4.0.1",
+    "redux-electron-ipc": "^1.2.0",
     "redux-thunk": "^2.3.0",
     "source-map-support": "^0.5.9"
   },
@@ -242,5 +250,6 @@
     "npm": ">=4.x",
     "yarn": ">=0.21.3"
   },
-  "browserslist": "electron 1.6"
+  "browserslist": "electron 1.6",
+  "author": "Stegos, AG <team@stegos.com>"
 }

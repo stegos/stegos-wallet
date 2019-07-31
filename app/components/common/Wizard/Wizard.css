@@ -1,0 +1,101 @@
+.Container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin-bottom: 68px;
+}
+
+.StepsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.StepsContainer::before {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 5px;
+  background-color: #2e3345;
+  border-bottom: 1px solid #454b65;
+  border-top: 1px solid #000;
+  z-index: -2;
+}
+
+.Step {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  background-color: #2e3345;
+  border-radius: 50%;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 40px;
+  text-align: center;
+  letter-spacing: 0.72px;
+  color: #bfc1c6;
+}
+
+.Step::before {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: #000;
+  transform: translateY(-1px);
+  z-index: -1;
+}
+
+.Step::after {
+  content: '';
+  display: block;
+  position: absolute;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background-color: #454b65;
+  transform: translateY(1px);
+  z-index: -1;
+}
+
+.Step.Active {
+  color: #ff6c00;
+}
+
+.Step .Label {
+  display: inline-block;
+  position: absolute;
+  bottom: -46px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: 0.42px;
+  text-align: center;
+  white-space: nowrap;
+  color: #bfc1c6;
+}
+
+.Step.Active .Label {
+  color: #ff6c00;
+}
+
+.Step.First .Label {
+  display: inline-block;
+  left: 0;
+  text-align: left;
+}
+
+.Step.Last .Label {
+  display: inline-block;
+  right: 0;
+  text-align: right;
+}

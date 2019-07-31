@@ -1,0 +1,59 @@
+.Container {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
+  height: 49px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #5b5d63;
+}
+
+.InputStyle {
+  display: block;
+  flex-grow: 1;
+  max-width: 100%;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-family: Montserrat, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0.48px;
+  color: #fff;
+  resize: vertical;
+}
+
+.InputStyle::-webkit-outer-spin-button,
+.InputStyle::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+.Label {
+  position: absolute;
+  display: inline-block;
+  margin-top: -5px;
+  text-align: left;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0.48px;
+  color: #bfc1c6;
+}
+
+.Error {
+  display: inline-block;
+  margin-left: 3px;
+  float: left;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 16px;
+  letter-spacing: 0.39px;
+  color: #ff6c00;
+}

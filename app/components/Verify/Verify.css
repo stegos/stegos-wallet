@@ -1,0 +1,91 @@
+.Container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.LabelSuccess {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 17px;
+  line-height: 24px;
+  letter-spacing: 0.51px;
+  text-transform: uppercase;
+  color: #46fb48;
+}
+
+.LabelFailed {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 17px;
+  line-height: 24px;
+  letter-spacing: 0.51px;
+  text-transform: uppercase;
+  color: #f00;
+}
+
+.LabelSmall {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 24px;
+  letter-spacing: 0.45px;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.LabelBold {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 17px;
+  line-height: 24px;
+  letter-spacing: 0.51px;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.LabelAmount {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 23px;
+  line-height: 24px;
+  letter-spacing: 0.69px;
+  color: #ee6920;
+}
+
+.Row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.RowLabel {
+  width: 130px;
+}
+
+.VerificationContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-auto-rows: max-content;
+}
+
+.VerificationRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.VerificationRow > .LabelBold {
+  margin-right: 20px;
+}
+
+.ActionsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+}

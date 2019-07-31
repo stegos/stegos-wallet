@@ -1,0 +1,55 @@
+:root {
+  --menu-width: 406px;
+}
+
+.Menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  width: var(--menu-width);
+  background-color: #171a27;
+  overflow-y: auto;
+  user-select: none;
+}
+
+.MenuItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  padding: 18px 18px 18px 160px;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 49px;
+  letter-spacing: 0.54px;
+  color: #bfc1c6;
+}
+
+.MenuItem.Active {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 18px 18px 18px 160px;
+  background-color: #1d2230;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 49px;
+  letter-spacing: 0.54px;
+  color: #fff;
+}
+
+.MenuIcon {
+  width: 46px;
+  height: 46px;
+  margin-right: 18px;
+  filter: grayscale(100%) brightness(1000%);
+}
+
+.MenuItem.Active .MenuIcon {
+  filter: none;
+}

@@ -1,0 +1,103 @@
+.Wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: 100vh;
+}
+
+.HeaderContentWrapper {
+  padding-top: 21px;
+  padding-bottom: 17px;
+}
+
+.Main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.Title {
+  max-width: 714px;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 40px;
+  line-height: 40px;
+  text-align: center;
+  letter-spacing: 1.2px;
+  color: #fff;
+}
+
+.ProgressBarWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Progress {
+  margin-bottom: 30px;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 27px;
+  line-height: 22px;
+  text-align: center;
+  letter-spacing: 0.81px;
+  color: #fff;
+}
+
+.ProgressBar {
+  width: 432px;
+}
+
+.Label {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: center;
+  letter-spacing: 0.54px;
+  color: #fff;
+}
+
+.ButtonWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin-right: 120px;
+}
+
+.NextButtonIcon {
+  margin-left: 5px;
+  color: #fff;
+}
+
+.Checkboxes {
+  margin-top: 40px;
+}
+
+.CheckboxWrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-bottom: 35px;
+}
+
+.CheckboxLabel {
+  max-width: 530px;
+  margin-left: 70px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0.48px;
+  color: #fff;
+}
+
+.FooterWrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
+}

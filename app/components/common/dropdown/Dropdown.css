@@ -1,0 +1,65 @@
+.Select {
+  position: relative;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  letter-spacing: 0.42px;
+  color: #bfc1c6;
+  user-select: none;
+}
+
+.SelectValue {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.SelectValue:focus {
+  outline: none;
+}
+
+.Options {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  background-color: #1d2230;
+  box-shadow: 2px 12px 17px rgba(0, 0, 0, 0.171902);
+}
+
+.Option {
+  padding: 10px 20px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow-x: hidden;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  letter-spacing: 0.42px;
+  color: #bfc1c6;
+  cursor: pointer;
+}
+
+.Option:hover {
+  color: #fff;
+  background-color: #272d40;
+}
+
+.Error {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 16px;
+  letter-spacing: 0.39px;
+  color: #ff6c00;
+}
+
+.Value {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow-x: hidden;
+}

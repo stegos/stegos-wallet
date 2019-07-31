@@ -1,0 +1,105 @@
+.Button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+  padding-left: 15px;
+  padding-right: 15px;
+  border: 1px solid #ff6c00;
+  box-sizing: border-box;
+  border-radius: 7.5px;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 41px;
+  text-align: center;
+  letter-spacing: 0.48px;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  opacity: 1;
+}
+
+.Button * {
+  user-select: none;
+}
+
+.Icon {
+  color: #fff;
+}
+
+.Button:focus {
+  outline: none;
+}
+
+.Disabled {
+  cursor: default;
+  border-color: #696e79;
+  opacity: 0.53;
+}
+
+.Elevated {
+  box-shadow: 0 11px 11px rgba(0, 0, 0, 0.31698);
+  transition-duration: 0.3s;
+  transition-property: box-shadow;
+}
+
+.Elevated:active {
+  box-shadow: 0 5px 11px rgba(0, 0, 0, 0.31698);
+}
+
+.Button:focus.Disabled {
+  box-shadow: none;
+  outline: none;
+}
+
+/* button types */
+.Button.OutlineDisabled {
+  border-color: #696e79;
+  opacity: 0.53;
+}
+
+.Button.OutlineDisabled .Icon {
+  color: #dc6006 !important;
+}
+
+.Button.FilledPrimary {
+  border-radius: 5px;
+  background-color: #ff6c00;
+  border-color: #ff6c00;
+}
+
+.Button.FilledPrimary:hover {
+  background-color: #6ba94c;
+  border-color: #6ba94c;
+}
+
+.Button.FilledSecondary {
+  border-radius: 5px;
+  background-color: #4e80f3;
+  border-color: #4e80f3;
+}
+
+.Button.FilledSecondary:hover {
+  background-color: #6ba94c;
+  border-color: #6ba94c;
+}
+
+.Button.Invisible,
+.Button.IcoButton {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: 0.39px;
+  color: #fff;
+}
+
+.Button.IcoButton {
+  min-width: auto;
+  padding: 0;
+}

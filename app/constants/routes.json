@@ -1,4 +1,12 @@
 {
-  "HOME": "/",
-  "COUNTER": "/counter"
+  "WELCOME": "/",
+  "PROTECT": "/protect",
+  "SYNC": "/sync",
+  "BAGS_AND_TERMS": "/bagsAndTerms",
+  "PORTFOLIO": "/portfolio",
+  "ACCOUNTS": "/",
+  "ACCOUNT": "/account",
+  "SEND": "/send",
+  "RECEIVE": "/receive",
+  "NODE": "/node"
 }
