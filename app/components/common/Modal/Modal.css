@@ -16,6 +16,8 @@
   flex-direction: column;
   align-items: center;
   padding: 38px 60px 30px 60px;
+  overflow-y: auto;
+  max-height: 100vh;
   min-width: 588px;
   background: linear-gradient(14.63deg, #252c46 -1.44%, #383f59 163.29%);
   border: 1px solid #cc5e11;

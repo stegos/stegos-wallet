@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react';
 import type { AccountsStateType } from '../../../reducers/types';
 import Button from '../../common/Button/Button';
-import Dropdown from '../../common/dropdown/Dropdown';
+import Dropdown from '../../common/Dropdown/Dropdown';
 import Icon from '../../common/Icon/Icon';
 import AccountItem from './AccountItem/AccountItem';
 import styles from './AccountsList.css';

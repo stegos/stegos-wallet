@@ -48,7 +48,7 @@ export default class Welcome extends Component<Props> {
           </div>
           {settings.isDbExist === false && (
             <Link to={routes.PROTECT}>
-              <span className={styles.StatusBar}>Get Started</span>
+              <span className={styles.StatusBar}>Click here</span>
             </Link>
           )}
 

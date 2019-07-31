@@ -2,7 +2,14 @@
   "name": "stegos-wallet",
   "productName": "StegosWallet",
   "version": "0.0.1",
-  "description": "Stegos wallet",
+  "description": "Platform for privacy applications",
+  "copyright": "Copyright © 2018-2019 Stegos AG",
+  "author": {
+    "name": "Stegos AG",
+    "email": "info@stegos.com",
+    "url": "https://stegos.com/"
+  },
+  "license": "MIT",
   "scripts": {
     "build": "concurrently \"yarn build-main\" \"yarn build-renderer\"",
     "build-dll": "cross-env NODE_ENV=development webpack --config ./configs/webpack.config.renderer.dev.dll.babel.js --colors",
@@ -18,8 +25,7 @@
     "lint-styles-fix": "yarn --silent lint-styles --fix; exit 0",
     "package": "yarn build && electron-builder build --publish never",
     "package-all": "yarn build && electron-builder build -mwl",
-    "package-ci": "yarn postinstall && yarn build && electron-builder --publish always",
-    "package-linux": "yarn build && electron-builder build --linux",
+    "package-linux": "yarn build && electron-builder build --linux --publish never",
     "package-win": "yarn build && electron-builder build --win --x64",
     "postinstall": "yarn flow-typed && electron-builder install-app-deps package.json && yarn build-dll",
     "postlint-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{*{js,jsx,json},babelrc,eslintrc,prettierrc,stylelintrc}'",
@@ -88,12 +94,16 @@
     },
     "linux": {
       "target": [
+        "tar.gz",
         "deb",
         "rpm",
         "snap",
         "AppImage"
       ],
-      "category": "Development"
+      "category": "Finance"
+    },
+    "snap": {
+      "confinement": "strict"
     },
     "directories": {
       "buildResources": "resources",
@@ -250,6 +260,5 @@
     "npm": ">=4.x",
     "yarn": ">=0.21.3"
   },
-  "browserslist": "electron 1.6",
-  "author": "Stegos, AG <team@stegos.com>"
+  "browserslist": "electron 1.6"
 }

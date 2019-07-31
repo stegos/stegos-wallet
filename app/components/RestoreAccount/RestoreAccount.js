@@ -103,7 +103,7 @@ class RestoreAccount extends Component<Props> {
           className={styles.Qrcode}
         />
         <span className={styles.AccountAddress}>
-          <span style={{ color: '#EE6920' }}>Address copied</span> Address for
+          <div style={{ color: '#EE6920' }}>Address copied</div> Address for
           account <b>{account.name}</b>
         </span>
       </div>
