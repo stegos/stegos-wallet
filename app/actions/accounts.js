@@ -6,16 +6,16 @@ import { sendSync } from '../ws/client';
 import { SHOW_ERROR } from './settings';
 import { RECOVERY_PHRASE_LENGTH } from '../constants/config';
 import { getDatabase } from '../db/db';
+import { toTwoDigits } from '../utils/format';
 
 export const RECOVERY_PHRASE_WRITTEN_DOWN = 'RECOVERY_PHRASE_WRITTEN_DOWN';
 export const SET_ACCOUNT_NAME = 'SET_ACCOUNT_NAME';
 
 const formatDate = ts => {
   const date = new Date(ts);
-  const month = date.getMonth() + 1;
-  return `${date.getFullYear()}-${
-    month < 10 ? `0${month}` : month
-  }-${date.getDate()}T00:00:00.000000000Z`;
+  return `${date.getFullYear()}-${toTwoDigits(
+    date.getMonth() + 1
+  )}-${toTwoDigits(date.getDate())}T00:00:00.000000000Z`;
 };
 
 const d = new Date();

@@ -45,7 +45,7 @@ export default class AccountsList extends PureComponent<Props> {
     const { sort } = this.state;
     const sortProp = sort.value;
     const accounts = this.getFilteredAccounts();
-    return Object.sort(accounts, (a, b) => {
+    return Object.entries(accounts).sort((a, b) => {
       if (sortProp === 'name') return a[1].name.localeCompare(b[1].name);
       if (sortProp === 'balance') return a[1].balance > b[1].balance;
       return a > b;
@@ -60,7 +60,6 @@ export default class AccountsList extends PureComponent<Props> {
   render() {
     const { sort, search } = this.state;
     const accounts = this.getFilteredAndSortedAccounts();
-    const keys = Object.keys(accounts);
     return (
       <div className={styles.AccountsList}>
         <div className={styles.SearchBar}>
@@ -101,8 +100,8 @@ export default class AccountsList extends PureComponent<Props> {
           </div>
         </div>
         <div className={styles.Accounts}>
-          {keys.map(key => (
-            <AccountItem account={accounts[key]} key={key} />
+          {accounts.map(a => (
+            <AccountItem account={a[1]} key={a[0]} />
           ))}
         </div>
       </div>
