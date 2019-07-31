@@ -22,7 +22,7 @@ class Backup extends Component<Props> {
   constructor(props) {
     super(props);
     const { accounts, accountId } = props;
-    const account = accounts.get(accountId);
+    const account = accounts[accountId];
     const { recoveryPhrase } = account;
     const words = [];
     for (let i = 0; i < RECOVERY_PHRASE_LENGTH; i += 1) {
@@ -91,6 +91,6 @@ class Backup extends Component<Props> {
 }
 
 export default connect(
-  state => ({ accounts: state.accounts.accounts }),
+  state => ({ accounts: state.accounts.items }),
   dispatch => bindActionCreators(AccountsActions, dispatch)
 )(Backup);

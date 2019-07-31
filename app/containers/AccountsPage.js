@@ -5,7 +5,7 @@ import AccountsList from '../components/Accounts/AccountsList/AccountsList';
 
 function mapStateToProps(state) {
   return {
-    accounts: state.accounts
+    accounts: state.accounts.items
   };
 }
 

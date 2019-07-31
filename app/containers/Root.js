@@ -5,6 +5,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import type { SettingsStateType, Store } from '../reducers/types';
 import BootstrapRoutes from '../BootstrapRoutes';
 import Routes from '../Routes';
+import '../utils/extended';
 
 type Props = {
   store: Store,

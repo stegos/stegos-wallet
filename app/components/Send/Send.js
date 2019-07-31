@@ -64,8 +64,7 @@ export default class Send extends Component<Props> {
   constructor(props) {
     super(props);
     const { location, accounts } = props;
-    const account =
-      location.state && accounts.accounts.get(location.state.accountId);
+    const account = location.state && accounts[location.state.accountId];
 
     this.state = {
       step: 0,
@@ -95,7 +94,7 @@ export default class Send extends Component<Props> {
       this.setState({ recipientAddressError: 'Incorrect address' });
       return false;
     }
-    if (!amount) {
+    if (!amount || +amount < 0) {
       this.setState({ amountError: 'Incorrect value' });
       return false;
     }
@@ -201,7 +200,7 @@ export default class Send extends Component<Props> {
         <div className={styles.SendFormContainer} key="Accounts">
           <span className={styles.FieldLabel}>Account credit</span>
           {Send.renderDropdown(
-            Array.from(accounts.accounts).map(acc => ({
+            Array.from(accounts).map(acc => ({
               value: acc[1],
               name: acc[1].name
             })),

@@ -26,7 +26,7 @@ class EditAccount extends PureComponent<Props> {
   constructor(props) {
     super(props);
     const { accounts, accountId } = props;
-    const account = accounts.get(accountId);
+    const account = accounts[accountId];
     this.state = {
       form: '',
       accountName: account.name
@@ -87,7 +87,7 @@ class EditAccount extends PureComponent<Props> {
 
   renderMain() {
     const { accounts, accountId } = this.props;
-    const account = accounts.get(accountId);
+    const account = accounts[accountId];
     return [
       <div className={styles.Container} key="form">
         <div className={styles.InputLabel}>
@@ -150,7 +150,7 @@ class EditAccount extends PureComponent<Props> {
   render() {
     const { form } = this.state;
     const { accountId, visible, accounts } = this.props;
-    const account = accounts.get(accountId);
+    const account = accounts[accountId];
     return (
       <Modal
         options={{
@@ -181,6 +181,6 @@ class EditAccount extends PureComponent<Props> {
 }
 
 export default connect(
-  state => ({ accounts: state.accounts.accounts }),
+  state => ({ accounts: state.accounts.items }),
   dispatch => bindActionCreators(AccountsActions, dispatch)
 )(EditAccount);

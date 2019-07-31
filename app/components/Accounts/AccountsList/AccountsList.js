@@ -35,13 +35,9 @@ export default class AccountsList extends PureComponent<Props> {
 
   getFilteredAccounts = () => {
     const { search } = this.state;
-    const {
-      accounts: { accounts }
-    } = this.props;
-    return new Map(
-      [...accounts.entries()].filter(a =>
-        a[1].name.toLowerCase().includes(search.toLowerCase())
-      )
+    const { accounts } = this.props;
+    return Object.filter(accounts, e =>
+      e[1].name.toLowerCase().includes(search.toLowerCase())
     );
   };
 
@@ -49,13 +45,11 @@ export default class AccountsList extends PureComponent<Props> {
     const { sort } = this.state;
     const sortProp = sort.value;
     const accounts = this.getFilteredAccounts();
-    return new Map(
-      [...accounts.entries()].sort((a, b) => {
-        if (sortProp === 'name') return a[1].name.localeCompare(b[1].name);
-        if (sortProp === 'balance') return a[1].balance > b[1].balance;
-        return a > b;
-      })
-    );
+    return Object.sort(accounts, (a, b) => {
+      if (sortProp === 'name') return a[1].name.localeCompare(b[1].name);
+      if (sortProp === 'balance') return a[1].balance > b[1].balance;
+      return a > b;
+    });
   };
 
   onCreateAccount = () => {
@@ -66,7 +60,7 @@ export default class AccountsList extends PureComponent<Props> {
   render() {
     const { sort, search } = this.state;
     const accounts = this.getFilteredAndSortedAccounts();
-    const keys = Array.from(accounts.keys());
+    const keys = Object.keys(accounts);
     return (
       <div className={styles.AccountsList}>
         <div className={styles.SearchBar}>
@@ -108,7 +102,7 @@ export default class AccountsList extends PureComponent<Props> {
         </div>
         <div className={styles.Accounts}>
           {keys.map(key => (
-            <AccountItem account={accounts.get(key)} key={key} />
+            <AccountItem account={accounts[key]} key={key} />
           ))}
         </div>
       </div>

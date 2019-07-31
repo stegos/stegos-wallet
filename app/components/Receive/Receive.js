@@ -28,7 +28,7 @@ export default class Receive extends Component<Props> {
     super(props);
     const { location, accounts } = props;
     const selectedAccount =
-      location.state && accounts.accounts.get(location.state.accountId);
+      location.state && accounts[location.state.accountId];
 
     this.state = {
       step: 0,
@@ -86,7 +86,7 @@ export default class Receive extends Component<Props> {
             <Dropdown
               onChange={e => this.onSelectAccount(e)}
               value={selectedAccount && selectedAccount.name}
-              options={Array.from(accounts.accounts).map(acc => ({
+              options={Array.from(accounts).map(acc => ({
                 value: acc[1],
                 name: acc[1].name
               }))}

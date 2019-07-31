@@ -1,3 +1,4 @@
+import { remote } from 'electron';
 import type { AccountsStateType, Action } from './types';
 import { WS_MESSAGE } from '../ws/actionsTypes';
 import {
@@ -7,7 +8,8 @@ import {
 import { INIT_ACCOUNTS } from '../actions/settings';
 
 const initialState = {
-  accounts: new Map()
+  items: {}, // map
+  lastActive: null
 };
 
 export default function accounts(
@@ -15,6 +17,116 @@ export default function accounts(
   action: Action
 ) {
   const { payload } = action;
+  const account =
+    payload && payload.account_id ? state.items[payload.account_id] : null;
+
+  const setAccountProps = props => ({
+    ...state,
+    items: {
+      ...state.items,
+      [payload.account_id]: {
+        ...state.items[payload.account_id],
+        ...props
+      }
+    }
+  });
+
+  const handleMessage = () => {
+    const { type } = payload;
+
+    if (
+      type !== 'new_micro_block' &&
+      type !== 'new_macro_block' &&
+      type !== 'sync_changed' &&
+      remote.process.env.NODE_ENV === 'development'
+    ) {
+      console.log('HANDLE MSG');
+      console.log(JSON.stringify(payload));
+    }
+    switch (type) {
+      case 'accounts_info':
+        return {
+          ...state,
+          items: payload.accounts.reduce((acc, id) => {
+            acc[id] = state.items[id] || createEmptyAccount(id);
+            return acc;
+          }, {})
+        };
+      case 'account_created':
+        return {
+          ...state,
+          items: {
+            ...state.items,
+            [payload.account_id]: createEmptyAccount(payload.account_id)
+          }
+        };
+      case 'keys_info':
+        return setAccountProps({ address: payload.account_address });
+      case 'unsealed':
+        return setAccountProps({ isLocked: false });
+      case 'sealed':
+        return setAccountProps({ isLocked: true });
+      case 'balance_info':
+      case 'balance_changed':
+        return setAccountProps({ balance: payload.balance });
+      case 'recovery':
+        return setAccountProps({ recoveryPhrase: payload.recovery.split(' ') });
+      case 'history_info':
+        return setAccountProps({
+          transactions: payload.log
+            .map(t =>
+              t.type.toLowerCase() === 'outgoing'
+                ? createOutgoingTransaction(t, account)
+                : {
+                    ...t,
+                    type: 'Receive',
+                    timestamp: new Date(t.timestamp),
+                    id: t.utxo
+                  }
+            )
+            .filter(t => t.type === 'Send' || !t.is_change)
+            .sort((a, b) => a.timestamp > b.timestamp)
+        });
+      case 'transaction_created':
+        return setAccountProps({
+          transactions: [
+            createOutgoingTransaction(payload, account),
+            ...account.transactions
+          ]
+        });
+      case 'transaction_status':
+        return setAccountProps({
+          transactions: [
+            ...account.transactions.map(t =>
+              t.tx_hash === payload.tx_hash
+                ? { ...t, ...payload, type: 'Send' }
+                : t
+            )
+          ]
+        });
+      case 'received':
+        return setAccountProps({
+          transactions:
+            payload.comment === 'Change' // todo fix
+              ? account.transactions
+              : [
+                  {
+                    type: 'Receive',
+                    amount: payload.amount,
+                    utxo: payload.utxo,
+                    timestamp: payload.timestamp
+                      ? new Date(payload.timestamp)
+                      : new Date(),
+                    id: payload.utxo
+                  },
+                  ...account.transactions
+                ]
+        });
+      default:
+        return {};
+    }
+  };
+
   switch (action.type) {
     case WS_MESSAGE:
       return {
@@ -24,144 +136,34 @@ export default function accounts(
     case INIT_ACCOUNTS:
       return {
         ...state,
-        accounts: payload
+        items: payload
       };
     case SET_ACCOUNT_NAME:
-      return {
-        ...state,
-        accounts: state.accounts.set(payload.accountId, {
-          ...state.accounts.get(payload.accountId),
-          name: payload.name
-        })
-      };
+      return setAccountProps({ name: payload.name });
     case RECOVERY_PHRASE_WRITTEN_DOWN:
-      return {
-        ...state,
-        accounts: state.accounts.set(payload, {
-          ...state.accounts.get(payload),
-          isRecoveryPhraseWrittenDown: true
-        })
-      };
+      return setAccountProps({ isRecoveryPhraseWrittenDown: true });
     default:
       return state;
   }
 }
 
-const handleMessage = (state: AccountsStateType, payload) => {
-  const { type } = payload;
-  if (
-    type !== 'new_micro_block' &&
-    type !== 'new_macro_block' &&
-    type !== 'sync_changed'
-  ) {
-    console.log('HANDLE MSG');
-    console.log(JSON.stringify(payload));
-  }
-  const account = payload.account_id
-    ? state.accounts.get(payload.account_id)
-    : null;
-  switch (type) {
-    case 'accounts_info':
-      return {
-        ...state,
-        accounts: payload.accounts.reduce((map, w) => {
-          map.set(
-            w,
-            state.accounts.get(w) || {
-              id: w,
-              name: `Account #${w}`,
-              balance: 0,
-              isLocked: true,
-              transactions: []
-            }
-          );
-          return map;
-        }, new Map())
-      };
-    case 'keys_info':
-      return {
-        ...state,
-        accounts: state.accounts.set(payload.account_id, {
-          ...state.accounts.get(payload.account_id),
-          address: payload.account_address
-        })
-      };
-    case 'account_created':
-      return {
-        ...state,
-        accounts: state.accounts.set(payload.account_id, {
-          id: payload.account_id,
-          name: `Account #${payload.account_id}`,
-          balance: 0,
-          isLocked: true,
-          transactions: []
-        })
-      };
-    case 'unsealed':
-      return {
-        ...state,
-        accounts: state.accounts.set(payload.account_id, {
-          ...state.accounts.get(payload.account_id),
-          isLocked: false
-        })
-      };
-    case 'sealed':
-      return {
-        ...state,
-        accounts: state.accounts.set(payload.account_id, {
-          ...state.accounts.get(payload.account_id),
-          isLocked: true
-        })
-      };
-    case 'balance_info':
-      return {
-        ...state,
-        accounts: state.accounts.set(payload.account_id, {
-          ...state.accounts.get(payload.account_id),
-          balance: payload.balance
-        })
-      };
-    case 'history_info':
-      return {
-        ...state,
-        accounts: state.accounts.set(payload.account_id, {
-          ...account,
-          transactions: payload.log
-            .map(t =>
-              t.type.toLowerCase() === 'outgoing'
-                ? {
-                    ...t,
-                    type: 'Send',
-                    timestamp: new Date(t.timestamp),
-                    amount: t.outputs.reduce(
-                      (a, c) => a + (c.is_change ? 0 : c.amount),
-                      0
-                    ),
-                    utxo: t.outputs.filter(o => !o.is_change)[0],
-                    id: t.timestamp,
-                    rvalue: t.outputs.filter(o => !o.is_change)[0].rvalue,
-                    sender: account && account.address
-                  }
-                : {
-                    ...t,
-                    type: 'Receive',
-                    timestamp: new Date(t.timestamp),
-                    id: t.timestamp
-                  }
-            )
-            .filter(t => t.type === 'Send' || !t.is_change)
-            .sort((a, b) => a.timestamp > b.timestamp)
-        })
-      };
-    case 'recovery':
-      return {
-        ...state,
-        accounts: state.accounts.set(payload.account_id, {
-          ...state.accounts.get(payload.account_id),
-          recoveryPhrase: payload.recovery.split(' ')
-        })
-      };
-    default:
-      return {};
-  }
-};
+const createEmptyAccount = id => ({
+  id,
+  name: `Account #${id}`,
+  balance: 0,
+  isLocked: true,
+  transactions: []
+});
+
+function createOutgoingTransaction(t, account) {
+  return {
+    ...t,
+    type: 'Send',
+    timestamp: t.timestamp ? new Date(t.timestamp) : new Date(),
+    amount: t.outputs.reduce((a, c) => a + (c.is_change ? 0 : c.amount), 0),
+    utxo: t.outputs.filter(o => !o.is_change)[0],
+    id: t.tx_hash,
+    rvalue: t.outputs.filter(o => !o.is_change)[0].rvalue,
+    sender: account && account.address
+  };
+}
