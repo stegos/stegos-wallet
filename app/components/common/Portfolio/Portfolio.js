@@ -114,7 +114,9 @@ export default class Portfolio extends PureComponent<Props> {
         <div className={styles.Header}>
           <span
             className={styles.Title}
-          >{`Here's the summary of your ${size} accounts`}</span>
+          >{`Here's the summary of your ${size} account${
+            size !== 1 ? 's' : ''
+          }`}</span>
         </div>
         <div className={styles.AccountDetailsContainer}>
           <div className={styles.AccountDetailsHeader}>
