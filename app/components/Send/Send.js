@@ -10,7 +10,7 @@ import Steps from '../common/Steps/Steps';
 import styles from './Send.css';
 import routes from '../../constants/routes';
 import { POWER_DIVISIBILITY } from '../../constants/config';
-import { isBase58 } from '../../utils/format';
+import { isBase58, isStegosNumber } from '../../utils/format';
 
 type Location = {
   pathname: string,
@@ -25,7 +25,8 @@ type Props = {
 
 const fees = [
   { value: 'standard', name: 'Standard', fee: 0.01 },
-  { value: 'high', name: 'High', fee: 0.05 }
+  { value: 'high', name: 'High', fee: 0.05 },
+  { value: 'custom', name: 'Custom', fee: 0.01 }
 ];
 
 export default class Send extends Component<Props> {
@@ -77,20 +78,25 @@ export default class Send extends Component<Props> {
       amountError: '',
       comment: '',
       fee: fees[0],
+      feeError: '',
       generateCertificate: false
     };
   }
 
+  get totalAmount() {
+    const { amount, fee } = this.state;
+    return +amount + Number(fee.fee);
+  }
+
   validate = () => {
-    const { account, recipientAddress, amount } = this.state;
-    const nodeAmount = amount * POWER_DIVISIBILITY;
+    const { account, recipientAddress, amount, fee } = this.state;
+    const totalAmount = this.totalAmount * POWER_DIVISIBILITY;
 
     if (!account) {
       this.setState({ accountError: 'Select account' });
       return false;
     }
     if (!recipientAddress || !isBase58(recipientAddress)) {
-      // todo validate address
       this.setState({ recipientAddressError: 'Incorrect address' });
       return false;
     }
@@ -98,10 +104,21 @@ export default class Send extends Component<Props> {
       this.setState({ amountError: 'Incorrect value' });
       return false;
     }
-    if (nodeAmount > account.balance) {
+    if (totalAmount > account.balance) {
       this.setState({ accountError: 'Insufficient balance' });
       return false;
     }
+    if (!isStegosNumber(fee.fee)) {
+      this.setState({ feeError: 'Incorrect value' });
+      return false;
+    }
+    if (+fee.fee < 0.01) {
+      this.setState({ feeError: 'Minimum fee is 0.01' });
+      return false;
+    }
+    this.setState({
+      accountError: ''
+    });
     return true;
   };
 
@@ -114,7 +131,8 @@ export default class Send extends Component<Props> {
 
   handleFeesChange(option) {
     this.setState({
-      fee: option.value
+      fee: option.value,
+      feeError: ''
     });
   }
 
@@ -161,7 +179,7 @@ export default class Send extends Component<Props> {
       comment,
       account.id,
       generateCertificate,
-      fee ? fee.fee * POWER_DIVISIBILITY : 0
+      fee.fee * POWER_DIVISIBILITY
     )
       .then(resp => {
         this.confirmed();
@@ -176,11 +194,6 @@ export default class Send extends Component<Props> {
     });
   }
 
-  getFeeLabel() {
-    const { fee } = this.state;
-    return fee ? `${fee.fee} STG per UTXO` : '';
-  }
-
   sendForm() {
     const { accounts } = this.props;
     const {
@@ -193,6 +206,7 @@ export default class Send extends Component<Props> {
       amountError,
       comment,
       fee,
+      feeError,
       step
     } = this.state;
     return (
@@ -271,11 +285,24 @@ export default class Send extends Component<Props> {
               step === 1
             )}
             <Icon name="add" style={{ padding: '0 8px' }} size={16} />
-            <input
-              className={styles.FormField}
-              value={this.getFeeLabel()}
-              readOnly
-            />
+            <div className={styles.FormField}>
+              <input
+                className={styles.FeeInput}
+                error={feeError}
+                value={fee.fee}
+                type="number"
+                onChange={e =>
+                  this.setState({
+                    fee: { ...fee, fee: e.target.value },
+                    feeError: ''
+                  })
+                }
+                readOnly={step === 1 || fee.value !== 'custom'}
+              />
+              <span className={styles.FieldLabel} style={{ marginTop: 0 }}>
+                STG per UTXO
+              </span>
+            </div>
           </div>
           <span className={styles.FieldLabel} />
           <div
@@ -308,7 +335,7 @@ export default class Send extends Component<Props> {
           <div className={styles.TotalAmount}>
             Total to debit{' '}
             <span className={styles.TotalAmountValue}>
-              STG {(+amount + fee.fee).toFixed(2)}
+              STG {this.totalAmount.toFixed(2)}
             </span>
           </div>
           <Button

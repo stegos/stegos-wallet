@@ -80,7 +80,7 @@ export default class PasswordProtection extends Component<Props> {
             }
           ]}
         />
-        <div className={styles.Main}>
+        <div className={`${styles.Main} ScrollBar`}>
           <div className={styles.Container}>
             <span className={styles.StatusBar}>Protect your wallet</span>
           </div>

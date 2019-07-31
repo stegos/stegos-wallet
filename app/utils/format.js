@@ -16,3 +16,5 @@ export const getCertificateVerificationDate = date =>
 export const BASE58_REGEX = /^[1-9A-HJ-NP-Za-km-z]{50,51}$/;
 
 export const isBase58 = str => BASE58_REGEX.test(str);
+
+export const isStegosNumber = str => /^-?\d+\.?\d{0,6}$/.test(str);
