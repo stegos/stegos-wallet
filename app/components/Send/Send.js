@@ -10,7 +10,7 @@ import Steps from '../common/Steps/Steps';
 import styles from './Send.css';
 import routes from '../../constants/routes';
 import { POWER_DIVISIBILITY } from '../../constants/config';
-import { isBase58 } from '../../utils/format';
+import { formatDigit, isBase58 } from '../../utils/format';
 
 type Location = {
   pathname: string,
@@ -309,7 +309,7 @@ export default class Send extends Component<Props> {
           <div className={styles.TotalAmount}>
             Total to debit{' '}
             <span className={styles.TotalAmountValue}>
-              STG {(+amount + fee.fee).toFixed(2)}
+              STG {formatDigit((+amount + fee.fee).toFixed(2))}
             </span>
           </div>
           <Button

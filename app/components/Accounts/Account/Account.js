@@ -1,6 +1,7 @@
 // @flow
 import React, { PureComponent, Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import { formatDigit } from '../../../utils/format';
 import Button from '../../common/Button/Button';
 import Icon from '../../common/Icon/Icon';
 import EditAccount from '../../EditAccount/EditAccount';
@@ -200,7 +201,7 @@ export default class Account extends PureComponent<Props> {
               <div className={styles.BalanceAmount}>
                 <div>
                   <span className={styles.BalanceValue}>
-                    {balance.toFixed(4)}
+                    {formatDigit(balance.toFixed(4))}
                   </span>
                   <span className={styles.BalanceCurrency}> STG</span>
                 </div>

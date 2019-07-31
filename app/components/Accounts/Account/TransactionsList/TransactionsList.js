@@ -1,5 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
+import { formatDigit } from '../../../../utils/format';
 import Icon from '../../../common/Icon/Icon';
 import PaymentCertificate from '../../../PaymentCertificate/PaymentCertificate';
 import styles from './TransactionsList.css';
@@ -52,7 +53,7 @@ export default class TransactionsList extends PureComponent<Props> {
     return transactions.map(item => {
       const signAmount =
         (item.type === 'Receive' ? '+' : '-') +
-        (item.amount / POWER_DIVISIBILITY).toString();
+        formatDigit(item.amount / POWER_DIVISIBILITY).toString();
       return (
         <div className={styles.Transaction} key={item.id}>
           <div className={styles.TransactionDirection}>
