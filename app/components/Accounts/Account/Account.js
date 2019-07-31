@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../../common/Button/Button';
 import Icon from '../../common/Icon/Icon';
@@ -19,7 +19,10 @@ type Location = {
 };
 
 type Props = {
-  location: Location
+  location: Location,
+  settingsActions: any,
+  accounts: any,
+  deleteAccount: any
 };
 
 export default class Account extends PureComponent<Props> {
@@ -28,7 +31,6 @@ export default class Account extends PureComponent<Props> {
   }
 
   state = {
-    trendingUp: true,
     period: 'week',
     editAccountVisible: false,
     restoreAccountVisible: false
@@ -63,13 +65,6 @@ export default class Account extends PureComponent<Props> {
         return transactions;
     }
   };
-
-  switchTranding() {
-    const { trendingUp } = this.state;
-    this.setState({
-      trendingUp: !trendingUp
-    });
-  }
 
   restoreAccount() {
     this.setState({
@@ -116,12 +111,7 @@ export default class Account extends PureComponent<Props> {
   }
 
   render() {
-    const {
-      trendingUp,
-      editAccountVisible,
-      restoreAccountVisible,
-      period
-    } = this.state;
+    const { editAccountVisible, restoreAccountVisible, period } = this.state;
     const { location, deleteAccount, accounts } = this.props;
     if (!location.state || !location.state.accountId) {
       return null;
@@ -131,6 +121,8 @@ export default class Account extends PureComponent<Props> {
     const transactions = this.filterTransactions(account.transactions);
     const balance = account.balance / POWER_DIVISIBILITY;
     const isNewWallet = !account.balance && account.transactions.length === 0;
+    const trendingUp =
+      transactions.length > 0 ? transactions[0].type === 'Receive' : false;
     return (
       <div className={styles.Account}>
         <div className={styles.Header}>
@@ -218,17 +210,17 @@ export default class Account extends PureComponent<Props> {
               <div className={styles.NoTransactions}>No Stegos tokens yet?</div>
             )}
           </div>
-          {!!transactions.length && <Chart data={this.chartDataSource} />}
-          <button
-            className={styles.ButtonSwitchTrending}
-            onClick={this.switchTranding.bind(this)}
-            type="button"
-          >
-            <Icon
-              name={trendingUp ? 'trending_up' : 'trending_down'}
-              size={32}
-            />
-          </button>
+          {!!transactions.length && (
+            <Fragment>
+              <Chart data={this.chartDataSource} />
+              <div className={styles.ButtonSwitchTrending}>
+                <Icon
+                  name={trendingUp ? 'trending_up' : 'trending_down'}
+                  size={32}
+                />
+              </div>
+            </Fragment>
+          )}
         </div>
         {!!transactions.length && (
           <TransactionsList
