@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import * as qrcode from 'qrcode-generator';
 import type { AccountsStateType } from '../../reducers/types';
 import Button from '../common/Button/Button';
-import Dropdown from '../common/dropdown/Dropdown';
+import Dropdown from '../common/Dropdown/Dropdown';
 import Steps from '../common/Steps/Steps';
 import Verify from '../Verify/Verify';
 import styles from './Receive.css';

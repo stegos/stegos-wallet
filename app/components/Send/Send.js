@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import type { AccountsStateType } from '../../reducers/types';
 import Busy from '../common/Busy/Busy';
 import Button from '../common/Button/Button';
-import Dropdown from '../common/dropdown/Dropdown';
+import Dropdown from '../common/Dropdown/Dropdown';
 import Icon from '../common/Icon/Icon';
 import Input from '../common/Input/Input';
 import Steps from '../common/Steps/Steps';
@@ -48,11 +48,11 @@ export default class Send extends Component<Props> {
         onChange={onChange}
         options={options}
         placeholder={placeholder}
-        icon="expand_more"
+        icon={!readOnly ? 'expand_more' : ''}
         iconPosition="right"
         style={{
           width: '100%',
-          border: '1px solid #5b5d63',
+          border: !readOnly ? '1px solid #5b5d63' : null,
           padding: '4px 12px 5px 12px',
           boxSizing: 'border-box'
         }}
@@ -213,6 +213,9 @@ export default class Send extends Component<Props> {
       feeError,
       step
     } = this.state;
+    const formFieldClass = `${styles.FormField} ${
+      step === 1 ? styles.FormFieldFixedValue : ''
+    }`;
     return (
       <Fragment>
         <div className={styles.SendFormContainer} key="Accounts">
@@ -231,7 +234,7 @@ export default class Send extends Component<Props> {
           )}
           <span className={styles.FieldLabel}>Recipient address</span>
           <Input
-            className={styles.FormField}
+            className={formFieldClass}
             name="recipientAddress"
             value={recipientAddress}
             onChange={e =>
@@ -243,13 +246,14 @@ export default class Send extends Component<Props> {
             readOnly={step === 1}
             noLabel
             isTextarea
+            resize={step === 0 ? 'vertical' : 'none'}
             error={recipientAddressError}
             showError={!!recipientAddressError}
             style={{ height: 'auto', margin: 0 }}
           />
           <span className={styles.FieldLabel}>Amount</span>
           <Input
-            className={styles.FormField}
+            className={formFieldClass}
             type="number"
             name="amount"
             value={amount}
@@ -264,7 +268,7 @@ export default class Send extends Component<Props> {
           />
           <span className={styles.FieldLabel}>Comment</span>
           <Input
-            className={styles.FormField}
+            className={formFieldClass}
             rows={3}
             name="comment"
             value={comment}
@@ -272,6 +276,7 @@ export default class Send extends Component<Props> {
             readOnly={step === 1}
             noLabel
             isTextarea
+            resize={step === 0 ? 'vertical' : 'none'}
             style={{ height: 'auto', margin: 0 }}
           />
           <span className={styles.FieldLabel}>Fees</span>
@@ -289,7 +294,7 @@ export default class Send extends Component<Props> {
               step === 1
             )}
             <Icon name="add" style={{ padding: '0 8px' }} size={16} />
-            <div className={styles.FormField}>
+            <div className={formFieldClass}>
               <input
                 className={styles.FeeInput}
                 error={feeError}
