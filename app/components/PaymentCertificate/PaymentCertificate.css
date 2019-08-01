@@ -21,6 +21,7 @@
   line-height: 24px;
   letter-spacing: 0.45px;
   color: #fff;
+  user-select: text;
 }
 
 .LabelBold {
