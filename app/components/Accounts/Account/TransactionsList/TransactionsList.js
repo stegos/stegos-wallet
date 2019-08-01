@@ -1,5 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
+import { formatDigit } from '../../../../utils/format';
 import Icon from '../../../common/Icon/Icon';
 import PaymentCertificate from '../../../PaymentCertificate/PaymentCertificate';
 import styles from './TransactionsList.css';
@@ -49,10 +50,10 @@ export default class TransactionsList extends PureComponent<Props> {
     if (!transactions || transactions.length === 0) {
       return null;
     }
-    return transactions.map(item => {
+    return transactions.map((item: Transaction) => {
       const signAmount =
         (item.type === 'Receive' ? '+' : '-') +
-        (item.amount / POWER_DIVISIBILITY).toString();
+        formatDigit(item.amount / POWER_DIVISIBILITY).toString();
       return (
         <div className={styles.Transaction} key={item.id}>
           <div className={styles.TransactionDirection}>
@@ -63,19 +64,22 @@ export default class TransactionsList extends PureComponent<Props> {
           </div>
           <span className={styles.TransactionTitle}>{item.type}</span>
           <div className={styles.TransactionDate}>
-            <span className={styles.TransactionText}>
-              {TransactionsList.getDate(item.timestamp)}
-            </span>
-            <div className={styles.TransactionTime}>
-              <Icon
-                name="schedule"
-                color="rgba(130, 130, 130, 0.7)"
-                size="20"
-                style={{ marginRight: 10 }}
-              />
+            <span className={styles.TransactionStatus}>{item.status}</span>
+            <div className={styles.TransactionDateTime}>
               <span className={styles.TransactionText}>
-                {TransactionsList.getTime(item.timestamp)}
+                {TransactionsList.getDate(item.timestamp)}
               </span>
+              <div className={styles.TransactionTime}>
+                <Icon
+                  name="schedule"
+                  color="rgba(130, 130, 130, 0.7)"
+                  size="20"
+                  style={{ marginRight: 8 }}
+                />
+                <span className={styles.TransactionText}>
+                  {TransactionsList.getTime(item.timestamp)}
+                </span>
+              </div>
             </div>
           </div>
           {item.rvalue ? (
@@ -99,13 +103,19 @@ export default class TransactionsList extends PureComponent<Props> {
           <div className={styles.TransactionAmountContainer}>
             <span
               className={styles.TransactionAmount}
-              style={{ color: item.type === 'Receive' ? '#FF6C00' : '#fff' }}
+              style={{
+                color: item.type === 'Receive' ? '#FF6C00' : '#fff',
+                fontSize: signAmount.length > 10 ? 10 : 'inherit'
+              }}
             >
               {signAmount}
             </span>
             <span
               className={styles.TransactionAmountCurrency}
-              style={{ marginLeft: 8 }}
+              style={{
+                marginLeft: 8,
+                fontSize: signAmount.length > 10 ? 10 : 'inherit'
+              }}
             >
               STG
             </span>
