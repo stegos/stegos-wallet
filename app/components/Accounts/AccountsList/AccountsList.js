@@ -37,7 +37,9 @@ export default class AccountsList extends PureComponent<Props> {
     const { search } = this.state;
     const { accounts } = this.props;
     return Object.filter(accounts, e =>
-      e[1].name.toLowerCase().includes(search.toLowerCase())
+      ((e && e[1] && e[1].name) || '')
+        .toLowerCase()
+        .includes(search.toLowerCase())
     );
   };
 
