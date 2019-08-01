@@ -285,7 +285,7 @@ export default class Send extends Component<Props> {
             style={{ height: 'auto', margin: 0 }}
           />
           <span className={styles.FieldLabel}>Fees</span>
-          <div className={styles.FormFieldContainer}>
+          <div className={`${styles.FormFieldContainer} ${styles.ColOnSmall}`}>
             {Send.renderDropdown(
               fees.map(feeItem => ({
                 value: feeItem,
@@ -298,7 +298,7 @@ export default class Send extends Component<Props> {
               false,
               step === 1
             )}
-            <Icon name="add" style={{ padding: '0 8px' }} size={16} />
+            <Icon name="add" style={{ padding: '10px 8px' }} size={16} />
             <div className={formFieldClass}>
               <Input
                 className={formFieldClass}
@@ -315,6 +315,7 @@ export default class Send extends Component<Props> {
                 }
                 readOnly={step === 1 || fee.value !== 'custom'}
                 style={{
+                  minWidth: 40,
                   height: 'auto',
                   margin: 0,
                   border: 'none',

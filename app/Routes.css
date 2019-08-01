@@ -24,3 +24,14 @@
   margin: 0 auto;
   padding: 0 120px 0 120px;
 }
+
+@media screen and (max-width: 1280px) {
+  .Container {
+    grid-template-columns: 326px auto;
+    grid-template-rows: 96px auto;
+  }
+
+  .Page {
+    padding: 0 40px 0 40px;
+  }
+}

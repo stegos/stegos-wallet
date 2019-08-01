@@ -38,6 +38,7 @@ export default class Account extends PureComponent<Props> {
   render() {
     const { account } = this.props;
     const balance = account.balance / POWER_DIVISIBILITY;
+    const shouldDrawChart = window.innerWidth > 1280;
     return (
       <Link
         className={styles.AccountItem}
@@ -55,34 +56,36 @@ export default class Account extends PureComponent<Props> {
             {formatDigit((balance || 0).toFixed(4))} STG
           </span>
         </div>
-        <div className={styles.ChartContainer}>
-          <AreaChart
-            width={180}
-            height={107}
-            data={this.chartDataSource}
-            margin={{ top: 8, left: 0, right: 0, bottom: 0 }}
-          >
-            <defs>
-              <linearGradient id="colorSTG" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#707EA3" stopOpacity={1} />
-                <stop offset="100%" stopColor="#3D4869" stopOpacity={1} />
-              </linearGradient>
-              <linearGradient id="colorSTROKE" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stopColor="#46FF00" stopOpacity={1} />
-                <stop offset="100%" stopColor="#FF6C00" stopOpacity={1} />
-              </linearGradient>
-            </defs>
-            <Area
-              type="monotone"
-              dataKey="stg"
-              stroke="url(#colorSTROKE)"
-              strokeWidth={2}
-              fillOpacity={1}
-              fill="url(#colorSTG)"
-              isAnimationActive={false}
-            />
-          </AreaChart>
-        </div>
+        {shouldDrawChart && (
+          <div className={styles.ChartContainer}>
+            <AreaChart
+              width={180}
+              height={107}
+              data={this.chartDataSource}
+              margin={{ top: 8, left: 0, right: 0, bottom: 0 }}
+            >
+              <defs>
+                <linearGradient id="colorSTG" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#707EA3" stopOpacity={1} />
+                  <stop offset="100%" stopColor="#3D4869" stopOpacity={1} />
+                </linearGradient>
+                <linearGradient id="colorSTROKE" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stopColor="#46FF00" stopOpacity={1} />
+                  <stop offset="100%" stopColor="#FF6C00" stopOpacity={1} />
+                </linearGradient>
+              </defs>
+              <Area
+                type="monotone"
+                dataKey="stg"
+                stroke="url(#colorSTROKE)"
+                strokeWidth={2}
+                fillOpacity={1}
+                fill="url(#colorSTG)"
+                isAnimationActive={false}
+              />
+            </AreaChart>
+          </div>
+        )}
       </Link>
     );
   }

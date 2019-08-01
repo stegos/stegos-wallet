@@ -81,7 +81,7 @@ export default class Receive extends Component<Props> {
     return (
       <Fragment>
         <div className={styles.SelectAccountContainer} key="Accounts">
-          <span className={styles.AccountCredit}>Account credit</span>
+          <span className={styles.AccountCredit}>Account to credit</span>
           <div className={styles.AccountDropdown}>
             <Dropdown
               onChange={e => this.onSelectAccount(e)}

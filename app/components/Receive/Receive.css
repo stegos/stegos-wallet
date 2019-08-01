@@ -55,6 +55,19 @@
   color: #fff;
 }
 
+@media screen and (max-width: 1220px) {
+  .SelectAccountContainer {
+    flex-direction: column;
+  }
+
+  .AccountCredit {
+    width: 384px;
+    margin-left: 8px;
+    margin-right: 0;
+    margin-bottom: 8px;
+  }
+}
+
 .AccountDropdown {
   display: flex;
   flex-direction: row;

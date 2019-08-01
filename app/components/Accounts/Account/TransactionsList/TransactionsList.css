@@ -97,6 +97,7 @@
   line-height: 18px;
   letter-spacing: 0.42px;
   color: #fff;
+  white-space: nowrap;
 }
 
 .TransactionAmountContainer {
