@@ -3,7 +3,10 @@ import React, { Component } from 'react';
 import Modal from '../common/Modal/Modal';
 import styles from './PaymentCertificate.css';
 import { POWER_DIVISIBILITY } from '../../constants/config';
-import { getCertificateVerificationDate } from '../../utils/format';
+import {
+  formatDigit,
+  getCertificateVerificationDate
+} from '../../utils/format';
 
 type Props = {
   visible: boolean,
@@ -117,7 +120,7 @@ export default class PaymentCertificate extends Component<Props> {
               Amount
             </div>
             <span className={styles.LabelAmount} style={{ marginLeft: '20px' }}>
-              {tx.amount / POWER_DIVISIBILITY} STG
+              {formatDigit(tx.amount / POWER_DIVISIBILITY)} STG
             </span>
           </div>
         </div>

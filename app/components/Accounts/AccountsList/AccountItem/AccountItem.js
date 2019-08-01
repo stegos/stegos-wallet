@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Area, AreaChart } from 'recharts';
 
 import routes from '../../../../constants/routes';
+import { formatDigit } from '../../../../utils/format';
 import styles from './AccountItem.css';
 import Stg from '../../../../../resources/img/Stg.svg';
 import { Account as AccountType } from '../../../../reducers/types';
@@ -51,7 +52,7 @@ export default class Account extends PureComponent<Props> {
         <div className={styles.BalanceContainer}>
           <img src={Stg} alt="STG" className={styles.StgIcon} />
           <span className={styles.Balance}>
-            {(balance || 0).toFixed(4)} STG
+            {formatDigit((balance || 0).toFixed(4))} STG
           </span>
         </div>
         <div className={styles.ChartContainer}>
