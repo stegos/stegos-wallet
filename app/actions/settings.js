@@ -7,6 +7,7 @@ import {
   setNewPassword
 } from '../db/db';
 import { sendSync } from '../ws/client';
+import { createEmptyAccount } from '../reducers/types';
 
 export const CHECK_DB_EXISTENCE = 'CHECK_DB_EXISTENCE';
 export const SET_PASSWORD = 'SET_PASSWORD';
@@ -39,17 +40,11 @@ export const setPassword = (pass: string) => (dispatch: Dispatch) => {
         db.find({ account: { $exists: true } }, (e, accounts) => {
           dispatch({
             type: INIT_ACCOUNTS,
-            payload: accounts.reduce((map, w) => {
-              map.set(w.account, {
-                id: w.account,
-                isRecoveryPhraseWrittenDown:
-                  w.isRecoveryPhraseWrittenDown || false,
-                isLocked: true,
-                transactions: [],
-                name: w.name || `Account #${w.account}` // todo think
-              });
-              return map;
-            }, new Map())
+            payload: accounts.reduce((ret, acc) => {
+              const id = acc.account;
+              ret[id] = { ...createEmptyAccount(id), ...acc, id };
+              return ret;
+            }, {})
           });
           dispatch(push('/sync'));
         });
@@ -109,7 +104,7 @@ export const showError = (error: string) => (dispatch: Dispatch) => {
 };
 
 export const lockWallet = () => (dispatch: Dispatch, getState: GetState) => {
-  Array.from(getState().accounts.accounts).map(account =>
+  Object.entries(getState().accounts.items).map(account =>
     sendSync({ type: 'seal', account_id: account[0] }, getState)
   );
   dispatch({ type: LOCK_WALLET });
@@ -128,7 +123,7 @@ export const unlockWallet = (password: string) => async (
   } else {
     try {
       await Promise.all(
-        Array.from(getState().accounts.accounts).map(account =>
+        Object.entries(getState().accounts.items).map(account =>
           sendSync(
             { type: 'unseal', password, account_id: account[0] },
             getState
@@ -161,7 +156,7 @@ export const changePassword = (newPass: string, oldPass: string) => (
       }
       await setNewPassword(newPass, async () => {
         await Promise.all(
-          Array.from(getState().accounts.accounts).map(account =>
+          Object.entries(getState().accounts.items).map(account =>
             sendSync(
               {
                 type: 'change_password',

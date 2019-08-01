@@ -49,7 +49,7 @@ export default class Account extends PureComponent<Props> {
   filterTransactions = period => {
     const { location, accounts } = this.props;
     const { accountId } = location.state;
-    const account = accounts.get(accountId);
+    const account = accounts[accountId];
     const { transactions } = account;
     const now = new Date();
     const weekAgo = new Date().setDate(now.getDate() - 7);
@@ -88,7 +88,7 @@ export default class Account extends PureComponent<Props> {
   get chartDataSource() {
     const { location, accounts } = this.props;
     const { accountId } = location.state;
-    const account = accounts.get(accountId);
+    const account = accounts[accountId];
     const { transactions } = account;
     let data = [];
     let balance = Number(account.balance);
@@ -118,7 +118,7 @@ export default class Account extends PureComponent<Props> {
       return null;
     }
     const { accountId } = location.state;
-    const account = accounts.get(accountId);
+    const account = accounts[accountId];
     const transactions = this.filterTransactions(account.transactions);
     const balance = account.balance / POWER_DIVISIBILITY;
     const isNewWallet = !account.balance && account.transactions.length === 0;

@@ -6,16 +6,16 @@ import { sendSync } from '../ws/client';
 import { SHOW_ERROR } from './settings';
 import { RECOVERY_PHRASE_LENGTH } from '../constants/config';
 import { getDatabase } from '../db/db';
+import { toTwoDigits } from '../utils/format';
 
 export const RECOVERY_PHRASE_WRITTEN_DOWN = 'RECOVERY_PHRASE_WRITTEN_DOWN';
 export const SET_ACCOUNT_NAME = 'SET_ACCOUNT_NAME';
 
 const formatDate = ts => {
   const date = new Date(ts);
-  const month = date.getMonth() + 1;
-  return `${date.getFullYear()}-${
-    month < 10 ? `0${month}` : month
-  }-${date.getDate()}T00:00:00.000000000Z`;
+  return `${date.getFullYear()}-${toTwoDigits(
+    date.getMonth() + 1
+  )}-${toTwoDigits(date.getDate())}T00:00:00.000000000Z`;
 };
 
 const d = new Date();
@@ -29,7 +29,7 @@ export const getAccounts = () => (dispatch: Dispatch, getState: GetState) => {
       const { accounts, settings } = state;
       const { password } = settings;
       await Promise.all(
-        Array.from(accounts.accounts)
+        Object.entries(accounts.items)
           .filter(a => a[1].isLocked === true)
           .map(
             account =>
@@ -179,7 +179,7 @@ export const writeDownRecoveryPhrase = (
   getDatabase()
     .then(async db => {
       const state = getState();
-      const { recoveryPhrase } = state.accounts.accounts.get(accountId);
+      const { recoveryPhrase } = state.accounts.items[accountId];
       for (let i = 0; i < RECOVERY_PHRASE_LENGTH; i += 1) {
         if (recoveryPhrase[i] !== phrase[i]) {
           throw new Error(
@@ -192,7 +192,10 @@ export const writeDownRecoveryPhrase = (
         { $set: { isRecoveryPhraseWrittenDown: true } },
         { upsert: true }
       );
-      dispatch({ type: RECOVERY_PHRASE_WRITTEN_DOWN, payload: accountId });
+      dispatch({
+        type: RECOVERY_PHRASE_WRITTEN_DOWN,
+        payload: { account_id: accountId }
+      });
       return db;
     })
     .catch(err => {
@@ -206,7 +209,10 @@ export const setAccountName = (accountId: string, name: string) => (
   getDatabase()
     .then(db => {
       db.update({ account: accountId }, { $set: { name } }, { upsert: true });
-      dispatch({ type: SET_ACCOUNT_NAME, payload: { accountId, name } });
+      dispatch({
+        type: SET_ACCOUNT_NAME,
+        payload: { account_id: accountId, name }
+      });
       return db;
     })
     .catch(err => {

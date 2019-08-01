@@ -8,6 +8,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(
-  state => ({ accounts: state.accounts.accounts }),
+  state => ({ accounts: state.accounts.items }),
   mapDispatchToProps
 )(Account);

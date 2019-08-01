@@ -80,57 +80,66 @@ export default class PasswordProtection extends Component<Props> {
             }
           ]}
         />
-        <div className={styles.Main}>
-          <div className={styles.Container}>
-            <span className={styles.StatusBar}>Protect your wallet</span>
-          </div>
-          <div className={styles.Description}>
-            Set a password to prevent an unauthorized access to Stegos Wallet
-            data on your computer, including account names, transactions and
-            public wallet keys.
-          </div>
-          <div className={styles.PasswordForm}>
-            <Input
-              onInput={this.onPassChange}
-              label="New password"
-              error={passError}
-              showError
-              type="password"
-            />
-            <Input
-              onInput={this.onConfirmPassChange}
-              label="Confirm password"
-              error={confirmPassError}
-              showError
-              type="password"
-            />
-          </div>
-          <div className={styles.FooterWrapper}>
-            <div style={{ flex: 1 }} />
-            <div className={styles.Warning}>
-              <div className={styles.WarningIcon}>
-                <Icon name="report_problem" size="32" color="#ff6c00" />
-              </div>
-              <p>
-                Make sure you remeber your password. Do not share it. Losing
-                your password requires resetting Stegos Wallet and re-adding
-                accounts. Resetting Stegos Wallet does not affect your crypto
-                assets.
-              </p>
+        <div className={`${styles.Main} ScrollBar`}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center'
+            }}
+          >
+            <div className={styles.Container}>
+              <span className={styles.StatusBar}>Protect your wallet</span>
             </div>
-            <div className={styles.ButtonWrapper}>
-              <Button type="button" onClick={this.onSkip}>
-                <span>Skip</span>
-              </Button>
-              <Button
-                type="button"
-                onClick={this.onNext}
-                disabled={passError || confirmPassError}
-                iconRight="keyboard_backspace"
-                iconRightMirrorHor
-              >
-                Next
-              </Button>
+            <div className={styles.Description}>
+              Set a password to prevent an unauthorized access to Stegos Wallet
+              data on your computer, including account names, transactions and
+              public wallet keys.
+            </div>
+            <div className={styles.PasswordForm}>
+              <Input
+                onInput={this.onPassChange}
+                label="New password"
+                error={passError}
+                showError
+                type="password"
+                autoFocus
+              />
+              <Input
+                onInput={this.onConfirmPassChange}
+                label="Confirm password"
+                error={confirmPassError}
+                showError
+                type="password"
+              />
+            </div>
+            <div className={styles.FooterWrapper}>
+              <div style={{ flex: 1 }} />
+              <div className={styles.Warning}>
+                <div className={styles.WarningIcon}>
+                  <Icon name="report_problem" size="32" color="#ff6c00" />
+                </div>
+                <p>
+                  Make sure you remeber your password. Do not share it. Losing
+                  your password requires resetting Stegos Wallet and re-adding
+                  accounts. Resetting Stegos Wallet does not affect your crypto
+                  assets.
+                </p>
+              </div>
+              <div className={styles.ButtonWrapper}>
+                <Button type="button" onClick={this.onSkip}>
+                  <span>Skip</span>
+                </Button>
+                <Button
+                  type="button"
+                  onClick={this.onNext}
+                  disabled={passError || confirmPassError}
+                  iconRight="keyboard_backspace"
+                  iconRightMirrorHor
+                >
+                  Next
+                </Button>
+              </div>
             </div>
           </div>
         </div>

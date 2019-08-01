@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import * as qrcode from 'qrcode-generator';
 import type { AccountsStateType } from '../../reducers/types';
 import Button from '../common/Button/Button';
-import Dropdown from '../common/dropdown/Dropdown';
+import Dropdown from '../common/Dropdown/Dropdown';
 import Steps from '../common/Steps/Steps';
 import Verify from '../Verify/Verify';
 import styles from './Receive.css';
@@ -28,7 +28,7 @@ export default class Receive extends Component<Props> {
     super(props);
     const { location, accounts } = props;
     const selectedAccount =
-      location.state && accounts.accounts.get(location.state.accountId);
+      location.state && accounts[location.state.accountId];
 
     this.state = {
       step: 0,
@@ -86,7 +86,8 @@ export default class Receive extends Component<Props> {
             <Dropdown
               onChange={e => this.onSelectAccount(e)}
               value={selectedAccount && selectedAccount.name}
-              options={Array.from(accounts.accounts).map(acc => ({
+              placeholder="Select account..."
+              options={Object.entries(accounts).map(acc => ({
                 value: acc[1],
                 name: acc[1].name
               }))}
@@ -140,7 +141,7 @@ export default class Receive extends Component<Props> {
         />
         <span className={styles.AccountAddress}>
           {copied ? (
-            <span style={{ color: '#EE6920' }}>Address copied</span>
+            <div style={{ color: '#EE6920' }}>Address copied</div>
           ) : (
             selectedAccount.address
           )}{' '}

@@ -3,7 +3,7 @@ import Portfolio from '../components/common/Portfolio/Portfolio';
 
 function mapStateToProps(state) {
   return {
-    accounts: state.accounts.accounts
+    accounts: state.accounts.items
   };
 }
 

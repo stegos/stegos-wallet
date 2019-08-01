@@ -37,6 +37,25 @@ export type Account = {
   isRecoveryPhraseWrittenDown: boolean
 };
 
+export const createEmptyAccount = id => ({
+  id,
+  name: `Account #${id}`,
+  balance: 0,
+  isLocked: true,
+  transactions: []
+});
+
+export const createOutgoingTransaction = (t, account) => ({
+  ...t,
+  type: 'Send',
+  timestamp: t.timestamp ? new Date(t.timestamp) : new Date(),
+  amount: t.outputs.reduce((a, c) => a + (c.is_change ? 0 : c.amount), 0),
+  utxo: t.outputs.filter(o => !o.is_change)[0],
+  id: t.tx_hash,
+  rvalue: t.outputs.filter(o => !o.is_change)[0].rvalue,
+  sender: account && account.address
+});
+
 export type Transaction = {
   type: TransactionType,
   timestamp: string,

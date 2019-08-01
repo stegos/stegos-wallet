@@ -1,10 +1,13 @@
 // @flow
+import { ConnectedRouter } from 'connected-react-router';
+import { remote } from 'electron';
 import React, { Component } from 'react';
 import { connect, Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
-import type { SettingsStateType, Store } from '../reducers/types';
 import BootstrapRoutes from '../BootstrapRoutes';
+import type { SettingsStateType, Store } from '../reducers/types';
 import Routes from '../Routes';
+import '../utils/extended';
+import menu from '../contextMenu';
 
 type Props = {
   store: Store,
@@ -13,6 +16,27 @@ type Props = {
 };
 
 class Root extends Component<Props> {
+  componentDidMount() {
+    window.addEventListener(
+      'contextmenu',
+      e => {
+        e.preventDefault();
+        // disable "copy" menu item when nothing is selected
+        const selectedText = window.getSelection().toString();
+        const copyMenuItem = menu.getMenuItemById('copy');
+        copyMenuItem.enabled = !!selectedText;
+        // disable paste menu item when clicked outside textfield
+        const { activeElement } = document;
+        const pasteMenuItem = menu.getMenuItemById('paste');
+        pasteMenuItem.enabled =
+          activeElement.nodeName === 'INPUT' ||
+          activeElement.nodeName === 'TEXTAREA';
+        menu.popup({ window: remote.getCurrentWindow() });
+      },
+      false
+    );
+  }
+
   render() {
     const { store, history, settings } = this.props;
     return (

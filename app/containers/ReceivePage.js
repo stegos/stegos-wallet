@@ -3,7 +3,7 @@ import Receive from '../components/Receive/Receive';
 
 function mapStateToProps(state) {
   return {
-    accounts: state.accounts
+    accounts: state.accounts.items
   };
 }
 

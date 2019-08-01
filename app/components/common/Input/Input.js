@@ -16,7 +16,9 @@ type Props = {
   noLabel?: boolean,
   style?: object,
   readOnly?: boolean,
-  isTextarea?: boolean
+  isTextarea?: boolean,
+  autoFocus?: boolean,
+  resize?: 'none' | 'vertical' | 'horizontal' | 'both'
 };
 
 export default class Input extends Component<Props> {
@@ -36,7 +38,9 @@ export default class Input extends Component<Props> {
     noLabel: false,
     style: {},
     readOnly: false,
-    isTextarea: false
+    isTextarea: false,
+    autoFocus: false,
+    resize: 'none'
   };
 
   render() {
@@ -54,7 +58,9 @@ export default class Input extends Component<Props> {
       noLabel,
       style,
       readOnly,
-      isTextarea
+      isTextarea,
+      autoFocus,
+      resize
     } = this.props;
     const InputComponent = isTextarea ? 'textarea' : 'input';
     return (
@@ -72,6 +78,8 @@ export default class Input extends Component<Props> {
           className={styles.InputStyle}
           name={name}
           readOnly={readOnly}
+          autoFocus={autoFocus}
+          style={{ resize }}
         />
         {showError && error && <span className={styles.Error}>{error}</span>}
       </div>

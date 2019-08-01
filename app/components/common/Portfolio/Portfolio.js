@@ -31,7 +31,7 @@ export default class Portfolio extends PureComponent<Props> {
 
   get balance() {
     const { accounts } = this.props;
-    return [...accounts.entries()].reduce(
+    return Object.entries(accounts).reduce(
       (a, c) => a + c[1].balance / POWER_DIVISIBILITY,
       0
     );
@@ -39,7 +39,7 @@ export default class Portfolio extends PureComponent<Props> {
 
   get size() {
     const { accounts } = this.props;
-    return accounts.size;
+    return Object.keys(accounts).length;
   }
 
   get transactions() {
@@ -54,7 +54,7 @@ export default class Portfolio extends PureComponent<Props> {
   get filteredTransactions() {
     const { accounts } = this.props;
     const { period } = this.state;
-    const transactions = Array.from(accounts)
+    const transactions = Object.entries(accounts)
       .map(a => a[1].transactions)
       .reduce((arr, tr) => [...arr, ...tr], [])
       .sort((a, b) => a.timestamp > b.timestamp)

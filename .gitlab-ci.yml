@@ -1,0 +1,38 @@
+variables:
+  STEGOS_PROJECT_ID: 25
+  STEGOS_BRANCH: dev
+
+stages:
+  - build
+
+.build:
+  stage: build
+  cache:
+    key: electron
+    paths:
+      - /root/.cache/electron
+#  when: manual
+
+build:linux:
+  extends: .build
+  image: node:8.16.0
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - release/stegos-wallet*.tar.gz
+      - release/stegos-wallet*.AppImage
+      - release/stegos-wallet*.snap
+      - release/stegos-wallet*.deb
+      - release/stegos-wallet*.rpm
+  script:
+    - node --version
+    - yarn --version
+    - mkdir node
+    - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/linux/stegosd?job=release:linux -o node/stegosd
+    - chmod a+x node/stegosd
+    - node/stegosd --version
+    - yarn install
+    - apt-get update && apt-get install -y --no-install-recommends libopenjp2-tools binutils rpm ruby
+    - yarn package-linux
+  tags:
+    - linux

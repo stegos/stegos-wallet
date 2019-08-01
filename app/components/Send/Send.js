@@ -2,15 +2,21 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import type { AccountsStateType } from '../../reducers/types';
+import Busy from '../common/Busy/Busy';
 import Button from '../common/Button/Button';
-import Dropdown from '../common/dropdown/Dropdown';
+import Dropdown from '../common/Dropdown/Dropdown';
 import Icon from '../common/Icon/Icon';
 import Input from '../common/Input/Input';
 import Steps from '../common/Steps/Steps';
 import styles from './Send.css';
 import routes from '../../constants/routes';
 import { POWER_DIVISIBILITY } from '../../constants/config';
-import { formatDigit, isBase58, NUMBER_FORMAT } from '../../utils/format';
+import {
+  formatDigit,
+  isBase58,
+  NUMBER_FORMAT,
+  isStegosNumber
+} from '../../utils/format';
 
 type Location = {
   pathname: string,
@@ -25,7 +31,8 @@ type Props = {
 
 const fees = [
   { value: 'standard', name: 'Standard', fee: 0.01 },
-  { value: 'high', name: 'High', fee: 0.05 }
+  { value: 'high', name: 'High', fee: 0.05 },
+  { value: 'custom', name: 'Custom', fee: 0.01 }
 ];
 
 export default class Send extends Component<Props> {
@@ -46,11 +53,11 @@ export default class Send extends Component<Props> {
         onChange={onChange}
         options={options}
         placeholder={placeholder}
-        icon="expand_more"
+        icon={!readOnly ? 'expand_more' : ''}
         iconPosition="right"
         style={{
           width: '100%',
-          border: '1px solid #5b5d63',
+          border: !readOnly ? '1px solid #5b5d63' : null,
           padding: '4px 12px 5px 12px',
           boxSizing: 'border-box'
         }}
@@ -64,8 +71,7 @@ export default class Send extends Component<Props> {
   constructor(props) {
     super(props);
     const { location, accounts } = props;
-    const account =
-      location.state && accounts.accounts.get(location.state.accountId);
+    const account = location.state && accounts[location.state.accountId];
 
     this.state = {
       step: 0,
@@ -78,31 +84,48 @@ export default class Send extends Component<Props> {
       amountError: '',
       comment: '',
       fee: fees[0],
-      generateCertificate: false
+      feeError: '',
+      generateCertificate: false,
+      isBusy: false
     };
   }
 
+  get totalAmount() {
+    const { amount, fee } = this.state;
+    return +amount + Number(fee.fee);
+  }
+
   validate = () => {
-    const { account, recipientAddress, amount } = this.state;
-    const nodeAmount = amount * POWER_DIVISIBILITY;
+    const { account, recipientAddress, amount, fee } = this.state;
+    const totalAmount = this.totalAmount * POWER_DIVISIBILITY;
 
     if (!account) {
       this.setState({ accountError: 'Select account' });
       return false;
     }
     if (!recipientAddress || !isBase58(recipientAddress)) {
-      // todo validate address
       this.setState({ recipientAddressError: 'Incorrect address' });
       return false;
     }
-    if (!amount || !NUMBER_FORMAT.test(amount)) {
+    if (!amount || !NUMBER_FORMAT.test(amount) + amount < 0) {
       this.setState({ amountError: 'Incorrect value' });
       return false;
     }
-    if (nodeAmount > account.balance) {
+    if (totalAmount > account.balance) {
       this.setState({ accountError: 'Insufficient balance' });
       return false;
     }
+    if (!isStegosNumber(fee.fee)) {
+      this.setState({ feeError: 'Incorrect value' });
+      return false;
+    }
+    if (+fee.fee < 0.01) {
+      this.setState({ feeError: 'Minimum fee is 0.01' });
+      return false;
+    }
+    this.setState({
+      accountError: ''
+    });
     return true;
   };
 
@@ -115,7 +138,8 @@ export default class Send extends Component<Props> {
 
   handleFeesChange(option) {
     this.setState({
-      fee: option.value
+      fee: option.value,
+      feeError: ''
     });
   }
 
@@ -156,15 +180,17 @@ export default class Send extends Component<Props> {
       generateCertificate,
       fee
     } = this.state;
+    this.setState({ isBusy: true });
     sendTransaction(
       recipientAddress,
       amount * POWER_DIVISIBILITY,
       comment,
       account.id,
       generateCertificate,
-      fee ? fee.fee * POWER_DIVISIBILITY : 0
+      fee.fee * POWER_DIVISIBILITY
     )
       .then(resp => {
+        this.setState({ isBusy: false });
         this.confirmed();
         return resp;
       })
@@ -175,11 +201,6 @@ export default class Send extends Component<Props> {
     this.setState({
       step: 2
     });
-  }
-
-  getFeeLabel() {
-    const { fee } = this.state;
-    return fee ? `${fee.fee} STG per UTXO` : '';
   }
 
   sendForm() {
@@ -194,14 +215,18 @@ export default class Send extends Component<Props> {
       amountError,
       comment,
       fee,
+      feeError,
       step
     } = this.state;
+    const formFieldClass = `${styles.FormField} ${
+      step === 1 ? styles.FormFieldFixedValue : ''
+    }`;
     return (
       <Fragment>
         <div className={styles.SendFormContainer} key="Accounts">
           <span className={styles.FieldLabel}>Account credit</span>
           {Send.renderDropdown(
-            Array.from(accounts.accounts).map(acc => ({
+            Object.entries(accounts).map(acc => ({
               value: acc[1],
               name: acc[1].name
             })),
@@ -214,7 +239,7 @@ export default class Send extends Component<Props> {
           )}
           <span className={styles.FieldLabel}>Recipient address</span>
           <Input
-            className={styles.FormField}
+            className={formFieldClass}
             name="recipientAddress"
             value={recipientAddress}
             onChange={e =>
@@ -226,13 +251,14 @@ export default class Send extends Component<Props> {
             readOnly={step === 1}
             noLabel
             isTextarea
+            resize={step === 0 ? 'vertical' : 'none'}
             error={recipientAddressError}
             showError={!!recipientAddressError}
             style={{ height: 'auto', margin: 0 }}
           />
           <span className={styles.FieldLabel}>Amount</span>
           <Input
-            className={styles.FormField}
+            className={formFieldClass}
             type="number"
             name="amount"
             value={amount}
@@ -247,7 +273,7 @@ export default class Send extends Component<Props> {
           />
           <span className={styles.FieldLabel}>Comment</span>
           <Input
-            className={styles.FormField}
+            className={formFieldClass}
             rows={3}
             name="comment"
             value={comment}
@@ -255,6 +281,7 @@ export default class Send extends Component<Props> {
             readOnly={step === 1}
             noLabel
             isTextarea
+            resize={step === 0 ? 'vertical' : 'none'}
             style={{ height: 'auto', margin: 0 }}
           />
           <span className={styles.FieldLabel}>Fees</span>
@@ -272,11 +299,24 @@ export default class Send extends Component<Props> {
               step === 1
             )}
             <Icon name="add" style={{ padding: '0 8px' }} size={16} />
-            <input
-              className={styles.FormField}
-              value={this.getFeeLabel()}
-              readOnly
-            />
+            <div className={formFieldClass}>
+              <input
+                className={styles.FeeInput}
+                error={feeError}
+                value={fee.fee}
+                type="number"
+                onChange={e =>
+                  this.setState({
+                    fee: { ...fee, fee: e.target.value },
+                    feeError: ''
+                  })
+                }
+                readOnly={step === 1 || fee.value !== 'custom'}
+              />
+              <span className={styles.FieldLabel} style={{ marginTop: 0 }}>
+                STG per UTXO
+              </span>
+            </div>
           </div>
           <span className={styles.FieldLabel} />
           <div
@@ -309,7 +349,7 @@ export default class Send extends Component<Props> {
           <div className={styles.TotalAmount}>
             Total to debit{' '}
             <span className={styles.TotalAmountValue}>
-              STG {formatDigit((+amount + fee.fee).toFixed(2))}
+              STG {formatDigit(this.totalAmount).toFixed(2)}
             </span>
           </div>
           <Button
@@ -361,44 +401,47 @@ export default class Send extends Component<Props> {
   }
 
   render() {
-    const { titledAccount, step } = this.state;
+    const { titledAccount, step, isBusy } = this.state;
     return (
-      <div className={styles.Send}>
-        {titledAccount && (
-          <Fragment>
-            <span className={styles.Title}>{titledAccount.name}</span>
-            <Link
-              to={{
-                pathname: routes.ACCOUNT,
-                state: { accountId: titledAccount.id }
+      <Fragment>
+        <div className={styles.Send}>
+          {titledAccount && (
+            <Fragment>
+              <span className={styles.Title}>{titledAccount.name}</span>
+              <Link
+                to={{
+                  pathname: routes.ACCOUNT,
+                  state: { accountId: titledAccount.id }
+                }}
+                style={{ alignSelf: 'flex-start', paddingLeft: 0 }}
+              >
+                <Button type="Invisible" icon="keyboard_backspace">
+                  Back to the account
+                </Button>
+              </Link>
+            </Fragment>
+          )}
+          <div className={styles.SendForm}>
+            <div className={styles.FormTitle}>Send</div>
+            <div
+              style={{
+                width: 384,
+                alignSelf: 'center',
+                marginTop: 7,
+                marginBottom: 30
               }}
-              style={{ alignSelf: 'flex-start', paddingLeft: 0 }}
             >
-              <Button type="Invisible" icon="keyboard_backspace">
-                Back to the account
-              </Button>
-            </Link>
-          </Fragment>
-        )}
-        <div className={styles.SendForm}>
-          <div className={styles.FormTitle}>Send</div>
-          <div
-            style={{
-              width: 384,
-              alignSelf: 'center',
-              marginTop: 7,
-              marginBottom: 30
-            }}
-          >
-            <Steps
-              steps={['Details', 'Verification', 'Confirmation']}
-              activeStep={step}
-            />
+              <Steps
+                steps={['Details', 'Verification', 'Confirmation']}
+                activeStep={step}
+              />
+            </div>
+            {(step === 0 || step === 1) && this.sendForm()}
+            {step === 2 && this.transactionSent()}
           </div>
-          {(step === 0 || step === 1) && this.sendForm()}
-          {step === 2 && this.transactionSent()}
         </div>
-      </div>
+        <Busy visible={isBusy} title="Sending transaction" />
+      </Fragment>
     );
   }
 }
