@@ -29,6 +29,9 @@ export default class AppUpdater {
   }
 }
 
+app.commandLine.appendSwitch('high-dpi-support', 'true');
+app.commandLine.appendSwitch('force-device-scale-factor', '1');
+
 let mainWindow = null;
 let nodeProcess = null;
 let isTokenCapturing = false;
