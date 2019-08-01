@@ -60,8 +60,18 @@ export type Transaction = {
   type: TransactionType,
   timestamp: string,
   amount: number,
-  hasCertificate: boolean
+  hasCertificate: boolean,
+  status?: TransactionStatus
 };
+
+export type TransactionStatus =
+  | 'created'
+  | 'accepted'
+  | 'rejected'
+  | 'prepare'
+  | 'rollback'
+  | 'committed'
+  | 'conflicted';
 
 export type TransactionType = 'Send' | 'Receive';
 

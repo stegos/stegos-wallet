@@ -7,7 +7,11 @@ import Input from '../common/Input/Input';
 import Modal from '../common/Modal/Modal';
 import styles from './Verify.css';
 import * as NodeActions from '../../actions/node';
-import { getCertificateVerificationDate, isBase58 } from '../../utils/format';
+import {
+  formatDigit,
+  getCertificateVerificationDate,
+  isBase58
+} from '../../utils/format';
 
 type Props = {
   visible: boolean,
@@ -253,7 +257,7 @@ class Verify extends Component<Props> {
               Amount
             </div>
             <span className={styles.LabelAmount} style={{ marginLeft: '20px' }}>
-              {amount ? `${amount} STG` : ''}
+              {amount ? `${formatDigit(amount)} STG` : ''}
             </span>
           </div>
         </div>
