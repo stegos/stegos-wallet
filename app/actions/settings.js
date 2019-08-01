@@ -1,5 +1,6 @@
 import { push } from 'connected-react-router';
 import type { Dispatch, GetState } from '../reducers/types';
+import { createEmptyAccount } from '../reducers/types';
 import {
   createDatabase,
   getDatabase,
@@ -7,7 +8,6 @@ import {
   setNewPassword
 } from '../db/db';
 import { sendSync } from '../ws/client';
-import { createEmptyAccount } from '../reducers/types';
 
 export const CHECK_DB_EXISTENCE = 'CHECK_DB_EXISTENCE';
 export const SET_PASSWORD = 'SET_PASSWORD';
@@ -170,7 +170,11 @@ export const changePassword = (newPass: string, oldPass: string) => (
       dispatch({ type: SET_PASSWORD, payload: newPass });
       resolve();
     } catch (e) {
-      dispatch({ type: SHOW_ERROR, payload: 'An error occurred' });
-      reject();
+      console.log(e);
+      dispatch({
+        type: SHOW_ERROR,
+        payload: `An error occurred. ${e && e.message}`
+      });
+      reject(e);
     }
   });
