@@ -14,7 +14,7 @@ import { POWER_DIVISIBILITY } from '../../constants/config';
 import {
   formatDigit,
   isBase58,
-  NUMBER_FORMAT,
+  isPositiveNumber,
   isStegosNumber
 } from '../../utils/format';
 
@@ -107,7 +107,7 @@ export default class Send extends Component<Props> {
       this.setState({ recipientAddressError: 'Incorrect address' });
       return false;
     }
-    if (!amount || !NUMBER_FORMAT.test(amount) + amount < 0) {
+    if (!amount || !isPositiveNumber(amount)) {
       this.setState({ amountError: 'Incorrect value' });
       return false;
     }
@@ -349,7 +349,7 @@ export default class Send extends Component<Props> {
           <div className={styles.TotalAmount}>
             Total to debit{' '}
             <span className={styles.TotalAmountValue}>
-              STG {formatDigit(this.totalAmount).toFixed(2)}
+              STG {formatDigit(this.totalAmount.toFixed(2))}
             </span>
           </div>
           <Button

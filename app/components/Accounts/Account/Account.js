@@ -21,7 +21,6 @@ type Location = {
 
 type Props = {
   location: Location,
-  settingsActions: any,
   accounts: any,
   deleteAccount: any
 };
@@ -36,15 +35,6 @@ export default class Account extends PureComponent<Props> {
     editAccountVisible: false,
     restoreAccountVisible: false
   };
-
-  componentDidMount() {
-    const { location } = this.props;
-    if (!location.state || !location.state.accountId) {
-      const { settingsActions } = this.props;
-      const { showError } = settingsActions;
-      showError('Something went wrong. please try again later.');
-    }
-  }
 
   filterTransactions = period => {
     const { location, accounts } = this.props;

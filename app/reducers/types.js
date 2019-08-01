@@ -73,18 +73,6 @@ export type TransactionStatus =
   | 'committed'
   | 'conflicted';
 
-// const TransactionStatuses = {
-//   created: 'Created',
-//   accepted: 'Accepted',
-//   rejected: 'Rejected',
-//   prepare: 'Prepare',
-//   rollback: 'Rollback',
-//   committed: 'Committed',
-//   conflicted: 'Conflicted',
-// };
-//
-// export type TransactionStatus = $Keys<typeof TransactionStatuses>;
-
 export type TransactionType = 'Send' | 'Receive';
 
 export type State = {

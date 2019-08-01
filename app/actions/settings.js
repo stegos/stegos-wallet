@@ -119,7 +119,6 @@ export const unlockWallet = (password: string) => async (
       type: SHOW_ERROR,
       payload: 'The password is incorrect. Please try again.'
     });
-    throw new Error('Incorrect password');
   } else {
     try {
       await Promise.all(

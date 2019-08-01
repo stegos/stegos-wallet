@@ -5,18 +5,12 @@ import Icon from '../../../common/Icon/Icon';
 import PaymentCertificate from '../../../PaymentCertificate/PaymentCertificate';
 import styles from './TransactionsList.css';
 import { POWER_DIVISIBILITY } from '../../../../constants/config';
-import type {
-  Transaction,
-  TransactionStatus
-} from '../../../../reducers/types';
+import type { Transaction } from '../../../../reducers/types';
 
 type Props = {
   transactions: Transaction[],
   sender: string
 };
-
-const choose = (...args: TransactionStatus) =>
-  args[Number.parseInt(Math.random() * args.length, 10)];
 
 export default class TransactionsList extends PureComponent<Props> {
   static getDate(date: Date) {
@@ -57,15 +51,6 @@ export default class TransactionsList extends PureComponent<Props> {
       return null;
     }
     return transactions.map((item: Transaction) => {
-      item.status = choose(
-        'accepted',
-        'committed',
-        'conflicted',
-        'created',
-        'prepare',
-        'rejected',
-        'rollback'
-      );
       const signAmount =
         (item.type === 'Receive' ? '+' : '-') +
         formatDigit(item.amount / POWER_DIVISIBILITY).toString();

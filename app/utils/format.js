@@ -27,4 +27,6 @@ export const formatDigit = (value: number | string) => {
   return parts.join('.');
 };
 
-export const NUMBER_FORMAT = /^(\d+)((\.(?=\d+)(\d*))|$)$/;
+export const POSITIVE_NUMBER_FORMAT = /^(\d+)(\.\d+)?$/;
+
+export const isPositiveNumber = str => POSITIVE_NUMBER_FORMAT.test(str);
