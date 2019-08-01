@@ -25,11 +25,16 @@ const limit = 1000; // todo config
 export const getAccounts = () => (dispatch: Dispatch, getState: GetState) => {
   sendSync({ type: 'list_accounts' }, getState)
     .then(async resp => {
-      const state = getState();
+      let state = getState();
       const { accounts, settings } = state;
       const { password } = settings;
+      if (Object.keys(accounts.items).length === 0) {
+        await sendSync({ type: 'create_account', password }, getState);
+      }
+      state = getState();
+      const { items } = state.accounts;
       await Promise.all(
-        Object.entries(accounts.items)
+        Object.entries(items)
           .filter(a => a[1].isLocked === true)
           .map(
             account =>
@@ -40,14 +45,14 @@ export const getAccounts = () => (dispatch: Dispatch, getState: GetState) => {
                 .catch(console.log) // todo handle error when error codes will be available
           )
       );
-      resp.accounts.forEach(account => {
-        dispatch(send({ type: 'balance_info', account_id: account }));
-        dispatch(send({ type: 'keys_info', account_id: account }));
-        dispatch(send({ type: 'get_recovery', account_id: account }));
+      Object.values(items).forEach(account => {
+        dispatch(send({ type: 'balance_info', account_id: account.id }));
+        dispatch(send({ type: 'keys_info', account_id: account.id }));
+        dispatch(send({ type: 'get_recovery', account_id: account.id }));
         dispatch(
           send({
             type: 'history_info',
-            account_id: account,
+            account_id: account.id,
             starting_from: startingTimestamp,
             limit
           })
@@ -74,14 +79,6 @@ export const createAccount = () => async (
       .finally(() => {
         dispatch(send({ type: 'keys_info', account_id: resp.account_id }));
         dispatch(send({ type: 'get_recovery', account_id: resp.account_id }));
-        dispatch(
-          push({
-            pathname: routes.ACCOUNT,
-            state: {
-              accountId: resp.account_id
-            }
-          })
-        );
       })
   );
 };

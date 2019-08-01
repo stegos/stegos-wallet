@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, { Fragment, PureComponent } from 'react';
 import Icon from '../Icon/Icon';
 import Chart from '../../Accounts/Account/Chart/Chart';
 import TransactionsList from '../../Accounts/Account/TransactionsList/TransactionsList';
@@ -106,9 +106,11 @@ export default class Portfolio extends PureComponent<Props> {
   }
 
   render() {
-    const { trendingUp, period } = this.state;
+    const { period } = this.state;
     const { balance, size } = this;
     const transactions = this.filteredTransactions;
+    const trendingUp =
+      transactions.length > 0 ? transactions[0].type === 'Receive' : false;
     return (
       <div className={styles.Account}>
         <div className={styles.Header}>
@@ -162,17 +164,15 @@ export default class Portfolio extends PureComponent<Props> {
               </div>
             </div>
           </div>
-          {!!transactions.length && <Chart data={this.chartDataSource} />}
-          <button
-            className={styles.ButtonSwitchTrending}
-            onClick={this.switchTranding.bind(this)}
-            type="button"
-          >
-            <Icon
-              name={trendingUp ? 'trending_up' : 'trending_down'}
-              size={32}
-            />
-          </button>
+          {!!transactions.length && (
+            <Fragment>
+              <Chart data={this.chartDataSource} />
+              <Icon
+                name={trendingUp ? 'trending_up' : 'trending_down'}
+                size={32}
+              />
+            </Fragment>
+          )}
         </div>
         {!!transactions.length && (
           <TransactionsList transactions={transactions} />
