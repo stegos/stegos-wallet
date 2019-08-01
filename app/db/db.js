@@ -1,10 +1,10 @@
-import { remote } from 'electron';
+import getPath from 'platform-folders';
 import DataStore from 'nedb';
 import fs from 'fs';
 import crypto from 'crypto';
 import path from 'path';
 
-const DIR_PATH = path.resolve(`${remote.app.getPath('appData')}/stegos/`);
+const DIR_PATH = path.resolve(`${getPath('appData')}/stegos/`);
 const DB_PATH = `${DIR_PATH}/stegos.db`;
 const TMP_DB_PATH = `${DIR_PATH}/stegos_tmp.db`;
 const NO_PASSWORD = 'EMPTY_PASSWORD';

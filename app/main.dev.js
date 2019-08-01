@@ -16,6 +16,7 @@ import log from 'electron-log';
 import { spawn } from 'child_process';
 import path from 'path';
 import fs from 'fs';
+import getPath from 'platform-folders';
 // import MenuBuilder from './menu';
 import { TOKEN_RECEIVED } from './actions/node';
 import { wsEndpoint } from './constants/config';
@@ -35,7 +36,7 @@ const nodePath =
   process.env.NODE_ENV === 'production'
     ? path.resolve(__dirname, '../../node/')
     : path.resolve(__dirname, '../node/');
-const appDataPath = `${app.getPath('appData')}/stegos/`;
+const appDataPath = `${getPath('appData')}/stegos/`;
 const tokenFile = `${appDataPath}/api.token`; // todo config
 
 if (process.env.NODE_ENV === 'production') {
