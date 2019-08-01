@@ -300,11 +300,13 @@ export default class Send extends Component<Props> {
             )}
             <Icon name="add" style={{ padding: '0 8px' }} size={16} />
             <div className={formFieldClass}>
-              <input
-                className={styles.FeeInput}
+              <Input
+                className={formFieldClass}
                 error={feeError}
+                showError={!!feeError}
                 value={fee.fee}
                 type="number"
+                noLabel
                 onChange={e =>
                   this.setState({
                     fee: { ...fee, fee: e.target.value },
@@ -312,10 +314,18 @@ export default class Send extends Component<Props> {
                   })
                 }
                 readOnly={step === 1 || fee.value !== 'custom'}
+                style={{
+                  height: 'auto',
+                  margin: 0,
+                  border: 'none',
+                  padding: 0
+                }}
               />
-              <span className={styles.FieldLabel} style={{ marginTop: 0 }}>
-                STG per UTXO
-              </span>
+              {!feeError && (
+                <span className={styles.FieldLabel} style={{ marginTop: 0 }}>
+                  STG per UTXO
+                </span>
+              )}
             </div>
           </div>
           <span className={styles.FieldLabel} />
