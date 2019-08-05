@@ -10,6 +10,7 @@ import { toTwoDigits } from '../utils/format';
 
 export const RECOVERY_PHRASE_WRITTEN_DOWN = 'RECOVERY_PHRASE_WRITTEN_DOWN';
 export const SET_ACCOUNT_NAME = 'SET_ACCOUNT_NAME';
+export const SET_LAST_USED_ACCOUNT = 'SET_LAST_USED_ACCOUNT';
 
 const formatDate = ts => {
   const date = new Date(ts);
@@ -216,3 +217,9 @@ export const setAccountName = (accountId: string, name: string) => (
       dispatch({ type: SHOW_ERROR, payload: err.message });
       throw err;
     });
+
+export const setLastUsedAccount = (accountId: string) => (
+  dispatch: Dispatch
+) => {
+  dispatch({ type: SET_LAST_USED_ACCOUNT, payload: accountId });
+};

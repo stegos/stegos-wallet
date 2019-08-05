@@ -18,14 +18,9 @@ import {
   isStegosNumber
 } from '../../utils/format';
 
-type Location = {
-  pathname: string,
-  state?: object
-};
-
 type Props = {
   accounts: AccountsStateType,
-  location: Location,
+  lastActive: string,
   sendTransaction: () => void
 };
 
@@ -70,8 +65,10 @@ export default class Send extends Component<Props> {
 
   constructor(props) {
     super(props);
-    const { location, accounts } = props;
-    const account = location.state && accounts[location.state.accountId];
+    const { accounts, lastActive } = props;
+    const account =
+      (lastActive && accounts[lastActive]) ||
+      accounts[Object.keys(accounts)[0]];
 
     this.state = {
       step: 0,
