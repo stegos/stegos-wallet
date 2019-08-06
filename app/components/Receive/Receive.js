@@ -11,14 +11,9 @@ import Verify from '../Verify/Verify';
 import styles from './Receive.css';
 import routes from '../../constants/routes';
 
-type Location = {
-  pathname: string,
-  state?: object
-};
-
 type Props = {
   accounts: AccountsStateType,
-  location: Location
+  lastActive: string
 };
 
 export default class Receive extends Component<Props> {
@@ -26,9 +21,10 @@ export default class Receive extends Component<Props> {
 
   constructor(props) {
     super(props);
-    const { location, accounts } = props;
+    const { accounts, lastActive } = props;
     const selectedAccount =
-      location.state && accounts[location.state.accountId];
+      (lastActive && accounts[lastActive]) ||
+      accounts[Object.keys(accounts)[0]];
 
     this.state = {
       step: 0,
@@ -81,7 +77,7 @@ export default class Receive extends Component<Props> {
     return (
       <Fragment>
         <div className={styles.SelectAccountContainer} key="Accounts">
-          <span className={styles.AccountCredit}>Account to credit</span>
+          <span className={styles.AccountCredit}>Account To Credit</span>
           <div className={styles.AccountDropdown}>
             <Dropdown
               onChange={e => this.onSelectAccount(e)}

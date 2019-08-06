@@ -22,7 +22,8 @@ type Location = {
 type Props = {
   location: Location,
   accounts: any,
-  deleteAccount: any
+  deleteAccount: () => {},
+  setLastUsedAccount: () => {}
 };
 
 export default class Account extends PureComponent<Props> {
@@ -30,11 +31,17 @@ export default class Account extends PureComponent<Props> {
     return date.toLocaleDateString('en-us', { weekday: 'short' });
   }
 
-  state = {
-    period: 'week',
-    editAccountVisible: false,
-    restoreAccountVisible: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      period: 'week',
+      editAccountVisible: false,
+      restoreAccountVisible: false
+    };
+    const { location, setLastUsedAccount } = props;
+    const { accountId } = location.state;
+    setLastUsedAccount(accountId);
+  }
 
   filterTransactions = period => {
     const { location, accounts } = this.props;
@@ -131,10 +138,7 @@ export default class Account extends PureComponent<Props> {
             <Button
               type="FilledSecondary"
               icon="file_upload"
-              link={{
-                pathname: routes.SEND,
-                state: { accountId: account.id }
-              }}
+              link={{ pathname: routes.SEND }}
               elevated
             >
               Send tokens
@@ -142,10 +146,7 @@ export default class Account extends PureComponent<Props> {
             <Button
               type="FilledPrimary"
               icon="file_download"
-              link={{
-                pathname: routes.RECEIVE,
-                state: { accountId: account.id }
-              }}
+              link={{ pathname: routes.RECEIVE }}
               elevated
             >
               Receive tokens
@@ -228,12 +229,7 @@ export default class Account extends PureComponent<Props> {
                 }
               </span>
 
-              <Link
-                to={{
-                  pathname: routes.RECEIVE,
-                  state: { accountId: account.id }
-                }}
-              >
+              <Link to={{ pathname: routes.RECEIVE }}>
                 <Button
                   type="OutlineDisabled"
                   icon="open_in_browser"
