@@ -171,7 +171,7 @@ function runNodeProcess(): Promise<void> {
         if (process.env.NODE_ENV === 'development') console.log(str);
         fs.appendFile(logFile, str, () => {});
         if (str.includes('ERROR [stegos'))
-          reject(new Error('An error occurred'));
+          reject(new Error(`An error occurred\n${str}`));
         if (!isTokenCapturing) {
           isTokenCapturing = true;
           captureToken(resolve); // todo rid off NODE_RUNNING action
