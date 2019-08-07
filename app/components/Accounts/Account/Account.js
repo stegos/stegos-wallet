@@ -258,7 +258,6 @@ export default class Account extends PureComponent<Props> {
         )}
         <RestoreAccount
           visible={restoreAccountVisible}
-          account={account}
           onClose={() => this.setState({ restoreAccountVisible: false })}
         />
         <EditAccount

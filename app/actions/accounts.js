@@ -84,51 +84,47 @@ export const createAccount = () => async (
   );
 };
 
-export const restoreAccount = (phrase: string[]) => (
+export const restoreAccount = (phrase: string[]) => async (
   dispatch: Dispatch,
   getState: GetState
 ) => {
   const { password } = getState().settings;
-  return sendSync(
-    { type: 'recover_account', recovery: phrase.join(' '), password },
-    getState
-  )
-    .then(async resp => {
-      const accountId = resp.account_id;
-      await sendSync(
-        { type: 'unseal', password, account_id: accountId },
-        getState
-      );
-      dispatch(send({ type: 'balance_info', account_id: accountId }));
-      dispatch(send({ type: 'keys_info', account_id: accountId }));
-      dispatch(send({ type: 'get_recovery', account_id: accountId }));
-      dispatch(
-        send({
-          type: 'history_info',
-          account_id: accountId,
-          starting_from: startingTimestamp,
-          limit
-        })
-      );
-      return accountId;
-    })
-    .catch(err => {
-      console.log(err);
-      dispatch({
-        type: SHOW_ERROR,
-        payload:
-          'The recovery phrase is incorrect. Please verify it, correct and try again.'
-      });
-      throw err;
+  try {
+    const resp = await sendSync(
+      { type: 'recover_account', recovery: phrase.join(' '), password },
+      getState
+    );
+
+    const accountId = resp.account_id;
+    await sendSync(
+      { type: 'unseal', password, account_id: accountId },
+      getState
+    );
+    await sendSync({ type: 'keys_info', account_id: accountId }, getState);
+    dispatch(send({ type: 'balance_info', account_id: accountId }));
+    dispatch(send({ type: 'get_recovery', account_id: accountId }));
+    dispatch(
+      send({
+        type: 'history_info',
+        account_id: accountId,
+        starting_from: startingTimestamp,
+        limit
+      })
+    );
+    return accountId;
+  } catch (err) {
+    console.log(err);
+    dispatch({
+      type: SHOW_ERROR,
+      payload:
+        'The recovery phrase is incorrect. Please verify it, correct and try again.'
     });
+    throw err;
+  }
 };
 
-export const completeAccountRestoring = (
-  newId: string,
-  oldId: string
-) => async (dispatch: Dispatch, getState: GetState) => {
+export const completeAccountRestoring = () => (dispatch: Dispatch) => {
   dispatch(push(routes.ACCOUNTS));
-  await sendSync({ type: 'delete_account', account_id: oldId }, getState);
 };
 
 export const deleteAccount = id => (dispatch: Dispatch, getState: GetState) => {

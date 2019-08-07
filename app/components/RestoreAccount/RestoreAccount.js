@@ -12,12 +12,15 @@ import Steps from '../common/Steps/Steps';
 import RecoveryPhrase from './RecoveryPhraze/RecoveryPhrase';
 import styles from './RestoreAccount.css';
 import { RECOVERY_PHRASE_LENGTH } from '../../constants/config';
+import { getEmptyRecoveryPhrase } from '../../utils/format';
+import Busy from '../common/Busy/Busy';
 
 type Props = {
-  account: Account,
+  accounts: Account[],
   visible: boolean,
   onClose: () => void,
-  restoreAccount: () => void
+  restoreAccount: () => void,
+  completeAccountRestoring: () => void
 };
 
 class RestoreAccount extends Component<Props> {
@@ -25,15 +28,12 @@ class RestoreAccount extends Component<Props> {
 
   constructor(props) {
     super(props);
-    const words = [];
-    for (let i = 0; i < RECOVERY_PHRASE_LENGTH; i += 1) {
-      words.push({ id: i, value: '' });
-    }
     this.state = {
-      phrase: words,
+      phrase: getEmptyRecoveryPhrase(),
       step: 0,
-      qrcodeDataUrl: null,
-      restoredAccountId: null
+      qrCodeDataUrl: null,
+      restoredAccountId: null,
+      isBusy: false
     };
   }
 
@@ -44,15 +44,12 @@ class RestoreAccount extends Component<Props> {
   }
 
   close() {
-    const { restoredAccountId } = this.state;
-    const { account, completeAccountRestoring } = this.props;
-    if (restoredAccountId) {
-      completeAccountRestoring(restoredAccountId, account.id);
-    }
+    const { completeAccountRestoring } = this.props;
+    completeAccountRestoring();
     this.setState({
-      // phrase: [],
+      phrase: getEmptyRecoveryPhrase(),
       step: 0,
-      qrcodeDataUrl: null
+      qrCodeDataUrl: null
     });
     const { onClose } = this.props;
     if (typeof onClose === 'function') {
@@ -62,43 +59,61 @@ class RestoreAccount extends Component<Props> {
 
   restore() {
     const { phrase } = this.state;
-    const { account, restoreAccount } = this.props;
-    restoreAccount(phrase.map(w => w.value))
-      .then(resp => {
-        const qr = qrcode(4, 'L');
-        qr.addData(account.id);
-        qr.make();
-        const qrcodeDataUrl = qr.createDataURL();
-        this.setState({ qrcodeDataUrl, step: 1, restoredAccountId: resp });
-        return resp;
-      })
-      .catch(() => {});
+    const { restoreAccount } = this.props;
+    this.setState(
+      {
+        isBusy: true
+      },
+      () => {
+        restoreAccount(phrase.map(w => w.value))
+          .then(resp => {
+            const { accounts } = this.props;
+            const account = accounts[resp];
+            const qr = qrcode(4, 'L');
+            qr.addData(account.address);
+            qr.make();
+            const qrCodeDataUrl = qr.createDataURL();
+            this.setState({
+              qrCodeDataUrl,
+              step: 1,
+              restoredAccountId: resp,
+              isBusy: false
+            });
+            return resp;
+          })
+          .catch(() => {
+            this.setState({ isBusy: false });
+          });
+      }
+    );
   }
 
   copyAddressStep() {
-    const { qrcodeDataUrl } = this.state;
-    const { account } = this.props;
+    const { qrCodeDataUrl, restoredAccountId } = this.state;
+    const { accounts } = this.props;
+    const account = accounts[restoredAccountId];
     return (
       <div className={styles.QrcodeContainer} key="Qrcode">
         <img
-          src={qrcodeDataUrl}
+          src={qrCodeDataUrl}
           alt={account.address}
           className={styles.Qrcode}
         />
         <span className={styles.AccountAddress}>
-          {account.id} Address for account <b>{account.name}</b>
+          {account.address} Address for account <b>{account.name}</b>
         </span>
       </div>
     );
   }
 
   addressCopiedStep() {
-    const { qrcodeDataUrl } = this.state;
-    const { account } = this.props;
+    const { qrCodeDataUrl, restoredAccountId } = this.state;
+    const { accounts } = this.props;
+    const account = accounts[restoredAccountId];
     return (
       <div className={styles.QrcodeContainer} key="Qrcode">
         <img
-          src={qrcodeDataUrl}
+          src={qrCodeDataUrl}
           alt={account.address}
           className={styles.Qrcode}
         />
@@ -111,13 +126,15 @@ class RestoreAccount extends Component<Props> {
   }
 
   copyAddressToClipboard() {
-    const { account } = this.props;
+    const { restoredAccountId } = this.state;
+    const { accounts } = this.props;
+    const account = accounts[restoredAccountId];
     clipboard.writeText(account.address);
     this.setState({ step: 2 });
   }
 
   render() {
-    const { phrase, step } = this.state;
+    const { phrase, step, isBusy } = this.state;
     const { visible } = this.props;
     return (
       <Modal
@@ -178,6 +195,7 @@ class RestoreAccount extends Component<Props> {
             </Button>
           </div>
         )}
+        <Busy visible={isBusy} title="Restoring account" />
       </Modal>
     );
   }
@@ -188,6 +206,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(
-  () => ({}),
+  state => ({ accounts: state.accounts.items }),
   mapDispatchToProps
 )(RestoreAccount);

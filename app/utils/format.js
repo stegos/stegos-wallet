@@ -1,3 +1,5 @@
+import { RECOVERY_PHRASE_LENGTH } from '../constants/config';
+
 export const toTwoDigits = (str: string) => `0${str}`.slice(-2);
 
 export const to101Date = (date: Date) =>
@@ -30,3 +32,11 @@ export const formatDigit = (value: number | string) => {
 export const POSITIVE_NUMBER_FORMAT = /^(\d+)(\.\d+)?$/;
 
 export const isPositiveNumber = str => POSITIVE_NUMBER_FORMAT.test(str);
+
+export const getEmptyRecoveryPhrase = () => {
+  const words = [];
+  for (let i = 0; i < RECOVERY_PHRASE_LENGTH; i += 1) {
+    words.push({ id: i, value: '' });
+  }
+  return words;
+};
