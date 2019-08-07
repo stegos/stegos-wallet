@@ -30,7 +30,6 @@ export default class AppUpdater {
 }
 
 app.commandLine.appendSwitch('high-dpi-support', 'true');
-app.commandLine.appendSwitch('force-device-scale-factor', '1');
 
 let mainWindow = null;
 let nodeProcess = null;
@@ -88,7 +87,7 @@ app.on('ready', async () => {
     show: false,
     width: 1440,
     height: 877,
-    minWidth: 1280,
+    minWidth: 960,
     minHeight: 320,
     icon: path.join(__dirname, '../resources/icons/64x64.png')
   });

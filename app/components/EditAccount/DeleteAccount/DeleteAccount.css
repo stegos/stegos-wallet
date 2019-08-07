@@ -5,6 +5,12 @@
   width: 587px;
 }
 
+@media screen and (max-width: 1280px) {
+  .Container {
+    width: 480px;
+  }
+}
+
 .InputStyle {
   display: flex;
 }

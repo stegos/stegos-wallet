@@ -2,6 +2,12 @@
   --menu-width: 406px;
 }
 
+@media screen and (max-width: 1280px) {
+  :root {
+    --menu-width: 326px;
+  }
+}
+
 .Menu {
   display: flex;
   flex-direction: column;
@@ -28,18 +34,14 @@
   color: #bfc1c6;
 }
 
+@media screen and (max-width: 1280px) {
+  .MenuItem {
+    padding: 18px 18px 18px 65px;
+  }
+}
+
 .MenuItem.Active {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 18px 18px 18px 160px;
   background-color: #1d2230;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 18px;
-  line-height: 49px;
-  letter-spacing: 0.54px;
   color: #fff;
 }
 

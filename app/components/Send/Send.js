@@ -18,14 +18,9 @@ import {
   isStegosNumber
 } from '../../utils/format';
 
-type Location = {
-  pathname: string,
-  state?: object
-};
-
 type Props = {
   accounts: AccountsStateType,
-  location: Location,
+  lastActive: string,
   sendTransaction: () => void
 };
 
@@ -70,8 +65,10 @@ export default class Send extends Component<Props> {
 
   constructor(props) {
     super(props);
-    const { location, accounts } = props;
-    const account = location.state && accounts[location.state.accountId];
+    const { accounts, lastActive } = props;
+    const account =
+      (lastActive && accounts[lastActive]) ||
+      accounts[Object.keys(accounts)[0]];
 
     this.state = {
       step: 0,
@@ -285,7 +282,7 @@ export default class Send extends Component<Props> {
             style={{ height: 'auto', margin: 0 }}
           />
           <span className={styles.FieldLabel}>Fees</span>
-          <div className={styles.FormFieldContainer}>
+          <div className={`${styles.FormFieldContainer} ${styles.ColOnSmall}`}>
             {Send.renderDropdown(
               fees.map(feeItem => ({
                 value: feeItem,
@@ -298,7 +295,7 @@ export default class Send extends Component<Props> {
               false,
               step === 1
             )}
-            <Icon name="add" style={{ padding: '0 8px' }} size={16} />
+            <Icon name="add" style={{ padding: '10px 8px' }} size={16} />
             <div className={formFieldClass}>
               <Input
                 className={formFieldClass}
@@ -315,6 +312,7 @@ export default class Send extends Component<Props> {
                 }
                 readOnly={step === 1 || fee.value !== 'custom'}
                 style={{
+                  minWidth: 40,
                   height: 'auto',
                   margin: 0,
                   border: 'none',

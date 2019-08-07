@@ -3,7 +3,8 @@ import type { AccountsStateType, Action } from './types';
 import { WS_MESSAGE } from '../ws/actionsTypes';
 import {
   RECOVERY_PHRASE_WRITTEN_DOWN,
-  SET_ACCOUNT_NAME
+  SET_ACCOUNT_NAME,
+  SET_LAST_USED_ACCOUNT
 } from '../actions/accounts';
 import { INIT_ACCOUNTS } from '../actions/settings';
 import { createEmptyAccount, createOutgoingTransaction } from './types';
@@ -143,6 +144,11 @@ export default function accounts(
       return setAccountProps({ name: payload.name });
     case RECOVERY_PHRASE_WRITTEN_DOWN:
       return setAccountProps({ isRecoveryPhraseWrittenDown: true });
+    case SET_LAST_USED_ACCOUNT:
+      return {
+        ...state,
+        lastActive: payload
+      };
     default:
       return state;
   }

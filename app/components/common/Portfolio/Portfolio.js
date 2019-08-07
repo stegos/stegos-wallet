@@ -167,10 +167,12 @@ export default class Portfolio extends PureComponent<Props> {
           {!!transactions.length && (
             <Fragment>
               <Chart data={this.chartDataSource} />
-              <Icon
-                name={trendingUp ? 'trending_up' : 'trending_down'}
-                size={32}
-              />
+              <div className={styles.ButtonSwitchTrending}>
+                <Icon
+                  name={trendingUp ? 'trending_up' : 'trending_down'}
+                  size={32}
+                />
+              </div>
             </Fragment>
           )}
         </div>

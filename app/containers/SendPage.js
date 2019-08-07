@@ -5,7 +5,8 @@ import Send from '../components/Send/Send';
 
 function mapStateToProps(state) {
   return {
-    accounts: state.accounts.items
+    accounts: state.accounts.items,
+    lastActive: state.accounts.lastActive
   };
 }
 
