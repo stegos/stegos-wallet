@@ -15,7 +15,7 @@ stages:
 
 build:linux:
   extends: .build
-  image: node:8.16.0
+  image: node:10-stretch
   artifacts:
     expire_in: 1 week
     paths:
@@ -36,3 +36,26 @@ build:linux:
     - yarn package-linux
   tags:
     - linux
+
+build:macos:
+  extends: .build
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - release/StegosWallet-*-mac.zip
+      - release/StegosWallet-*.dmg
+  before_script:
+    - brew install yarn && brew install node@10
+    - brew uninstall --ignore-dependencies node
+    - brew link --force --overwrite node@10
+  script:
+    - node --version
+    - yarn --version
+    - mkdir node
+    - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/macos/stegosd?job=release:macos -o node/stegosd
+    - chmod a+x node/stegosd
+    - node/stegosd --version
+    - yarn install
+    - yarn package-macos
+  tags:
+    - macos

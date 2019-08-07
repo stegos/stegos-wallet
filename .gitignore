@@ -2,6 +2,9 @@
 logs
 *.log
 
+# Wallet data
+/database
+
 # Runtime data
 pids
 *.pid
