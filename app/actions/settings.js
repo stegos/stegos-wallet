@@ -117,7 +117,7 @@ export const unlockWallet = (password: string) => async (
   if (password !== getState().settings.password) {
     dispatch({
       type: SHOW_ERROR,
-      payload: 'The password is incorrect. Please try again.'
+      payload: 'alert.password.is.incorrect'
     });
   } else {
     try {
@@ -148,7 +148,7 @@ export const changePassword = (newPass: string, oldPass: string) => (
       if (oldPass !== getState().settings.password) {
         dispatch({
           type: SHOW_ERROR,
-          payload: 'The password is incorrect. Please try again.'
+          payload: 'alert.password.is.incorrect'
         });
         reject();
         return;

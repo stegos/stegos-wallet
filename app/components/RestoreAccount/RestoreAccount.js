@@ -4,6 +4,7 @@ import * as qrcode from 'qrcode-generator';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import * as AccountsActions from '../../actions/accounts';
 import type { Account } from '../../reducers/types';
 import Button from '../common/Button/Button';
@@ -20,7 +21,8 @@ type Props = {
   visible: boolean,
   onClose: () => void,
   restoreAccount: () => void,
-  completeAccountRestoring: () => void
+  completeAccountRestoring: () => void,
+  intl: any
 };
 
 class RestoreAccount extends Component<Props> {
@@ -100,7 +102,12 @@ class RestoreAccount extends Component<Props> {
           className={styles.Qrcode}
         />
         <span className={styles.AccountAddress}>
-          {account.address} Address for account <b>{account.name}</b>
+          {account.address}{' '}
+          <FormattedMessage
+            id="receive.address.for.account"
+            values={{ account: '' }}
+          />{' '}
+          <b>{account.name}</b>
         </span>
       </div>
     );
@@ -118,8 +125,14 @@ class RestoreAccount extends Component<Props> {
           className={styles.Qrcode}
         />
         <span className={styles.AccountAddress}>
-          <div style={{ color: '#EE6920' }}>Address copied</div> Address for
-          account <b>{account.name}</b>
+          <div style={{ color: '#EE6920' }}>
+            <FormattedMessage id="receive.address.copied" />
+          </div>{' '}
+          <FormattedMessage
+            id="receive.address.for.account"
+            values={{ account: '' }}
+          />{' '}
+          <b>{account.name}</b>
         </span>
       </div>
     );
@@ -135,13 +148,12 @@ class RestoreAccount extends Component<Props> {
 
   render() {
     const { phrase, step, isBusy } = this.state;
-    const { visible } = this.props;
+    const { visible, intl } = this.props;
     return (
       <Modal
         options={{
-          title: 'Restore Account',
-          subtitle:
-            'In order to restore your existing account, please fill all words from the recovery phrase in correct order.',
+          title: intl.formatMessage({ id: 'restore.title' }),
+          subtitle: intl.formatMessage({ id: 'restore.subtitle' }),
           type: 'big',
           visible,
           onClose: this.close.bind(this)
@@ -150,7 +162,11 @@ class RestoreAccount extends Component<Props> {
       >
         <div className={styles.Container}>
           <Steps
-            steps={['Accout', 'Copy Address', 'Receive']}
+            steps={[
+              intl.formatMessage({ id: 'restore.step.one.title' }),
+              intl.formatMessage({ id: 'restore.step.two.title' }),
+              intl.formatMessage({ id: 'restore.step.three.title' })
+            ]}
             activeStep={step}
           />
           {step === 0 && (
@@ -166,10 +182,10 @@ class RestoreAccount extends Component<Props> {
         {step === 0 && (
           <div className={styles.ActionsContainer}>
             <Button type="OutlineDisabled" onClick={() => this.close()}>
-              Cancel
+              <FormattedMessage id="button.cancel" />
             </Button>
             <Button type="OutlinePrimary" onClick={() => this.restore()}>
-              Restore
+              <FormattedMessage id="button.restore" />
             </Button>
           </div>
         )}
@@ -180,7 +196,7 @@ class RestoreAccount extends Component<Props> {
               style={{ margin: 'auto' }}
               onClick={() => this.copyAddressToClipboard()}
             >
-              Copy address to clipboard
+              <FormattedMessage id="button.copy.address" />
             </Button>
           </div>
         )}
@@ -191,11 +207,14 @@ class RestoreAccount extends Component<Props> {
               style={{ margin: 'auto' }}
               onClick={() => this.close()}
             >
-              close
+              <FormattedMessage id="button.close" />
             </Button>
           </div>
         )}
-        <Busy visible={isBusy} title="Restoring account" />
+        <Busy
+          visible={isBusy}
+          title={intl.formatMessage({ id: 'restore.waiting' })}
+        />
       </Modal>
     );
   }
@@ -208,4 +227,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   state => ({ accounts: state.accounts.items }),
   mapDispatchToProps
-)(RestoreAccount);
+)(injectIntl(RestoreAccount));

@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import * as SettingsActions from '../actions/settings';
 import type { NodeStateType } from '../reducers/types';
 import Button from './common/Button/Button';
@@ -12,7 +13,8 @@ import WalletSettings from './WalletSettings/WalletSettings';
 type Props = {
   node: NodeStateType,
   className: string,
-  lockWallet: () => void
+  lockWallet: () => void,
+  intl: any
 };
 
 class StatusBar extends PureComponent<Props> {
@@ -39,12 +41,12 @@ class StatusBar extends PureComponent<Props> {
 
   render() {
     const { showSettings } = this.state;
-    const { node, className } = this.props;
+    const { node, className, intl } = this.props;
     return (
       <Header
         logoContainerClassName={styles.LogoContainerStyle}
         contentContainerClassName={styles.ContentContainerStyle}
-        title="Wallet"
+        title={intl.formatMessage({ id: 'status.wallet' })}
         containerClassName={className}
       >
         <Button
@@ -78,7 +80,11 @@ class StatusBar extends PureComponent<Props> {
             />
           )}
           <span className={styles.NetworkIndicatorText}>
-            {node.isSynced ? 'Syncronized' : 'Unsynchronized'}
+            <FormattedMessage
+              id={
+                node.isSynced ? 'status.synchronized' : 'status.unsynchronized'
+              }
+            />
           </span>
         </div>
         <WalletSettings
@@ -96,4 +102,4 @@ export default connect(
     settings: state.settings
   }),
   dispatch => bindActionCreators(SettingsActions, dispatch)
-)(StatusBar);
+)(injectIntl(StatusBar));

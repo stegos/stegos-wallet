@@ -3,6 +3,7 @@ import { clipboard } from 'electron';
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import * as qrcode from 'qrcode-generator';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import type { AccountsStateType } from '../../reducers/types';
 import Button from '../common/Button/Button';
 import Dropdown from '../common/Dropdown/Dropdown';
@@ -13,10 +14,11 @@ import routes from '../../constants/routes';
 
 type Props = {
   accounts: AccountsStateType,
-  lastActive: string
+  lastActive: string,
+  intl: any
 };
 
-export default class Receive extends Component<Props> {
+class Receive extends Component<Props> {
   props: Props;
 
   constructor(props) {
@@ -72,17 +74,19 @@ export default class Receive extends Component<Props> {
   }
 
   selectAccountStep() {
-    const { accounts } = this.props;
+    const { accounts, intl } = this.props;
     const { selectedAccount, isValid, showVerifyWindow } = this.state;
     return (
       <Fragment>
         <div className={styles.SelectAccountContainer} key="Accounts">
-          <span className={styles.AccountCredit}>Account To Credit</span>
+          <span className={styles.AccountCredit}>
+            <FormattedMessage id="receive.account.to.credit" />
+          </span>
           <div className={styles.AccountDropdown}>
             <Dropdown
               onChange={e => this.onSelectAccount(e)}
               value={selectedAccount && selectedAccount.name}
-              placeholder="Select account..."
+              placeholder={intl.formatMessage({ id: 'input.name.account' })}
               options={Object.entries(accounts).map(acc => ({
                 value: acc[1],
                 name: acc[1].name
@@ -94,7 +98,9 @@ export default class Receive extends Component<Props> {
                 border: '1px solid #5b5d63',
                 padding: '4px 12px 5px 12px'
               }}
-              error="Please select a value"
+              error={intl.formatMessage({
+                id: 'input.error.dropdown.required'
+              })}
               showError={!isValid}
             />
           </div>
@@ -105,9 +111,11 @@ export default class Receive extends Component<Props> {
             onClick={() => this.setState({ showVerifyWindow: true })}
             style={{ marginRight: 'auto' }}
           >
-            Verify
+            <FormattedMessage id="button.verify" />
           </Button>
-          <Button type="OutlineDisabled">Cancel</Button>
+          <Button type="OutlineDisabled">
+            <FormattedMessage id="button.cancel" />
+          </Button>
           <Button
             type="OutlinePrimary"
             iconRight="keyboard_backspace"
@@ -115,7 +123,7 @@ export default class Receive extends Component<Props> {
             onClick={() => this.onAccountSelected()}
             disabled={!isValid}
           >
-            Next
+            <FormattedMessage id="button.next" />
           </Button>
         </div>
         <Verify
@@ -137,11 +145,17 @@ export default class Receive extends Component<Props> {
         />
         <span className={styles.AccountAddress}>
           {copied ? (
-            <div style={{ color: '#EE6920' }}>Address copied</div>
+            <div style={{ color: '#EE6920' }}>
+              <FormattedMessage id="receive.address.copied" />
+            </div>
           ) : (
             selectedAccount.address
           )}{' '}
-          Address for account <b>{selectedAccount.name}</b>
+          <FormattedMessage
+            id="receive.address.for.account"
+            values={{ account: '' }}
+          />{' '}
+          <b>{selectedAccount.name}</b>
         </span>
       </div>,
       <div className={styles.ActionsContainer} key="Actions">
@@ -151,7 +165,7 @@ export default class Receive extends Component<Props> {
             style={{ margin: 'auto' }}
             onClick={() => this.copyAddressToClipboard()}
           >
-            Copy address to clipboard
+            <FormattedMessage id="button.copy.address" />
           </Button>
         )}
         {copied && (
@@ -160,7 +174,7 @@ export default class Receive extends Component<Props> {
             style={{ margin: 'auto' }}
             onClick={() => this.onAddressCopied()}
           >
-            Close
+            <FormattedMessage id="button.close" />
           </Button>
         )}
       </div>
@@ -169,6 +183,7 @@ export default class Receive extends Component<Props> {
 
   render() {
     const { step, titledAccount } = this.state;
+    const { intl } = this.props;
     return (
       <div className={styles.Receive}>
         {titledAccount && (
@@ -182,13 +197,15 @@ export default class Receive extends Component<Props> {
               style={{ alignSelf: 'flex-start', paddingLeft: 0 }}
             >
               <Button type="Invisible" icon="keyboard_backspace">
-                Back to the account
+                <FormattedMessage id="back.to.account" />
               </Button>
             </Link>
           </Fragment>
         )}
         <div className={styles.ReceiveForm}>
-          <div className={styles.FormTitle}>Receive</div>
+          <div className={styles.FormTitle}>
+            <FormattedMessage id="receive.title" />
+          </div>
           <div
             style={{
               width: 384,
@@ -198,7 +215,11 @@ export default class Receive extends Component<Props> {
             }}
           >
             <Steps
-              steps={['Account', 'Copy Address', 'Receive']}
+              steps={[
+                intl.formatMessage({ id: 'receive.step.one.title' }),
+                intl.formatMessage({ id: 'receive.step.two.title' }),
+                intl.formatMessage({ id: 'receive.step.three.title' })
+              ]}
               activeStep={step}
             />
           </div>
@@ -210,3 +231,5 @@ export default class Receive extends Component<Props> {
     );
   }
 }
+
+export default injectIntl(Receive);

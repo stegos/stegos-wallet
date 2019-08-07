@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import Button from '../../common/Button/Button';
 import Steps from '../../common/Steps/Steps';
 import RecoveryPhrase from '../../RestoreAccount/RecoveryPhraze/RecoveryPhrase';
@@ -13,7 +14,8 @@ import type { Account } from '../../../reducers/types';
 type Props = {
   accountId: string,
   accounts: Account[],
-  onClose: () => void
+  onClose: () => void,
+  intl: any
 };
 
 class Backup extends Component<Props> {
@@ -66,13 +68,24 @@ class Backup extends Component<Props> {
 
   render() {
     const { step, phrase } = this.state;
+    const { intl } = this.props;
     return (
       <div className={styles.Container}>
-        <Steps steps={['Write down', 'Verify']} activeStep={step} />
+        <Steps
+          steps={[
+            intl.formatMessage({ id: 'backup.step.one.label' }),
+            intl.formatMessage({ id: 'backup.step.two.label' })
+          ]}
+          activeStep={step}
+        />
         <span className={styles.Label}>
-          {step === 0
-            ? 'The phrase is case sensitive. Please make sure you write it down. You will need it to restore your account.'
-            : 'In order to restore your existing account, please fill all words from the recovery phrase in correct order.'}
+          <FormattedMessage
+            id={
+              step === 0
+                ? 'backup.step.one.description'
+                : 'backup.step.two.description'
+            }
+          />
         </span>
         <RecoveryPhrase
           wordsCount={RECOVERY_PHRASE_LENGTH}
@@ -82,7 +95,9 @@ class Backup extends Component<Props> {
         />
         <div className={styles.ActionsContainer}>
           <Button type="OutlinePrimary" onClick={() => this.next()}>
-            {step === 0 ? 'Yes, I have written it down' : 'Done'}
+            <FormattedMessage
+              id={step === 0 ? 'button.written.down' : 'button.done'}
+            />
           </Button>
         </div>
       </div>
@@ -93,4 +108,4 @@ class Backup extends Component<Props> {
 export default connect(
   state => ({ accounts: state.accounts.items }),
   dispatch => bindActionCreators(AccountsActions, dispatch)
-)(Backup);
+)(injectIntl(Backup));

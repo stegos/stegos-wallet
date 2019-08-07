@@ -1,11 +1,12 @@
 // @flow
 import React, { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
 import Button from './common/Button/Button';
 import Checkbox from './common/Checkbox/Checkbox';
 import Header from './common/Header/Header';
 import styles from './BugsAndTerms.css';
 import ProgressBar from './common/ProgressBar/ProgressBar';
-import Wizard from './common/Wizard/Wizard';
+import BootstrapWizard from './common/Wizard/BootstrapWizard';
 
 type Props = {
   setBugsAndTerms: boolean => void
@@ -45,29 +46,13 @@ export default class BagsAndTerms extends Component<Props> {
           logoContainerClassName={styles.HeaderContentWrapper}
           contentContainerClassName={styles.HeaderContentWrapper}
         />
-        <Wizard
-          steps={[
-            {
-              number: 1,
-              label: 'Password protection',
-              active: true
-            },
-            {
-              number: 2,
-              label: 'Sync',
-              active: true
-            },
-            {
-              number: 3,
-              label: 'Bugs & Terms of Use',
-              active: true
-            }
-          ]}
-        />
+        <BootstrapWizard step={3} />
         <div className={styles.Main}>
-          <span className={styles.Title}>Bugs and Terms of Use</span>
+          <span className={styles.Title}>
+            <FormattedMessage id="terms.title" />
+          </span>
           <span className={styles.Label}>
-            Share anonymized data to help improve Stegos Wallet
+            <FormattedMessage id="terms.share.data" />
           </span>
           <div className={styles.ProgressBarWrapper}>
             <span className={styles.Progress}>100%</span>
@@ -80,7 +65,7 @@ export default class BagsAndTerms extends Component<Props> {
                 onClick={this.onSendBugsChanged.bind(this)}
               />
               <span className={styles.CheckboxLabel}>
-                Automatically send reports to help Stegos fix bugs
+                <FormattedMessage id="terms.send.reports" />
               </span>
             </div>
             <div className={styles.CheckboxWrapper}>
@@ -89,8 +74,7 @@ export default class BagsAndTerms extends Component<Props> {
                 onClick={this.onTermsAccepted.bind(this)}
               />
               <span className={styles.CheckboxLabel}>
-                By continuing, you acknowledge that you have read and agree to
-                the Terms of Use and Privacy Policy.
+                <FormattedMessage id="terms.accept" />
               </span>
             </div>
           </div>
@@ -105,7 +89,7 @@ export default class BagsAndTerms extends Component<Props> {
                 iconRight="keyboard_backspace"
                 iconRightMirrorHor
               >
-                Next
+                <FormattedMessage id="button.next" />
               </Button>
             </div>
           </div>

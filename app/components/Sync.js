@@ -1,11 +1,12 @@
 // @flow
 import React, { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
 import type { NodeStateType } from '../reducers/types';
 import Button from './common/Button/Button';
 import Header from './common/Header/Header';
 import ProgressBar from './common/ProgressBar/ProgressBar';
 import styles from './Sync.css';
-import Wizard from './common/Wizard/Wizard';
+import BootstrapWizard from './common/Wizard/BootstrapWizard';
 
 type Props = {
   node: NodeStateType,
@@ -31,30 +32,16 @@ export default class Sync extends Component<Props> {
     return (
       <div className={styles.Wrapper}>
         <Header />
-        <Wizard
-          steps={[
-            {
-              number: 1,
-              label: 'Password protection',
-              active: true
-            },
-            {
-              number: 2,
-              label: 'Sync',
-              active: true
-            },
-            {
-              number: 3,
-              label: 'Bugs & Terms of Use',
-              active: false
-            }
-          ]}
-        />
+        <BootstrapWizard step={2} />
         <div className={styles.Main}>
           <span className={styles.Title}>
-            {node.isSynced
-              ? 'Your wallet is synchronized!'
-              : 'Your wallet is synchronizing with the blockchain...'}
+            <FormattedMessage
+              id={
+                node.isSynced
+                  ? 'synced.successfully'
+                  : 'syncing.in.progress.description'
+              }
+            />
           </span>
           <div className={styles.ProgressBarWrapper}>
             <span className={styles.Progress}>{node.syncingProgress}%</span>
@@ -64,7 +51,9 @@ export default class Sync extends Component<Props> {
             />
           </div>
           {!node.isSynced && (
-            <span className={styles.Label}>Please wait...</span>
+            <span className={styles.Label}>
+              <FormattedMessage id="syncing.please.wait" />
+            </span>
           )}
           <div className={styles.FooterWrapper}>
             <div style={{ flex: 1 }} />
@@ -77,7 +66,7 @@ export default class Sync extends Component<Props> {
                 onClick={this.onNext}
                 style={{ visibility: node.isSynced ? 'visible' : 'hidden' }}
               >
-                Next
+                <FormattedMessage id="button.next" />
               </Button>
             </div>
           </div>

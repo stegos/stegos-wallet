@@ -169,9 +169,10 @@ function runNodeProcess(): Promise<void> {
       nodeProcess.stdout.on('data', data => {
         const str = data.toString('utf8');
         if (process.env.NODE_ENV === 'development') console.log(str);
-        fs.appendFile(logFile, str, () => {});
-        if (str.includes('ERROR [stegos'))
+        if (str.includes('ERROR [stegos')) {
+          fs.appendFile(logFile, str, () => {});
           reject(new Error(`An error occurred\n${str}`));
+        }
         if (!isTokenCapturing) {
           isTokenCapturing = true;
           captureToken(resolve); // todo rid off NODE_RUNNING action

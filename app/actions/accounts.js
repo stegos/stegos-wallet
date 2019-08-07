@@ -116,8 +116,7 @@ export const restoreAccount = (phrase: string[]) => async (
     console.log(err);
     dispatch({
       type: SHOW_ERROR,
-      payload:
-        'The recovery phrase is incorrect. Please verify it, correct and try again.'
+      payload: 'alert.recovery.phrase.is.incorrect'
     });
     throw err;
   }
@@ -161,7 +160,7 @@ export const sendTransaction = (
     getState
   ).catch(err => {
     console.log(err);
-    const message = err || 'An error ocurred';
+    const message = err || 'An error occurred';
     dispatch({ type: SHOW_ERROR, payload: message });
     throw err;
   });
@@ -176,9 +175,7 @@ export const writeDownRecoveryPhrase = (
       const { recoveryPhrase } = state.accounts.items[accountId];
       for (let i = 0; i < RECOVERY_PHRASE_LENGTH; i += 1) {
         if (recoveryPhrase[i] !== phrase[i]) {
-          throw new Error(
-            'The recovery phrase is incorrect. Please verify it, correct and try again'
-          );
+          throw new Error('alert.recovery.phrase.is.incorrect');
         }
       }
       db.update(

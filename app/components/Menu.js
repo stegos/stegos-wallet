@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 import routes from '../constants/routes';
 import portfolio from '../../resources/img/menu/Portfolio.svg';
 import accounts from '../../resources/img/menu/Accounts.svg';
@@ -72,7 +73,7 @@ class Menu extends Component<Props> {
         key={item.link}
       >
         <img src={item.iconImage} className={style.MenuIcon} alt={item.name} />
-        <span>{item.name}</span>
+        <FormattedMessage id={`menu.${item.name}`} tagName="span" />
       </Link>
     ));
     return <div className={`${style.Menu} ${className} ScrollBar`}>{menu}</div>;

@@ -1,5 +1,6 @@
 // @flow
 import React, { Fragment, PureComponent } from 'react';
+import { FormattedMessage, FormattedPlural, injectIntl } from 'react-intl';
 import Icon from '../Icon/Icon';
 import Chart from '../../Accounts/Account/Chart/Chart';
 import TransactionsList from '../../Accounts/Account/TransactionsList/TransactionsList';
@@ -9,10 +10,11 @@ import { POWER_DIVISIBILITY } from '../../../constants/config';
 import type { AccountsStateType } from '../../../reducers/types';
 
 type Props = {
-  accounts: AccountsStateType
+  accounts: AccountsStateType,
+  intl: any
 };
 
-export default class Portfolio extends PureComponent<Props> {
+class Portfolio extends PureComponent<Props> {
   static getDayName(date) {
     return date.toLocaleDateString('en-us', { weekday: 'short' });
   }
@@ -107,6 +109,7 @@ export default class Portfolio extends PureComponent<Props> {
 
   render() {
     const { period } = this.state;
+    const { intl } = this.props;
     const { balance, size } = this;
     const transactions = this.filteredTransactions;
     const trendingUp =
@@ -114,15 +117,22 @@ export default class Portfolio extends PureComponent<Props> {
     return (
       <div className={styles.Account}>
         <div className={styles.Header}>
-          <span
-            className={styles.Title}
-          >{`Here's the summary of your ${size} account${
-            size !== 1 ? 's' : ''
-          }`}</span>
+          <span className={styles.Title}>
+            <FormattedPlural
+              value={size}
+              other={intl.formatMessage(
+                { id: 'portfolio.description.many' },
+                { size }
+              )}
+              one={intl.formatMessage({ id: 'portfolio.description.one' })}
+            />
+          </span>
         </div>
         <div className={styles.AccountDetailsContainer}>
           <div className={styles.AccountDetailsHeader}>
-            <span className={styles.DetailsHeaderText}>Total amount</span>
+            <span className={styles.DetailsHeaderText}>
+              <FormattedMessage id="chart.total.amount" />
+            </span>
             <div>
               <button
                 className={`${styles.Chip} ${(period === 'week' &&
@@ -131,7 +141,7 @@ export default class Portfolio extends PureComponent<Props> {
                 onClick={() => this.changePeriod('week')}
                 type="button"
               >
-                Week
+                <FormattedMessage id="chart.week" />
               </button>
               <button
                 className={`${styles.Chip} ${(period === 'month' &&
@@ -140,7 +150,7 @@ export default class Portfolio extends PureComponent<Props> {
                 onClick={() => this.changePeriod('month')}
                 type="button"
               >
-                Month
+                <FormattedMessage id="chart.month" />
               </button>
               <button
                 className={`${styles.Chip} ${(period === 'year' &&
@@ -149,7 +159,7 @@ export default class Portfolio extends PureComponent<Props> {
                 onClick={() => this.changePeriod('year')}
                 type="button"
               >
-                Year
+                <FormattedMessage id="chart.year" />
               </button>
             </div>
           </div>
@@ -183,3 +193,5 @@ export default class Portfolio extends PureComponent<Props> {
     );
   }
 }
+
+export default injectIntl(Portfolio);

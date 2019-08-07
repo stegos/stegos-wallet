@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import * as SettingsActions from '../../actions/settings';
 import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
@@ -11,7 +12,8 @@ import type { SettingsStateType } from '../../reducers/types';
 
 type Props = {
   settings: SettingsStateType,
-  unlockWallet: string => void
+  unlockWallet: string => void,
+  intl: any
 };
 
 class Blocker extends Component<Props> {
@@ -45,13 +47,13 @@ class Blocker extends Component<Props> {
   }
 
   render() {
-    const { settings } = this.props;
+    const { settings, intl } = this.props;
     const { isLocked } = settings;
     const { password, unlocking } = this.state;
     return (
       <Modal
         options={{
-          title: 'Unlock wallet',
+          title: intl.formatMessage({ id: 'unlock.wallet.title' }),
           type: 'small',
           visible: isLocked,
           showCloseButton: false
@@ -61,13 +63,17 @@ class Blocker extends Component<Props> {
         <div className={styles.Container}>
           {!unlocking && (
             <Input
-              placeholder="Enter password"
+              placeholder={intl.formatMessage({
+                id: 'input.placeholder.enter.password'
+              })}
               value={password}
               type="password"
               onChange={e => this.setState({ password: e.currentTarget.value })}
             />
           )}
-          {unlocking && <span>Unlocking wallet...</span>}
+          {unlocking && (
+            <FormattedMessage id="unlock.wallet.waiting" tagName="span" />
+          )}
         </div>
         <div className={styles.ActionsContainer}>
           <Button
@@ -75,7 +81,7 @@ class Blocker extends Component<Props> {
             onClick={() => this.onUnlock()}
             disabled={unlocking}
           >
-            Unlock
+            <FormattedMessage id="button.unlock" />
           </Button>
         </div>
       </Modal>
@@ -86,4 +92,4 @@ class Blocker extends Component<Props> {
 export default connect(
   state => ({ settings: state.settings }),
   dispatch => bindActionCreators(SettingsActions, dispatch)
-)(Blocker);
+)(injectIntl(Blocker));
