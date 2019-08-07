@@ -1,6 +1,6 @@
-# stegos-wallet (https://github.com/stegos/stegos-wallet)
+# Stegos Wallet
 
-Electron-based wallet for Stegos blockchain
+Electron-based Wallet application for [Stegos](https://github.com/stegos/stegos) blockchain.
 
 ## Run dev
 
@@ -9,6 +9,6 @@ Electron-based wallet for Stegos blockchain
 3. `yarn`
 4. `yarn dev`
 
-## Package prod
+## Run prod
 
-`yarn package` or `yarn package-all` to multiple platforms
+Download packages for Linux and Mac from [GitHub Releases](https://github.com/stegos/stegos-wallet).
