@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
 import Modal from '../common/Modal/Modal';
@@ -12,7 +13,8 @@ import * as SettingsActions from '../../actions/settings';
 type Props = {
   settings: SettingsStateType,
   visible: boolean,
-  onCloseRequest: () => void
+  onCloseRequest: () => void,
+  intl: any
 };
 
 const noErrorsState = {
@@ -116,24 +118,40 @@ class WalletSettings extends Component<Props> {
       newPasswordRepeat,
       autoLockTimeout
     } = this.state;
-    const { settings } = this.props;
+    const { settings, intl } = this.props;
     const { isPasswordSet } = settings;
     if (oldPassword !== '' || newPassword !== '') {
       if (isPasswordSet && oldPassword === '') {
-        this.setState({ oldPasswordError: 'Enter current password' });
+        this.setState({
+          oldPasswordError: intl.formatMessage({
+            id: 'input.error.old.password.required'
+          })
+        });
         return false;
       }
       if (newPassword === '') {
-        this.setState({ newPasswordError: 'Enter new password' });
+        this.setState({
+          newPasswordError: intl.formatMessage({
+            id: 'input.error.new.password.required'
+          })
+        });
         return false;
       }
     }
     if (newPasswordRepeat !== newPassword) {
-      this.setState({ newPasswordRepeatError: 'Password does not match' });
+      this.setState({
+        newPasswordRepeatError: intl.formatMessage({
+          id: 'input.error.password.does.not.match'
+        })
+      });
       return false;
     }
     if (!/^\d*$/.test(autoLockTimeout) || +autoLockTimeout < 1) {
-      this.setState({ autoLockTimeoutError: 'Invalid value' });
+      this.setState({
+        autoLockTimeoutError: intl.formatMessage({
+          id: 'input.error.invalid.value'
+        })
+      });
       return false;
     }
     return true;
@@ -150,13 +168,13 @@ class WalletSettings extends Component<Props> {
       autoLockTimeout,
       autoLockTimeoutError
     } = this.state;
-    const { visible, settings } = this.props;
+    const { visible, settings, intl } = this.props;
     const { isPasswordSet } = settings;
     return (
       <Modal
         options={{
-          title: 'Wallet Settings',
-          subtitle: 'Set wallet password',
+          title: intl.formatMessage({ id: 'wallet.settings.title' }),
+          subtitle: intl.formatMessage({ id: 'wallet.settings.subtitle' }),
           type: 'big',
           visible,
           onClose: this.cancel.bind(this)
@@ -166,7 +184,9 @@ class WalletSettings extends Component<Props> {
         <div className={styles.Container}>
           {isPasswordSet && (
             <Input
-              placeholder="Old password"
+              placeholder={intl.formatMessage({
+                id: 'input.name.old.password'
+              })}
               value={oldPassword}
               name="oldPassword"
               onChange={e => this.handleInputChange(e)}
@@ -177,7 +197,7 @@ class WalletSettings extends Component<Props> {
             />
           )}
           <Input
-            placeholder="Password"
+            placeholder={intl.formatMessage({ id: 'input.name.password' })}
             value={newPassword}
             name="newPassword"
             onChange={e => this.handleInputChange(e)}
@@ -187,7 +207,9 @@ class WalletSettings extends Component<Props> {
             showError
           />
           <Input
-            placeholder="Confirm password"
+            placeholder={intl.formatMessage({
+              id: 'input.name.confirm.password'
+            })}
             value={newPasswordRepeat}
             name="newPasswordRepeat"
             onChange={e => this.handleInputChange(e)}
@@ -198,7 +220,8 @@ class WalletSettings extends Component<Props> {
           />
           <div className={styles.AutoLockContainer}>
             <span className={styles.AutoLockLabel}>
-              <b>Wallet auto-lock</b> Set auto-lock timeout
+              <FormattedMessage id="wallet.settings.lock.title" tagName="b" />{' '}
+              <FormattedMessage id="wallet.settings.lock.description" />
             </span>
             <Input
               name="autoLockTimeout"
@@ -210,15 +233,17 @@ class WalletSettings extends Component<Props> {
               className={styles.AutoLockInput}
               noLabel
             />
-            <span className={styles.AutoLockPostfix}>min</span>
+            <span className={styles.AutoLockPostfix}>
+              <FormattedMessage id="wallet.settings.minutes" />
+            </span>
           </div>
         </div>
         <div className={styles.ActionsContainer}>
           <Button type="OutlineDisabled" onClick={() => this.cancel()}>
-            Cancel
+            <FormattedMessage id="button.cancel" />
           </Button>
           <Button type="OutlinePrimary" onClick={() => this.apply()}>
-            Apply
+            <FormattedMessage id="button.apply" />
           </Button>
         </div>
       </Modal>
@@ -229,4 +254,4 @@ class WalletSettings extends Component<Props> {
 export default connect(
   state => ({ settings: state.settings }),
   dispatch => bindActionCreators(SettingsActions, dispatch)
-)(WalletSettings);
+)(injectIntl(WalletSettings));

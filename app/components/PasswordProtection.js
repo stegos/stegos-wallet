@@ -1,14 +1,16 @@
 // @flow
 import React, { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
 import Button from './common/Button/Button';
 import Header from './common/Header/Header';
 import Icon from './common/Icon/Icon';
 import Input from './common/Input/Input';
 import styles from './PasswordProtection.css';
-import Wizard from './common/Wizard/Wizard';
+import BootstrapWizard from './common/Wizard/BootstrapWizard';
 
 type Props = {
-  setPassword: string => void
+  setPassword: string => void,
+  intl: any
 };
 
 export default class PasswordProtection extends Component<Props> {
@@ -33,12 +35,19 @@ export default class PasswordProtection extends Component<Props> {
 
   validate = (): boolean => {
     const { pass, confirmPass } = this.state;
+    const { intl } = this.props;
     if (pass.length === 0) {
-      this.setState({ passError: 'This fields is required' });
+      this.setState({
+        passError: intl.formatMessage({ id: 'input.error.required' })
+      });
       return false;
     }
     if (pass !== confirmPass) {
-      this.setState({ confirmPassError: 'Password does not match' });
+      this.setState({
+        confirmPassError: intl.formatMessage({
+          id: 'input.error.password.does.not.match'
+        })
+      });
       return false;
     }
     return true;
@@ -58,28 +67,11 @@ export default class PasswordProtection extends Component<Props> {
 
   render() {
     const { passError, confirmPassError } = this.state;
+    const { intl } = this.props;
     return (
       <div className={styles.Wrapper}>
         <Header />
-        <Wizard
-          steps={[
-            {
-              number: 1,
-              label: 'Password protection',
-              active: true
-            },
-            {
-              number: 2,
-              label: 'Sync',
-              active: false
-            },
-            {
-              number: 3,
-              label: 'Bugs & Terms of Use',
-              active: false
-            }
-          ]}
-        />
+        <BootstrapWizard step={1} />
         <div className={`${styles.Main} ScrollBar`}>
           <div
             style={{
@@ -89,17 +81,17 @@ export default class PasswordProtection extends Component<Props> {
             }}
           >
             <div className={styles.Container}>
-              <span className={styles.StatusBar}>Protect your wallet</span>
+              <span className={styles.StatusBar}>
+                <FormattedMessage id="protect.title" />
+              </span>
             </div>
             <div className={styles.Description}>
-              Set a password to prevent an unauthorized access to Stegos Wallet
-              data on your computer, including account names, transactions and
-              public wallet keys.
+              <FormattedMessage id="protect.description" />
             </div>
             <div className={styles.PasswordForm}>
               <Input
                 onInput={this.onPassChange}
-                label="New password"
+                label={intl.formatMessage({ id: 'input.name.new.password' })}
                 error={passError}
                 showError
                 type="password"
@@ -107,7 +99,9 @@ export default class PasswordProtection extends Component<Props> {
               />
               <Input
                 onInput={this.onConfirmPassChange}
-                label="Confirm password"
+                label={intl.formatMessage({
+                  id: 'input.name.confirm.password'
+                })}
                 error={confirmPassError}
                 showError
                 type="password"
@@ -119,16 +113,11 @@ export default class PasswordProtection extends Component<Props> {
                 <div className={styles.WarningIcon}>
                   <Icon name="report_problem" size="32" color="#ff6c00" />
                 </div>
-                <p>
-                  Make sure you remeber your password. Do not share it. Losing
-                  your password requires resetting Stegos Wallet and re-adding
-                  accounts. Resetting Stegos Wallet does not affect your crypto
-                  assets.
-                </p>
+                <FormattedMessage id="protect.attention" tagName="p" />
               </div>
               <div className={styles.ButtonWrapper}>
                 <Button type="button" onClick={this.onSkip}>
-                  <span>Skip</span>
+                  <FormattedMessage id="button.skip" tagName="span" />
                 </Button>
                 <Button
                   type="button"
@@ -137,7 +126,7 @@ export default class PasswordProtection extends Component<Props> {
                   iconRight="keyboard_backspace"
                   iconRightMirrorHor
                 >
-                  Next
+                  <FormattedMessage id="button.next" />
                 </Button>
               </div>
             </div>

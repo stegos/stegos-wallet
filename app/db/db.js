@@ -32,9 +32,7 @@ export const createDatabase = async pass =>
     db.loadDatabase(err => {
       if (err) {
         console.log('Error while loading database', err);
-        reject(
-          new Error('The account password is incorrect. Please try again.')
-        );
+        reject(new Error('alert.account.password.is.incorrect'));
       } else {
         db.update(
           { setting: 'isPasswordSet' },

@@ -1,7 +1,7 @@
 {
   "name": "stegos-wallet",
   "productName": "StegosWallet",
-  "version": "0.0.1",
+  "version": "0.11.0",
   "description": "Platform for privacy applications",
   "copyright": "Copyright © 2018-2019 Stegos AG",
   "author": {
@@ -27,6 +27,7 @@
     "package-all": "yarn build && electron-builder build -mwl",
     "package-linux": "yarn build && electron-builder build --linux --publish never",
     "package-win": "yarn build && electron-builder build --win --x64",
+    "package-macos": "yarn build && electron-builder build --mac --x64 --publish never",
     "postinstall": "yarn flow-typed && electron-builder install-app-deps package.json && yarn build-dll",
     "postlint-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{*{js,jsx,json},babelrc,eslintrc,prettierrc,stylelintrc}'",
     "postlint-styles-fix": "prettier --ignore-path .eslintignore --single-quote --write '**/*.{css,scss}'",
@@ -247,6 +248,7 @@
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-hot-loader": "^4.3.12",
+    "react-intl": "^2.9.0",
     "react-redux": "^5.1.1",
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",

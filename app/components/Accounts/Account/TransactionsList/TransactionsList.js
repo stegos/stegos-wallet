@@ -1,5 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { formatDigit } from '../../../../utils/format';
 import Icon from '../../../common/Icon/Icon';
 import PaymentCertificate from '../../../PaymentCertificate/PaymentCertificate';
@@ -130,7 +131,9 @@ export default class TransactionsList extends PureComponent<Props> {
     const { sender } = this.props;
     return (
       <div className={styles.TransactionsList}>
-        <span className={styles.Title}>Last operations</span>
+        <span className={styles.Title}>
+          <FormattedMessage id="transactions.list.title" />
+        </span>
         {this.renderTransactions()}
         <PaymentCertificate
           tx={tx}

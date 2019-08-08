@@ -1,6 +1,7 @@
 // @flow
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import type { AccountsStateType } from '../../reducers/types';
 import Busy from '../common/Busy/Busy';
 import Button from '../common/Button/Button';
@@ -21,16 +22,11 @@ import {
 type Props = {
   accounts: AccountsStateType,
   lastActive: string,
-  sendTransaction: () => void
+  sendTransaction: () => void,
+  intl: any
 };
 
-const fees = [
-  { value: 'standard', name: 'Standard', fee: 0.01 },
-  { value: 'high', name: 'High', fee: 0.05 },
-  { value: 'custom', name: 'Custom', fee: 0.01 }
-];
-
-export default class Send extends Component<Props> {
+class Send extends Component<Props> {
   props: Props;
 
   static renderDropdown(
@@ -65,10 +61,28 @@ export default class Send extends Component<Props> {
 
   constructor(props) {
     super(props);
-    const { accounts, lastActive } = props;
+    const { accounts, lastActive, intl } = props;
     const account =
       (lastActive && accounts[lastActive]) ||
       accounts[Object.keys(accounts)[0]];
+
+    const fees = [
+      {
+        value: 'standard',
+        name: intl.formatMessage({ id: 'fee.standard' }),
+        fee: 0.01
+      },
+      {
+        value: 'high',
+        name: intl.formatMessage({ id: 'fee.high' }),
+        fee: 0.05
+      },
+      {
+        value: 'custom',
+        name: intl.formatMessage({ id: 'fee.custom' }),
+        fee: 0.01
+      }
+    ];
 
     this.state = {
       step: 0,
@@ -81,6 +95,7 @@ export default class Send extends Component<Props> {
       amountError: '',
       comment: '',
       fee: fees[0],
+      fees,
       feeError: '',
       generateCertificate: false,
       isBusy: false
@@ -94,30 +109,52 @@ export default class Send extends Component<Props> {
 
   validate = () => {
     const { account, recipientAddress, amount, fee } = this.state;
+    const { intl } = this.props;
     const totalAmount = this.totalAmount * POWER_DIVISIBILITY;
 
     if (!account) {
-      this.setState({ accountError: 'Select account' });
+      this.setState({
+        accountError: intl.formatMessage({
+          id: 'input.error.dropdown.required'
+        })
+      });
       return false;
     }
     if (!recipientAddress || !isBase58(recipientAddress)) {
-      this.setState({ recipientAddressError: 'Incorrect address' });
+      this.setState({
+        recipientAddressError: intl.formatMessage({
+          id: 'input.error.incorrect.address'
+        })
+      });
       return false;
     }
     if (!amount || !isPositiveNumber(amount)) {
-      this.setState({ amountError: 'Incorrect value' });
+      this.setState({
+        amountError: intl.formatMessage({ id: 'input.error.invalid.value' })
+      });
       return false;
     }
     if (totalAmount > account.balance) {
-      this.setState({ accountError: 'Insufficient balance' });
+      this.setState({
+        accountError: intl.formatMessage({
+          id: 'input.error.insufficient.balance'
+        })
+      });
       return false;
     }
     if (!isStegosNumber(fee.fee)) {
-      this.setState({ feeError: 'Incorrect value' });
+      this.setState({
+        feeError: intl.formatMessage({ id: 'input.error.invalid.value' })
+      });
       return false;
     }
     if (+fee.fee < 0.01) {
-      this.setState({ feeError: 'Minimum fee is 0.01' });
+      this.setState({
+        feeError: intl.formatMessage(
+          { id: 'input.error.minimum.fee' },
+          { fee: 0.01 }
+        )
+      });
       return false;
     }
     this.setState({
@@ -201,7 +238,7 @@ export default class Send extends Component<Props> {
   }
 
   sendForm() {
-    const { accounts } = this.props;
+    const { accounts, intl } = this.props;
     const {
       generateCertificate,
       account,
@@ -212,6 +249,7 @@ export default class Send extends Component<Props> {
       amountError,
       comment,
       fee,
+      fees,
       feeError,
       step
     } = this.state;
@@ -221,20 +259,24 @@ export default class Send extends Component<Props> {
     return (
       <Fragment>
         <div className={styles.SendFormContainer} key="Accounts">
-          <span className={styles.FieldLabel}>Account credit</span>
+          <span className={styles.FieldLabel}>
+            <FormattedMessage id="send.account.to.debit" />
+          </span>
           {Send.renderDropdown(
             Object.entries(accounts).map(acc => ({
               value: acc[1],
               name: acc[1].name
             })),
-            'Select account...',
+            intl.formatMessage({ id: 'input.name.account' }),
             account && account.name,
             this.handleAccountChange.bind(this),
             accountError,
             !!accountError,
             step === 1
           )}
-          <span className={styles.FieldLabel}>Recipient address</span>
+          <span className={styles.FieldLabel}>
+            <FormattedMessage id="input.name.recipient.address" />
+          </span>
           <Input
             className={formFieldClass}
             name="recipientAddress"
@@ -253,7 +295,9 @@ export default class Send extends Component<Props> {
             showError={!!recipientAddressError}
             style={{ height: 'auto', margin: 0 }}
           />
-          <span className={styles.FieldLabel}>Amount</span>
+          <span className={styles.FieldLabel}>
+            <FormattedMessage id="input.name.amount" />
+          </span>
           <Input
             className={formFieldClass}
             type="number"
@@ -268,7 +312,9 @@ export default class Send extends Component<Props> {
             showError={!!amountError}
             style={{ height: 'auto', margin: 0 }}
           />
-          <span className={styles.FieldLabel}>Comment</span>
+          <span className={styles.FieldLabel}>
+            <FormattedMessage id="input.name.comment" />
+          </span>
           <Input
             className={formFieldClass}
             rows={3}
@@ -281,7 +327,9 @@ export default class Send extends Component<Props> {
             resize={step === 0 ? 'vertical' : 'none'}
             style={{ height: 'auto', margin: 0 }}
           />
-          <span className={styles.FieldLabel}>Fees</span>
+          <span className={styles.FieldLabel}>
+            <FormattedMessage id="input.name.fees" />
+          </span>
           <div className={`${styles.FormFieldContainer} ${styles.ColOnSmall}`}>
             {Send.renderDropdown(
               fees.map(feeItem => ({
@@ -321,7 +369,7 @@ export default class Send extends Component<Props> {
               />
               {!feeError && (
                 <span className={styles.FieldLabel} style={{ marginTop: 0 }}>
-                  STG per UTXO
+                  <FormattedMessage id="send.stg.per.utxo" />
                 </span>
               )}
             </div>
@@ -344,18 +392,22 @@ export default class Send extends Component<Props> {
               size={24}
             />
             <div className={styles.CheckboxLabel}>
-              Generate Payment Certificate
+              <FormattedMessage id="send.generate.payment.certificate" />
               <div className={styles.CertificateDescription}>
-                {generateCertificate
-                  ? 'Payment certificate will be generated. In case if you will need it, you will be able to prove that you made the transaction above.'
-                  : 'No payment certificate will be generated.'}
+                <FormattedMessage
+                  id={
+                    generateCertificate
+                      ? 'send.with.certificate.description'
+                      : 'send.no.certificate.description'
+                  }
+                />
               </div>
             </div>
           </div>
         </div>
         <div className={styles.ActionsContainer} key="Actions">
           <div className={styles.TotalAmount}>
-            Total to debit{' '}
+            <FormattedMessage id="send.total.to.debit" />{' '}
             <span className={styles.TotalAmountValue}>
               STG {formatDigit(this.totalAmount.toFixed(2))}
             </span>
@@ -364,7 +416,7 @@ export default class Send extends Component<Props> {
             type={step === 1 ? 'OutlinePrimary' : 'OutlineDisabled'}
             onClick={() => this.onCancelConfirm()}
           >
-            Cancel
+            <FormattedMessage id="button.cancel" />
           </Button>
           <Button
             type="OutlinePrimary"
@@ -372,7 +424,7 @@ export default class Send extends Component<Props> {
             iconRightMirrorHor
             onClick={() => this.onNext()}
           >
-            Next
+            <FormattedMessage id="button.next" />
           </Button>
         </div>
       </Fragment>
@@ -383,14 +435,18 @@ export default class Send extends Component<Props> {
     const { account } = this.state;
     return [
       <div className={styles.TransactionSentContainer} key="Accounts">
-        <span className={styles.TransactionSentTitle}>Transaction sent</span>
+        <span className={styles.TransactionSentTitle}>
+          <FormattedMessage id="send.transaction.sent.title" />
+        </span>
         <p className={styles.TransactionSentText}>
-          Your account balance will be update once the blockchain has confirmed
-          the transaction.
+          <FormattedMessage id="send.transaction.sent.description" />
         </p>
         <p className={styles.TransactionSentText}>
-          Payment certificate for this transaction will be available in Last
-          Operations for <b>{account.name}</b>.
+          <FormattedMessage
+            id="send.transaction.sent.certificate"
+            values={{ account: '' }}
+          />{' '}
+          <b>{account.name}</b>.
         </p>
       </div>,
       <div className={styles.ActionsContainer} key="Actions">
@@ -402,7 +458,7 @@ export default class Send extends Component<Props> {
           }}
           style={{ margin: 'auto' }}
         >
-          Close
+          <FormattedMessage id="button.close" />
         </Button>
       </div>
     ];
@@ -410,6 +466,7 @@ export default class Send extends Component<Props> {
 
   render() {
     const { titledAccount, step, isBusy } = this.state;
+    const { intl } = this.props;
     return (
       <Fragment>
         <div className={styles.Send}>
@@ -424,13 +481,15 @@ export default class Send extends Component<Props> {
                 style={{ alignSelf: 'flex-start', paddingLeft: 0 }}
               >
                 <Button type="Invisible" icon="keyboard_backspace">
-                  Back to the account
+                  <FormattedMessage id="back.to.account" />
                 </Button>
               </Link>
             </Fragment>
           )}
           <div className={styles.SendForm}>
-            <div className={styles.FormTitle}>Send</div>
+            <div className={styles.FormTitle}>
+              <FormattedMessage id="send.title" />
+            </div>
             <div
               style={{
                 width: 384,
@@ -440,7 +499,11 @@ export default class Send extends Component<Props> {
               }}
             >
               <Steps
-                steps={['Details', 'Verification', 'Confirmation']}
+                steps={[
+                  intl.formatMessage({ id: 'send.step.one.title' }),
+                  intl.formatMessage({ id: 'send.step.two.title' }),
+                  intl.formatMessage({ id: 'send.step.three.title' })
+                ]}
                 activeStep={step}
               />
             </div>
@@ -448,8 +511,13 @@ export default class Send extends Component<Props> {
             {step === 2 && this.transactionSent()}
           </div>
         </div>
-        <Busy visible={isBusy} title="Sending transaction" />
+        <Busy
+          visible={isBusy}
+          title={intl.formatMessage({ id: 'send.waiting' })}
+        />
       </Fragment>
     );
   }
 }
+
+export default injectIntl(Send);

@@ -2,6 +2,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import * as AccountsActions from '../../actions/accounts';
 import Button from '../common/Button/Button';
 import Icon from '../common/Icon/Icon';
@@ -17,7 +18,8 @@ type Props = {
   visible: boolean,
   onApply: () => void,
   onCancel: () => void,
-  setAccountName: () => void
+  setAccountName: () => void,
+  intl: any
 };
 
 class EditAccount extends PureComponent<Props> {
@@ -92,9 +94,9 @@ class EditAccount extends PureComponent<Props> {
       <div className={styles.Container} key="form">
         <div className={styles.InputLabel}>
           <div>
-            <b>Account Name</b>
+            <FormattedMessage id="edit.account.name.title" tagName="b" />
           </div>
-          Rename this account
+          <FormattedMessage id="edit.account.name.description" />
         </div>
         <Input
           className={styles.Input}
@@ -105,9 +107,9 @@ class EditAccount extends PureComponent<Props> {
 
         <div className={styles.InputLabel}>
           <div>
-            <b>Account Backup</b>
+            <FormattedMessage id="edit.account.backup.title" tagName="b" />
           </div>
-          Write down recovery phrase
+          <FormattedMessage id="edit.account.backup.description" />
         </div>
         <div>
           {account.isRecoveryPhraseWrittenDown && (
@@ -118,7 +120,7 @@ class EditAccount extends PureComponent<Props> {
                 size="24"
                 style={{ marginRight: 10 }}
               />
-              Recovery phrase saved
+              <FormattedMessage id="edit.account.recovery.phrase.saved" />
             </div>
           )}
           {!account.isRecoveryPhraseWrittenDown && (
@@ -127,7 +129,7 @@ class EditAccount extends PureComponent<Props> {
               style={{ width: 114 }}
               onClick={() => this.onBackup()}
             >
-              Backup
+              <FormattedMessage id="button.backup" />
             </Button>
           )}
         </div>
@@ -138,10 +140,10 @@ class EditAccount extends PureComponent<Props> {
           icon="cancel"
           onClick={() => this.deleteAccount()}
         >
-          Delete account
+          <FormattedMessage id="button.delete.account" />
         </Button>
         <Button type="OutlinePrimary" onClick={() => this.apply()}>
-          Apply
+          <FormattedMessage id="button.apply" />
         </Button>
       </div>
     ];
@@ -149,12 +151,12 @@ class EditAccount extends PureComponent<Props> {
 
   render() {
     const { form } = this.state;
-    const { accountId, visible, accounts } = this.props;
+    const { accountId, visible, accounts, intl } = this.props;
     const account = accounts[accountId];
     return (
       <Modal
         options={{
-          title: 'Edit Account',
+          title: intl.formatMessage({ id: 'edit.account.title' }),
           type: 'big',
           visible,
           onClose: this.hide.bind(this)
@@ -183,4 +185,4 @@ class EditAccount extends PureComponent<Props> {
 export default connect(
   state => ({ accounts: state.accounts.items }),
   dispatch => bindActionCreators(AccountsActions, dispatch)
-)(EditAccount);
+)(injectIntl(EditAccount));

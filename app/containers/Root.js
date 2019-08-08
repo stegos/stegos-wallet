@@ -8,6 +8,7 @@ import type { SettingsStateType, Store } from '../reducers/types';
 import Routes from '../Routes';
 import '../utils/extended';
 import menu from '../contextMenu';
+import { IntlProviderWrapper } from '../i18n/IntlContext';
 
 type Props = {
   store: Store,
@@ -41,17 +42,19 @@ class Root extends Component<Props> {
     const { store, history, settings } = this.props;
     return (
       <Provider store={store}>
-        {settings.isBootstrappingComplete ? (
-          <React.Fragment>
+        <IntlProviderWrapper>
+          {settings.isBootstrappingComplete ? (
+            <React.Fragment>
+              <ConnectedRouter history={history}>
+                <Routes />
+              </ConnectedRouter>
+            </React.Fragment>
+          ) : (
             <ConnectedRouter history={history}>
-              <Routes />
+              <BootstrapRoutes />
             </ConnectedRouter>
-          </React.Fragment>
-        ) : (
-          <ConnectedRouter history={history}>
-            <BootstrapRoutes />
-          </ConnectedRouter>
-        )}
+          )}
+        </IntlProviderWrapper>
       </Provider>
     );
   }

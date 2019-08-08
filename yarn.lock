@@ -5797,6 +5797,13 @@ hoist-non-react-statics@^3.1.0:
   dependencies:
     react-is "^16.3.2"
 
+hoist-non-react-statics@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.0.tgz#b09178f0122184fb95acf525daaecb4d8f45958b"
+  integrity sha512-0XsbTXxgiaCDYDIWFcwkmerZPSwywfUqYmwT4jzewKTQSWoE6FCMoUVOeBJWK3E/CrWbxRG3m5GzY4lnIwGRBA==
+  dependencies:
+    react-is "^16.7.0"
+
 home-or-tmp@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/home-or-tmp/-/home-or-tmp-2.0.0.tgz#e36c3f2d2cae7d746a857e38d18d5f32a7882db8"
@@ -6137,7 +6144,31 @@ interpret@^1.0.0, interpret@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/interpret/-/interpret-1.1.0.tgz#7ed1b1410c6a0e0f78cf95d3b8440c63f78b8614"
 
-invariant@^2.2.1, invariant@^2.2.2, invariant@^2.2.4:
+intl-format-cache@^2.0.5:
+  version "2.2.9"
+  resolved "https://registry.yarnpkg.com/intl-format-cache/-/intl-format-cache-2.2.9.tgz#fb560de20c549cda20b569cf1ffb6dc62b5b93b4"
+  integrity sha512-Zv/u8wRpekckv0cLkwpVdABYST4hZNTDaX7reFetrYTJwxExR2VyTqQm+l0WmL0Qo8Mjb9Tf33qnfj0T7pjxdQ==
+
+intl-messageformat-parser@1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/intl-messageformat-parser/-/intl-messageformat-parser-1.4.0.tgz#b43d45a97468cadbe44331d74bb1e8dea44fc075"
+  integrity sha1-tD1FqXRoytvkQzHXS7Ho3qRPwHU=
+
+intl-messageformat@^2.0.0, intl-messageformat@^2.1.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/intl-messageformat/-/intl-messageformat-2.2.0.tgz#345bcd46de630b7683330c2e52177ff5eab484fc"
+  integrity sha1-NFvNRt5jC3aDMwwuUhd/9eq0hPw=
+  dependencies:
+    intl-messageformat-parser "1.4.0"
+
+intl-relativeformat@^2.1.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/intl-relativeformat/-/intl-relativeformat-2.2.0.tgz#6aca95d019ec8d30b6c5653b6629f9983ea5b6c5"
+  integrity sha512-4bV/7kSKaPEmu6ArxXf9xjv1ny74Zkwuey8Pm01NH4zggPP7JHwg2STk8Y3JdspCKRDriwIyLRfEXnj2ZLr4Bw==
+  dependencies:
+    intl-messageformat "^2.0.0"
+
+invariant@^2.1.1, invariant@^2.2.1, invariant@^2.2.2, invariant@^2.2.4:
   version "2.2.4"
   resolved "https://registry.npmjs.org/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
   dependencies:
@@ -9401,6 +9432,17 @@ react-hot-loader@^4.3.12:
     react-lifecycles-compat "^3.0.4"
     shallowequal "^1.0.2"
 
+react-intl@^2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-2.9.0.tgz#c97c5d17d4718f1575fdbd5a769f96018a3b1843"
+  integrity sha512-27jnDlb/d2A7mSJwrbOBnUgD+rPep+abmoJE511Tf8BnoONIAUehy/U1zZCHGO17mnOwMWxqN4qC0nW11cD6rA==
+  dependencies:
+    hoist-non-react-statics "^3.3.0"
+    intl-format-cache "^2.0.5"
+    intl-messageformat "^2.1.0"
+    intl-relativeformat "^2.1.0"
+    invariant "^2.1.1"
+
 react-is@^16.3.2, react-is@^16.6.0:
   version "16.6.0"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.6.0.tgz#456645144581a6e99f6816ae2bd24ee94bdd0c01"
@@ -9409,7 +9451,7 @@ react-is@^16.6.1, react-is@^16.6.3:
   version "16.6.3"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.6.3.tgz#d2d7462fcfcbe6ec0da56ad69047e47e56e7eac0"
 
-react-is@^16.8.1:
+react-is@^16.7.0, react-is@^16.8.1:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.6.tgz#5bbc1e2d29141c9fbdfed456343fe2bc430a6a16"
   integrity sha512-aUk3bHfZ2bRSVFFbbeVS4i+lNPZr3/WM5jT2J5omUVV1zzcs1nAaf3l51ctA5FFvCRbhrH0bdAsRRQddFJZPtA==

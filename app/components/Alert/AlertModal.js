@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 import Button from '../common/Button/Button';
 import styles from './Alert.css';
 import type { SettingsStateType } from '../../reducers/types';
@@ -55,9 +56,13 @@ class AlertModal extends Component<Props> {
             size="30"
           />
           <div className={styles.Header}>
-            <div>Error</div>
+            <FormattedMessage id="alert.error.caption" tagName="div" />
           </div>
-          <div className={styles.Body}>{error}</div>
+          {error && (
+            <div className={styles.Body}>
+              <FormattedMessage id={error} />
+            </div>
+          )}
           <div className={styles.Action}>
             <Button type="OutlinePrimary" onClick={this.close}>
               OK

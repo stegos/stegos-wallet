@@ -1,5 +1,6 @@
 // @flow
 import React, { Component } from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import Button from '../../common/Button/Button';
 import Icon from '../../common/Icon/Icon';
 import type { Account } from '../../../reducers/types';
@@ -9,10 +10,11 @@ import styles from './DeleteAccount.css';
 type Props = {
   account: Account,
   onDelete: () => void,
-  onCancel: () => void
+  onCancel: () => void,
+  intl: any
 };
 
-export default class DeleteAccount extends Component<Props> {
+class DeleteAccount extends Component<Props> {
   props: Props;
 
   state = {
@@ -41,19 +43,23 @@ export default class DeleteAccount extends Component<Props> {
   }
 
   render() {
-    const { account } = this.props;
+    const { account, intl } = this.props;
     const { accountName, disableDeleteButton } = this.state;
     return (
       <div className={styles.Container}>
         <div className={styles.WarnContainer}>
           <Icon name="error" color="#FF6C00" size="24" />
           <span className={styles.WarnText}>
-            Your account “{account.name}” will be removed from this device. You
-            cannot revert this operation!
+            <FormattedMessage
+              id="delete.account"
+              values={{ name: account.name }}
+            />
           </span>
         </div>
         <Input
-          placeholder="If your are sure, please enter account name to proceed"
+          placeholder={intl.formatMessage({
+            id: 'input.placeholder.delete.account.name'
+          })}
           noLabel
           value={accountName}
           onChange={this.onChangeAccountName}
@@ -65,13 +71,15 @@ export default class DeleteAccount extends Component<Props> {
             icon="cancel"
             onClick={() => this.deleteAccount()}
           >
-            Delete account
+            <FormattedMessage id="button.delete.account" />
           </Button>
           <Button type="OutlinePrimary" onClick={() => this.cancel()}>
-            Cancel
+            <FormattedMessage id="button.cancel" />
           </Button>
         </div>
       </div>
     );
   }
 }
+
+export default injectIntl(DeleteAccount);

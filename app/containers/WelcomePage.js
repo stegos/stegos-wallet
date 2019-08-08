@@ -1,5 +1,6 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { injectIntl } from 'react-intl';
 import * as SettingsActions from '../actions/settings';
 import Welcome from '../components/Welcome';
 
@@ -16,4 +17,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Welcome);
+)(injectIntl(Welcome));

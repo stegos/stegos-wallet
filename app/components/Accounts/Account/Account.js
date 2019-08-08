@@ -1,6 +1,7 @@
 // @flow
 import React, { PureComponent, Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 import { formatDigit } from '../../../utils/format';
 import Button from '../../common/Button/Button';
 import Icon from '../../common/Icon/Icon';
@@ -130,7 +131,7 @@ export default class Account extends PureComponent<Props> {
             icon="tune"
             onClick={() => this.editAccount()}
           >
-            Account settings
+            <FormattedMessage id="account.settings" />
           </Button>
         </div>
         {!isNewWallet && (
@@ -141,7 +142,7 @@ export default class Account extends PureComponent<Props> {
               link={{ pathname: routes.SEND }}
               elevated
             >
-              Send tokens
+              <FormattedMessage id="button.send.tokens" />
             </Button>
             <Button
               type="FilledPrimary"
@@ -149,13 +150,15 @@ export default class Account extends PureComponent<Props> {
               link={{ pathname: routes.RECEIVE }}
               elevated
             >
-              Receive tokens
+              <FormattedMessage id="button.receive.tokens" />
             </Button>
           </div>
         )}
         <div className={styles.AccountDetailsContainer}>
           <div className={styles.AccountDetailsHeader}>
-            <span className={styles.DetailsHeaderText}>Total amount</span>
+            <span className={styles.DetailsHeaderText}>
+              <FormattedMessage id="chart.total.amount" />
+            </span>
             <div>
               <button
                 className={`${styles.Chip} ${(period === 'week' &&
@@ -164,7 +167,7 @@ export default class Account extends PureComponent<Props> {
                 onClick={() => this.changePeriod('week')}
                 type="button"
               >
-                Week
+                <FormattedMessage id="chart.week" />
               </button>
               <button
                 className={`${styles.Chip} ${(period === 'month' &&
@@ -173,7 +176,7 @@ export default class Account extends PureComponent<Props> {
                 onClick={() => this.changePeriod('month')}
                 type="button"
               >
-                Month
+                <FormattedMessage id="chart.month" />
               </button>
               <button
                 className={`${styles.Chip} ${(period === 'year' &&
@@ -182,7 +185,7 @@ export default class Account extends PureComponent<Props> {
                 onClick={() => this.changePeriod('year')}
                 type="button"
               >
-                Year
+                <FormattedMessage id="chart.year" />
               </button>
             </div>
           </div>
@@ -199,7 +202,9 @@ export default class Account extends PureComponent<Props> {
               </div>
             )}
             {isNewWallet && (
-              <div className={styles.NoTransactions}>No Stegos tokens yet?</div>
+              <div className={styles.NoTransactions}>
+                <FormattedMessage id="account.no.tokens" />
+              </div>
             )}
           </div>
           {!!transactions.length && (
@@ -224,9 +229,7 @@ export default class Account extends PureComponent<Props> {
           <div className={styles.BottomActions}>
             <div className={styles.BottomActionContainer}>
               <span className={styles.BottomActionDescription}>
-                {
-                  "Click 'Receive' button below to get your account address to start receiving tokens."
-                }
+                <FormattedMessage id="account.receive.description" />
               </span>
 
               <Link to={{ pathname: routes.RECEIVE }}>
@@ -235,15 +238,13 @@ export default class Account extends PureComponent<Props> {
                   icon="open_in_browser"
                   className={styles.BottomActionButton}
                 >
-                  Receive account address
+                  <FormattedMessage id="button.receive.account.address" />
                 </Button>
               </Link>
             </div>
             <div className={styles.BottomActionContainer}>
               <span className={styles.BottomActionDescription}>
-                {
-                  "Click 'Restore from recovery phrase' button to restore your existing account."
-                }
+                <FormattedMessage id="account.restore.description" />
               </span>
               <Button
                 type="OutlineDisabled"
@@ -251,14 +252,13 @@ export default class Account extends PureComponent<Props> {
                 className={styles.BottomActionButton}
                 onClick={() => this.restoreAccount()}
               >
-                Restore from recovery phrase
+                <FormattedMessage id="button.restore.account" />
               </Button>
             </div>
           </div>
         )}
         <RestoreAccount
           visible={restoreAccountVisible}
-          account={account}
           onClose={() => this.setState({ restoreAccountVisible: false })}
         />
         <EditAccount

@@ -84,51 +84,46 @@ export const createAccount = () => async (
   );
 };
 
-export const restoreAccount = (phrase: string[]) => (
+export const restoreAccount = (phrase: string[]) => async (
   dispatch: Dispatch,
   getState: GetState
 ) => {
   const { password } = getState().settings;
-  return sendSync(
-    { type: 'recover_account', recovery: phrase.join(' '), password },
-    getState
-  )
-    .then(async resp => {
-      const accountId = resp.account_id;
-      await sendSync(
-        { type: 'unseal', password, account_id: accountId },
-        getState
-      );
-      dispatch(send({ type: 'balance_info', account_id: accountId }));
-      dispatch(send({ type: 'keys_info', account_id: accountId }));
-      dispatch(send({ type: 'get_recovery', account_id: accountId }));
-      dispatch(
-        send({
-          type: 'history_info',
-          account_id: accountId,
-          starting_from: startingTimestamp,
-          limit
-        })
-      );
-      return accountId;
-    })
-    .catch(err => {
-      console.log(err);
-      dispatch({
-        type: SHOW_ERROR,
-        payload:
-          'The recovery phrase is incorrect. Please verify it, correct and try again.'
-      });
-      throw err;
+  try {
+    const resp = await sendSync(
+      { type: 'recover_account', recovery: phrase.join(' '), password },
+      getState
+    );
+
+    const accountId = resp.account_id;
+    await sendSync(
+      { type: 'unseal', password, account_id: accountId },
+      getState
+    );
+    await sendSync({ type: 'keys_info', account_id: accountId }, getState);
+    dispatch(send({ type: 'balance_info', account_id: accountId }));
+    dispatch(send({ type: 'get_recovery', account_id: accountId }));
+    dispatch(
+      send({
+        type: 'history_info',
+        account_id: accountId,
+        starting_from: startingTimestamp,
+        limit
+      })
+    );
+    return accountId;
+  } catch (err) {
+    console.log(err);
+    dispatch({
+      type: SHOW_ERROR,
+      payload: 'alert.recovery.phrase.is.incorrect'
     });
+    throw err;
+  }
 };
 
-export const completeAccountRestoring = (
-  newId: string,
-  oldId: string
-) => async (dispatch: Dispatch, getState: GetState) => {
+export const completeAccountRestoring = () => (dispatch: Dispatch) => {
   dispatch(push(routes.ACCOUNTS));
-  await sendSync({ type: 'delete_account', account_id: oldId }, getState);
 };
 
 export const deleteAccount = id => (dispatch: Dispatch, getState: GetState) => {
@@ -165,7 +160,7 @@ export const sendTransaction = (
     getState
   ).catch(err => {
     console.log(err);
-    const message = err || 'An error ocurred';
+    const message = err || 'An error occurred';
     dispatch({ type: SHOW_ERROR, payload: message });
     throw err;
   });
@@ -180,9 +175,7 @@ export const writeDownRecoveryPhrase = (
       const { recoveryPhrase } = state.accounts.items[accountId];
       for (let i = 0; i < RECOVERY_PHRASE_LENGTH; i += 1) {
         if (recoveryPhrase[i] !== phrase[i]) {
-          throw new Error(
-            'The recovery phrase is incorrect. Please verify it, correct and try again'
-          );
+          throw new Error('alert.recovery.phrase.is.incorrect');
         }
       }
       db.update(

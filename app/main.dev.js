@@ -40,6 +40,7 @@ const nodePath =
     : path.resolve(__dirname, '../node/');
 const appDataPath = `${getPath('appData')}/stegos/`;
 const tokenFile = `${appDataPath}/api.token`; // todo config
+const logFile = `${appDataPath}/stegos.log`; // todo config
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -141,7 +142,7 @@ ipcMain.on('RUN_NODE', event => {
     .then(() => event.sender.send('NODE_RUNNING'))
     .catch(e => {
       console.log(e);
-      dialog.showErrorBox('Error', 'An error occurred');
+      dialog.showErrorBox('Error', `An error occurred\n${e}`);
       event.sender.send('RUN_NODE_FAILED');
     });
 });
@@ -150,6 +151,7 @@ function runNodeProcess(): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
       if (fs.existsSync(tokenFile)) fs.unlinkSync(tokenFile);
+      if (fs.existsSync(logFile)) fs.unlinkSync(logFile); // todo may be rotation
       nodeProcess = spawn(
         `./stegosd`,
         [
@@ -166,9 +168,11 @@ function runNodeProcess(): Promise<void> {
       );
       nodeProcess.stdout.on('data', data => {
         const str = data.toString('utf8');
-        console.log(str);
-        if (str.includes('ERROR [stegos'))
-          reject(new Error('An error occurred'));
+        if (process.env.NODE_ENV === 'development') console.log(str);
+        if (str.includes('ERROR [stegos')) {
+          fs.appendFile(logFile, str, () => {});
+          reject(new Error(`An error occurred\n${str}`));
+        }
         if (!isTokenCapturing) {
           isTokenCapturing = true;
           captureToken(resolve); // todo rid off NODE_RUNNING action

@@ -1,5 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
+import { FormattedMessage } from 'react-intl';
 import type { AccountsStateType } from '../../../reducers/types';
 import Button from '../../common/Button/Button';
 import Dropdown from '../../common/Dropdown/Dropdown';
@@ -10,19 +11,31 @@ import styles from './AccountsList.css';
 type Props = {
   accounts: AccountsStateType,
   getAccounts: () => void,
-  createAccount: () => void
+  createAccount: () => void,
+  intl: any
 };
 
-const sortOptions = [
-  { value: 'name', name: 'Account name' },
-  { value: 'balance', name: 'Account balance' }
-];
-
 export default class AccountsList extends PureComponent<Props> {
-  state = {
-    search: '',
-    sort: sortOptions[0]
-  };
+  constructor(props) {
+    super(props);
+    const { intl } = props;
+    const sortOptions = [
+      {
+        value: 'name',
+        name: intl.formatMessage({ id: 'accounts.sort.account.name' })
+      },
+      {
+        value: 'balance',
+        name: intl.formatMessage({ id: 'accounts.sort.balance' })
+      }
+    ];
+
+    this.state = {
+      search: '',
+      sort: sortOptions[0],
+      options: sortOptions
+    };
+  }
 
   componentDidMount(): void {
     const { getAccounts } = this.props;
@@ -60,7 +73,8 @@ export default class AccountsList extends PureComponent<Props> {
   };
 
   render() {
-    const { sort, search } = this.state;
+    const { sort, search, options } = this.state;
+    const { intl } = this.props;
     const accounts = this.getFilteredAndSortedAccounts();
     return (
       <div className={styles.AccountsList}>
@@ -68,7 +82,9 @@ export default class AccountsList extends PureComponent<Props> {
           <div className={styles.SearchFiledWrapper}>
             <input
               className={styles.SearchInput}
-              placeholder="Search"
+              placeholder={intl.formatMessage({
+                id: 'input.placeholder.search'
+              })}
               value={search}
               onChange={this.onSearchingChange}
             />
@@ -80,23 +96,25 @@ export default class AccountsList extends PureComponent<Props> {
             elevated
             onClick={this.onCreateAccount}
           >
-            Add account
+            <FormattedMessage id="button.add.account" />
           </Button>
         </div>
         <div className={styles.Header}>
-          <span className={styles.Title}>Accounts</span>
+          <span className={styles.Title}>
+            <FormattedMessage id="accounts.title" />
+          </span>
           <div className={styles.SortSelectorContainer}>
             <span
               className={`${styles.SortSelectorText} ${
                 styles.SortSelectorLabel
               }`}
             >
-              Sort by:
+              <FormattedMessage id="accounts.sort.by" />:
             </span>
             <Dropdown
               value={sort && sort.name}
               onChange={this.onSortingChange}
-              options={sortOptions}
+              options={options}
               style={{ width: 150 }}
             />
           </div>
