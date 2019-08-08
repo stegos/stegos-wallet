@@ -228,7 +228,9 @@ class Send extends Component<Props> {
         this.confirmed();
         return resp;
       })
-      .catch(console.log);
+      .catch(() => {
+        this.setState({ isBusy: false });
+      });
   };
 
   confirmed() {
