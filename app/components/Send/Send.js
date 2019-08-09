@@ -103,7 +103,7 @@ class Send extends Component<Props> {
 
   get totalAmount() {
     const { amount, fee } = this.state;
-    return +amount + Number(fee.fee);
+    return +amount + Number(fee.fee) * 2;
   }
 
   validate = () => {
