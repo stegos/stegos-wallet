@@ -40,6 +40,7 @@
   "account.restore.description": "Click 'Restore from recovery phrase' button to restore your existing account.",
 
   "edit.account.title": "Edit Account",
+  "edit.account.backup.subtitle": "Account Backup",
   "edit.account.name.title": "Account Name",
   "edit.account.name.description": "Rename the account",
   "edit.account.backup.title": "Account Backup",
