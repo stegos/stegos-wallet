@@ -15,8 +15,7 @@ import { POWER_DIVISIBILITY } from '../../constants/config';
 import {
   formatDigit,
   isBase58,
-  isPositiveNumber,
-  isStegosNumber
+  isPositiveStegosNumber
 } from '../../utils/format';
 
 type Props = {
@@ -128,7 +127,7 @@ class Send extends Component<Props> {
       });
       return false;
     }
-    if (!amount || !isPositiveNumber(amount)) {
+    if (!amount || !isPositiveStegosNumber(amount)) {
       this.setState({
         amountError: intl.formatMessage({ id: 'input.error.invalid.value' })
       });
@@ -142,7 +141,7 @@ class Send extends Component<Props> {
       });
       return false;
     }
-    if (!isStegosNumber(fee.fee)) {
+    if (!isPositiveStegosNumber(fee.fee)) {
       this.setState({
         feeError: intl.formatMessage({ id: 'input.error.invalid.value' })
       });
