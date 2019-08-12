@@ -184,5 +184,7 @@
   "certificate.amount": "Amount",
   "certificate.generated": "Generated on",
   "certificate.verification.valid": "Valid",
-  "certificate.verification.failed": "Failed"
+  "certificate.verification.failed": "Failed",
+
+  "account.default.name": "Account #{id}"
 }
