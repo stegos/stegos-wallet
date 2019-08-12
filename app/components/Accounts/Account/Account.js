@@ -14,6 +14,7 @@ import routes from '../../../constants/routes';
 import styles from './Account.css';
 import Stg from '../../../../resources/img/Stg.svg';
 import { POWER_DIVISIBILITY } from '../../../constants/config';
+import AccountName from './AccountName';
 
 type Location = {
   pathname: string,
@@ -125,7 +126,7 @@ export default class Account extends PureComponent<Props> {
     return (
       <div className={styles.Account}>
         <div className={styles.Header}>
-          <span className={styles.Title}>{account.name}</span>
+          <span className={styles.Title}><AccountName account={account} /></span>
           <Button
             type="Invisible"
             icon="tune"

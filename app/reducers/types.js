@@ -39,7 +39,6 @@ export type Account = {
 
 export const createEmptyAccount = id => ({
   id,
-  name: `Account #${id}`,
   balance: 0,
   isLocked: true,
   transactions: []

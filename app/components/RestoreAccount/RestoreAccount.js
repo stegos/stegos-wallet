@@ -15,6 +15,7 @@ import styles from './RestoreAccount.css';
 import { RECOVERY_PHRASE_LENGTH } from '../../constants/config';
 import { getEmptyRecoveryPhrase } from '../../utils/format';
 import Busy from '../common/Busy/Busy';
+import AccountName from '../Accounts/Account/AccountName';
 
 type Props = {
   accounts: Account[],
@@ -107,7 +108,7 @@ class RestoreAccount extends Component<Props> {
             id="receive.address.for.account"
             values={{ account: '' }}
           />{' '}
-          <b>{account.name}</b>
+          <b><AccountName account={account} /></b>
         </span>
       </div>
     );
@@ -132,7 +133,7 @@ class RestoreAccount extends Component<Props> {
             id="receive.address.for.account"
             values={{ account: '' }}
           />{' '}
-          <b>{account.name}</b>
+          <b><AccountName account={account} /></b>
         </span>
       </div>
     );

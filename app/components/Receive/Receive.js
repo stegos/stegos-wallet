@@ -11,6 +11,7 @@ import Steps from '../common/Steps/Steps';
 import Verify from '../Verify/Verify';
 import styles from './Receive.css';
 import routes from '../../constants/routes';
+import AccountName from '../Accounts/Account/AccountName';
 
 type Props = {
   accounts: AccountsStateType,
@@ -85,11 +86,11 @@ class Receive extends Component<Props> {
           <div className={styles.AccountDropdown}>
             <Dropdown
               onChange={e => this.onSelectAccount(e)}
-              value={selectedAccount && selectedAccount.name}
+              value={selectedAccount && AccountName.getName(selectedAccount, intl)}
               placeholder={intl.formatMessage({ id: 'input.name.account' })}
               options={Object.entries(accounts).map(acc => ({
                 value: acc[1],
-                name: acc[1].name
+                name: AccountName.getName(acc[1], intl)
               }))}
               icon="expand_more"
               iconPosition="right"
@@ -155,7 +156,7 @@ class Receive extends Component<Props> {
             id="receive.address.for.account"
             values={{ account: '' }}
           />{' '}
-          <b>{selectedAccount.name}</b>
+          <b><AccountName account={selectedAccount}/></b>
         </span>
       </div>,
       <div className={styles.ActionsContainer} key="Actions">
@@ -188,7 +189,7 @@ class Receive extends Component<Props> {
       <div className={styles.Receive}>
         {titledAccount && (
           <Fragment>
-            <span className={styles.Title}>{titledAccount.name}</span>
+            <span className={styles.Title}><AccountName account={titledAccount}/></span>
             <Link
               to={{
                 pathname: routes.ACCOUNT,

@@ -11,6 +11,7 @@ import Modal from '../common/Modal/Modal';
 import Backup from './Backup/Backup';
 import DeleteAccount from './DeleteAccount/DeleteAccount';
 import styles from './EditAccount.css';
+import AccountName from '../Accounts/Account/AccountName';
 
 type Props = {
   accountId: number,
@@ -88,7 +89,7 @@ class EditAccount extends PureComponent<Props> {
   };
 
   renderMain() {
-    const { accounts, accountId } = this.props;
+    const { accounts, accountId, intl } = this.props;
     const account = accounts[accountId];
     return [
       <div className={styles.Container} key="form">
@@ -100,7 +101,7 @@ class EditAccount extends PureComponent<Props> {
         </div>
         <Input
           className={styles.Input}
-          placeholder={account.name}
+          placeholder={AccountName.getName(account, intl)}
           noLabel
           onChange={this.onChangeAccountName}
         />

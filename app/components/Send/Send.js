@@ -3,6 +3,7 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import type { AccountsStateType } from '../../reducers/types';
+import AccountName from '../Accounts/Account/AccountName';
 import Busy from '../common/Busy/Busy';
 import Button from '../common/Button/Button';
 import Dropdown from '../common/Dropdown/Dropdown';
@@ -265,10 +266,10 @@ class Send extends Component<Props> {
           {Send.renderDropdown(
             Object.entries(accounts).map(acc => ({
               value: acc[1],
-              name: acc[1].name
+              name: AccountName.getName(acc[1], intl)
             })),
             intl.formatMessage({ id: 'input.name.account' }),
-            account && account.name,
+            account && AccountName.getName(account, intl),
             this.handleAccountChange.bind(this),
             accountError,
             !!accountError,
@@ -446,7 +447,7 @@ class Send extends Component<Props> {
             id="send.transaction.sent.certificate"
             values={{ account: '' }}
           />{' '}
-          <b>{account.name}</b>.
+          <b><AccountName account={account}/></b>.
         </p>
       </div>,
       <div className={styles.ActionsContainer} key="Actions">
@@ -472,7 +473,7 @@ class Send extends Component<Props> {
         <div className={styles.Send}>
           {titledAccount && (
             <Fragment>
-              <span className={styles.Title}>{titledAccount.name}</span>
+              <span className={styles.Title}><AccountName account={titledAccount} /></span>
               <Link
                 to={{
                   pathname: routes.ACCOUNT,

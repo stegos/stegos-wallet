@@ -38,6 +38,7 @@
   "account.no.tokens": "No Stegos tokens yet?",
   "account.receive.description": "Click 'Receive' button below to get your account address to start receiving tokens.",
   "account.restore.description": "Click 'Restore from recovery phrase' button to restore your existing account.",
+  "account.default.name": "Account",
 
   "edit.account.title": "Edit Account",
   "edit.account.name.title": "Account Name",
