@@ -93,7 +93,7 @@
         "msi"
       ]
     },
-    "icon" : "resources/icons/256x256.png",
+    "icon" : "resources/icons/512x512.png",
     "linux": {
       "target": [
         "tar.gz",
