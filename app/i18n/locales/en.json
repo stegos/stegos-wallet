@@ -38,7 +38,6 @@
   "account.no.tokens": "No Stegos tokens yet?",
   "account.receive.description": "Click 'Receive' button below to get your account address to start receiving tokens.",
   "account.restore.description": "Click 'Restore from recovery phrase' button to restore your existing account.",
-  "account.default.name": "Account",
 
   "edit.account.title": "Edit Account",
   "edit.account.name.title": "Account Name",
@@ -156,5 +155,7 @@
   "alert.account.password.is.incorrect": "The account password is incorrect. Please try again.",
   "alert.recovery.phrase.is.incorrect": "The recovery phrase is incorrect. Please verify it, correct and try again.",
   "alert.password.is.incorrect": "The password is incorrect. Please try again.",
-  "alert.default.error": "An error occurred."
+  "alert.default.error": "An error occurred.",
+
+  "account.default.name": "Account #{id}"
 }

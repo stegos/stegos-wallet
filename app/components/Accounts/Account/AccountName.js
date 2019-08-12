@@ -14,7 +14,7 @@ class AccountName extends Component<Props> {
     if (account.name) {
       return account.name;
     }
-    return `${intl.formatMessage({id: 'account.default.name'})} #${account.id}`;
+    return intl.formatMessage({id: 'account.default.name'}, {id: account.id});
   }
 
   render() {
