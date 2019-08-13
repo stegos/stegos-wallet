@@ -128,7 +128,7 @@
   "button.backup": "Backup",
   "button.back": "Back",
   "button.done": "Done",
-  "button.verify": "Verify",
+  "button.verify": "Verify Certificate",
   "button.close": "Close",
   "button.restore": "Restore",
   "button.delete.account": "Delete account",
