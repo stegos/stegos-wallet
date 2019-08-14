@@ -124,13 +124,21 @@ class EditAccount extends PureComponent<Props> {
             </div>
           )}
           {!account.isRecoveryPhraseWrittenDown && (
-            <Button
-              type="OutlineDisabled"
-              style={{ width: 114 }}
-              onClick={() => this.onBackup()}
-            >
-              <FormattedMessage id="button.backup" />
-            </Button>
+            <div>
+              <Button
+                type="OutlineDisabled"
+                style={{ width: 114 }}
+                onClick={() => this.onBackup()}
+                disabled={!account.recoveryPhrase}
+              >
+                <FormattedMessage id="button.backup" />
+              </Button>
+              {!account.recoveryPhrase && (
+                <div className={styles.InputLabel}>
+                  <FormattedMessage id="backup.waiting" />
+                </div>
+              )}
+            </div>
           )}
         </div>
       </div>,
