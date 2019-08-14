@@ -94,6 +94,7 @@ const onMessage = (store: MiddlewareAPI, evt: MessageEvent) => {
   const mes = decrypt(base64ToArrayBuffer(evt.data), apiToken);
   const data = JSON.parse(mes);
   const { id } = data;
+  listeners.forEach(l => l(store.dispatch, data));
   store.dispatch({ type: WS_MESSAGE, payload: data });
   if (id !== null) {
     if (messages[id]) {

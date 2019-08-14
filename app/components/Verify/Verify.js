@@ -1,14 +1,13 @@
 // @flow
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
 import Modal from '../common/Modal/Modal';
 import styles from './Verify.css';
-import * as NodeActions from '../../actions/node';
 import { formatDigit, isBase58 } from '../../utils/format';
+import { validateCertificate } from '../../actions/node';
+import { POWER_DIVISIBILITY } from '../../constants/config';
 
 type Props = {
   visible: boolean,
@@ -75,7 +74,6 @@ class Verify extends Component<Props> {
 
   onVerify = () => {
     // todo validate inputs
-    const { validateCertificate } = this.props;
     const { sender, recipient, rvalue, utxo } = this.state;
     if (!this.validate()) {
       return;
@@ -84,7 +82,7 @@ class Verify extends Component<Props> {
       .then(resp => {
         this.setState({
           verified: true,
-          amount: resp.amount,
+          amount: resp.amount / POWER_DIVISIBILITY,
           block: resp.epoch || '--',
           date: resp.timestamp && new Date(resp.timestamp)
         });
@@ -92,7 +90,12 @@ class Verify extends Component<Props> {
       })
       .catch(e => {
         console.log(e);
-        this.setState({ verified: false });
+        this.setState({
+          verified: false,
+          amount: null,
+          block: null,
+          date: null
+        });
       });
   };
 
@@ -297,7 +300,4 @@ class Verify extends Component<Props> {
   }
 }
 
-export default connect(
-  () => ({}),
-  dispatch => bindActionCreators(NodeActions, dispatch)
-)(injectIntl(Verify));
+export default injectIntl(Verify);
