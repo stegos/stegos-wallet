@@ -2,20 +2,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
 import Modal from '../common/Modal/Modal';
 import styles from './Verify.css';
 import * as NodeActions from '../../actions/node';
-import {
-  formatDigit,
-  getCertificateVerificationDate,
-  isBase58
-} from '../../utils/format';
+import { formatDigit, isBase58 } from '../../utils/format';
 
 type Props = {
   visible: boolean,
-  onClose: () => void
+  onClose: () => void,
+  intl: any
 };
 
 class Verify extends Component<Props> {
@@ -44,28 +42,31 @@ class Verify extends Component<Props> {
   }
 
   validate = () => {
+    const { intl } = this.props;
     const { sender, recipient, rvalue, utxo } = this.state;
     if (!sender || !isBase58(sender)) {
       this.setState({
-        senderError: 'Incorrect address'
+        senderError: intl.formatMessage({ id: 'input.error.incorrect.address' })
       });
       return false;
     }
     if (!recipient || !isBase58(recipient)) {
       this.setState({
-        recipientError: 'Incorrect address'
+        recipientError: intl.formatMessage({
+          id: 'input.error.incorrect.address'
+        })
       });
       return false;
     }
     if (!rvalue) {
       this.setState({
-        rvalueError: 'Incorrect value'
+        rvalueError: intl.formatMessage({ id: 'input.error.invalid.value' })
       });
       return false;
     }
     if (!utxo || utxo.length < 50) {
       this.setState({
-        utxoError: 'Incorrect value'
+        utxoError: intl.formatMessage({ id: 'input.error.invalid.value' })
       });
       return false;
     }
@@ -96,14 +97,17 @@ class Verify extends Component<Props> {
   };
 
   get verificationResult() {
+    const { intl } = this.props;
     const { verified } = this.state;
-    if (verified) return 'Valid';
-    if (verified !== null) return 'Failed';
+    if (verified)
+      return intl.formatMessage({ id: 'certificate.verification.valid' });
+    if (verified !== null)
+      return intl.formatMessage({ id: 'certificate.verification.failed' });
     return '';
   }
 
   render() {
-    const { visible } = this.props;
+    const { visible, intl } = this.props;
     const {
       sender,
       senderError,
@@ -121,7 +125,7 @@ class Verify extends Component<Props> {
     return (
       <Modal
         options={{
-          title: 'Payment Certificate',
+          title: intl.formatMessage({ id: 'certificate.title' }),
           // subtitle: 'Generated on June, 5th, 2019 at 10:17am',// todo
           type: 'big',
           visible,
@@ -134,18 +138,20 @@ class Verify extends Component<Props> {
             className={styles.LabelBold}
             style={{ margin: '40px 0 20px 0' }}
           >
-            Transaction data
+            <FormattedMessage id="certificate.data.title" />
           </span>
           <div className={styles.Row}>
             <div className={`${styles.RowLabel} ${styles.LabelBold}`}>
-              Sender:
+              <FormattedMessage id="certificate.sender" />:
             </div>
             <Input
               value={sender}
               onChange={e =>
                 this.setState({ sender: e.target.value, senderError: '' })
               }
-              placeholder="Sender address..."
+              placeholder={`${intl.formatMessage({
+                id: 'certificate.sender.address'
+              })}...`}
               noLabel
               error={senderError}
               showError={!!senderError}
@@ -154,14 +160,16 @@ class Verify extends Component<Props> {
           </div>
           <div className={styles.Row}>
             <div className={`${styles.RowLabel} ${styles.LabelBold}`}>
-              Recipient:
+              <FormattedMessage id="certificate.recipient" />:
             </div>
             <Input
               value={recipient}
               onChange={e =>
                 this.setState({ recipient: e.target.value, recipientError: '' })
               }
-              placeholder="Recipient address..."
+              placeholder={`${intl.formatMessage({
+                id: 'certificate.recipient.address'
+              })}...`}
               noLabel
               error={recipientError}
               showError={!!recipientError}
@@ -170,14 +178,16 @@ class Verify extends Component<Props> {
           </div>
           <div className={styles.Row}>
             <div className={`${styles.RowLabel} ${styles.LabelBold}`}>
-              R-value:
+              <FormattedMessage id="certificate.rvalue" />:
             </div>
             <Input
               value={rvalue}
               onChange={e =>
                 this.setState({ rvalue: e.target.value, rvalueError: '' })
               }
-              placeholder="R-value..."
+              placeholder={`${intl.formatMessage({
+                id: 'certificate.rvalue'
+              })}...`}
               noLabel
               error={rvalueError}
               showError={!!rvalueError}
@@ -186,14 +196,14 @@ class Verify extends Component<Props> {
           </div>
           <div className={styles.Row}>
             <div className={`${styles.RowLabel} ${styles.LabelBold}`}>
-              UTXO ID:
+              <FormattedMessage id="certificate.id" />:
             </div>
             <Input
               value={utxo}
               onChange={e =>
                 this.setState({ utxo: e.target.value, utxoError: '' })
               }
-              placeholder="UTXO ID..."
+              placeholder={intl.formatMessage({ id: 'certificate.id' })}
               noLabel
               error={utxoError}
               showError={!!utxoError}
@@ -208,18 +218,28 @@ class Verify extends Component<Props> {
               className={`${styles.RowLabel} ${styles.LabelBold}`}
               style={{ width: 'auto' }}
             >
-              Transaction verification
+              <FormattedMessage id="certificate.verification.title" />
             </div>
             <span
               className={styles.LabelSmall}
               style={{ textAlign: 'right', marginLeft: 'auto' }}
             >
-              {date ? getCertificateVerificationDate(date) : ''}
+              {date
+                ? intl.formatDate(date, {
+                    month: 'numeric',
+                    day: 'numeric',
+                    year: 'numeric',
+                    hour: 'numeric',
+                    minute: 'numeric'
+                  })
+                : ''}
             </span>
           </div>
           <div className={styles.VerificationContainer}>
             <div className={styles.VerificationRow}>
-              <span className={styles.LabelBold}>Sender:</span>
+              <span className={styles.LabelBold}>
+                <FormattedMessage id="certificate.sender" />:
+              </span>
               <span
                 className={verified ? styles.LabelSuccess : styles.LabelFailed}
               >
@@ -227,7 +247,9 @@ class Verify extends Component<Props> {
               </span>
             </div>
             <div className={styles.VerificationRow}>
-              <span className={styles.LabelBold}>Recipient:</span>
+              <span className={styles.LabelBold}>
+                <FormattedMessage id="certificate.recipient" />:
+              </span>
               <span
                 className={verified ? styles.LabelSuccess : styles.LabelFailed}
               >
@@ -235,7 +257,9 @@ class Verify extends Component<Props> {
               </span>
             </div>
             <div className={styles.VerificationRow}>
-              <span className={styles.LabelBold}>UTXO ID:</span>
+              <span className={styles.LabelBold}>
+                <FormattedMessage id="certificate.id" />:
+              </span>
               <span
                 className={verified ? styles.LabelSuccess : styles.LabelFailed}
               >
@@ -245,7 +269,9 @@ class Verify extends Component<Props> {
             <div />
             <div />
             <div className={styles.VerificationRow}>
-              <span className={styles.LabelBold}>UTXO Block No:</span>
+              <span className={styles.LabelBold}>
+                <FormattedMessage id="certificate.block" />:
+              </span>
               <span className={styles.LabelSmall}>{block}</span>
             </div>
           </div>
@@ -254,7 +280,7 @@ class Verify extends Component<Props> {
               className={`${styles.RowLabel} ${styles.LabelBold}`}
               style={{ width: 'auto', textTransform: 'none' }}
             >
-              Amount
+              <FormattedMessage id="certificate.amount" />
             </div>
             <span className={styles.LabelAmount} style={{ marginLeft: '20px' }}>
               {amount ? `${formatDigit(amount)} STG` : ''}
@@ -263,7 +289,7 @@ class Verify extends Component<Props> {
         </div>
         <div className={styles.ActionsContainer}>
           <Button type="OutlinePrimary" onClick={this.onVerify}>
-            Verify
+            <FormattedMessage id="button.verify" />
           </Button>
         </div>
       </Modal>
@@ -274,4 +300,4 @@ class Verify extends Component<Props> {
 export default connect(
   () => ({}),
   dispatch => bindActionCreators(NodeActions, dispatch)
-)(Verify);
+)(injectIntl(Verify));

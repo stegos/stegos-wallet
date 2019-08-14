@@ -11,10 +11,12 @@ import Modal from '../common/Modal/Modal';
 import Backup from './Backup/Backup';
 import DeleteAccount from './DeleteAccount/DeleteAccount';
 import styles from './EditAccount.css';
+import type { Account } from '../../reducers/types';
 import AccountName from '../Accounts/Account/AccountName';
 
 type Props = {
   accountId: number,
+  accounts: Account[],
   onDelete: string => void,
   visible: boolean,
   onApply: () => void,
@@ -154,10 +156,14 @@ class EditAccount extends PureComponent<Props> {
     const { form } = this.state;
     const { accountId, visible, accounts, intl } = this.props;
     const account = accounts[accountId];
+    const showBackup = form === 'backup';
     return (
       <Modal
         options={{
           title: intl.formatMessage({ id: 'edit.account.title' }),
+          subtitle: showBackup
+            ? intl.formatMessage({ id: 'edit.account.backup.subtitle' })
+            : '',
           type: 'big',
           visible,
           onClose: this.hide.bind(this)
@@ -172,7 +178,7 @@ class EditAccount extends PureComponent<Props> {
             onCancel={this.cancelDeleting.bind(this)}
           />
         )}
-        {form === 'backup' && (
+        {showBackup && (
           <Backup
             accountId={accountId}
             onClose={this.onPhraseClosed.bind(this)}

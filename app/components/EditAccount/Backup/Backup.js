@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -15,6 +15,7 @@ type Props = {
   accountId: string,
   accounts: Account[],
   onClose: () => void,
+  writeDownRecoveryPhrase: (number, string[]) => void,
   intl: any
 };
 
@@ -66,6 +67,17 @@ class Backup extends Component<Props> {
     }
   }
 
+  back() {
+    const { accountId, accounts } = this.props;
+    const account = accounts[accountId];
+    const { recoveryPhrase } = account;
+    const words = [];
+    for (let i = 0; i < RECOVERY_PHRASE_LENGTH; i += 1) {
+      words.push({ id: i, value: recoveryPhrase[i] });
+    }
+    this.setState({ step: 0, phrase: words });
+  }
+
   render() {
     const { step, phrase } = this.state;
     const { intl } = this.props;
@@ -94,11 +106,21 @@ class Backup extends Component<Props> {
           onChange={e => this.handleRecoveryChange(e)}
         />
         <div className={styles.ActionsContainer}>
-          <Button type="OutlinePrimary" onClick={() => this.next()}>
-            <FormattedMessage
-              id={step === 0 ? 'button.written.down' : 'button.done'}
-            />
-          </Button>
+          {step === 0 && (
+            <Button type="OutlinePrimary" onClick={() => this.next()}>
+              <FormattedMessage id="button.written.down" />
+            </Button>
+          )}
+          {step !== 0 && (
+            <Fragment>
+              <Button type="OutlineDisabled" onClick={() => this.back()}>
+                <FormattedMessage id="button.back" />
+              </Button>
+              <Button type="OutlinePrimary" onClick={() => this.next()}>
+                <FormattedMessage id="button.done" />
+              </Button>
+            </Fragment>
+          )}
         </div>
       </div>
     );

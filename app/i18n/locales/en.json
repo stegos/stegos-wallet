@@ -40,6 +40,7 @@
   "account.restore.description": "Click 'Restore from recovery phrase' button to restore your existing account.",
 
   "edit.account.title": "Edit Account",
+  "edit.account.backup.subtitle": "Account Backup",
   "edit.account.name.title": "Account Name",
   "edit.account.name.description": "Rename the account",
   "edit.account.backup.title": "Account Backup",
@@ -95,6 +96,18 @@
   "chart.year": "Year",
 
   "transactions.list.title": "Last operations",
+  "transactions.list.certificate": "Certificate",
+
+  "transaction.type.send": "Send",
+  "transaction.type.receive": "Receive",
+  "transaction.status.created": "created",
+  "transaction.status.accepted": "accepted",
+  "transaction.status.rejected": "rejected",
+  "transaction.status.prepare": "prepare",
+  "transaction.status.rollback": "rollback",
+  "transaction.status.committed": "committed",
+  "transaction.status.conflicted": "conflicted",
+
   "portfolio.description.one": "Here's the summary of your 1 account",
   "portfolio.description.many": "Here's the summary of your {size} accounts",
 
@@ -113,8 +126,9 @@
   "button.apply": "Apply",
   "button.unlock": "Unlock",
   "button.backup": "Backup",
+  "button.back": "Back",
   "button.done": "Done",
-  "button.verify": "Verify",
+  "button.verify": "Verify Certificate",
   "button.close": "Close",
   "button.restore": "Restore",
   "button.delete.account": "Delete account",
@@ -156,6 +170,21 @@
   "alert.recovery.phrase.is.incorrect": "The recovery phrase is incorrect. Please verify it, correct and try again.",
   "alert.password.is.incorrect": "The password is incorrect. Please try again.",
   "alert.default.error": "An error occurred.",
+
+  "certificate.title": "Payment Certificate",
+  "certificate.data.title": "Transaction data",
+  "certificate.verification.title": "Transaction verification",
+  "certificate.sender": "Sender",
+  "certificate.recipient": "Recipient",
+  "certificate.sender.address": "Sender address",
+  "certificate.recipient.address": "Recipient address",
+  "certificate.rvalue": "R-value",
+  "certificate.id": "UTXO ID",
+  "certificate.block": "UTXO Block No",
+  "certificate.amount": "Amount",
+  "certificate.generated": "Generated on",
+  "certificate.verification.valid": "Valid",
+  "certificate.verification.failed": "Failed",
 
   "account.default.name": "Account #{id}"
 }
