@@ -1,9 +1,10 @@
 import { MiddlewareAPI } from 'redux';
 import crypto from 'crypto';
-import type { Action, Dispatch, GetState } from '../reducers/types';
+import type { Action, Dispatch } from '../reducers/types';
 import { WS_CLOSED, WS_ERROR, WS_MESSAGE, WS_OPEN } from './actionsTypes';
 
 let ws = null;
+let apiToken = null;
 let isOpened = false;
 let shouldReconnect = true;
 let wsUrl: string | null = null;
@@ -13,15 +14,17 @@ const algorithm = 'aes-128-ctr'; // todo config
 const tokenLength = 16; // todo config
 let messageCounter = 1;
 const messages = {};
+const listeners = [];
 
 export const connect = (store: MiddlewareAPI, { payload }: Action) => {
   close();
-  const { dispatch, getState } = store;
+  const { dispatch } = store;
   const { url } = payload;
+  apiToken = payload.token;
   wsUrl = url;
   ws = new WebSocket(url);
   ws.onopen = () => onOpen(dispatch);
-  ws.onmessage = evt => onMessage(dispatch, getState, evt);
+  ws.onmessage = evt => onMessage(store, evt);
   ws.onclose = () => onClose(store);
   ws.onerror = () => onError(store);
 };
@@ -36,9 +39,6 @@ export const disconnect = () => {
 
 export const send = (store: MiddlewareAPI, { payload }: Action) => {
   if (ws) {
-    const state = store.getState();
-    const { node } = state;
-    const { apiToken } = node;
     if (!apiToken) return;
     ws.send(encrypt(JSON.stringify(payload), apiToken).toString('utf8'));
   } else {
@@ -46,15 +46,9 @@ export const send = (store: MiddlewareAPI, { payload }: Action) => {
   }
 };
 
-export const sendSync = (
-  payload: any,
-  getState: GetState // fixme
-) =>
+export const sendSync = (payload: any) =>
   new Promise((resolve, reject) => {
     if (ws) {
-      const state = getState();
-      const { node } = state;
-      const { apiToken } = node;
       if (!apiToken) return;
       ws.send(
         encrypt(
@@ -77,6 +71,15 @@ const close = (code?: number, reason?: string) => {
   }
 };
 
+export const subscribe = (listener: (data: string) => {}) => {
+  listeners.push(listener);
+};
+
+export const unsubscribe = (listener: (data: string) => {}) => {
+  const index = listeners.indexOf(listener);
+  if (index > -1) listeners.splice(index, 1);
+};
+
 const onOpen = (dispatch: Dispatch) => {
   if (reconnectionInterval) {
     clearInterval(reconnectionInterval);
@@ -86,19 +89,12 @@ const onOpen = (dispatch: Dispatch) => {
   isOpened = true;
 };
 
-const onMessage = (
-  dispatch: Dispatch,
-  getState: GetState,
-  evt: MessageEvent
-) => {
-  const state = getState();
-  const { node } = state;
-  const { apiToken } = node;
+const onMessage = (store: MiddlewareAPI, evt: MessageEvent) => {
   if (!apiToken) return;
   const mes = decrypt(base64ToArrayBuffer(evt.data), apiToken);
   const data = JSON.parse(mes);
   const { id } = data;
-  dispatch({ type: WS_MESSAGE, payload: data });
+  store.dispatch({ type: WS_MESSAGE, payload: data });
   if (id !== null) {
     if (messages[id]) {
       if (!data.error) messages[id].resolve(data);

@@ -5,7 +5,8 @@ import * as NodeActions from '../actions/node';
 
 function mapStateToProps(state) {
   return {
-    node: state.node
+    node: state.node,
+    settings: state.settings
   };
 }
 

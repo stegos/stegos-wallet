@@ -42,3 +42,15 @@ export const getEmptyRecoveryPhrase = () => {
   }
   return words;
 };
+
+export const formatDateForWs = ts => {
+  const date = new Date(ts);
+  return `${date.getFullYear()}-${toTwoDigits(
+    date.getMonth() + 1
+  )}-${toTwoDigits(date.getDate())}T00:00:00.000000000Z`;
+};
+
+export const getYearAgoTimestamp = () => {
+  const now = new Date();
+  return formatDateForWs(now.setFullYear(now.getFullYear() - 1));
+};
