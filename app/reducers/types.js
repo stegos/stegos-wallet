@@ -1,7 +1,7 @@
 import type { Dispatch as ReduxDispatch, Store as ReduxStore } from 'redux';
 
 export type SettingsStateType = {
-  isDbExist: boolean | null,
+  isFirstLaunch: boolean | null,
   isBootstrappingComplete: boolean,
   isPasswordSet: boolean | null,
   password: string,

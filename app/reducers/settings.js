@@ -1,6 +1,6 @@
 import type { Action, SettingsStateType } from './types';
 import {
-  CHECK_DB_EXISTENCE,
+  SET_FIRST_LAUNCH,
   HIDE_ERROR,
   LOCK_WALLET,
   SET_AUTO_LOCK_TIMEOUT,
@@ -13,7 +13,7 @@ import {
 import { COMPLETE_ONBOARDING } from '../actions/node';
 
 const initialState = {
-  isDbExist: null,
+  isFirstLaunch: null,
   isBootstrappingComplete: false,
   isPasswordSet: null,
   password: null,
@@ -30,10 +30,10 @@ export default function settings(
 ) {
   const { payload } = action;
   switch (action.type) {
-    case CHECK_DB_EXISTENCE:
+    case SET_FIRST_LAUNCH:
       return {
         ...state,
-        isDbExist: payload
+        isFirstLaunch: payload
       };
     case SET_PASSWORD:
       return {
