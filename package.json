@@ -93,6 +93,7 @@
         "msi"
       ]
     },
+    "icon" : "resources/icons/512x512.png",
     "linux": {
       "target": [
         "tar.gz",
@@ -228,11 +229,11 @@
     "testcafe-react-selectors": "^3.0.0",
     "url-loader": "^1.1.2",
     "webpack": "^4.26.0",
-    "webpack-bundle-analyzer": "^3.0.3",
+    "webpack-bundle-analyzer": "^3.3.2",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.10",
+    "webpack-dev-server": "^3.1.11",
     "webpack-merge": "^4.1.4",
-    "yarn": "^1.16.0"
+    "yarn": "^1.17.3"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.5.0",

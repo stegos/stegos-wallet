@@ -66,8 +66,9 @@ class Receive extends Component<Props> {
   }
 
   onAddressCopied() {
+    const { selectedAccount } = this.state;
     this.setState({
-      selectedAccount: null,
+      selectedAccount,
       qrcodeDataUrl: null,
       step: 0
     });

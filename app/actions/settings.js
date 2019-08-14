@@ -9,7 +9,7 @@ import {
 } from '../db/db';
 import { sendSync } from '../ws/client';
 
-export const CHECK_DB_EXISTENCE = 'CHECK_DB_EXISTENCE';
+export const SET_FIRST_LAUNCH = 'SET_FIRST_LAUNCH';
 export const SET_PASSWORD = 'SET_PASSWORD';
 export const SET_SETTINGS = 'SET_SETTINGS';
 export const INIT_ACCOUNTS = 'INIT_ACCOUNTS';
@@ -20,9 +20,9 @@ export const HIDE_ERROR = 'HIDE_ERROR';
 export const LOCK_WALLET = 'LOCK_WALLET';
 export const UNLOCK_WALLET = 'UNLOCK_WALLET';
 
-export const checkDbExistence = () => (dispatch: Dispatch) => {
+export const checkFirstLaunch = () => (dispatch: Dispatch) => {
   const exist = isDbExist();
-  dispatch({ type: CHECK_DB_EXISTENCE, payload: exist });
+  dispatch({ type: SET_FIRST_LAUNCH, payload: exist });
 };
 
 export const setPassword = (pass: string) => (dispatch: Dispatch) => {
@@ -105,7 +105,7 @@ export const showError = (error: string) => (dispatch: Dispatch) => {
 
 export const lockWallet = () => (dispatch: Dispatch, getState: GetState) => {
   Object.entries(getState().accounts.items).map(account =>
-    sendSync({ type: 'seal', account_id: account[0] }, getState)
+    sendSync({ type: 'seal', account_id: account[0] })
   );
   dispatch({ type: LOCK_WALLET });
 };
@@ -123,10 +123,7 @@ export const unlockWallet = (password: string) => async (
     try {
       await Promise.all(
         Object.entries(getState().accounts.items).map(account =>
-          sendSync(
-            { type: 'unseal', password, account_id: account[0] },
-            getState
-          )
+          sendSync({ type: 'unseal', password, account_id: account[0] })
         )
       );
     } catch (e) {
@@ -156,14 +153,11 @@ export const changePassword = (newPass: string, oldPass: string) => (
       await setNewPassword(newPass, async () => {
         await Promise.all(
           Object.entries(getState().accounts.items).map(account =>
-            sendSync(
-              {
-                type: 'change_password',
-                new_password: newPass,
-                account_id: account[0]
-              },
-              getState
-            )
+            sendSync({
+              type: 'change_password',
+              new_password: newPass,
+              account_id: account[0]
+            })
           )
         );
       });

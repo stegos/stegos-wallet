@@ -1,6 +1,6 @@
 // @flow
 import React, { PureComponent } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { formatDigit } from '../../../../utils/format';
 import Icon from '../../../common/Icon/Icon';
 import PaymentCertificate from '../../../PaymentCertificate/PaymentCertificate';
@@ -10,24 +10,11 @@ import type { Transaction } from '../../../../reducers/types';
 
 type Props = {
   transactions: Transaction[],
-  sender: string
+  sender: string,
+  intl: any
 };
 
-export default class TransactionsList extends PureComponent<Props> {
-  static getDate(date: Date) {
-    const locale = 'en-us';
-    const month = date.toLocaleString(locale, { month: 'short' });
-    const day = `0${date.getDate()}`.substr(-2);
-    const year = date.getFullYear();
-    return `${month} ${day}, ${year}`;
-  }
-
-  static getTime(date: Date) {
-    const hours = `0${date.getHours()}`.substr(-2);
-    const minutes = `0${date.getMinutes()}`.substr(-2);
-    return `${hours}:${minutes}`;
-  }
-
+class TransactionsList extends PureComponent<Props> {
   state = {
     tx: null,
     showCertificate: false
@@ -47,7 +34,7 @@ export default class TransactionsList extends PureComponent<Props> {
   }
 
   renderTransactions() {
-    const { transactions } = this.props;
+    const { transactions, intl } = this.props;
     if (!transactions || transactions.length === 0) {
       return null;
     }
@@ -63,12 +50,26 @@ export default class TransactionsList extends PureComponent<Props> {
               size="24"
             />
           </div>
-          <span className={styles.TransactionTitle}>{item.type}</span>
+          <span className={styles.TransactionTitle}>
+            <FormattedMessage
+              id={`transaction.type.${item.type.toLowerCase()}`}
+            />
+          </span>
           <div className={styles.TransactionDate}>
-            <span className={styles.TransactionStatus}>{item.status}</span>
+            {item.status && (
+              <span className={styles.TransactionStatus}>
+                <FormattedMessage
+                  id={`transaction.status.${item.status.toLowerCase()}`}
+                />
+              </span>
+            )}
             <div className={styles.TransactionDateTime}>
               <span className={styles.TransactionText}>
-                {TransactionsList.getDate(item.timestamp)}
+                {intl.formatDate(item.timestamp, {
+                  month: 'short',
+                  day: '2-digit',
+                  year: 'numeric'
+                })}
               </span>
               <div className={styles.TransactionTime}>
                 <Icon
@@ -78,7 +79,7 @@ export default class TransactionsList extends PureComponent<Props> {
                   style={{ marginRight: 8 }}
                 />
                 <span className={styles.TransactionText}>
-                  {TransactionsList.getTime(item.timestamp)}
+                  {intl.formatTime(item.timestamp)}
                 </span>
               </div>
             </div>
@@ -92,7 +93,9 @@ export default class TransactionsList extends PureComponent<Props> {
               onKeyPress={() => false}
             >
               <Icon name="poll" size={24} color="rgba(255,255,255,0.7)" />
-              <span className={styles.TransactionText}>Certificate</span>
+              <span className={styles.TransactionText}>
+                <FormattedMessage id="transactions.list.certificate" />
+              </span>
             </div>
           ) : (
             <div
@@ -145,3 +148,5 @@ export default class TransactionsList extends PureComponent<Props> {
     );
   }
 }
+
+export default injectIntl(TransactionsList);
