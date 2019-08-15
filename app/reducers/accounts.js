@@ -39,6 +39,7 @@ export default function accounts(
     if (
       type !== 'new_micro_block' &&
       type !== 'new_macro_block' &&
+      type !== 'rollback_micro_block' &&
       type !== 'sync_changed' &&
       remote.process.env.NODE_ENV === 'development'
     ) {
@@ -105,24 +106,6 @@ export default function accounts(
                 : t
             )
           ]
-        });
-      case 'received':
-        return setAccountProps({
-          transactions:
-            payload.comment === 'Change' // todo fix
-              ? account.transactions
-              : [
-                  {
-                    type: 'Receive',
-                    amount: payload.amount,
-                    utxo: payload.utxo,
-                    timestamp: payload.timestamp
-                      ? new Date(payload.timestamp)
-                      : new Date(),
-                    id: payload.utxo
-                  },
-                  ...account.transactions
-                ]
         });
       default:
         return {};

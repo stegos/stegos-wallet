@@ -11,8 +11,9 @@ import Button from './common/Button/Button';
 
 type Props = {
   settings: SettingsStateType,
-  checkDbExistence: () => void,
-  setPassword: string => Promise<void>
+  checkFirstLaunch: () => void,
+  setPassword: string => Promise<void>,
+  intl: any
 };
 
 export default class Welcome extends Component<Props> {
@@ -23,8 +24,8 @@ export default class Welcome extends Component<Props> {
   };
 
   componentDidMount(): void {
-    const { checkDbExistence } = this.props;
-    checkDbExistence();
+    const { checkFirstLaunch } = this.props;
+    checkFirstLaunch();
   }
 
   onNext = () => {
@@ -50,7 +51,7 @@ export default class Welcome extends Component<Props> {
               <FormattedMessage id="welcome.title" />
             </span>
           </div>
-          {settings.isDbExist === false && (
+          {settings.isFirstLaunch === false && (
             <Link to={routes.PROTECT}>
               <span className={styles.StatusBar}>
                 <FormattedMessage id="welcome.click.here" />
@@ -58,7 +59,7 @@ export default class Welcome extends Component<Props> {
             </Link>
           )}
 
-          {settings.isDbExist === true && (
+          {settings.isFirstLaunch === true && (
             <Fragment>
               <FormattedMessage id="welcome.enter.password" tagName="span" />
               <Input

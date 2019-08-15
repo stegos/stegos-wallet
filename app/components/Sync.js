@@ -28,11 +28,11 @@ export default class Sync extends Component<Props> {
   };
 
   render() {
-    const { node } = this.props;
+    const { node, settings } = this.props;
     return (
       <div className={styles.Wrapper}>
         <Header />
-        <BootstrapWizard step={2} />
+        {!settings.isFirstLaunch && <BootstrapWizard step={2} />}
         <div className={styles.Main}>
           <span className={styles.Title}>
             <FormattedMessage
