@@ -11,7 +11,7 @@ import Steps from '../common/Steps/Steps';
 import Verify from '../Verify/Verify';
 import styles from './Receive.css';
 import routes from '../../constants/routes';
-import AccountName from '../Accounts/Account/AccountName';
+import AccountName from '../common/Account/AccountName';
 
 type Props = {
   accounts: AccountsStateType,
@@ -138,6 +138,7 @@ class Receive extends Component<Props> {
 
   copyAddressStep(copied: boolean) {
     const { selectedAccount, qrcodeDataUrl } = this.state;
+    const { intl } = this.props;
     return [
       <div className={styles.QrcodeContainer} key="Qrcode">
         <img
@@ -157,7 +158,7 @@ class Receive extends Component<Props> {
             id="receive.address.for.account"
             values={{ account: '' }}
           />{' '}
-          <b><AccountName account={selectedAccount}/></b>
+          <b>{AccountName.getName(selectedAccount, intl)}</b>
         </span>
       </div>,
       <div className={styles.ActionsContainer} key="Actions">
@@ -190,7 +191,7 @@ class Receive extends Component<Props> {
       <div className={styles.Receive}>
         {titledAccount && (
           <Fragment>
-            <span className={styles.Title}><AccountName account={titledAccount}/></span>
+            <span className={styles.Title}>{AccountName.getName(titledAccount, intl)}</span>
             <Link
               to={{
                 pathname: routes.ACCOUNT,

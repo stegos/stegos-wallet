@@ -7,7 +7,7 @@ import Dropdown from '../../common/Dropdown/Dropdown';
 import Icon from '../../common/Icon/Icon';
 import AccountItem from './AccountItem/AccountItem';
 import styles from './AccountsList.css';
-import AccountName from '../Account/AccountName';
+import AccountName from '../../common/Account/AccountName';
 
 type Props = {
   accounts: AccountsStateType,

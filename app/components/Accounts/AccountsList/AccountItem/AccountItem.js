@@ -8,13 +8,15 @@ import styles from './AccountItem.css';
 import Stg from '../../../../../resources/img/Stg.svg';
 import { Account as AccountType } from '../../../../reducers/types';
 import { POWER_DIVISIBILITY } from '../../../../constants/config';
-import AccountName from '../../Account/AccountName';
+import AccountName from '../../../common/Account/AccountName';
+import { injectIntl } from 'react-intl';
 
 type Props = {
-  account: AccountType
+  account: AccountType,
+  intl: any
 };
 
-export default class Account extends PureComponent<Props> {
+class Account extends PureComponent<Props> {
   get chartDataSource() {
     const { account } = this.props;
     const { transactions } = account;
@@ -37,7 +39,7 @@ export default class Account extends PureComponent<Props> {
   }
 
   render() {
-    const { account } = this.props;
+    const { account, intl } = this.props;
     const balance = account.balance / POWER_DIVISIBILITY;
     return (
       <Link
@@ -48,7 +50,7 @@ export default class Account extends PureComponent<Props> {
         }}
       >
         <div className={styles.NameContainer}>
-          <span className={styles.Name}><AccountName account={account} /></span>
+          <span className={styles.Name}>{AccountName.getName(account, intl)}</span>
         </div>
         <div className={styles.BalanceContainer}>
           <img src={Stg} alt="STG" className={styles.StgIcon} />
@@ -88,3 +90,5 @@ export default class Account extends PureComponent<Props> {
     );
   }
 }
+
+export default injectIntl(Account)

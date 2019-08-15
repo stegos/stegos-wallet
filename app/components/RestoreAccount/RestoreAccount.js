@@ -15,7 +15,7 @@ import styles from './RestoreAccount.css';
 import { RECOVERY_PHRASE_LENGTH } from '../../constants/config';
 import { getEmptyRecoveryPhrase } from '../../utils/format';
 import Busy from '../common/Busy/Busy';
-import AccountName from '../Accounts/Account/AccountName';
+import AccountName from '../common/Account/AccountName';
 
 type Props = {
   accounts: Account[],
@@ -93,7 +93,7 @@ class RestoreAccount extends Component<Props> {
 
   copyAddressStep() {
     const { qrCodeDataUrl, restoredAccountId } = this.state;
-    const { accounts } = this.props;
+    const { accounts, intl } = this.props;
     const account = accounts[restoredAccountId];
     return (
       <div className={styles.QrcodeContainer} key="Qrcode">
@@ -108,7 +108,7 @@ class RestoreAccount extends Component<Props> {
             id="receive.address.for.account"
             values={{ account: '' }}
           />{' '}
-          <b><AccountName account={account} /></b>
+          <b>{AccountName.getName(account, intl)}</b>
         </span>
       </div>
     );
@@ -116,7 +116,7 @@ class RestoreAccount extends Component<Props> {
 
   addressCopiedStep() {
     const { qrCodeDataUrl, restoredAccountId } = this.state;
-    const { accounts } = this.props;
+    const { accounts, intl } = this.props;
     const account = accounts[restoredAccountId];
     return (
       <div className={styles.QrcodeContainer} key="Qrcode">
@@ -133,7 +133,7 @@ class RestoreAccount extends Component<Props> {
             id="receive.address.for.account"
             values={{ account: '' }}
           />{' '}
-          <b><AccountName account={account} /></b>
+          <b>{AccountName.getName(account, intl)}</b>
         </span>
       </div>
     );

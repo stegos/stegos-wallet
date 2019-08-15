@@ -3,7 +3,7 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import type { AccountsStateType } from '../../reducers/types';
-import AccountName from '../Accounts/Account/AccountName';
+import AccountName from '../common/Account/AccountName';
 import Busy from '../common/Busy/Busy';
 import Button from '../common/Button/Button';
 import Dropdown from '../common/Dropdown/Dropdown';
@@ -434,6 +434,7 @@ class Send extends Component<Props> {
   }
 
   transactionSent() {
+    const { intl } = this.props;
     const { account } = this.state;
     return [
       <div className={styles.TransactionSentContainer} key="Accounts">
@@ -449,7 +450,7 @@ class Send extends Component<Props> {
             values={{ account: '' }}
           />{' '}
           <b>
-            <AccountName account={account} />
+            {AccountName.getName(account, intl)}
           </b>
           .
         </p>
@@ -478,7 +479,7 @@ class Send extends Component<Props> {
           {titledAccount && (
             <Fragment>
               <span className={styles.Title}>
-                <AccountName account={titledAccount} />
+                {AccountName.getName(titledAccount, intl)}
               </span>
               <Link
                 to={{

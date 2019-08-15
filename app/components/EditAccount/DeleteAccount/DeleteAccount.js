@@ -6,7 +6,7 @@ import Icon from '../../common/Icon/Icon';
 import type { Account } from '../../../reducers/types';
 import Input from '../../common/Input/Input';
 import styles from './DeleteAccount.css';
-import AccountName from '../../Accounts/Account/AccountName';
+import AccountName from '../../common/Account/AccountName';
 
 type Props = {
   account: Account,

@@ -12,7 +12,7 @@ import Backup from './Backup/Backup';
 import DeleteAccount from './DeleteAccount/DeleteAccount';
 import styles from './EditAccount.css';
 import type { Account } from '../../reducers/types';
-import AccountName from '../Accounts/Account/AccountName';
+import AccountName from '../common/Account/AccountName';
 
 type Props = {
   accountId: number,
