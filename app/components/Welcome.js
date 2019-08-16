@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import routes from '../constants/routes';
 import styles from './Welcome.css';
-import logo from '../../resources/img/StegosLogoVertRGB.png';
+import logo from '../../resources/img/StegosLogoVertRGB.svg';
 import type { SettingsStateType } from '../reducers/types';
 import Input from './common/Input/Input';
 import Button from './common/Button/Button';

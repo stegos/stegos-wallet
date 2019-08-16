@@ -9,6 +9,7 @@ type Props = {
   label?: string,
   error?: string,
   showError?: string,
+  errorOutside?: boolean,
   onInput?: InputEvent => void,
   onChange?: InputEvent => void,
   name?: string,
@@ -31,6 +32,7 @@ export default class Input extends Component<Props> {
     label: null,
     error: null,
     showError: false,
+    errorOutside: false,
     onInput: undefined,
     onChange: undefined,
     name: '',
@@ -53,6 +55,7 @@ export default class Input extends Component<Props> {
       label,
       error,
       showError,
+      errorOutside,
       name,
       className,
       noLabel,
@@ -81,7 +84,19 @@ export default class Input extends Component<Props> {
           autoFocus={autoFocus}
           style={{ resize }}
         />
-        {showError && error && <span className={styles.Error}>{error}</span>}
+        {showError && error && (
+          <span
+            className={styles.Error}
+            style={
+              errorOutside && {
+                position: 'absolute',
+                left: '100%'
+              }
+            }
+          >
+            {error}
+          </span>
+        )}
       </div>
     );
   }

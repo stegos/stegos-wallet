@@ -193,6 +193,7 @@ class WalletSettings extends Component<Props> {
               className={styles.Input}
               type="password"
               error={oldPasswordError}
+              errorOutside
               showError
             />
           )}
@@ -204,6 +205,7 @@ class WalletSettings extends Component<Props> {
             className={styles.Input}
             type="password"
             error={newPasswordError}
+            errorOutside
             showError
           />
           <Input
@@ -216,6 +218,7 @@ class WalletSettings extends Component<Props> {
             className={styles.Input}
             type="password"
             error={newPasswordRepeatError}
+            errorOutside
             showError
           />
           <div className={styles.AutoLockContainer}>
