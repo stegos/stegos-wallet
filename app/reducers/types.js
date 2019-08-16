@@ -1,6 +1,6 @@
 import type { Dispatch as ReduxDispatch, Store as ReduxStore } from 'redux';
 
-export type SettingsStateType = {
+export type AppStateType = {
   isFirstLaunch: boolean | null,
   isBootstrappingComplete: boolean,
   isPasswordSet: boolean | null,
@@ -9,7 +9,8 @@ export type SettingsStateType = {
   isTermsAccepted: boolean,
   autoLockTimeout: number,
   isLocked: boolean,
-  error: string
+  error: string,
+  waiting: boolean
 };
 
 export type NodeStateType = {
@@ -79,7 +80,7 @@ export type TransactionStatus =
 export type TransactionType = 'Send' | 'Receive';
 
 export type State = {
-  settings: SettingsStateType,
+  settings: AppStateType,
   node: NodeStateType,
   accounts: AccountsStateType
 };

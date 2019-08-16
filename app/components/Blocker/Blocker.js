@@ -8,10 +8,10 @@ import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
 import Modal from '../common/Modal/Modal';
 import styles from './Blocker.css';
-import type { SettingsStateType } from '../../reducers/types';
+import type { AppStateType } from '../../reducers/types';
 
 type Props = {
-  settings: SettingsStateType,
+  settings: AppStateType,
   unlockWallet: string => void,
   intl: any
 };
@@ -38,7 +38,7 @@ class Blocker extends Component<Props> {
         })
       )
       .catch(e => {
-        showError(e.message || 'Unlock wallet failed, please try again.');
+        showError(e.message || 'Unlock wallet failed, please try again.'); // todo to action
         this.setState({
           password: '',
           unlocking: false

@@ -5,12 +5,12 @@ import { FormattedMessage } from 'react-intl';
 import routes from '../constants/routes';
 import styles from './Welcome.css';
 import logo from '../../resources/img/StegosLogoVertRGB.png';
-import type { SettingsStateType } from '../reducers/types';
+import type { AppStateType } from '../reducers/types';
 import Input from './common/Input/Input';
 import Button from './common/Button/Button';
 
 type Props = {
-  settings: SettingsStateType,
+  settings: AppStateType,
   checkFirstLaunch: () => void,
   setPassword: string => Promise<void>,
   intl: any
