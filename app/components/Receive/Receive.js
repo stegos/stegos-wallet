@@ -114,9 +114,6 @@ class Receive extends Component<Props> {
           >
             <FormattedMessage id="button.verify" />
           </Button>
-          <Button type="OutlineDisabled">
-            <FormattedMessage id="button.cancel" />
-          </Button>
           <Button
             type="OutlinePrimary"
             iconRight="keyboard_backspace"
@@ -145,18 +142,13 @@ class Receive extends Component<Props> {
           className={styles.Qrcode}
         />
         <span className={styles.AccountAddress}>
-          {copied ? (
+          {copied && (
             <div style={{ color: '#EE6920' }}>
               <FormattedMessage id="receive.address.copied" />
             </div>
-          ) : (
-            selectedAccount.address
-          )}{' '}
-          <FormattedMessage
-            id="receive.address.for.account"
-            values={{ account: '' }}
-          />{' '}
-          <b>{selectedAccount.name}</b>
+          )}
+          <FormattedMessage id="receive.address.for.account" />{' '}
+          <b>{selectedAccount.name}</b>: {selectedAccount.address}
         </span>
       </div>,
       <div className={styles.ActionsContainer} key="Actions">
