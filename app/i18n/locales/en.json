@@ -103,7 +103,7 @@
   "transaction.status.created": "created",
   "transaction.status.accepted": "accepted",
   "transaction.status.rejected": "rejected",
-  "transaction.status.prepare": "prepare",
+  "transaction.status.prepared": "prepared",
   "transaction.status.rollback": "rollback",
   "transaction.status.committed": "committed",
   "transaction.status.conflicted": "conflicted",
