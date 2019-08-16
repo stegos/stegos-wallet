@@ -1,6 +1,10 @@
 // @flow
+import { remote } from 'electron';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import fs from 'fs';
+import pdf from 'pdfjs';
+import Button from '../common/Button/Button';
 import Modal from '../common/Modal/Modal';
 import styles from './PaymentCertificate.css';
 import { POWER_DIVISIBILITY } from '../../constants/config';
@@ -24,23 +28,132 @@ class PaymentCertificate extends Component<Props> {
     }
   }
 
+  downloadAsPdf() {
+    const { intl, tx, sender } = this.props;
+
+    remote.dialog.showSaveDialog({}, filename => {
+      if (!filename) return;
+      const doc = new pdf.Document({});
+      doc.text(this.title, { fontSize: 24, textAlign: 'center' });
+      doc.text(`${this.subtitle}\n\n`, { fontSize: 6, textAlign: 'center' });
+      doc.text(`${intl.formatMessage({ id: 'certificate.data.title' })}\n\n`, {
+        fontSize: 10
+      });
+      doc.text(
+        `${intl.formatMessage({ id: 'certificate.sender' })}: ${sender}`,
+        { fontSize: 8 }
+      );
+      doc.text(
+        `${intl.formatMessage({ id: 'certificate.recipient' })}: ${
+          this.output.recipient
+        }`,
+        { fontSize: 8 }
+      );
+      doc.text(
+        `${intl.formatMessage({ id: 'certificate.rvalue' })}: ${
+          this.output.rvalue
+        }`,
+        { fontSize: 8 }
+      );
+      doc.text(
+        `${intl.formatMessage({ id: 'certificate.utxo' })}: ${
+          this.output.utxo
+        }`,
+        { fontSize: 8 }
+      );
+      const verification = doc.table({
+        widths: [null, null, null],
+        padding: 5
+      });
+      const row0 = verification.row();
+      row0.cell(intl.formatMessage({ id: 'certificate.verification.title' }), {
+        fontSize: 10
+      });
+      row0.cell('');
+      row0.cell(this.verificationData, { fontSize: 8 });
+      const row1 = verification.row();
+      const valid = intl.formatMessage({
+        id: 'certificate.verification.valid'
+      });
+      row1.cell(
+        `${intl.formatMessage({ id: 'certificate.sender' })}: ${valid}`,
+        { fontSize: 8 }
+      );
+      row1.cell(
+        `${intl.formatMessage({ id: 'certificate.recipient' })}: ${valid}`,
+        { fontSize: 8 }
+      );
+      row1.cell(`${intl.formatMessage({ id: 'certificate.utxo' })}: ${valid}`, {
+        fontSize: 8
+      });
+      const row2 = verification.row();
+      row2.cell('');
+      row2.cell('');
+      row2.cell(
+        `${intl.formatMessage({ id: 'certificate.block' })}: ${tx.epoch}`,
+        { fontSize: 8 }
+      );
+      const row3 = verification.row();
+      row3.cell(
+        `${intl.formatMessage({ id: 'certificate.amount' })}: ${
+          this.amount
+        } STG`,
+        { fontSize: 8 }
+      );
+      row3.cell('');
+      row3.cell('');
+      doc.pipe(fs.createWriteStream(filename));
+      doc.end();
+    });
+  }
+
+  get title() {
+    const { intl } = this.props;
+    return intl.formatMessage({ id: 'certificate.title' });
+  }
+
+  get subtitle() {
+    const { tx, intl } = this.props;
+    return `${intl.formatMessage({
+      id: 'certificate.generated'
+    })} ${intl.formatDate(tx.timestamp, {
+      month: 'short',
+      day: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })}`;
+  }
+
+  get output() {
+    const { tx } = this.props;
+    return tx.outputs.filter(o => !o.is_change)[0];
+  }
+
+  get verificationData() {
+    const { intl } = this.props;
+    return intl.formatDate(new Date(), {
+      month: '2-digit',
+      day: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  get amount() {
+    const { tx } = this.props;
+    return formatDigit(tx.amount / POWER_DIVISIBILITY);
+  }
+
   render() {
-    const { visible, tx, sender, intl } = this.props;
+    const { visible, tx, sender } = this.props;
     if (!tx) return null;
-    const output = tx.outputs.filter(o => !o.is_change)[0];
     return (
       <Modal
         options={{
-          title: intl.formatMessage({ id: 'certificate.title' }),
-          subtitle: `${intl.formatMessage({
-            id: 'certificate.generated'
-          })} ${intl.formatDate(tx.timestamp, {
-            month: 'short',
-            day: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-          })}`,
+          title: this.title,
+          subtitle: this.subtitle,
           type: 'big',
           visible,
           onClose: this.close.bind(this)
@@ -64,19 +177,19 @@ class PaymentCertificate extends Component<Props> {
             <div className={`${styles.RowLabel} ${styles.LabelBold}`}>
               <FormattedMessage id="certificate.recipient" />:
             </div>
-            <span className={styles.LabelSmall}>{output.recipient}</span>
+            <span className={styles.LabelSmall}>{this.output.recipient}</span>
           </div>
           <div className={styles.Row}>
             <div className={`${styles.RowLabel} ${styles.LabelBold}`}>
               <FormattedMessage id="certificate.rvalue" />:
             </div>
-            <span className={styles.LabelSmall}>{output.rvalue}</span>
+            <span className={styles.LabelSmall}>{this.output.rvalue}</span>
           </div>
           <div className={styles.Row}>
             <div className={`${styles.RowLabel} ${styles.LabelBold}`}>
-              <FormattedMessage id="certificate.id" />:
+              <FormattedMessage id="certificate.utxo" />:
             </div>
-            <span className={styles.LabelSmall}>{output.utxo}</span>
+            <span className={styles.LabelSmall}>{this.output.utxo}</span>
           </div>
           <div
             className={styles.Row}
@@ -92,13 +205,7 @@ class PaymentCertificate extends Component<Props> {
               className={styles.LabelSmall}
               style={{ textAlign: 'right', marginLeft: 'auto' }}
             >
-              {intl.formatDate(new Date(), {
-                month: 'numeric',
-                day: 'numeric',
-                year: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric'
-              })}
+              {this.verificationData}
             </span>
           </div>
           <div className={styles.VerificationContainer}>
@@ -120,7 +227,7 @@ class PaymentCertificate extends Component<Props> {
             </div>
             <div className={styles.VerificationRow}>
               <span className={styles.LabelBold}>
-                <FormattedMessage id="certificate.id" />
+                <FormattedMessage id="certificate.utxo" />
               </span>
               <span className={styles.LabelSuccess}>
                 <FormattedMessage id="certificate.verification.valid" />
@@ -140,12 +247,17 @@ class PaymentCertificate extends Component<Props> {
               className={`${styles.RowLabel} ${styles.LabelBold}`}
               style={{ width: 'auto', textTransform: 'none' }}
             >
-              Amount
+              <FormattedMessage id="certificate.amount" />
             </div>
             <span className={styles.LabelAmount} style={{ marginLeft: '20px' }}>
-              {formatDigit(tx.amount / POWER_DIVISIBILITY)} STG
+              {this.amount} STG
             </span>
           </div>
+        </div>
+        <div className={styles.ActionsContainer}>
+          <Button type="OutlinePrimary" onClick={() => this.downloadAsPdf()}>
+            Download as PDF
+          </Button>
         </div>
       </Modal>
     );

@@ -179,7 +179,7 @@
   "certificate.sender.address": "Sender address",
   "certificate.recipient.address": "Recipient address",
   "certificate.rvalue": "R-value",
-  "certificate.id": "UTXO ID",
+  "certificate.utxo": "UTXO ID",
   "certificate.block": "UTXO Block No",
   "certificate.amount": "Amount",
   "certificate.generated": "Generated on",

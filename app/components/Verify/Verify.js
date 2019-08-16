@@ -199,14 +199,14 @@ class Verify extends Component<Props> {
           </div>
           <div className={styles.Row}>
             <div className={`${styles.RowLabel} ${styles.LabelBold}`}>
-              <FormattedMessage id="certificate.id" />:
+              <FormattedMessage id="certificate.utxo" />:
             </div>
             <Input
               value={utxo}
               onChange={e =>
                 this.setState({ utxo: e.target.value, utxoError: '' })
               }
-              placeholder={intl.formatMessage({ id: 'certificate.id' })}
+              placeholder={intl.formatMessage({ id: 'certificate.utxo' })}
               noLabel
               error={utxoError}
               showError={!!utxoError}
@@ -261,7 +261,7 @@ class Verify extends Component<Props> {
             </div>
             <div className={styles.VerificationRow}>
               <span className={styles.LabelBold}>
-                <FormattedMessage id="certificate.id" />:
+                <FormattedMessage id="certificate.utxo" />:
               </span>
               <span
                 className={verified ? styles.LabelSuccess : styles.LabelFailed}
