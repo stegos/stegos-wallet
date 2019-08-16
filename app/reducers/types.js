@@ -63,7 +63,8 @@ export type Transaction = {
   timestamp: string,
   amount: number,
   hasCertificate: boolean,
-  status?: TransactionStatus
+  status?: TransactionStatus,
+  sender?: string
 };
 
 export type TransactionStatus =
