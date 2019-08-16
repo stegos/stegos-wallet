@@ -10,7 +10,6 @@ import styles from './Backup.css';
 import * as AccountsActions from '../../../actions/accounts';
 import { RECOVERY_PHRASE_LENGTH } from '../../../constants/config';
 import type { Account } from '../../../reducers/types';
-import Busy from '../../common/Busy/Busy';
 
 type Props = {
   accountId: string,
@@ -25,28 +24,17 @@ class Backup extends Component<Props> {
 
   constructor(props) {
     super(props);
-    this.state = {
-      phrase: null,
-      step: 0
-    };
-  }
-
-  get phrase() {
-    const { phrase } = this.state;
-    if (phrase) {
-      return phrase;
-    }
-    const { accountId, accounts } = this.props;
-    const { recoveryPhrase } = accounts[accountId];
-    if (!recoveryPhrase) {
-      return null;
-    }
+    const { accounts, accountId } = props;
+    const account = accounts[accountId];
+    const { recoveryPhrase } = account;
     const words = [];
     for (let i = 0; i < RECOVERY_PHRASE_LENGTH; i += 1) {
       words.push({ id: i, value: recoveryPhrase[i] });
     }
-    this.setState({phrase: words});
-    return words;
+    this.state = {
+      phrase: words,
+      step: 0
+    };
   }
 
   handleRecoveryChange(phrase: string[]) {
@@ -91,7 +79,7 @@ class Backup extends Component<Props> {
   }
 
   render() {
-    const { step } = this.state;
+    const { step, phrase } = this.state;
     const { intl } = this.props;
     return (
       <div className={styles.Container}>
@@ -111,15 +99,12 @@ class Backup extends Component<Props> {
             }
           />
         </span>
-        account.recoveryPhrase
-        {this.phrase ?
-         <RecoveryPhrase
-           wordsCount={RECOVERY_PHRASE_LENGTH}
-           phrase={this.phrase}
-           readOnly={step === 0}
-           onChange={e => this.handleRecoveryChange(e)}
-         />
-        : ''}
+        <RecoveryPhrase
+          wordsCount={RECOVERY_PHRASE_LENGTH}
+          phrase={phrase}
+          readOnly={step === 0}
+          onChange={e => this.handleRecoveryChange(e)}
+        />
         <div className={styles.ActionsContainer}>
           {step === 0 && (
             <Button type="OutlinePrimary" onClick={() => this.next()}>
@@ -137,10 +122,6 @@ class Backup extends Component<Props> {
             </Fragment>
           )}
         </div>
-        <Busy
-          visible={!this.phrase}
-          title={intl.formatMessage({id: 'backup.waiting'})}
-        />
       </div>
     );
   }

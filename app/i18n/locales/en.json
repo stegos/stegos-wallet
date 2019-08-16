@@ -53,7 +53,6 @@
   "backup.step.two.label": "Verify",
   "backup.step.one.description": "The phrase is case sensitive. Please make sure you write it down. You will need it to restore your account.",
   "backup.step.two.description": "In order to restore your existing account, please fill all words from the recovery phrase in correct order.",
-  "backup.waiting": "Words loading...",
 
   "back.to.account": "Back to the account",
 
