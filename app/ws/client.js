@@ -20,7 +20,7 @@ export const connect = (store: MiddlewareAPI, { payload }: Action) => {
   close();
   const { dispatch } = store;
   const { url } = payload;
-  apiToken = payload.token;
+  apiToken = payload.token || apiToken;
   wsUrl = url;
   ws = new WebSocket(url);
   ws.onopen = () => onOpen(dispatch);
