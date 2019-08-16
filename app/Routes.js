@@ -11,7 +11,7 @@ import ReceivePage from './containers/ReceivePage';
 import Menu from './components/Menu';
 import StatusBar from './components/StatusBar';
 import styles from './Routes.css';
-import AlertModal from './components/Alert/AlertModal';
+import Alert from './components/Alert/Alert';
 
 export default () => (
   <App withIdleBlocking>
@@ -19,7 +19,7 @@ export default () => (
       <StatusBar className={styles.StatusBar} />
       <Menu className={styles.Menu} />
       <Blocker />
-      <AlertModal />
+      <Alert />
       <div className={`${styles.PageScrollWrapper} ScrollBar`}>
         <div className={styles.Page}>
           <Switch>

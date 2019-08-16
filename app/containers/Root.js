@@ -4,7 +4,7 @@ import { remote } from 'electron';
 import React, { Component } from 'react';
 import { connect, Provider } from 'react-redux';
 import BootstrapRoutes from '../BootstrapRoutes';
-import type { SettingsStateType, Store } from '../reducers/types';
+import type { AppStateType, Store } from '../reducers/types';
 import Routes from '../Routes';
 import '../utils/extended';
 import menu from '../contextMenu';
@@ -13,7 +13,7 @@ import { IntlProviderWrapper } from '../i18n/IntlContext';
 type Props = {
   store: Store,
   history: {},
-  settings: SettingsStateType
+  settings: AppStateType
 };
 
 class Root extends Component<Props> {

@@ -10,7 +10,6 @@ import type { Transaction } from '../../../../reducers/types';
 
 type Props = {
   transactions: Transaction[],
-  sender: string,
   intl: any
 };
 
@@ -131,7 +130,6 @@ class TransactionsList extends PureComponent<Props> {
 
   render() {
     const { tx, showCertificate } = this.state;
-    const { sender } = this.props;
     return (
       <div className={styles.TransactionsList}>
         <span className={styles.Title}>
@@ -140,7 +138,6 @@ class TransactionsList extends PureComponent<Props> {
         {this.renderTransactions()}
         <PaymentCertificate
           tx={tx}
-          sender={sender || (tx && tx.sender)}
           visible={showCertificate}
           onClose={() => this.hideCertificate()}
         />

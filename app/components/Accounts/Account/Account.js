@@ -220,10 +220,7 @@ export default class Account extends PureComponent<Props> {
           )}
         </div>
         {!!transactions.length && (
-          <TransactionsList
-            transactions={transactions}
-            sender={account.address}
-          />
+          <TransactionsList transactions={transactions} />
         )}
         {isNewWallet && (
           <div className={styles.BottomActions}>

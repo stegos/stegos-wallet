@@ -6,11 +6,11 @@ import WelcomePage from './containers/WelcomePage';
 import PasswordProtectionPage from './containers/PasswordProtectionPage';
 import SyncPage from './containers/SyncPage';
 import BagsAndTermsPage from './containers/BagsAndTermsPage';
-import AlertModal from './components/Alert/AlertModal';
+import Alert from './components/Alert/Alert';
 
 export default () => (
   <App>
-    <AlertModal />
+    <Alert />
     <Switch>
       <Route exact path={routes.WELCOME} component={WelcomePage} />
       <Route path={routes.SYNC} component={SyncPage} />
