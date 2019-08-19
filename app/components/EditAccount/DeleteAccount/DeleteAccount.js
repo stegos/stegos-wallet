@@ -19,7 +19,9 @@ class DeleteAccount extends Component<Props> {
 
   state = {
     accountName: '',
-    disableDeleteButton: true
+    disableDeleteButton: true,
+    accountNameError: '',
+    showError: false
   };
 
   onChangeAccountName = e => {
@@ -27,14 +29,27 @@ class DeleteAccount extends Component<Props> {
     const newVal = e.target.value;
     this.setState({
       accountName: newVal,
-      disableDeleteButton: account.name !== newVal
+      disableDeleteButton: account.name !== newVal || newVal.length < 2,
+      showError: false
     });
   };
 
   deleteAccount() {
     const { onDelete, account } = this.props;
     const { accountName } = this.state;
-    if (account.name === accountName) onDelete();
+    if (accountName.length < 2) {
+      return this.setState({
+        accountNameError: 'Name should not be shorter than 2 characters',
+        showError: true
+      });
+    }
+    if (account.name !== accountName) {
+      return this.setState({
+        accountNameError: 'Account name does not match',
+        showError: true
+      });
+    }
+    onDelete();
   }
 
   cancel() {
@@ -44,7 +59,12 @@ class DeleteAccount extends Component<Props> {
 
   render() {
     const { account, intl } = this.props;
-    const { accountName, disableDeleteButton } = this.state;
+    const {
+      accountName,
+      disableDeleteButton,
+      accountNameError,
+      showError
+    } = this.state;
     return (
       <div className={styles.Container}>
         <div className={styles.WarnContainer}>
@@ -64,6 +84,12 @@ class DeleteAccount extends Component<Props> {
           value={accountName}
           onChange={this.onChangeAccountName}
           className={styles.InputStyle}
+          error={accountNameError}
+          showError={showError}
+          errorStyle={{
+            position: 'absolute',
+            top: 'calc(18px + 100%)'
+          }}
         />
         <div className={styles.ActionsContainer} key="actions">
           <Button

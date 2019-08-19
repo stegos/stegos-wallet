@@ -16,6 +16,7 @@ type Props = {
   className?: string,
   noLabel?: boolean,
   style?: object,
+  errorStyle?: object,
   readOnly?: boolean,
   isTextarea?: boolean,
   autoFocus?: boolean,
@@ -39,6 +40,7 @@ export default class Input extends Component<Props> {
     className: '',
     noLabel: false,
     style: {},
+    errorStyle: {},
     readOnly: false,
     isTextarea: false,
     autoFocus: false,
@@ -60,6 +62,7 @@ export default class Input extends Component<Props> {
       className,
       noLabel,
       style,
+      errorStyle,
       readOnly,
       isTextarea,
       autoFocus,
@@ -87,12 +90,15 @@ export default class Input extends Component<Props> {
         {showError && error && (
           <span
             className={styles.Error}
-            style={
-              errorOutside && {
-                position: 'absolute',
-                left: '100%'
-              }
-            }
+            style={{
+              ...errorStyle,
+              ...(errorOutside
+                ? {
+                    position: 'absolute',
+                    left: '100%'
+                  }
+                : null)
+            }}
           >
             {error}
           </span>
