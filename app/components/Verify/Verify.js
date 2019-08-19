@@ -1,6 +1,9 @@
 // @flow
+import { remote } from 'electron';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import fs from 'fs';
 import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
 import Modal from '../common/Modal/Modal';
@@ -8,10 +11,14 @@ import styles from './Verify.css';
 import { formatDigit, isBase58 } from '../../utils/format';
 import { validateCertificate } from '../../actions/node';
 import { POWER_DIVISIBILITY } from '../../constants/config';
+import generateCertificatePdf from '../../utils/pdf';
+import Busy from '../common/Busy/Busy';
 
 type Props = {
   visible: boolean,
+  waiting: boolean,
   onClose: () => void,
+  verify: () => void,
   intl: any
 };
 
@@ -30,7 +37,8 @@ class Verify extends Component<Props> {
     date: null,
     verified: null,
     amount: null,
-    block: null
+    block: null,
+    pdfData: null
   };
 
   close() {
@@ -76,16 +84,31 @@ class Verify extends Component<Props> {
 
   onVerify = () => {
     const { sender, recipient, rvalue, utxo } = this.state;
+    const { verify } = this.props;
     if (!this.validate()) {
       return;
     }
-    validateCertificate(sender, recipient, rvalue, utxo)
+    verify(sender, recipient, rvalue, utxo)
       .then(resp => {
+        const block = resp.epoch || '--';
+        const amount = resp.amount / POWER_DIVISIBILITY;
+        const date = resp.timestamp && new Date(resp.timestamp);
         this.setState({
           verified: true,
-          amount: resp.amount / POWER_DIVISIBILITY,
-          block: resp.epoch || '--',
-          date: resp.timestamp && new Date(resp.timestamp)
+          amount,
+          block,
+          date,
+          pdfData: {
+            title: this.title,
+            // subtitle: this.subtitle,// todo
+            sender,
+            recipient,
+            rvalue,
+            utxo,
+            verificationDate: date,
+            block,
+            amount
+          }
         });
         return resp;
       })
@@ -110,8 +133,40 @@ class Verify extends Component<Props> {
     return '';
   }
 
+  get title() {
+    const { intl } = this.props;
+    return intl.formatMessage({ id: 'certificate.title' });
+  }
+
+  get verificationDate() {
+    const { intl } = this.props;
+    const { date } = this.state;
+    return date
+      ? intl.formatDate(date, {
+          month: '2-digit',
+          day: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        })
+      : '';
+  }
+
+  downloadAsPdf() {
+    const { intl } = this.props;
+    const { pdfData } = this.state;
+
+    remote.dialog.showSaveDialog({}, filename => {
+      if (!filename) return;
+      const doc = generateCertificatePdf(intl, pdfData);
+
+      doc.pipe(fs.createWriteStream(filename));
+      doc.end();
+    });
+  }
+
   render() {
-    const { visible, intl } = this.props;
+    const { visible, intl, waiting } = this.props;
     const {
       sender,
       senderError,
@@ -121,7 +176,6 @@ class Verify extends Component<Props> {
       rvalueError,
       utxo,
       utxoError,
-      date,
       verified,
       amount,
       block
@@ -228,15 +282,7 @@ class Verify extends Component<Props> {
               className={styles.LabelSmall}
               style={{ textAlign: 'right', marginLeft: 'auto' }}
             >
-              {date
-                ? intl.formatDate(date, {
-                    month: 'numeric',
-                    day: 'numeric',
-                    year: 'numeric',
-                    hour: 'numeric',
-                    minute: 'numeric'
-                  })
-                : ''}
+              {this.verificationDate}
             </span>
           </div>
           <div className={styles.VerificationContainer}>
@@ -295,10 +341,26 @@ class Verify extends Component<Props> {
           <Button type="OutlinePrimary" onClick={this.onVerify}>
             <FormattedMessage id="button.verify" />
           </Button>
+          {verified === true && (
+            <Button type="OutlinePrimary" onClick={() => this.downloadAsPdf()}>
+              Download as PDF
+            </Button>
+          )}
         </div>
+        <Busy
+          title={intl.formatMessage({
+            id: 'certificate.verifications.waiting'
+          })}
+          visible={waiting}
+        />
       </Modal>
     );
   }
 }
 
-export default injectIntl(Verify);
+export default connect(
+  state => ({ waiting: state.app.waiting }),
+  dispatch => ({
+    verify: (...args) => dispatch(validateCertificate(...args))
+  })
+)(injectIntl(Verify));

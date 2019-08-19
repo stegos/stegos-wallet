@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import type { NodeStateType } from '../reducers/types';
+import type { AppStateType, NodeStateType } from '../reducers/types';
 import Button from './common/Button/Button';
 import Header from './common/Header/Header';
 import ProgressBar from './common/ProgressBar/ProgressBar';
@@ -10,6 +10,7 @@ import BootstrapWizard from './common/Wizard/BootstrapWizard';
 
 type Props = {
   node: NodeStateType,
+  app: AppStateType,
   runNode: () => void,
   onSync: () => void
 };
@@ -28,11 +29,11 @@ export default class Sync extends Component<Props> {
   };
 
   render() {
-    const { node, settings } = this.props;
+    const { node, app } = this.props;
     return (
       <div className={styles.Wrapper}>
         <Header />
-        {!settings.isFirstLaunch && <BootstrapWizard step={2} />}
+        {!app.isFirstLaunch && <BootstrapWizard step={2} />}
         <div className={styles.Main}>
           <span className={styles.Title}>
             <FormattedMessage
