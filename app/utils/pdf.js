@@ -48,7 +48,7 @@ export default function generateCertificatePdf(intl, data) {
   row2.cell('');
   row2.cell('');
   row2.cell(
-    `${intl.formatMessage({ id: 'certificate.block' })}: ${data.block}`,
+    `${intl.formatMessage({ id: 'certificate.block' })}: ${data.block || ''}`,
     { fontSize: 8 }
   );
 

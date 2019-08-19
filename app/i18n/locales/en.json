@@ -185,6 +185,7 @@
   "certificate.generated": "Generated on",
   "certificate.verification.valid": "Valid",
   "certificate.verification.failed": "Failed",
+  "certificate.verifications.waiting": "Verifying...",
 
   "account.default.name": "Account #{id}"
 }

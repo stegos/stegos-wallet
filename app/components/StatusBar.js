@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import * as SettingsActions from '../actions/settings';
+import * as AppActions from '../actions/settings';
 import type { NodeStateType } from '../reducers/types';
 import Button from './common/Button/Button';
 import Header from './common/Header/Header';
@@ -97,9 +97,6 @@ class StatusBar extends PureComponent<Props> {
 }
 
 export default connect(
-  state => ({
-    node: state.node,
-    settings: state.settings
-  }),
-  dispatch => bindActionCreators(SettingsActions, dispatch)
+  state => ({ node: state.node }),
+  dispatch => bindActionCreators(AppActions, dispatch)
 )(injectIntl(StatusBar));
