@@ -26,7 +26,7 @@ const initialState = {
   waiting: false
 };
 
-export default function settings(
+export default function app(
   state: AppStateType = initialState,
   action: Action
 ) {

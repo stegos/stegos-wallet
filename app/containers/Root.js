@@ -13,7 +13,7 @@ import { IntlProviderWrapper } from '../i18n/IntlContext';
 type Props = {
   store: Store,
   history: {},
-  settings: AppStateType
+  app: AppStateType
 };
 
 class Root extends Component<Props> {
@@ -39,11 +39,11 @@ class Root extends Component<Props> {
   }
 
   render() {
-    const { store, history, settings } = this.props;
+    const { store, history, app } = this.props;
     return (
       <Provider store={store}>
         <IntlProviderWrapper>
-          {settings.isBootstrappingComplete ? (
+          {app.isBootstrappingComplete ? (
             <React.Fragment>
               <ConnectedRouter history={history}>
                 <Routes />
@@ -61,5 +61,5 @@ class Root extends Component<Props> {
 }
 
 export default connect(state => ({
-  settings: state.settings
+  app: state.app
 }))(Root);

@@ -10,7 +10,7 @@ import Input from './common/Input/Input';
 import Button from './common/Button/Button';
 
 type Props = {
-  settings: AppStateType,
+  app: AppStateType,
   checkFirstLaunch: () => void,
   setPassword: string => Promise<void>,
   intl: any
@@ -40,7 +40,7 @@ export default class Welcome extends Component<Props> {
     });
 
   render() {
-    const { settings } = this.props;
+    const { app } = this.props;
     const { intl } = this.props;
     return (
       <div className={styles.Main}>
@@ -51,7 +51,7 @@ export default class Welcome extends Component<Props> {
               <FormattedMessage id="welcome.title" />
             </span>
           </div>
-          {settings.isFirstLaunch === false && (
+          {app.isFirstLaunch === false && (
             <Link to={routes.PROTECT}>
               <span className={styles.StatusBar}>
                 <FormattedMessage id="welcome.click.here" />
@@ -59,7 +59,7 @@ export default class Welcome extends Component<Props> {
             </Link>
           )}
 
-          {settings.isFirstLaunch === true && (
+          {app.isFirstLaunch === true && (
             <Fragment>
               <FormattedMessage id="welcome.enter.password" tagName="span" />
               <Input

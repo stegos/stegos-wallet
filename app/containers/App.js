@@ -2,11 +2,14 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as SettingsActions from '../actions/settings';
+import * as AppActions from '../actions/settings';
+import type { AppStateType } from '../reducers/types';
 
 type Props = {
   children: React.Node,
-  withIdleBlocking: boolean
+  withIdleBlocking: boolean,
+  lockWallet: () => {},
+  app: AppStateType
 };
 
 class App extends React.Component<Props> {
@@ -21,8 +24,8 @@ class App extends React.Component<Props> {
   timeout = null;
 
   resetTimer = () => {
-    const { settings, withIdleBlocking } = this.props;
-    const { isLocked, autoLockTimeout } = settings;
+    const { app, withIdleBlocking } = this.props;
+    const { isLocked, autoLockTimeout } = app;
     if (withIdleBlocking && !isLocked) {
       if (this.timeout) {
         clearTimeout(this.timeout);
@@ -44,6 +47,6 @@ class App extends React.Component<Props> {
 }
 
 export default connect(
-  state => ({ settings: state.settings }),
-  dispatch => bindActionCreators(SettingsActions, dispatch)
+  state => ({ app: state.app }),
+  dispatch => bindActionCreators(AppActions, dispatch)
 )(App);

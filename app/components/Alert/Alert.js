@@ -73,6 +73,6 @@ class Alert extends Component<Props> {
 }
 
 export default connect(
-  state => ({ error: state.settings.error }),
+  state => ({ error: state.app.error }),
   dispatch => bindActionCreators(SettingsActions, dispatch)
 )(Alert);

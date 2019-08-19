@@ -8,10 +8,10 @@ import Input from '../common/Input/Input';
 import Modal from '../common/Modal/Modal';
 import styles from './WalletSettings.css';
 import type { AppStateType } from '../../reducers/types';
-import * as SettingsActions from '../../actions/settings';
+import * as AppActions from '../../actions/settings';
 
 type Props = {
-  settings: AppStateType,
+  app: AppStateType,
   visible: boolean,
   onCloseRequest: () => void,
   changePassword: () => void,
@@ -38,8 +38,8 @@ class WalletSettings extends Component<Props> {
 
   constructor(props) {
     super(props);
-    const { settings } = props;
-    const { autoLockTimeout } = settings;
+    const { app } = props;
+    const { autoLockTimeout } = app;
     this.state = {
       ...initialState,
       autoLockTimeout
@@ -69,8 +69,8 @@ class WalletSettings extends Component<Props> {
   };
 
   resetAll = () => {
-    const { settings } = this.props;
-    const { autoLockTimeout } = settings;
+    const { app } = this.props;
+    const { autoLockTimeout } = app;
     this.setState({
       ...initialState,
       autoLockTimeout
@@ -120,8 +120,8 @@ class WalletSettings extends Component<Props> {
       newPasswordRepeat,
       autoLockTimeout
     } = this.state;
-    const { settings, intl } = this.props;
-    const { isPasswordSet } = settings;
+    const { app, intl } = this.props;
+    const { isPasswordSet } = app;
     if (oldPassword !== '' || newPassword !== '') {
       if (isPasswordSet && oldPassword === '') {
         this.setState({
@@ -170,8 +170,8 @@ class WalletSettings extends Component<Props> {
       autoLockTimeout,
       autoLockTimeoutError
     } = this.state;
-    const { visible, settings, intl } = this.props;
-    const { isPasswordSet } = settings;
+    const { visible, app, intl } = this.props;
+    const { isPasswordSet } = app;
     return (
       <Modal
         options={{
@@ -254,6 +254,6 @@ class WalletSettings extends Component<Props> {
 }
 
 export default connect(
-  state => ({ settings: state.settings }),
-  dispatch => bindActionCreators(SettingsActions, dispatch)
+  state => ({ app: state.app }),
+  dispatch => bindActionCreators(AppActions, dispatch)
 )(injectIntl(WalletSettings));
