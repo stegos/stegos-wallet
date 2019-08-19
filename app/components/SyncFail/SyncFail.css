@@ -1,0 +1,45 @@
+.Wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: 100vh;
+}
+
+.Main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-grow: 0.6;
+  margin-top: 60px;
+}
+
+.Container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Title {
+  font-style: normal;
+  font-size: 30px;
+  line-height: 40px;
+  text-align: center;
+  color: #fff;
+  font-weight: 500;
+}
+
+.Label {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: center;
+  letter-spacing: 0.54px;
+  color: #fff;
+}
+
+.FailSvg {
+  width: 110px;
+  height: 110px;
+}
