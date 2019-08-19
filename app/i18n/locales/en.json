@@ -62,7 +62,7 @@
   "receive.step.three.title": "Receive",
   "receive.account.to.credit": "Account To Credit",
   "receive.address.copied": "Address copied",
-  "receive.address.for.account": "Address for account {account}",
+  "receive.address.for.account": "Address for",
 
   "send.title": "Send",
   "send.step.one.title": "Details",

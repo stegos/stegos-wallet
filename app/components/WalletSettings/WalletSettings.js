@@ -7,13 +7,15 @@ import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
 import Modal from '../common/Modal/Modal';
 import styles from './WalletSettings.css';
-import type { SettingsStateType } from '../../reducers/types';
+import type { AppStateType } from '../../reducers/types';
 import * as SettingsActions from '../../actions/settings';
 
 type Props = {
-  settings: SettingsStateType,
+  settings: AppStateType,
   visible: boolean,
   onCloseRequest: () => void,
+  changePassword: () => void,
+  setAutoLockTimeout: () => void,
   intl: any
 };
 

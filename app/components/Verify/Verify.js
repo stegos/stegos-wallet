@@ -58,12 +58,14 @@ class Verify extends Component<Props> {
       return false;
     }
     if (!rvalue) {
+      // todo true validator
       this.setState({
         rvalueError: intl.formatMessage({ id: 'input.error.invalid.value' })
       });
       return false;
     }
     if (!utxo || utxo.length < 50) {
+      // todo true validator
       this.setState({
         utxoError: intl.formatMessage({ id: 'input.error.invalid.value' })
       });
@@ -73,7 +75,6 @@ class Verify extends Component<Props> {
   };
 
   onVerify = () => {
-    // todo validate inputs
     const { sender, recipient, rvalue, utxo } = this.state;
     if (!this.validate()) {
       return;
