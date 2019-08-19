@@ -115,7 +115,7 @@ export const unlockWallet = (password: string) => async (
   dispatch: Dispatch,
   getState: GetState
 ) => {
-  if (password !== getState().settings.password) {
+  if (password !== getState().app.password) {
     dispatch({
       type: SHOW_ERROR,
       payload: 'alert.password.is.incorrect'
@@ -143,7 +143,7 @@ export const changePassword = (newPass: string, oldPass: string) => (
 ) =>
   new Promise(async (resolve, reject) => {
     try {
-      if (oldPass !== getState().settings.password) {
+      if (oldPass !== getState().app.password) {
         dispatch({
           type: SHOW_ERROR,
           payload: 'alert.password.is.incorrect'
@@ -151,6 +151,7 @@ export const changePassword = (newPass: string, oldPass: string) => (
         reject();
         return;
       }
+      dispatch({ type: SET_WAITING, payload: true });
       await setNewPassword(newPass, async () => {
         await Promise.all(
           Object.entries(getState().accounts.items).map(account =>
@@ -162,13 +163,15 @@ export const changePassword = (newPass: string, oldPass: string) => (
           )
         );
       });
+      dispatch({ type: SET_WAITING, payload: false });
       dispatch({ type: SET_PASSWORD, payload: newPass });
       resolve();
     } catch (e) {
       console.log(e);
+      dispatch({ type: SET_WAITING, payload: false });
       dispatch({
         type: SHOW_ERROR,
-        payload: `An error occurred. ${e && e.message}`
+        payload: `An error occurred. ${(e && e.message) || ''}`
       });
       reject(e);
     }

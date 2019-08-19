@@ -23,8 +23,8 @@ export const getAccounts = () => (dispatch: Dispatch, getState: GetState) => {
   sendSync({ type: 'list_accounts' })
     .then(async resp => {
       let state = getState();
-      const { accounts, settings } = state;
-      const { password } = settings;
+      const { accounts, app } = state;
+      const { password } = app;
       if (Object.keys(accounts.items).length === 0) {
         await sendSync({ type: 'create_account', password });
       }
@@ -46,8 +46,8 @@ export const createAccount = () => async (
   getState: GetState
 ) => {
   const state = getState();
-  const { settings } = state;
-  const { password } = settings;
+  const { app } = state;
+  const { password } = app;
   await sendSync({ type: 'create_account', password }).then(resp =>
     sendSync({ type: 'unseal', password, account_id: resp.account_id })
       .catch(console.log) // todo handle error when error codes will be available
@@ -62,7 +62,7 @@ export const restoreAccount = (phrase: string[]) => async (
   dispatch: Dispatch,
   getState: GetState
 ) => {
-  const { password } = getState().settings;
+  const { password } = getState().app;
   try {
     const resp = await sendSync({
       type: 'recover_account',
