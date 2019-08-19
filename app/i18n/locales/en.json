@@ -121,6 +121,7 @@
   "wallet.settings.lock.title": "Wallet auto-lock",
   "wallet.settings.lock.description": "Set auto-lock timeout",
   "wallet.settings.minutes": "min",
+  "wallet.settings.waiting": "Changing password...",
 
   "button.skip": "Skip",
   "button.next": "Next",
@@ -172,6 +173,7 @@
   "alert.recovery.phrase.is.incorrect": "The recovery phrase is incorrect. Please verify it, correct and try again.",
   "alert.password.is.incorrect": "The password is incorrect. Please try again.",
   "alert.default.error": "An error occurred.",
+  "alert.error.with.message": "An error occurred. {error}",
 
   "certificate.title": "Payment Certificate",
   "certificate.data.title": "Transaction data",

@@ -99,7 +99,7 @@ const onMessage = (store: MiddlewareAPI, evt: MessageEvent) => {
   if (id !== null) {
     if (messages[id]) {
       if (!data.error) messages[id].resolve(data);
-      else messages[id].reject(data.error);
+      else messages[id].reject(new Error(data.error));
       messages[id] = null;
     }
   }
