@@ -9,6 +9,7 @@ import Modal from '../common/Modal/Modal';
 import styles from './WalletSettings.css';
 import type { AppStateType } from '../../reducers/types';
 import * as AppActions from '../../actions/settings';
+import Busy from '../common/Busy/Busy';
 
 type Props = {
   app: AppStateType,
@@ -171,7 +172,7 @@ class WalletSettings extends Component<Props> {
       autoLockTimeoutError
     } = this.state;
     const { visible, app, intl } = this.props;
-    const { isPasswordSet } = app;
+    const { isPasswordSet, waiting } = app;
     return (
       <Modal
         options={{
@@ -248,6 +249,10 @@ class WalletSettings extends Component<Props> {
             <FormattedMessage id="button.apply" />
           </Button>
         </div>
+        <Busy
+          title={intl.formatMessage({ id: 'wallet.settings.waiting' })}
+          visible={waiting}
+        />
       </Modal>
     );
   }
