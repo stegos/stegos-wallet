@@ -1,8 +1,9 @@
 .Container {
   display: grid;
-  grid-template-columns: 406px auto;
+  grid-template-columns: 28% auto;
   grid-template-rows: 132px auto;
   height: 100vh;
+  transition-duration: 0.1s;
 }
 
 .StatusBar {
@@ -27,7 +28,6 @@
 
 @media screen and (max-width: 1280px) {
   .Container {
-    grid-template-columns: 326px auto;
     grid-template-rows: 96px auto;
   }
 
