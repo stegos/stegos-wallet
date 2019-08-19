@@ -29,23 +29,17 @@ class DeleteAccount extends Component<Props> {
     const newVal = e.target.value;
     this.setState({
       accountName: newVal,
-      disableDeleteButton: account.name !== newVal || newVal.length < 2,
+      disableDeleteButton: account.name !== newVal,
       showError: false
     });
   };
 
   deleteAccount() {
-    const { onDelete, account } = this.props;
+    const { onDelete, account, intl } = this.props;
     const { accountName } = this.state;
-    if (accountName.length < 2) {
-      return this.setState({
-        accountNameError: 'Name should not be shorter than 2 characters',
-        showError: true
-      });
-    }
     if (account.name !== accountName) {
       return this.setState({
-        accountNameError: 'Account name does not match',
+        accountNameError: intl.formatMessage({ id: 'delete.account.error' }),
         showError: true
       });
     }

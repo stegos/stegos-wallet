@@ -48,6 +48,7 @@
   "edit.account.recovery.phrase.saved": "Recovery phrase saved",
 
   "delete.account": "Your account “{name}” will be removed from this device. You cannot revert this operation!",
+  "delete.account.error": "Account name does not match",
 
   "backup.step.one.label": "Write down",
   "backup.step.two.label": "Verify",
