@@ -6,7 +6,7 @@ import * as NodeActions from '../actions/node';
 function mapStateToProps(state) {
   return {
     node: state.node,
-    app: state.app
+    isTermsAccepted: state.app.isTermsAccepted
   };
 }
 
