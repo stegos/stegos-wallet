@@ -80,7 +80,6 @@ export const validateCertificate = (
 
 const handleNodeSynchronization = (dispatch: Dispatch, data: string) => {
   if (data.type === 'sync_changed' && data.is_synchronized) {
-    console.log('UNSUBSCRIBE');
     unsubscribe(handleNodeSynchronization);
     dispatch(loadAccounts());
   }
@@ -89,6 +88,7 @@ const handleNodeSynchronization = (dispatch: Dispatch, data: string) => {
 const loadAccounts = () => (dispatch: Dispatch, getState: GetState) => {
   sendSync({ type: 'list_accounts' })
     .then(async resp => {
+      dispatch({ type: SET_WAITING, payload: true });
       let state = getState();
       const { accounts, app } = state;
       const { password } = app;
