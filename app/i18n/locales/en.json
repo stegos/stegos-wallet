@@ -163,6 +163,7 @@
   "input.error.incorrect.address": "Incorrect address",
   "input.error.insufficient.balance": "Insufficient balance",
   "input.error.minimum.fee": "Minimum fee is {fee}",
+  "input.error.account.name.does.not.match": "Account name does not match",
 
   "input.placeholder.search": "Search",
   "input.placeholder.enter.password": "Enter password",
