@@ -39,7 +39,9 @@ class DeleteAccount extends Component<Props> {
     const { accountName } = this.state;
     if (account.name !== accountName) {
       return this.setState({
-        accountNameError: intl.formatMessage({ id: 'delete.account.error' }),
+        accountNameError: intl.formatMessage({
+          id: 'input.error.account.name.does.not.match'
+        }),
         showError: true
       });
     }
