@@ -9,12 +9,14 @@ type Props = {
   label?: string,
   error?: string,
   showError?: string,
+  errorOutside?: boolean,
   onInput?: InputEvent => void,
   onChange?: InputEvent => void,
   name?: string,
   className?: string,
   noLabel?: boolean,
   style?: object,
+  errorStyle?: object,
   readOnly?: boolean,
   isTextarea?: boolean,
   autoFocus?: boolean,
@@ -31,12 +33,14 @@ export default class Input extends Component<Props> {
     label: null,
     error: null,
     showError: false,
+    errorOutside: false,
     onInput: undefined,
     onChange: undefined,
     name: '',
     className: '',
     noLabel: false,
     style: {},
+    errorStyle: {},
     readOnly: false,
     isTextarea: false,
     autoFocus: false,
@@ -53,10 +57,12 @@ export default class Input extends Component<Props> {
       label,
       error,
       showError,
+      errorOutside,
       name,
       className,
       noLabel,
       style,
+      errorStyle,
       readOnly,
       isTextarea,
       autoFocus,
@@ -81,7 +87,22 @@ export default class Input extends Component<Props> {
           autoFocus={autoFocus}
           style={{ resize }}
         />
-        {showError && error && <span className={styles.Error}>{error}</span>}
+        {showError && error && (
+          <span
+            className={styles.Error}
+            style={{
+              ...errorStyle,
+              ...(errorOutside
+                ? {
+                    position: 'absolute',
+                    left: '100%'
+                  }
+                : null)
+            }}
+          >
+            {error}
+          </span>
+        )}
       </div>
     );
   }

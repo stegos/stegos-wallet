@@ -115,7 +115,7 @@ export default class AccountsList extends PureComponent<Props> {
               value={sort && sort.name}
               onChange={this.onSortingChange}
               options={options}
-              style={{ width: 150 }}
+              style={{ width: 165 }}
             />
           </div>
         </div>
