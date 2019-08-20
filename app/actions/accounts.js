@@ -34,7 +34,6 @@ export const getAccounts = () => (dispatch: Dispatch, getState: GetState) => {
         Object.values(items).map(account =>
           (async () => {
             await sendSync({ type: 'balance_info', account_id: account.id });
-            await sendSync({ type: 'keys_info', account_id: account.id });
             await sendSync({ type: 'get_recovery', account_id: account.id });
             await sendSync(createHistoryInfoAction(account.id));
           })()
