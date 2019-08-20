@@ -78,7 +78,6 @@ export const validateCertificate = (
 
 const handleNodeSynchronization = (dispatch: Dispatch, data: string) => {
   if (data.type === 'sync_changed' && data.is_synchronized) {
-    console.log('UNSUBSCRIBE');
     unsubscribe(handleNodeSynchronization);
     dispatch(loadAccounts());
   }

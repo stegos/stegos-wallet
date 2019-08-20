@@ -37,95 +37,98 @@ class TransactionsList extends PureComponent<Props> {
     if (!transactions || transactions.length === 0) {
       return null;
     }
-    return transactions.map((item: Transaction) => {
-      const signAmount =
-        (item.type === 'Receive' ? '+' : '-') +
-        formatDigit(item.amount / POWER_DIVISIBILITY).toString();
-      return (
-        <div className={styles.Transaction} key={item.id}>
-          <div className={styles.TransactionDirection}>
-            <Icon
-              name={item.type === 'Send' ? 'file_upload' : 'file_download'}
-              size="24"
-            />
-          </div>
-          <span className={styles.TransactionTitle}>
-            <FormattedMessage
-              id={`transaction.type.${item.type.toLowerCase()}`}
-            />
-          </span>
-          <div className={styles.TransactionDate}>
-            {item.status && (
-              <span className={styles.TransactionStatus}>
-                <FormattedMessage
-                  id={`transaction.status.${item.status.toLowerCase()}`}
-                />
-              </span>
-            )}
-            <div className={styles.TransactionDateTime}>
-              <span className={styles.TransactionText}>
-                {intl.formatDate(item.timestamp, {
-                  month: 'short',
-                  day: '2-digit',
-                  year: 'numeric'
-                })}
-              </span>
-              <div className={styles.TransactionTime}>
-                <Icon
-                  name="schedule"
-                  color="rgba(130, 130, 130, 0.7)"
-                  size="20"
-                  style={{ marginRight: 8 }}
-                />
-                <span className={styles.TransactionText}>
-                  {intl.formatTime(item.timestamp)}
+    return transactions
+      .sort((a, b) => a.timestamp > b.timestamp)
+      .reverse() // todo why < compare does not works?
+      .map((item: Transaction) => {
+        const signAmount =
+          (item.type === 'Receive' ? '+' : '-') +
+          formatDigit(item.amount / POWER_DIVISIBILITY).toString();
+        return (
+          <div className={styles.Transaction} key={item.id}>
+            <div className={styles.TransactionDirection}>
+              <Icon
+                name={item.type === 'Send' ? 'file_upload' : 'file_download'}
+                size="24"
+              />
+            </div>
+            <span className={styles.TransactionTitle}>
+              <FormattedMessage
+                id={`transaction.type.${item.type.toLowerCase()}`}
+              />
+            </span>
+            <div className={styles.TransactionDate}>
+              {item.status && (
+                <span className={styles.TransactionStatus}>
+                  <FormattedMessage
+                    id={`transaction.status.${item.status.toLowerCase()}`}
+                  />
                 </span>
+              )}
+              <div className={styles.TransactionDateTime}>
+                <span className={styles.TransactionText}>
+                  {intl.formatDate(item.timestamp, {
+                    month: 'short',
+                    day: '2-digit',
+                    year: 'numeric'
+                  })}
+                </span>
+                <div className={styles.TransactionTime}>
+                  <Icon
+                    name="schedule"
+                    color="rgba(130, 130, 130, 0.7)"
+                    size="20"
+                    style={{ marginRight: 8 }}
+                  />
+                  <span className={styles.TransactionText}>
+                    {intl.formatTime(item.timestamp)}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-          {item.rvalue ? (
-            <div
-              className={styles.TransactionCertificate}
-              onClick={() => this.showCertificate(item)}
-              role="button"
-              tabIndex="-1"
-              onKeyPress={() => false}
-            >
-              <Icon name="poll" size={24} color="rgba(255,255,255,0.7)" />
-              <span className={styles.TransactionText}>
-                <FormattedMessage id="transactions.list.certificate" />
+            {item.rvalue ? (
+              <div
+                className={styles.TransactionCertificate}
+                onClick={() => this.showCertificate(item)}
+                role="button"
+                tabIndex="-1"
+                onKeyPress={() => false}
+              >
+                <Icon name="poll" size={24} color="rgba(255,255,255,0.7)" />
+                <span className={styles.TransactionText}>
+                  <FormattedMessage id="transactions.list.certificate" />
+                </span>
+              </div>
+            ) : (
+              <div
+                className={styles.TransactionCertificate}
+                role="button"
+                tabIndex="-1"
+              />
+            )}
+            <div className={styles.TransactionAmountContainer}>
+              <span
+                className={styles.TransactionAmount}
+                style={{
+                  color: item.type === 'Receive' ? '#FF6C00' : '#fff',
+                  fontSize: signAmount.length > 10 ? 10 : 'inherit'
+                }}
+              >
+                {signAmount}
+              </span>
+              <span
+                className={styles.TransactionAmountCurrency}
+                style={{
+                  marginLeft: 8,
+                  fontSize: signAmount.length > 10 ? 10 : 'inherit'
+                }}
+              >
+                STG
               </span>
             </div>
-          ) : (
-            <div
-              className={styles.TransactionCertificate}
-              role="button"
-              tabIndex="-1"
-            />
-          )}
-          <div className={styles.TransactionAmountContainer}>
-            <span
-              className={styles.TransactionAmount}
-              style={{
-                color: item.type === 'Receive' ? '#FF6C00' : '#fff',
-                fontSize: signAmount.length > 10 ? 10 : 'inherit'
-              }}
-            >
-              {signAmount}
-            </span>
-            <span
-              className={styles.TransactionAmountCurrency}
-              style={{
-                marginLeft: 8,
-                fontSize: signAmount.length > 10 ? 10 : 'inherit'
-              }}
-            >
-              STG
-            </span>
           </div>
-        </div>
-      );
-    });
+        );
+      });
   }
 
   render() {
