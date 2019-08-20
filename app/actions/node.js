@@ -36,8 +36,10 @@ export const onNodeRunning = () => (dispatch: Dispatch) => {
   dispatch({ type: NODE_RUNNING });
 };
 
-export const onRunNodeFailed = () => (dispatch: Dispatch) =>
+export const onRunNodeFailed = () => (dispatch: Dispatch) => {
   dispatch({ type: RUN_NODE_FAILED });
+  dispatch(push(routes.SYNC_FAILED));
+};
 
 export const onTokenReceived = (event, token) => (dispatch: Dispatch) => {
   dispatch({ type: TOKEN_RECEIVED, payload: { token } });
