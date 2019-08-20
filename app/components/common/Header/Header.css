@@ -52,3 +52,8 @@
   height: 77px;
   object-fit: contain;
 }
+
+.Version {
+  font-size: 8px;
+  text-align: center;
+}
