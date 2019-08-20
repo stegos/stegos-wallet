@@ -86,6 +86,7 @@ const handleNodeSynchronization = (dispatch: Dispatch, data: string) => {
 const loadAccounts = () => (dispatch: Dispatch, getState: GetState) => {
   sendSync({ type: 'list_accounts' })
     .then(async resp => {
+      dispatch({ type: SET_WAITING, payload: true });
       let state = getState();
       const { accounts, app } = state;
       const { password } = app;
