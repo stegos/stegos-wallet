@@ -154,14 +154,7 @@ function runNodeProcess(): Promise<void> {
       if (fs.existsSync(logFile)) fs.unlinkSync(logFile); // todo may be rotation
       nodeProcess = spawn(
         `./stegosd`,
-        [
-          '--chain',
-          'devnet',
-          '--data-dir',
-          appDataPath,
-          '--api-endpoint',
-          wsEndpoint
-        ],
+        ['--data-dir', appDataPath, '--api-endpoint', wsEndpoint],
         {
           cwd: nodePath
         }
