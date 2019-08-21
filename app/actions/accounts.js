@@ -23,10 +23,9 @@ export const getAccounts = () => (dispatch: Dispatch, getState: GetState) => {
   sendSync({ type: 'list_accounts' })
     .then(async resp => {
       let state = getState();
-      const { accounts, app } = state;
-      const { password } = app;
+      const { accounts } = state;
       if (Object.keys(accounts.items).length === 0) {
-        await sendSync({ type: 'create_account', password });
+        await dispatch(createAccount());
       }
       state = getState();
       const { items } = state.accounts;
@@ -34,7 +33,6 @@ export const getAccounts = () => (dispatch: Dispatch, getState: GetState) => {
         Object.values(items).map(account =>
           (async () => {
             await sendSync({ type: 'balance_info', account_id: account.id });
-            await sendSync({ type: 'keys_info', account_id: account.id });
             await sendSync({ type: 'get_recovery', account_id: account.id });
             await sendSync(createHistoryInfoAction(account.id));
           })()
@@ -57,7 +55,7 @@ export const createAccount = () => async (
     sendSync({ type: 'unseal', password, account_id: resp.account_id })
       .catch(console.log) // todo handle error when error codes will be available
       .finally(() => {
-        dispatch(send({ type: 'keys_info', account_id: resp.account_id }));
+        dispatch(send({ type: 'account_info', account_id: resp.account_id }));
         dispatch(send({ type: 'get_recovery', account_id: resp.account_id }));
       })
   );
@@ -77,7 +75,7 @@ export const restoreAccount = (phrase: string[]) => async (
 
     const accountId = resp.account_id;
     await sendSync({ type: 'unseal', password, account_id: accountId });
-    await sendSync({ type: 'keys_info', account_id: accountId });
+    await sendSync({ type: 'account_info', account_id: accountId });
     dispatch(send({ type: 'balance_info', account_id: accountId }));
     dispatch(send({ type: 'get_recovery', account_id: accountId }));
     dispatch(send(createHistoryInfoAction(accountId)));
@@ -141,7 +139,7 @@ export const writeDownRecoveryPhrase = (
       const state = getState();
       const { recoveryPhrase } = state.accounts.items[accountId];
       for (let i = 0; i < RECOVERY_PHRASE_LENGTH; i += 1) {
-        if (recoveryPhrase[i] !== phrase[i]) {
+        if (!recoveryPhrase || recoveryPhrase[i] !== phrase[i]) {
           throw new Error('alert.recovery.phrase.is.incorrect');
         }
       }
