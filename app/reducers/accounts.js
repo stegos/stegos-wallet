@@ -66,8 +66,8 @@ export default function accounts(
             [payload.account_id]: createEmptyAccount(payload.account_id)
           }
         };
-      case 'keys_info':
-        return setAccountProps({ address: payload.account_address });
+      case 'account_info':
+        return setAccountProps({ address: payload.account_pkey });
       case 'unsealed':
         return setAccountProps({ isLocked: false });
       case 'sealed':
