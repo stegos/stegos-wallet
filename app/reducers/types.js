@@ -79,6 +79,8 @@ export type TransactionStatus =
 
 export type TransactionType = 'Send' | 'Receive';
 
+export type ChartPeriod = 'week' | 'month' | 'year';
+
 export type State = {
   settings: AppStateType,
   node: NodeStateType,

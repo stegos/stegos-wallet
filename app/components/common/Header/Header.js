@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import styles from './Header.css';
 import logo from '../../../../resources/img/StegosLogoHorRGB.svg';
+import { version } from '../../../../package.json';
 
 type Props = {
   containerClassName?: string,
@@ -32,6 +33,7 @@ export default class Header extends Component<Props> {
       <div className={`${styles.Container} ${containerClassName}`}>
         <div className={`${styles.LogoWrapper} ${logoContainerClassName}`}>
           <img src={logo} alt="STEGOS" className={styles.Logo} />
+          <div className={styles.Version}>{version}</div>
         </div>
         <div className={`${styles.Content} ${contentContainerClassName}`}>
           {title && <span className={styles.Title}>{title}</span>}
