@@ -10,6 +10,7 @@ import BootstrapWizard from './common/Wizard/BootstrapWizard';
 
 type Props = {
   node: NodeStateType,
+  isTermsAccepted: boolean,
   runNode: () => void,
   onSync: () => void
 };
@@ -28,11 +29,11 @@ export default class Sync extends Component<Props> {
   };
 
   render() {
-    const { node, settings } = this.props;
+    const { node, isTermsAccepted } = this.props;
     return (
       <div className={styles.Wrapper}>
         <Header />
-        {!settings.isFirstLaunch && <BootstrapWizard step={2} />}
+        {!isTermsAccepted && <BootstrapWizard step={2} />}
         <div className={styles.Main}>
           <span className={styles.Title}>
             <FormattedMessage

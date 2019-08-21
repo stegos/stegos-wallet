@@ -1,16 +1,20 @@
 // @flow
+import { remote } from 'electron';
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import fs from 'fs';
+import Button from '../common/Button/Button';
 import Modal from '../common/Modal/Modal';
 import styles from './PaymentCertificate.css';
 import { POWER_DIVISIBILITY } from '../../constants/config';
 import { formatDigit } from '../../utils/format';
+import type { Transaction } from '../../reducers/types';
+import generateCertificatePdf from '../../utils/pdf';
 
 type Props = {
   visible: boolean,
   onClose: () => void,
-  tx: any,
-  sender: string,
+  tx: Transaction,
   intl: any
 };
 
@@ -24,23 +28,75 @@ class PaymentCertificate extends Component<Props> {
     }
   }
 
+  downloadAsPdf() {
+    const { intl, tx } = this.props;
+
+    remote.dialog.showSaveDialog({}, filename => {
+      if (!filename) return;
+      const doc = generateCertificatePdf(intl, {
+        title: this.title,
+        subtitle: this.subtitle,
+        sender: tx.sender,
+        recipient: this.output.recipient,
+        rvalue: this.output.rvalue,
+        utxo: this.output.utxo,
+        verificationDate: this.verificationDate,
+        block: tx.epoch,
+        amount: this.amount
+      });
+
+      doc.pipe(fs.createWriteStream(filename));
+      doc.end();
+    });
+  }
+
+  get title() {
+    const { intl } = this.props;
+    return intl.formatMessage({ id: 'certificate.title' });
+  }
+
+  get subtitle() {
+    const { tx, intl } = this.props;
+    return `${intl.formatMessage({
+      id: 'certificate.generated'
+    })} ${intl.formatDate(tx.timestamp, {
+      month: 'short',
+      day: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })}`;
+  }
+
+  get output() {
+    const { tx } = this.props;
+    return tx.outputs.filter(o => !o.is_change)[0];
+  }
+
+  get verificationDate() {
+    const { intl } = this.props;
+    return intl.formatDate(new Date(), {
+      month: '2-digit',
+      day: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  get amount() {
+    const { tx } = this.props;
+    return formatDigit(tx.amount / POWER_DIVISIBILITY);
+  }
+
   render() {
-    const { visible, tx, sender, intl } = this.props;
+    const { visible, tx } = this.props;
     if (!tx) return null;
-    const output = tx.outputs.filter(o => !o.is_change)[0];
     return (
       <Modal
         options={{
-          title: intl.formatMessage({ id: 'certificate.title' }),
-          subtitle: `${intl.formatMessage({
-            id: 'certificate.generated'
-          })} ${intl.formatDate(tx.timestamp, {
-            month: 'short',
-            day: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-          })}`,
+          title: this.title,
+          subtitle: this.subtitle,
           type: 'big',
           visible,
           onClose: this.close.bind(this)
@@ -58,25 +114,25 @@ class PaymentCertificate extends Component<Props> {
             <div className={`${styles.RowLabel} ${styles.LabelBold}`}>
               <FormattedMessage id="certificate.sender" />:
             </div>
-            <span className={styles.LabelSmall}>{sender}</span>
+            <span className={styles.LabelSmall}>{tx.sender}</span>
           </div>
           <div className={styles.Row}>
             <div className={`${styles.RowLabel} ${styles.LabelBold}`}>
               <FormattedMessage id="certificate.recipient" />:
             </div>
-            <span className={styles.LabelSmall}>{output.recipient}</span>
+            <span className={styles.LabelSmall}>{this.output.recipient}</span>
           </div>
           <div className={styles.Row}>
             <div className={`${styles.RowLabel} ${styles.LabelBold}`}>
               <FormattedMessage id="certificate.rvalue" />:
             </div>
-            <span className={styles.LabelSmall}>{output.rvalue}</span>
+            <span className={styles.LabelSmall}>{this.output.rvalue}</span>
           </div>
           <div className={styles.Row}>
             <div className={`${styles.RowLabel} ${styles.LabelBold}`}>
-              <FormattedMessage id="certificate.id" />:
+              <FormattedMessage id="certificate.utxo" />:
             </div>
-            <span className={styles.LabelSmall}>{output.utxo}</span>
+            <span className={styles.LabelSmall}>{this.output.utxo}</span>
           </div>
           <div
             className={styles.Row}
@@ -92,13 +148,7 @@ class PaymentCertificate extends Component<Props> {
               className={styles.LabelSmall}
               style={{ textAlign: 'right', marginLeft: 'auto' }}
             >
-              {intl.formatDate(new Date(), {
-                month: 'numeric',
-                day: 'numeric',
-                year: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric'
-              })}
+              {this.verificationDate}
             </span>
           </div>
           <div className={styles.VerificationContainer}>
@@ -120,7 +170,7 @@ class PaymentCertificate extends Component<Props> {
             </div>
             <div className={styles.VerificationRow}>
               <span className={styles.LabelBold}>
-                <FormattedMessage id="certificate.id" />
+                <FormattedMessage id="certificate.utxo" />
               </span>
               <span className={styles.LabelSuccess}>
                 <FormattedMessage id="certificate.verification.valid" />
@@ -140,12 +190,17 @@ class PaymentCertificate extends Component<Props> {
               className={`${styles.RowLabel} ${styles.LabelBold}`}
               style={{ width: 'auto', textTransform: 'none' }}
             >
-              Amount
+              <FormattedMessage id="certificate.amount" />
             </div>
             <span className={styles.LabelAmount} style={{ marginLeft: '20px' }}>
-              {formatDigit(tx.amount / POWER_DIVISIBILITY)} STG
+              {this.amount} STG
             </span>
           </div>
+        </div>
+        <div className={styles.ActionsContainer}>
+          <Button type="OutlinePrimary" onClick={() => this.downloadAsPdf()}>
+            Download as PDF
+          </Button>
         </div>
       </Modal>
     );

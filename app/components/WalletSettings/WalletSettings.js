@@ -7,13 +7,16 @@ import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
 import Modal from '../common/Modal/Modal';
 import styles from './WalletSettings.css';
-import type { SettingsStateType } from '../../reducers/types';
-import * as SettingsActions from '../../actions/settings';
+import type { AppStateType } from '../../reducers/types';
+import * as AppActions from '../../actions/settings';
+import Busy from '../common/Busy/Busy';
 
 type Props = {
-  settings: SettingsStateType,
+  app: AppStateType,
   visible: boolean,
   onCloseRequest: () => void,
+  changePassword: () => void,
+  setAutoLockTimeout: () => void,
   intl: any
 };
 
@@ -36,8 +39,8 @@ class WalletSettings extends Component<Props> {
 
   constructor(props) {
     super(props);
-    const { settings } = props;
-    const { autoLockTimeout } = settings;
+    const { app } = props;
+    const { autoLockTimeout } = app;
     this.state = {
       ...initialState,
       autoLockTimeout
@@ -67,8 +70,8 @@ class WalletSettings extends Component<Props> {
   };
 
   resetAll = () => {
-    const { settings } = this.props;
-    const { autoLockTimeout } = settings;
+    const { app } = this.props;
+    const { autoLockTimeout } = app;
     this.setState({
       ...initialState,
       autoLockTimeout
@@ -118,8 +121,8 @@ class WalletSettings extends Component<Props> {
       newPasswordRepeat,
       autoLockTimeout
     } = this.state;
-    const { settings, intl } = this.props;
-    const { isPasswordSet } = settings;
+    const { app, intl } = this.props;
+    const { isPasswordSet } = app;
     if (oldPassword !== '' || newPassword !== '') {
       if (isPasswordSet && oldPassword === '') {
         this.setState({
@@ -168,8 +171,8 @@ class WalletSettings extends Component<Props> {
       autoLockTimeout,
       autoLockTimeoutError
     } = this.state;
-    const { visible, settings, intl } = this.props;
-    const { isPasswordSet } = settings;
+    const { visible, app, intl } = this.props;
+    const { isPasswordSet, waiting } = app;
     return (
       <Modal
         options={{
@@ -193,6 +196,7 @@ class WalletSettings extends Component<Props> {
               className={styles.Input}
               type="password"
               error={oldPasswordError}
+              errorOutside
               showError
             />
           )}
@@ -204,6 +208,7 @@ class WalletSettings extends Component<Props> {
             className={styles.Input}
             type="password"
             error={newPasswordError}
+            errorOutside
             showError
           />
           <Input
@@ -216,6 +221,7 @@ class WalletSettings extends Component<Props> {
             className={styles.Input}
             type="password"
             error={newPasswordRepeatError}
+            errorOutside
             showError
           />
           <div className={styles.AutoLockContainer}>
@@ -246,12 +252,16 @@ class WalletSettings extends Component<Props> {
             <FormattedMessage id="button.apply" />
           </Button>
         </div>
+        <Busy
+          title={intl.formatMessage({ id: 'wallet.settings.waiting' })}
+          visible={waiting}
+        />
       </Modal>
     );
   }
 }
 
 export default connect(
-  state => ({ settings: state.settings }),
-  dispatch => bindActionCreators(SettingsActions, dispatch)
+  state => ({ app: state.app }),
+  dispatch => bindActionCreators(AppActions, dispatch)
 )(injectIntl(WalletSettings));

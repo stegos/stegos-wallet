@@ -1,6 +1,6 @@
 import type { Dispatch as ReduxDispatch, Store as ReduxStore } from 'redux';
 
-export type SettingsStateType = {
+export type AppStateType = {
   isFirstLaunch: boolean | null,
   isBootstrappingComplete: boolean,
   isPasswordSet: boolean | null,
@@ -9,7 +9,8 @@ export type SettingsStateType = {
   isTermsAccepted: boolean,
   autoLockTimeout: number,
   isLocked: boolean,
-  error: string
+  error: string,
+  waiting: boolean
 };
 
 export type NodeStateType = {
@@ -63,7 +64,8 @@ export type Transaction = {
   timestamp: string,
   amount: number,
   hasCertificate: boolean,
-  status?: TransactionStatus
+  status?: TransactionStatus,
+  sender?: string
 };
 
 export type TransactionStatus =
@@ -77,8 +79,10 @@ export type TransactionStatus =
 
 export type TransactionType = 'Send' | 'Receive';
 
+export type ChartPeriod = 'week' | 'month' | 'year';
+
 export type State = {
-  settings: SettingsStateType,
+  settings: AppStateType,
   node: NodeStateType,
   accounts: AccountsStateType
 };

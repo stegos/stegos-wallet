@@ -58,3 +58,9 @@
   border-radius: 0 5px 5px 0;
   overflow: hidden;
 }
+
+@media screen and (max-width: 1024px) {
+  .ChartContainer {
+    display: none;
+  }
+}

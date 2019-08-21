@@ -13,7 +13,6 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-  width: var(--menu-width);
   background-color: #171a27;
   overflow-y: auto;
   user-select: none;
@@ -32,6 +31,8 @@
   line-height: 49px;
   letter-spacing: 0.54px;
   color: #bfc1c6;
+  transition-duration: 0.1s;
+  transition-property: padding;
 }
 
 @media screen and (max-width: 1280px) {

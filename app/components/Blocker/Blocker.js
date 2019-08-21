@@ -3,15 +3,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import * as SettingsActions from '../../actions/settings';
+import * as AppActions from '../../actions/settings';
 import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
 import Modal from '../common/Modal/Modal';
 import styles from './Blocker.css';
-import type { SettingsStateType } from '../../reducers/types';
+import type { AppStateType } from '../../reducers/types';
 
 type Props = {
-  settings: SettingsStateType,
+  app: AppStateType,
   unlockWallet: string => void,
   intl: any
 };
@@ -38,7 +38,7 @@ class Blocker extends Component<Props> {
         })
       )
       .catch(e => {
-        showError(e.message || 'Unlock wallet failed, please try again.');
+        showError(e.message || 'Unlock wallet failed, please try again.'); // todo to action
         this.setState({
           password: '',
           unlocking: false
@@ -47,8 +47,8 @@ class Blocker extends Component<Props> {
   }
 
   render() {
-    const { settings, intl } = this.props;
-    const { isLocked } = settings;
+    const { app, intl } = this.props;
+    const { isLocked } = app;
     const { password, unlocking } = this.state;
     return (
       <Modal
@@ -90,6 +90,6 @@ class Blocker extends Component<Props> {
 }
 
 export default connect(
-  state => ({ settings: state.settings }),
-  dispatch => bindActionCreators(SettingsActions, dispatch)
+  state => ({ app: state.app }),
+  dispatch => bindActionCreators(AppActions, dispatch)
 )(injectIntl(Blocker));

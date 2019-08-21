@@ -62,7 +62,7 @@
   "receive.step.three.title": "Receive",
   "receive.account.to.credit": "Account To Credit",
   "receive.address.copied": "Address copied",
-  "receive.address.for.account": "Address for account {account}",
+  "receive.address.for.account": "Address for",
 
   "send.title": "Send",
   "send.step.one.title": "Details",
@@ -103,7 +103,7 @@
   "transaction.status.created": "created",
   "transaction.status.accepted": "accepted",
   "transaction.status.rejected": "rejected",
-  "transaction.status.prepare": "prepare",
+  "transaction.status.prepared": "prepared",
   "transaction.status.rollback": "rollback",
   "transaction.status.committed": "committed",
   "transaction.status.conflicted": "conflicted",
@@ -119,6 +119,7 @@
   "wallet.settings.lock.title": "Wallet auto-lock",
   "wallet.settings.lock.description": "Set auto-lock timeout",
   "wallet.settings.minutes": "min",
+  "wallet.settings.waiting": "Changing password...",
 
   "button.skip": "Skip",
   "button.next": "Next",
@@ -160,6 +161,7 @@
   "input.error.incorrect.address": "Incorrect address",
   "input.error.insufficient.balance": "Insufficient balance",
   "input.error.minimum.fee": "Minimum fee is {fee}",
+  "input.error.account.name.does.not.match": "Account name does not match",
 
   "input.placeholder.search": "Search",
   "input.placeholder.enter.password": "Enter password",
@@ -170,6 +172,7 @@
   "alert.recovery.phrase.is.incorrect": "The recovery phrase is incorrect. Please verify it, correct and try again.",
   "alert.password.is.incorrect": "The password is incorrect. Please try again.",
   "alert.default.error": "An error occurred.",
+  "alert.error.with.message": "An error occurred. {error}",
 
   "certificate.title": "Payment Certificate",
   "certificate.data.title": "Transaction data",
@@ -179,12 +182,13 @@
   "certificate.sender.address": "Sender address",
   "certificate.recipient.address": "Recipient address",
   "certificate.rvalue": "R-value",
-  "certificate.id": "UTXO ID",
+  "certificate.utxo": "UTXO ID",
   "certificate.block": "UTXO Block No",
   "certificate.amount": "Amount",
   "certificate.generated": "Generated on",
   "certificate.verification.valid": "Valid",
   "certificate.verification.failed": "Failed",
+  "certificate.verifications.waiting": "Verifying...",
 
   "account.default.name": "Account #{id}"
 }

@@ -93,7 +93,7 @@
         "msi"
       ]
     },
-    "icon" : "resources/icons/512x512.png",
+    "icon": "resources/icons/512x512.png",
     "linux": {
       "target": [
         "tar.gz",
@@ -244,6 +244,7 @@
     "electron-updater": "^3.2.3",
     "history": "^4.7.2",
     "nedb": "^1.8.0",
+    "pdfjs": "^2.3.0",
     "platform-folders": "^0.4.1",
     "qrcode-generator": "^1.4.3",
     "react": "^16.6.3",

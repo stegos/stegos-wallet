@@ -3,7 +3,7 @@ import routes from '../constants/routes';
 import type { Dispatch, GetState } from '../reducers/types';
 import { send } from '../ws/actions';
 import { sendSync } from '../ws/client';
-import { SHOW_ERROR } from './settings';
+import { SET_WAITING, SHOW_ERROR } from './settings';
 import { HISTORY_LIMIT, RECOVERY_PHRASE_LENGTH } from '../constants/config';
 import { getDatabase } from '../db/db';
 import { getYearAgoTimestamp } from '../utils/format';
@@ -23,19 +23,23 @@ export const getAccounts = () => (dispatch: Dispatch, getState: GetState) => {
   sendSync({ type: 'list_accounts' })
     .then(async resp => {
       let state = getState();
-      const { accounts, settings } = state;
-      const { password } = settings;
+      const { accounts, app } = state;
+      const { password } = app;
       if (Object.keys(accounts.items).length === 0) {
         await sendSync({ type: 'create_account', password });
       }
       state = getState();
       const { items } = state.accounts;
-      Object.values(items).forEach(account => {
-        dispatch(send({ type: 'balance_info', account_id: account.id }));
-        dispatch(send({ type: 'keys_info', account_id: account.id }));
-        dispatch(send({ type: 'get_recovery', account_id: account.id }));
-        dispatch(send(createHistoryInfoAction(account.id)));
-      });
+      await Promise.all(
+        Object.values(items).map(account =>
+          (async () => {
+            await sendSync({ type: 'balance_info', account_id: account.id });
+            await sendSync({ type: 'get_recovery', account_id: account.id });
+            await sendSync(createHistoryInfoAction(account.id));
+          })()
+        )
+      );
+      dispatch({ type: SET_WAITING, payload: false });
       return resp;
     })
     .catch(console.log);
@@ -46,8 +50,8 @@ export const createAccount = () => async (
   getState: GetState
 ) => {
   const state = getState();
-  const { settings } = state;
-  const { password } = settings;
+  const { app } = state;
+  const { password } = app;
   await sendSync({ type: 'create_account', password }).then(resp =>
     sendSync({ type: 'unseal', password, account_id: resp.account_id })
       .catch(console.log) // todo handle error when error codes will be available
@@ -62,7 +66,7 @@ export const restoreAccount = (phrase: string[]) => async (
   dispatch: Dispatch,
   getState: GetState
 ) => {
-  const { password } = getState().settings;
+  const { password } = getState().app;
   try {
     const resp = await sendSync({
       type: 'recover_account',

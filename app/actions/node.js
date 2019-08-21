@@ -6,6 +6,7 @@ import { sendSync, subscribe, unsubscribe } from '../ws/client';
 import routes from '../constants/routes';
 import { wsEndpoint } from '../constants/config';
 import { createHistoryInfoAction } from './accounts';
+import { SET_WAITING } from './settings';
 
 const WS_ENDPOINT = `ws://${wsEndpoint}`;
 
@@ -51,9 +52,9 @@ export const onTokenReceived = (event, token) => (dispatch: Dispatch) => {
 
 export const onSync = () => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
-  const { settings } = state;
+  const { app } = state;
   subscribe(handleTransactions);
-  if (settings.isTermsAccepted) dispatch({ type: COMPLETE_ONBOARDING });
+  if (app.isTermsAccepted) dispatch({ type: COMPLETE_ONBOARDING });
   else dispatch(push(routes.BAGS_AND_TERMS));
 };
 
@@ -62,12 +63,21 @@ export const validateCertificate = (
   recipient: string,
   rvalue: string,
   utxo: string
-) =>
-  sendSync({ type: 'validate_certificate', spender, recipient, rvalue, utxo });
+) => (dispatch: Dispatch) => {
+  dispatch({ type: SET_WAITING, payload: true });
+  return sendSync({
+    type: 'validate_certificate',
+    spender,
+    recipient,
+    rvalue,
+    utxo
+  }).finally(() => {
+    dispatch({ type: SET_WAITING, payload: false });
+  });
+};
 
 const handleNodeSynchronization = (dispatch: Dispatch, data: string) => {
   if (data.type === 'sync_changed' && data.is_synchronized) {
-    console.log('UNSUBSCRIBE');
     unsubscribe(handleNodeSynchronization);
     dispatch(loadAccounts());
   }
@@ -76,9 +86,10 @@ const handleNodeSynchronization = (dispatch: Dispatch, data: string) => {
 const loadAccounts = () => (dispatch: Dispatch, getState: GetState) => {
   sendSync({ type: 'list_accounts' })
     .then(async resp => {
+      dispatch({ type: SET_WAITING, payload: true });
       let state = getState();
-      const { accounts, settings } = state;
-      const { password } = settings;
+      const { accounts, app } = state;
+      const { password } = app;
       if (Object.keys(accounts.items).length === 0) {
         await sendSync({ type: 'create_account', password });
       }

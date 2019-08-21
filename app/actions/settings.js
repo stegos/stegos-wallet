@@ -19,6 +19,7 @@ export const SHOW_ERROR = 'SHOW_ERROR';
 export const HIDE_ERROR = 'HIDE_ERROR';
 export const LOCK_WALLET = 'LOCK_WALLET';
 export const UNLOCK_WALLET = 'UNLOCK_WALLET';
+export const SET_WAITING = 'SET_WAITING';
 
 export const checkFirstLaunch = () => (dispatch: Dispatch) => {
   const exist = isDbExist();
@@ -114,7 +115,7 @@ export const unlockWallet = (password: string) => async (
   dispatch: Dispatch,
   getState: GetState
 ) => {
-  if (password !== getState().settings.password) {
+  if (password !== getState().app.password) {
     dispatch({
       type: SHOW_ERROR,
       payload: 'alert.password.is.incorrect'
@@ -142,7 +143,7 @@ export const changePassword = (newPass: string, oldPass: string) => (
 ) =>
   new Promise(async (resolve, reject) => {
     try {
-      if (oldPass !== getState().settings.password) {
+      if (oldPass !== getState().app.password) {
         dispatch({
           type: SHOW_ERROR,
           payload: 'alert.password.is.incorrect'
@@ -150,6 +151,7 @@ export const changePassword = (newPass: string, oldPass: string) => (
         reject();
         return;
       }
+      dispatch({ type: SET_WAITING, payload: true });
       await setNewPassword(newPass, async () => {
         await Promise.all(
           Object.entries(getState().accounts.items).map(account =>
@@ -161,13 +163,15 @@ export const changePassword = (newPass: string, oldPass: string) => (
           )
         );
       });
+      dispatch({ type: SET_WAITING, payload: false });
       dispatch({ type: SET_PASSWORD, payload: newPass });
       resolve();
     } catch (e) {
       console.log(e);
+      dispatch({ type: SET_WAITING, payload: false });
       dispatch({
         type: SHOW_ERROR,
-        payload: `An error occurred. ${e && e.message}`
+        payload: `An error occurred. ${(e && e.message) || ''}`
       });
       reject(e);
     }
