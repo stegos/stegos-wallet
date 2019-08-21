@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent } from 'react';
+import React, { Fragment, PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -107,39 +107,39 @@ class EditAccount extends PureComponent<Props> {
           onChange={this.onChangeAccountName}
         />
 
-        {account.recoveryPhrase && (
-          <div className={styles.InputLabel}>
-            <div>
-              <FormattedMessage id="edit.account.backup.title" tagName="b" />
-            </div>
-            <FormattedMessage id="edit.account.backup.description" />
-          </div>
-        )}
-        {account.recoveryPhrase && (
-          <div>
-            {account.isRecoveryPhraseWrittenDown && (
-              <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <Icon
-                  name="done"
-                  color="#46FB48"
-                  size="24"
-                  style={{ marginRight: 10 }}
-                />
-                <FormattedMessage id="edit.account.recovery.phrase.saved" />
-              </div>
-            )}
-            {!account.isRecoveryPhraseWrittenDown && (
+        {(account.recoveryPhrase || account.isRecoveryPhraseWrittenDown) && (
+          <Fragment>
+            <div className={styles.InputLabel}>
               <div>
-                <Button
-                  type="OutlineDisabled"
-                  style={{ width: 114 }}
-                  onClick={() => this.onBackup()}
-                >
-                  <FormattedMessage id="button.backup" />
-                </Button>
+                <FormattedMessage id="edit.account.backup.title" tagName="b" />
               </div>
-            )}
-          </div>
+              <FormattedMessage id="edit.account.backup.description" />
+            </div>
+            <div>
+              {account.isRecoveryPhraseWrittenDown && (
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                  <Icon
+                    name="done"
+                    color="#46FB48"
+                    size="24"
+                    style={{ marginRight: 10 }}
+                  />
+                  <FormattedMessage id="edit.account.recovery.phrase.saved" />
+                </div>
+              )}
+              {!account.isRecoveryPhraseWrittenDown && account.recoveryPhrase && (
+                <div>
+                  <Button
+                    type="OutlineDisabled"
+                    style={{ width: 114 }}
+                    onClick={() => this.onBackup()}
+                  >
+                    <FormattedMessage id="button.backup" />
+                  </Button>
+                </div>
+              )}
+            </div>
+          </Fragment>
         )}
       </div>,
       <div className={styles.ActionsContainer} key="actions">
