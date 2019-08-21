@@ -139,7 +139,7 @@ export const writeDownRecoveryPhrase = (
       const state = getState();
       const { recoveryPhrase } = state.accounts.items[accountId];
       for (let i = 0; i < RECOVERY_PHRASE_LENGTH; i += 1) {
-        if (recoveryPhrase[i] !== phrase[i]) {
+        if (!recoveryPhrase || recoveryPhrase[i] !== phrase[i]) {
           throw new Error('alert.recovery.phrase.is.incorrect');
         }
       }
