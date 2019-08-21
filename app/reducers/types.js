@@ -20,7 +20,8 @@ export type NodeStateType = {
   syncingProgress: number,
   apiToken: string | null,
   firstReceivedBlockTimestamp: number | null,
-  lastReceivedBlockTimestamp: number | null
+  lastReceivedBlockTimestamp: number | null,
+  isFailed: boolean
 };
 
 export type AccountsStateType = {

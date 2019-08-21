@@ -8,6 +8,5 @@
   "ACCOUNT": "/account",
   "SEND": "/send",
   "RECEIVE": "/receive",
-  "NODE": "/node",
-  "SYNC_FAILED": "/syncFailed"
+  "NODE": "/node"
 }

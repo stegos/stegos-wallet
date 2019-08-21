@@ -7,6 +7,7 @@ import Header from './common/Header/Header';
 import ProgressBar from './common/ProgressBar/ProgressBar';
 import styles from './Sync.css';
 import BootstrapWizard from './common/Wizard/BootstrapWizard';
+import SyncFail from './SyncFail/SyncFail';
 
 type Props = {
   node: NodeStateType,
@@ -34,44 +35,47 @@ export default class Sync extends Component<Props> {
       <div className={styles.Wrapper}>
         <Header />
         {!isTermsAccepted && <BootstrapWizard step={2} />}
-        <div className={styles.Main}>
-          <span className={styles.Title}>
-            <FormattedMessage
-              id={
-                node.isSynced
-                  ? 'synced.successfully'
-                  : 'syncing.in.progress.description'
-              }
-            />
-          </span>
-          <div className={styles.ProgressBarWrapper}>
-            <span className={styles.Progress}>{node.syncingProgress}%</span>
-            <ProgressBar
-              progress={node.syncingProgress}
-              className={styles.ProgressBar}
-            />
-          </div>
-          {!node.isSynced && (
-            <span className={styles.Label}>
-              <FormattedMessage id="syncing.please.wait" />
+        {node.isFailed && <SyncFail />}
+        {!node.isFailed && (
+          <div className={styles.Main}>
+            <span className={styles.Title}>
+              <FormattedMessage
+                id={
+                  node.isSynced
+                    ? 'synced.successfully'
+                    : 'syncing.in.progress.description'
+                }
+              />
             </span>
-          )}
-          <div className={styles.FooterWrapper}>
-            <div style={{ flex: 1 }} />
-            <div style={{ flex: 1 }} />
-            <div className={styles.ButtonWrapper}>
-              <Button
-                type="button"
-                iconRight="keyboard_backspace"
-                iconRightMirrorHor
-                onClick={this.onNext}
-                style={{ visibility: node.isSynced ? 'visible' : 'hidden' }}
-              >
-                <FormattedMessage id="button.next" />
-              </Button>
+            <div className={styles.ProgressBarWrapper}>
+              <span className={styles.Progress}>{node.syncingProgress}%</span>
+              <ProgressBar
+                progress={node.syncingProgress}
+                className={styles.ProgressBar}
+              />
+            </div>
+            {!node.isSynced && (
+              <span className={styles.Label}>
+                <FormattedMessage id="syncing.please.wait" />
+              </span>
+            )}
+            <div className={styles.FooterWrapper}>
+              <div style={{ flex: 1 }} />
+              <div style={{ flex: 1 }} />
+              <div className={styles.ButtonWrapper}>
+                <Button
+                  type="button"
+                  iconRight="keyboard_backspace"
+                  iconRightMirrorHor
+                  onClick={this.onNext}
+                  style={{ visibility: node.isSynced ? 'visible' : 'hidden' }}
+                >
+                  <FormattedMessage id="button.next" />
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }

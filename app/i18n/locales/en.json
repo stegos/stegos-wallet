@@ -20,7 +20,7 @@
   "synced.successfully": "Your wallet is synchronized!",
   "syncing.please.wait": "Please wait...",
   "syncing.failed.description": "Something went wrong, please restart your wallet",
-  "syncing.failed.description2": "bla bla bla bla",
+  "syncing.failed.error": "An error occurred. {error}",
 
   "terms.title": "Bugs and Terms of Use",
   "terms.share.data": "Share anonymized data to help improve Stegos Wallet",

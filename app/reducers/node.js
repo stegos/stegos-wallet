@@ -10,7 +10,8 @@ const initialState = {
   syncingProgress: 0,
   apiToken: null,
   firstReceivedBlockTimestamp: null,
-  lastReceivedBlockTimestamp: null
+  lastReceivedBlockTimestamp: null,
+  isFailed: false
 };
 
 export default function node(
@@ -21,7 +22,8 @@ export default function node(
     case RUN_NODE_FAILED:
       return {
         ...state,
-        isStarted: false
+        isStarted: false,
+        isFailed: true
       };
     case NODE_RUNNING:
       return {

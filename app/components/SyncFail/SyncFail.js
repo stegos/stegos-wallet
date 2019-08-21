@@ -2,27 +2,29 @@
 import React, { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import styles from './SyncFail.css';
-import Header from '../common/Header/Header';
-import BootstrapWizard from '../common/Wizard/BootstrapWizard';
 import Fail from '../../../resources/img/Fail.svg';
+
+type Props = {
+  error: string,
+  intl: any
+};
 
 class SyncFail extends Component<Props> {
   props: Props;
 
+  get message() {
+    const { intl, error } = this.props;
+    return intl.formatMessage({ id: 'syncing.failed.error' }, { error });
+  }
+
   render() {
     return (
-      <div className={styles.Wrapper}>
-        <Header />
-        <BootstrapWizard step={2} />
-        <div className={styles.Main}>
-          <img src={Fail} alt="FAIL" className={styles.FailSvg} />
-          <span className={styles.Title}>
-            <FormattedMessage id="syncing.failed.description" />
-          </span>
-          <span className={styles.Label}>
-            <FormattedMessage id="syncing.failed.description2" />
-          </span>
-        </div>
+      <div className={styles.Main}>
+        <img src={Fail} alt="FAIL" className={styles.FailSvg} />
+        <span className={styles.Title}>
+          <FormattedMessage id="syncing.failed.description" />
+        </span>
+        {this.message}
       </div>
     );
   }

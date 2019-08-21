@@ -7,7 +7,6 @@ import PasswordProtectionPage from './containers/PasswordProtectionPage';
 import SyncPage from './containers/SyncPage';
 import BagsAndTermsPage from './containers/BagsAndTermsPage';
 import Alert from './components/Alert/Alert';
-import SyncFailPage from './containers/SyncFailPage';
 
 export default () => (
   <App>
@@ -17,7 +16,6 @@ export default () => (
       <Route path={routes.SYNC} component={SyncPage} />
       <Route path={routes.PROTECT} component={PasswordProtectionPage} />
       <Route path={routes.BAGS_AND_TERMS} component={BagsAndTermsPage} />
-      <Route path={routes.SYNC_FAILED} component={SyncFailPage} />
     </Switch>
   </App>
 );
