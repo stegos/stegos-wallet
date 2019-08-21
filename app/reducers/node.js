@@ -11,7 +11,7 @@ const initialState = {
   apiToken: null,
   firstReceivedBlockTimestamp: null,
   lastReceivedBlockTimestamp: null,
-  isFailed: false
+  error: null
 };
 
 export default function node(
@@ -23,7 +23,7 @@ export default function node(
       return {
         ...state,
         isStarted: false,
-        isFailed: true
+        error: action.payload.error
       };
     case NODE_RUNNING:
       return {

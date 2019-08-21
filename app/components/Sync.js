@@ -35,8 +35,8 @@ export default class Sync extends Component<Props> {
       <div className={styles.Wrapper}>
         <Header />
         {!isTermsAccepted && <BootstrapWizard step={2} />}
-        {node.isFailed && <SyncFail />}
-        {!node.isFailed && (
+        {node.error && <SyncFail error={node.error} />}
+        {!node.error && (
           <div className={styles.Main}>
             <span className={styles.Title}>
               <FormattedMessage

@@ -12,19 +12,17 @@ type Props = {
 class SyncFail extends Component<Props> {
   props: Props;
 
-  get message() {
-    const { intl, error } = this.props;
-    return intl.formatMessage({ id: 'syncing.failed.error' }, { error });
-  }
-
   render() {
+    const { error } = this.props;
     return (
       <div className={styles.Main}>
         <img src={Fail} alt="FAIL" className={styles.FailSvg} />
         <span className={styles.Title}>
           <FormattedMessage id="syncing.failed.description" />
         </span>
-        {this.message}
+        <span className={styles.Label}>
+          {error}
+        </span>
       </div>
     );
   }

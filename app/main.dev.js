@@ -143,7 +143,7 @@ ipcMain.on('RUN_NODE', event => {
     .catch(e => {
       console.log(e);
       dialog.showErrorBox('Error', `An error occurred\n${e}`);
-      event.sender.send('RUN_NODE_FAILED');
+      event.sender.send('RUN_NODE_FAILED', {error: e});
     });
 });
 

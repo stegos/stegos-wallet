@@ -21,7 +21,7 @@ export type NodeStateType = {
   apiToken: string | null,
   firstReceivedBlockTimestamp: number | null,
   lastReceivedBlockTimestamp: number | null,
-  isFailed: boolean
+  error: string | null
 };
 
 export type AccountsStateType = {
