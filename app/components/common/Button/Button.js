@@ -25,7 +25,8 @@ type Props = {
   className?: string,
   link?: string | LocationShape,
   icoButton?: boolean,
-  color?: string
+  color?: string,
+  submit?: boolean
 };
 
 export default class Button extends Component<Props> {
@@ -44,7 +45,8 @@ export default class Button extends Component<Props> {
     className: '',
     link: null,
     icoButton: false,
-    color: 'inherit'
+    color: 'inherit',
+    submit: false
   };
 
   constructor(props) {
@@ -116,7 +118,8 @@ export default class Button extends Component<Props> {
       style,
       className,
       link,
-      icoButton
+      icoButton,
+      submit
     } = this.props;
     let buttonTypeClass = '';
     switch (type) {
@@ -145,13 +148,14 @@ export default class Button extends Component<Props> {
       className
     ];
 
-    const ButtonWrapper = link ? Link : 'div';
+    const ButtonWrapper = link ? Link : 'button';
     return (
       <ButtonWrapper
         className={classes.join(' ')}
         onClick={this.onClick.bind(this)}
         onKeyPress={this.onKeyPress.bind(this)}
         role="button"
+        type={submit ? 'submit' : 'button'}
         tabIndex={tabIndex}
         style={style}
         to={link}

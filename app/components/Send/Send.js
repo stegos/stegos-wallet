@@ -470,7 +470,7 @@ class Send extends Component<Props> {
     const { intl } = this.props;
     return (
       <Fragment>
-        <div className={styles.Send}>
+        <form className={styles.Send} onSubmit={console.log}>
           {titledAccount && (
             <Fragment>
               <span className={styles.Title}>{titledAccount.name}</span>
@@ -511,7 +511,7 @@ class Send extends Component<Props> {
             {(step === 0 || step === 1) && this.sendForm()}
             {step === 2 && this.transactionSent()}
           </div>
-        </div>
+        </form>
         <Busy
           visible={isBusy}
           title={intl.formatMessage({ id: 'send.waiting' })}
