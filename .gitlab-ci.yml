@@ -28,7 +28,7 @@ build:linux:
     - node --version
     - yarn --version
     - mkdir node
-    - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/linux/stegosd?job=release:linux -o node/stegosd
+    - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/stegosd-linux-x64?job=release:linux -o node/stegosd
     - chmod a+x node/stegosd
     - node/stegosd --version
     - yarn install
@@ -52,7 +52,7 @@ build:macos:
     - node --version
     - yarn --version
     - mkdir node
-    - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/macos/stegosd?job=release:macos -o node/stegosd
+    - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/stegosd-macos-x64?job=release:macos -o node/stegosd
     - chmod a+x node/stegosd
     - node/stegosd --version
     - yarn install

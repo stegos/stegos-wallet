@@ -29,7 +29,7 @@ class Backup extends Component<Props> {
     const { recoveryPhrase } = account;
     const words = [];
     for (let i = 0; i < RECOVERY_PHRASE_LENGTH; i += 1) {
-      words.push({ id: i, value: recoveryPhrase[i] });
+      words.push({ id: i, value: (recoveryPhrase && recoveryPhrase[i]) || '' });
     }
     this.state = {
       phrase: words,
@@ -73,7 +73,7 @@ class Backup extends Component<Props> {
     const { recoveryPhrase } = account;
     const words = [];
     for (let i = 0; i < RECOVERY_PHRASE_LENGTH; i += 1) {
-      words.push({ id: i, value: recoveryPhrase[i] });
+      words.push({ id: i, value: (recoveryPhrase && recoveryPhrase[i]) || '' });
     }
     this.setState({ step: 0, phrase: words });
   }
