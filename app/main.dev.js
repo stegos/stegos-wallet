@@ -38,7 +38,13 @@ const nodePath =
   process.env.NODE_ENV === 'production'
     ? path.resolve(__dirname, '../../node/')
     : path.resolve(__dirname, '../node/');
-const appDataPath = `${getPath('appData')}/stegos/`;
+const chain = process.env.CHAIN ? process.env.CHAIN : 'testnet';
+const appDataPath = process.env.APPDATAPATH
+  ? process.env.APPDATAPATH
+  : `${getPath('appData')}/stegos/`;
+const apiEndpoint = process.env.APIENDPOINT
+  ? process.env.APIENDPOINT
+  : wsEndpoint;
 const tokenFile = `${appDataPath}/api.token`; // todo config
 const logFile = `${appDataPath}/stegos.log`; // todo config
 
@@ -153,7 +159,14 @@ function runNodeProcess(): Promise<void> {
       if (fs.existsSync(logFile)) fs.unlinkSync(logFile); // todo may be rotation
       nodeProcess = spawn(
         `./stegosd`,
-        ['--data-dir', appDataPath, '--api-endpoint', wsEndpoint],
+        [
+          '--chain',
+          chain,
+          '--data-dir',
+          appDataPath,
+          '--api-endpoint',
+          apiEndpoint
+        ],
         {
           cwd: nodePath
         }

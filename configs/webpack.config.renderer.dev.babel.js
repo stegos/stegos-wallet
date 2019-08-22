@@ -260,6 +260,15 @@ export default merge.smart(baseConfig, {
     before() {
       if (process.env.START_HOT) {
         console.log('Starting Main Process...');
+        if (getArgvParam('--chain')) {
+          process.env.CHAIN = getArgvParam('--chain');
+        }
+        if (getArgvParam('--data-dir')) {
+          process.env.APPDATAPATH = getArgvParam('--data-dir');
+        }
+        if (getArgvParam('--api-endpoint')) {
+          process.env.APIENDPOINT = getArgvParam('--api-endpoint');
+        }
         spawn('npm', ['run', 'start-main-dev'], {
           shell: true,
           env: process.env,
@@ -271,3 +280,9 @@ export default merge.smart(baseConfig, {
     }
   }
 });
+
+function getArgvParam(name) {
+  return process.argv.indexOf(name) > 1
+    ? process.argv[process.argv.indexOf(name) + 1]
+    : null;
+}
