@@ -97,6 +97,7 @@
 
   "transactions.list.title": "Last operations",
   "transactions.list.certificate": "Certificate",
+  "transactions.list.comment": "Comment",
 
   "transaction.type.send": "Send",
   "transaction.type.receive": "Receive",
