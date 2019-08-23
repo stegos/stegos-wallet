@@ -14,24 +14,14 @@ type Props = {
   node: NodeStateType,
   className: string,
   lockWallet: () => void,
+  showWalletSettings: () => void,
   intl: any
 };
 
 class StatusBar extends PureComponent<Props> {
-  state = {
-    showSettings: false
-  };
-
   openWalletSettings() {
-    this.setState({
-      showSettings: true
-    });
-  }
-
-  closeWalletSettings() {
-    this.setState({
-      showSettings: false
-    });
+    const { showWalletSettings } = this.props;
+    showWalletSettings();
   }
 
   onLockPressed() {
@@ -40,7 +30,6 @@ class StatusBar extends PureComponent<Props> {
   }
 
   render() {
-    const { showSettings } = this.state;
     const { node, className, intl } = this.props;
     return (
       <Header
@@ -87,10 +76,7 @@ class StatusBar extends PureComponent<Props> {
             />
           </span>
         </div>
-        <WalletSettings
-          onCloseRequest={() => this.closeWalletSettings()}
-          visible={showSettings}
-        />
+        <WalletSettings />
       </Header>
     );
   }

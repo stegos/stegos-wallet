@@ -29,8 +29,8 @@ type Location = {
 type Props = {
   location: Location,
   accounts: any,
-  deleteAccount: () => {},
-  setLastUsedAccount: () => {}
+  deleteAccount: () => void,
+  setLastUsedAccount: () => void
 };
 
 export default class Account extends PureComponent<Props> {

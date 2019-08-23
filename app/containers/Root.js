@@ -8,7 +8,7 @@ import type { AppStateType, Store } from '../reducers/types';
 import Routes from '../Routes';
 import '../utils/extended';
 import menu from '../contextMenu';
-import { IntlProviderWrapper } from '../i18n/IntlContext';
+import IntlProviderWrapper from '../components/i18n/IntlContext';
 
 type Props = {
   store: Store,
