@@ -1,4 +1,5 @@
 import { RECOVERY_PHRASE_LENGTH } from '../constants/config';
+import { Account } from '../reducers/types';
 
 export const toTwoDigits = (str: string) => `0${str}`.slice(-2);
 
@@ -53,4 +54,12 @@ export const formatDateForWs = ts => {
 export const getYearAgoTimestamp = () => {
   const now = new Date();
   return formatDateForWs(now.setFullYear(now.getFullYear() - 1));
+};
+
+export const getAccountName = (account: Account, intl: any) => {
+  // todo
+  if (account.name) {
+    return account.name;
+  }
+  return intl.formatMessage({ id: 'account.default.name' }, { id: account.id });
 };

@@ -12,7 +12,7 @@ import Backup from './Backup/Backup';
 import DeleteAccount from './DeleteAccount/DeleteAccount';
 import styles from './EditAccount.css';
 import type { Account } from '../../reducers/types';
-import AccountName from '../common/Account/AccountName';
+import { getAccountName } from '../../utils/format';
 
 type Props = {
   accountId: number,
@@ -103,7 +103,7 @@ class EditAccount extends PureComponent<Props> {
         </div>
         <Input
           className={styles.Input}
-          placeholder={AccountName.getName(account, intl)}
+          placeholder={getAccountName(account, intl)}
           noLabel
           onChange={this.onChangeAccountName}
         />

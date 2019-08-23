@@ -3,7 +3,6 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import type { AccountsStateType } from '../../reducers/types';
-import AccountName from '../common/Account/AccountName';
 import Busy from '../common/Busy/Busy';
 import Button from '../common/Button/Button';
 import Dropdown from '../common/Dropdown/Dropdown';
@@ -15,6 +14,7 @@ import routes from '../../constants/routes';
 import { POWER_DIVISIBILITY } from '../../constants/config';
 import {
   formatDigit,
+  getAccountName,
   isBase58,
   isPositiveStegosNumber
 } from '../../utils/format';
@@ -268,10 +268,10 @@ class Send extends Component<Props> {
           {Send.renderDropdown(
             Object.entries(accounts).map(acc => ({
               value: acc[1],
-              name: AccountName.getName(acc[1], intl)
+              name: getAccountName(acc[1], intl)
             })),
             intl.formatMessage({ id: 'input.name.account' }),
-            account && AccountName.getName(account, intl),
+            account && getAccountName(account, intl),
             this.handleAccountChange.bind(this),
             accountError,
             !!accountError,
@@ -450,10 +450,7 @@ class Send extends Component<Props> {
             id="send.transaction.sent.certificate"
             values={{ account: '' }}
           />{' '}
-          <b>
-            {AccountName.getName(account, intl)}
-          </b>
-          .
+          <b>{getAccountName(account, intl)}</b>.
         </p>
       </div>,
       <div className={styles.ActionsContainer} key="Actions">
@@ -480,7 +477,7 @@ class Send extends Component<Props> {
           {titledAccount && (
             <Fragment>
               <span className={styles.Title}>
-                {AccountName.getName(titledAccount, intl)}
+                {getAccountName(titledAccount, intl)}
               </span>
               <Link
                 to={{

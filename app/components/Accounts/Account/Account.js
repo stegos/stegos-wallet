@@ -2,7 +2,7 @@
 import React, { Fragment, PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { formatDigit } from '../../../utils/format';
+import { formatDigit, getAccountName } from '../../../utils/format';
 import Button from '../../common/Button/Button';
 import Icon from '../../common/Icon/Icon';
 import EditAccount from '../../EditAccount/EditAccount';
@@ -20,7 +20,6 @@ import {
   weekAgo,
   yearAgo
 } from '../../../utils/chart';
-import AccountName from '../../common/Account/AccountName';
 
 type Location = {
   pathname: string,
@@ -115,7 +114,7 @@ class Account extends PureComponent<Props> {
     return (
       <div className={styles.Account}>
         <div className={styles.Header}>
-          <span className={styles.Title}>{AccountName.getName(account, intl)}</span>
+          <span className={styles.Title}>{getAccountName(account, intl)}</span>
           <Button
             type="Invisible"
             icon="tune"
@@ -260,4 +259,4 @@ class Account extends PureComponent<Props> {
   }
 }
 
-export default injectIntl(Account)
+export default injectIntl(Account);
