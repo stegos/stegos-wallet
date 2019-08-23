@@ -18,9 +18,7 @@
 
 .Transaction {
   display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   margin-top: 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid #979797;
@@ -126,4 +124,20 @@
   text-align: right;
   letter-spacing: 0.54px;
   color: #fff;
+}
+
+.TransactionComment {
+  font-size: 10px;
+  grid-area: comment;
+}
+
+.TransactionRow {
+  display: grid;
+  align-items: center;
+  justify-content: space-between;
+  grid-template-columns: 8% 14% 28% 20% 120px;
+  grid-template-areas:
+    '. . . . .'
+    '. . comment comment comment';
+  width: 100%;
 }
