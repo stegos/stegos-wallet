@@ -10,7 +10,7 @@
  *
  * @flow
  */
-import { app, BrowserWindow, dialog, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { spawn } from 'child_process';
@@ -142,8 +142,7 @@ ipcMain.on('RUN_NODE', event => {
     .then(() => event.sender.send('NODE_RUNNING'))
     .catch(e => {
       console.log(e);
-      dialog.showErrorBox('Error', `An error occurred\n${e}`);
-      event.sender.send('RUN_NODE_FAILED');
+      event.sender.send('RUN_NODE_FAILED', { error: e });
     });
 });
 

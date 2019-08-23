@@ -36,8 +36,9 @@ export const onNodeRunning = () => (dispatch: Dispatch) => {
   dispatch({ type: NODE_RUNNING });
 };
 
-export const onRunNodeFailed = () => (dispatch: Dispatch) =>
-  dispatch({ type: RUN_NODE_FAILED });
+export const onRunNodeFailed = (_, args) => (dispatch: Dispatch) => {
+  dispatch({ type: RUN_NODE_FAILED, payload: args });
+};
 
 export const onTokenReceived = (event, token) => (dispatch: Dispatch) => {
   dispatch({ type: TOKEN_RECEIVED, payload: { token } });
