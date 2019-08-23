@@ -152,6 +152,7 @@
   "input.name.comment": "Comment",
   "input.name.fees": "Fees",
   "input.name.account": "Select account...",
+  "input.name.language": "App language",
 
   "input.error.required": "This fields is required",
   "input.error.dropdown.required": "Please select a value",

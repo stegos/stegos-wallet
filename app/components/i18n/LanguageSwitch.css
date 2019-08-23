@@ -1,7 +1,15 @@
-.LanguageSwitchDropdown {
+.LanguageSwitchContainer {
   height: 49px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   margin-bottom: 30px;
   border-bottom: 1px solid #5b5d63;
+  justify-content: space-between;
+}
+
+.LanguageSwitchDropdown {
+  width: 30%;
   font-style: normal;
   font-weight: normal;
   font-size: 16px;
