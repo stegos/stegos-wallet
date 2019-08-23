@@ -20,15 +20,21 @@ class LanguageSwitch extends Component<Props> {
     language: 'en'
   };
 
+  get language() {
+    const { language } = this.props;
+    const i = localesOptions.findIndex(option => option.value === language);
+    return i === -1 ? 'unknown' : localesOptions[i].name;
+  }
+
   render() {
-    const { language, setLocale } = this.props;
+    const { setLocale } = this.props;
     return (
       <div className={styles.LanguageSwitchContainer}>
         <span>
           <FormattedMessage id="input.name.language" />:
         </span>
         <Dropdown
-          value={language || 'unknown'}
+          value={this.language}
           onChange={newLocale => setLocale(newLocale.value)}
           options={localesOptions}
           icon="expand_more"

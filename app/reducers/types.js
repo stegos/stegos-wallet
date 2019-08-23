@@ -11,7 +11,8 @@ export type AppStateType = {
   isLocked: boolean,
   error: string,
   waiting: boolean,
-  language: string | null
+  language: string | null,
+  showWalletSettings: boolean
 };
 
 export type NodeStateType = {

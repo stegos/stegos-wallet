@@ -10,6 +10,7 @@ import {
   SET_SETTINGS,
   SET_WAITING,
   SHOW_ERROR,
+  SHOW_WALLET_SETTINGS,
   UNLOCK_WALLET
 } from '../actions/settings';
 import { COMPLETE_ONBOARDING } from '../actions/node';
@@ -24,7 +25,8 @@ const initialState = {
   autoLockTimeout: 25, // todo config
   isLocked: false,
   error: '',
-  waiting: false
+  waiting: false,
+  showWalletSettings: false
 };
 
 export default function app(
@@ -95,6 +97,11 @@ export default function app(
       return {
         ...state,
         language: payload
+      };
+    case SHOW_WALLET_SETTINGS:
+      return {
+        ...state,
+        showWalletSettings: payload
       };
     default:
       return state;
