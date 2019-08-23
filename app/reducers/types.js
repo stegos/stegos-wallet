@@ -10,7 +10,8 @@ export type AppStateType = {
   autoLockTimeout: number,
   isLocked: boolean,
   error: string,
-  waiting: boolean
+  waiting: boolean,
+  language: string | null
 };
 
 export type NodeStateType = {

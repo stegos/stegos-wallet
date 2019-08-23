@@ -1,15 +1,16 @@
 import type { Action, AppStateType } from './types';
 import {
-  SET_FIRST_LAUNCH,
   HIDE_ERROR,
   LOCK_WALLET,
   SET_AUTO_LOCK_TIMEOUT,
   SET_BUGS_AND_TERMS,
+  SET_FIRST_LAUNCH,
+  SET_LANGUAGE,
   SET_PASSWORD,
   SET_SETTINGS,
+  SET_WAITING,
   SHOW_ERROR,
-  UNLOCK_WALLET,
-  SET_WAITING
+  UNLOCK_WALLET
 } from '../actions/settings';
 import { COMPLETE_ONBOARDING } from '../actions/node';
 
@@ -89,6 +90,11 @@ export default function app(
       return {
         ...state,
         waiting: payload
+      };
+    case SET_LANGUAGE:
+      return {
+        ...state,
+        language: payload
       };
     default:
       return state;
