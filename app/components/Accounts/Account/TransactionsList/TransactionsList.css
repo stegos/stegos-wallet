@@ -134,7 +134,7 @@
   display: grid;
   align-items: center;
   justify-content: space-between;
-  grid-template-columns: 10% 16% 22% 20% 20%;
+  grid-template-columns: 10% 14% 28% 28% 20%;
   grid-template-areas:
     '. . . . .'
     '. . comment comment comment';
