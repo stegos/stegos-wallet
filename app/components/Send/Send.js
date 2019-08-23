@@ -14,6 +14,7 @@ import routes from '../../constants/routes';
 import { POWER_DIVISIBILITY } from '../../constants/config';
 import {
   formatDigit,
+  getAccountName,
   isBase58,
   isPositiveStegosNumber
 } from '../../utils/format';
@@ -267,10 +268,10 @@ class Send extends Component<Props> {
           {Send.renderDropdown(
             Object.entries(accounts).map(acc => ({
               value: acc[1],
-              name: acc[1].name
+              name: getAccountName(acc[1], intl)
             })),
             intl.formatMessage({ id: 'input.name.account' }),
-            account && account.name,
+            account && getAccountName(account, intl),
             this.handleAccountChange.bind(this),
             accountError,
             !!accountError,
@@ -434,6 +435,7 @@ class Send extends Component<Props> {
   }
 
   transactionSent() {
+    const { intl } = this.props;
     const { account } = this.state;
     return [
       <div className={styles.TransactionSentContainer} key="Accounts">
@@ -448,7 +450,7 @@ class Send extends Component<Props> {
             id="send.transaction.sent.certificate"
             values={{ account: '' }}
           />{' '}
-          <b>{account.name}</b>.
+          <b>{getAccountName(account, intl)}</b>.
         </p>
       </div>,
       <div className={styles.ActionsContainer} key="Actions">
@@ -474,7 +476,9 @@ class Send extends Component<Props> {
         <div className={styles.Send}>
           {titledAccount && (
             <Fragment>
-              <span className={styles.Title}>{titledAccount.name}</span>
+              <span className={styles.Title}>
+                {getAccountName(titledAccount, intl)}
+              </span>
               <Link
                 to={{
                   pathname: routes.ACCOUNT,

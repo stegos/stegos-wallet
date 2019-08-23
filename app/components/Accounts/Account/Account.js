@@ -1,8 +1,8 @@
 // @flow
 import React, { Fragment, PureComponent } from 'react';
 import { Link } from 'react-router-dom';
-import { FormattedMessage } from 'react-intl';
-import { formatDigit } from '../../../utils/format';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { formatDigit, getAccountName } from '../../../utils/format';
 import Button from '../../common/Button/Button';
 import Icon from '../../common/Icon/Icon';
 import EditAccount from '../../EditAccount/EditAccount';
@@ -30,10 +30,11 @@ type Props = {
   location: Location,
   accounts: any,
   deleteAccount: () => void,
-  setLastUsedAccount: () => void
+  setLastUsedAccount: () => void,
+  intl: any
 };
 
-export default class Account extends PureComponent<Props> {
+class Account extends PureComponent<Props> {
   static getDayName(date) {
     return date.toLocaleDateString('en-us', { weekday: 'short' });
   }
@@ -99,7 +100,7 @@ export default class Account extends PureComponent<Props> {
 
   render() {
     const { editAccountVisible, restoreAccountVisible, period } = this.state;
-    const { location, deleteAccount, accounts } = this.props;
+    const { location, deleteAccount, accounts, intl } = this.props;
     if (!location.state || !location.state.accountId) {
       return null;
     }
@@ -113,7 +114,7 @@ export default class Account extends PureComponent<Props> {
     return (
       <div className={styles.Account}>
         <div className={styles.Header}>
-          <span className={styles.Title}>{account.name}</span>
+          <span className={styles.Title}>{getAccountName(account, intl)}</span>
           <Button
             type="Invisible"
             icon="tune"
@@ -257,3 +258,5 @@ export default class Account extends PureComponent<Props> {
     );
   }
 }
+
+export default injectIntl(Account);

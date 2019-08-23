@@ -8,6 +8,7 @@ import Icon from '../../common/Icon/Icon';
 import AccountItem from './AccountItem/AccountItem';
 import styles from './AccountsList.css';
 import Busy from '../../common/Busy/Busy';
+import { getAccountName } from '../../../utils/format';
 
 type Props = {
   accounts: AccountsStateType,
@@ -60,10 +61,14 @@ export default class AccountsList extends PureComponent<Props> {
 
   getFilteredAndSortedAccounts = () => {
     const { sort } = this.state;
+    const { intl } = this.props;
     const sortProp = sort.value;
     const accounts = this.getFilteredAccounts();
     return Object.entries(accounts).sort((a, b) => {
-      if (sortProp === 'name') return a[1].name.localeCompare(b[1].name);
+      if (sortProp === 'name')
+        return getAccountName(a[1], intl).localeCompare(
+          getAccountName(b[1], intl)
+        );
       if (sortProp === 'balance') return a[1].balance > b[1].balance;
       return a > b;
     });
