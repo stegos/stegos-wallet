@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent, Fragment } from 'react';
+import React, { Fragment, PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { formatDigit } from '../../../utils/format';
@@ -14,6 +14,12 @@ import routes from '../../../constants/routes';
 import styles from './Account.css';
 import Stg from '../../../../resources/img/Stg.svg';
 import { POWER_DIVISIBILITY } from '../../../constants/config';
+import {
+  generateChartData,
+  monthAgo,
+  weekAgo,
+  yearAgo
+} from '../../../utils/chart';
 import AccountName from '../../common/Account/AccountName';
 
 type Location = {
@@ -24,8 +30,8 @@ type Location = {
 type Props = {
   location: Location,
   accounts: any,
-  deleteAccount: () => {},
-  setLastUsedAccount: () => {},
+  deleteAccount: () => void,
+  setLastUsedAccount: () => void,
   intl: any
 };
 
@@ -51,17 +57,13 @@ class Account extends PureComponent<Props> {
     const { accountId } = location.state;
     const account = accounts[accountId];
     const { transactions } = account;
-    const now = new Date();
-    const weekAgo = new Date().setDate(now.getDate() - 7);
-    const monthAgo = new Date().setMonth(now.getMonth() - 1);
-    const yearAgo = new Date().setFullYear(now.getFullYear() - 1);
     switch (period) {
       case 'week':
-        return transactions.filter(t => t.timestamp > weekAgo);
+        return transactions.filter(t => t.timestamp > weekAgo(new Date()));
       case 'month':
-        return transactions.filter(t => t.timestamp > monthAgo);
+        return transactions.filter(t => t.timestamp > monthAgo(new Date()));
       case 'year':
-        return transactions.filter(t => t.timestamp > yearAgo);
+        return transactions.filter(t => t.timestamp > yearAgo(new Date()));
       default:
         return transactions;
     }
@@ -86,29 +88,15 @@ class Account extends PureComponent<Props> {
   }
 
   get chartDataSource() {
+    const { period } = this.state;
     const { location, accounts } = this.props;
     const { accountId } = location.state;
     const account = accounts[accountId];
-    const { transactions } = account;
-    let data = [];
-    let balance = Number(account.balance);
-    transactions.forEach(t => {
-      balance +=
-        t.amount * (t.type === 'Receive' ? -1 : 1) +
-        (t.type === 'Send' ? t.fee || 0 : 0);
-      data.push({
-        STG: balance,
-        name: Account.getDayName(t.timestamp),
-        tooltip: balance / POWER_DIVISIBILITY
-      });
-    });
-    data = data.reverse();
-    data.push({
-      STG: account.balance,
-      name: Account.getDayName(new Date()),
-      tooltip: account.balance / POWER_DIVISIBILITY
-    });
-    return data;
+    return generateChartData(
+      account.transactions,
+      Number(account.balance),
+      period
+    );
   }
 
   render() {
@@ -222,10 +210,7 @@ class Account extends PureComponent<Props> {
           )}
         </div>
         {!!transactions.length && (
-          <TransactionsList
-            transactions={transactions}
-            sender={account.address}
-          />
+          <TransactionsList transactions={transactions} />
         )}
         {isNewWallet && (
           <div className={styles.BottomActions}>

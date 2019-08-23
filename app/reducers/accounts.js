@@ -1,5 +1,6 @@
 import { remote } from 'electron';
 import type { AccountsStateType, Action } from './types';
+import { createEmptyAccount, createOutgoingTransaction } from './types';
 import { WS_MESSAGE } from '../ws/actionsTypes';
 import {
   RECOVERY_PHRASE_WRITTEN_DOWN,
@@ -7,7 +8,6 @@ import {
   SET_LAST_USED_ACCOUNT
 } from '../actions/accounts';
 import { INIT_ACCOUNTS } from '../actions/settings';
-import { createEmptyAccount, createOutgoingTransaction } from './types';
 
 const initialState = {
   items: {}, // map
@@ -50,8 +50,11 @@ export default function accounts(
       case 'accounts_info':
         return {
           ...state,
-          items: payload.accounts.reduce((acc, id) => {
-            acc[id] = state.items[id] || createEmptyAccount(id);
+          items: Object.entries(payload.accounts).reduce((acc, entry) => {
+            acc[entry[0]] = {
+              ...(state.items[entry[0]] || createEmptyAccount(entry[0])),
+              address: entry[1].account_pkey
+            };
             return acc;
           }, {})
         };
@@ -63,8 +66,8 @@ export default function accounts(
             [payload.account_id]: createEmptyAccount(payload.account_id)
           }
         };
-      case 'keys_info':
-        return setAccountProps({ address: payload.account_address });
+      case 'account_info':
+        return setAccountProps({ address: payload.account_pkey });
       case 'unsealed':
         return setAccountProps({ isLocked: false });
       case 'sealed':

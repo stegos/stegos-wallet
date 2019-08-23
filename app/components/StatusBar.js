@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import * as SettingsActions from '../actions/settings';
+import * as AppActions from '../actions/settings';
 import type { NodeStateType } from '../reducers/types';
 import Button from './common/Button/Button';
 import Header from './common/Header/Header';
@@ -14,24 +14,14 @@ type Props = {
   node: NodeStateType,
   className: string,
   lockWallet: () => void,
+  showWalletSettings: () => void,
   intl: any
 };
 
 class StatusBar extends PureComponent<Props> {
-  state = {
-    showSettings: false
-  };
-
   openWalletSettings() {
-    this.setState({
-      showSettings: true
-    });
-  }
-
-  closeWalletSettings() {
-    this.setState({
-      showSettings: false
-    });
+    const { showWalletSettings } = this.props;
+    showWalletSettings();
   }
 
   onLockPressed() {
@@ -40,7 +30,6 @@ class StatusBar extends PureComponent<Props> {
   }
 
   render() {
-    const { showSettings } = this.state;
     const { node, className, intl } = this.props;
     return (
       <Header
@@ -87,19 +76,13 @@ class StatusBar extends PureComponent<Props> {
             />
           </span>
         </div>
-        <WalletSettings
-          onCloseRequest={() => this.closeWalletSettings()}
-          visible={showSettings}
-        />
+        <WalletSettings />
       </Header>
     );
   }
 }
 
 export default connect(
-  state => ({
-    node: state.node,
-    settings: state.settings
-  }),
-  dispatch => bindActionCreators(SettingsActions, dispatch)
+  state => ({ node: state.node }),
+  dispatch => bindActionCreators(AppActions, dispatch)
 )(injectIntl(StatusBar));

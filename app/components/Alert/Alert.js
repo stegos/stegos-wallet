@@ -5,20 +5,19 @@ import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Button from '../common/Button/Button';
 import styles from './Alert.css';
-import type { SettingsStateType } from '../../reducers/types';
 import Icon from '../common/Icon/Icon';
 import * as SettingsActions from '../../actions/settings';
 
 type Props = {
-  settings?: SettingsStateType,
+  error?: string,
   hideError?: () => void
 };
 
-class AlertModal extends Component<Props> {
+class Alert extends Component<Props> {
   props: Props;
 
   static defaultProps = {
-    settings: { error: '' },
+    error: '',
     hideError: () => {}
   };
 
@@ -39,10 +38,9 @@ class AlertModal extends Component<Props> {
   };
 
   render() {
-    const { settings } = this.props;
-    const { error } = settings;
+    const { error } = this.props;
     const visible = error && error.length > 0;
-    const zIndex = AlertModal.getHigestZindex();
+    const zIndex = Alert.getHigestZindex();
     return (
       <div
         className={styles.Alert}
@@ -75,6 +73,6 @@ class AlertModal extends Component<Props> {
 }
 
 export default connect(
-  state => ({ settings: state.settings }),
+  state => ({ error: state.app.error }),
   dispatch => bindActionCreators(SettingsActions, dispatch)
-)(AlertModal);
+)(Alert);

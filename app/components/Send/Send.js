@@ -48,7 +48,8 @@ class Send extends Component<Props> {
         iconPosition="right"
         style={{
           width: '100%',
-          border: !readOnly ? '1px solid #5b5d63' : null,
+          height: '35px',
+          border: `1px solid ${readOnly ? 'transparent' : '#5b5d63'}`,
           padding: '4px 12px 5px 12px',
           boxSizing: 'border-box'
         }}

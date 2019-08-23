@@ -1,0 +1,38 @@
+.Main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-grow: 0.5;
+  margin-top: 50px;
+}
+
+.Container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Title {
+  font-style: normal;
+  font-size: 30px;
+  line-height: 50px;
+  text-align: center;
+  color: #fff;
+  font-weight: 500;
+}
+
+.Label {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: center;
+  letter-spacing: 0.54px;
+  color: #fff;
+}
+
+.FailSvg {
+  width: 100px;
+  height: 100px;
+}

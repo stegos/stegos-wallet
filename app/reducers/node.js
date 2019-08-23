@@ -10,7 +10,8 @@ const initialState = {
   syncingProgress: 0,
   apiToken: null,
   firstReceivedBlockTimestamp: null,
-  lastReceivedBlockTimestamp: null
+  lastReceivedBlockTimestamp: null,
+  error: null
 };
 
 export default function node(
@@ -21,7 +22,8 @@ export default function node(
     case RUN_NODE_FAILED:
       return {
         ...state,
-        isStarted: false
+        isStarted: false,
+        error: action.payload.error
       };
     case NODE_RUNNING:
       return {
@@ -66,6 +68,7 @@ const handleMessage = (state: NodeStateType, payload) => {
 };
 
 function handleReceivedBlockTimestamp(state, payload) {
+  const { syncingProgress } = state;
   const firstReceivedBlockTimestamp =
     state.firstReceivedBlockTimestamp ||
     getTimestamp(payload.last_macro_block_timestamp);
@@ -75,10 +78,13 @@ function handleReceivedBlockTimestamp(state, payload) {
   return {
     firstReceivedBlockTimestamp,
     lastReceivedBlockTimestamp,
-    syncingProgress: Math.round(
-      ((lastReceivedBlockTimestamp - firstReceivedBlockTimestamp) /
-        (+new Date() - firstReceivedBlockTimestamp)) *
-        100
+    syncingProgress: Math.max(
+      syncingProgress,
+      Math.round(
+        ((lastReceivedBlockTimestamp - firstReceivedBlockTimestamp) /
+          (+new Date() - firstReceivedBlockTimestamp)) *
+          100
+      )
     )
   };
 }

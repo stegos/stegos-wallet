@@ -8,6 +8,7 @@ import styles from './Portfolio.css';
 import Stg from '../../../../resources/img/Stg.svg';
 import { POWER_DIVISIBILITY } from '../../../constants/config';
 import type { AccountsStateType } from '../../../reducers/types';
+import { generateChartData } from '../../../utils/chart';
 
 type Props = {
   accounts: AccountsStateType,
@@ -20,37 +21,17 @@ class Portfolio extends PureComponent<Props> {
   }
 
   state = {
-    trendingUp: true,
     period: 'week'
   };
 
-  switchTranding() {
-    const { trendingUp } = this.state;
-    this.setState({
-      trendingUp: !trendingUp
-    });
-  }
-
   get balance() {
     const { accounts } = this.props;
-    return Object.entries(accounts).reduce(
-      (a, c) => a + c[1].balance / POWER_DIVISIBILITY,
-      0
-    );
+    return Object.entries(accounts).reduce((a, c) => a + c[1].balance, 0);
   }
 
   get size() {
     const { accounts } = this.props;
     return Object.keys(accounts).length;
-  }
-
-  get transactions() {
-    const { accounts } = this.props;
-    [...accounts.entries()].reduce(
-      (a, c) => a + c[1].balance / POWER_DIVISIBILITY,
-      0
-    );
-    return [];
   }
 
   get filteredTransactions() {
@@ -78,27 +59,8 @@ class Portfolio extends PureComponent<Props> {
   }
 
   get chartDataSource() {
-    const { balance } = this;
-    const transactions = this.filteredTransactions;
-    let data = [];
-    let bal = Number(balance * POWER_DIVISIBILITY);
-    transactions.forEach(t => {
-      bal +=
-        t.amount * (t.type === 'Receive' ? -1 : 1) +
-        (t.type === 'Send' ? t.fee || 0 : 0);
-      data.push({
-        STG: bal,
-        name: Portfolio.getDayName(t.timestamp),
-        tooltip: bal / POWER_DIVISIBILITY
-      });
-    });
-    data = data.reverse();
-    data.push({
-      STG: balance * POWER_DIVISIBILITY,
-      name: Portfolio.getDayName(new Date()),
-      tooltip: balance
-    });
-    return data;
+    const { period } = this.state;
+    return generateChartData(this.filteredTransactions, this.balance, period);
   }
 
   changePeriod(period: 'week' | 'month' | 'year' = 'week') {
@@ -168,7 +130,7 @@ class Portfolio extends PureComponent<Props> {
             <div className={styles.BalanceAmount}>
               <div>
                 <span className={styles.BalanceValue}>
-                  {balance.toFixed(4)}
+                  {(balance / POWER_DIVISIBILITY).toFixed(4)}
                 </span>
                 <span className={styles.BalanceCurrency}> STG</span>
               </div>

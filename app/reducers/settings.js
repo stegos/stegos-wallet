@@ -1,13 +1,16 @@
-import type { Action, SettingsStateType } from './types';
+import type { Action, AppStateType } from './types';
 import {
-  SET_FIRST_LAUNCH,
   HIDE_ERROR,
   LOCK_WALLET,
   SET_AUTO_LOCK_TIMEOUT,
   SET_BUGS_AND_TERMS,
+  SET_FIRST_LAUNCH,
+  SET_LANGUAGE,
   SET_PASSWORD,
   SET_SETTINGS,
+  SET_WAITING,
   SHOW_ERROR,
+  SHOW_WALLET_SETTINGS,
   UNLOCK_WALLET
 } from '../actions/settings';
 import { COMPLETE_ONBOARDING } from '../actions/node';
@@ -21,11 +24,13 @@ const initialState = {
   isTermsAccepted: false,
   autoLockTimeout: 25, // todo config
   isLocked: false,
-  error: ''
+  error: '',
+  waiting: false,
+  showWalletSettings: false
 };
 
-export default function settings(
-  state: SettingsStateType = initialState,
+export default function app(
+  state: AppStateType = initialState,
   action: Action
 ) {
   const { payload } = action;
@@ -82,6 +87,21 @@ export default function settings(
       return {
         ...state,
         isLocked: false
+      };
+    case SET_WAITING:
+      return {
+        ...state,
+        waiting: payload
+      };
+    case SET_LANGUAGE:
+      return {
+        ...state,
+        language: payload
+      };
+    case SHOW_WALLET_SETTINGS:
+      return {
+        ...state,
+        showWalletSettings: payload
       };
     default:
       return state;

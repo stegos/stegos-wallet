@@ -7,10 +7,12 @@ import Dropdown from '../../common/Dropdown/Dropdown';
 import Icon from '../../common/Icon/Icon';
 import AccountItem from './AccountItem/AccountItem';
 import styles from './AccountsList.css';
+import Busy from '../../common/Busy/Busy';
 import AccountName from '../../common/Account/AccountName';
 
 type Props = {
   accounts: AccountsStateType,
+  waiting: boolean,
   getAccounts: () => void,
   createAccount: () => void,
   intl: any
@@ -76,7 +78,7 @@ export default class AccountsList extends PureComponent<Props> {
 
   render() {
     const { sort, search, options } = this.state;
-    const { intl } = this.props;
+    const { intl, waiting } = this.props;
     const accounts = this.getFilteredAndSortedAccounts();
     return (
       <div className={styles.AccountsList}>
@@ -117,7 +119,7 @@ export default class AccountsList extends PureComponent<Props> {
               value={sort && sort.name}
               onChange={this.onSortingChange}
               options={options}
-              style={{ width: 150 }}
+              style={{ width: 165 }}
             />
           </div>
         </div>
@@ -126,6 +128,7 @@ export default class AccountsList extends PureComponent<Props> {
             <AccountItem account={a[1]} key={a[0]} />
           ))}
         </div>
+        <Busy visible={waiting} />
       </div>
     );
   }

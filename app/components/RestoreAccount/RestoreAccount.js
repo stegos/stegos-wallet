@@ -104,11 +104,8 @@ class RestoreAccount extends Component<Props> {
         />
         <span className={styles.AccountAddress}>
           {account.address}{' '}
-          <FormattedMessage
-            id="receive.address.for.account"
-            values={{ account: '' }}
-          />{' '}
-          <b>{AccountName.getName(account, intl)}</b>
+          <FormattedMessage id="receive.address.for.account" />{' '}
+          <b>{AccountName.getName(account, intl)}</b>: {account.address}
         </span>
       </div>
     );
@@ -129,11 +126,8 @@ class RestoreAccount extends Component<Props> {
           <div style={{ color: '#EE6920' }}>
             <FormattedMessage id="receive.address.copied" />
           </div>{' '}
-          <FormattedMessage
-            id="receive.address.for.account"
-            values={{ account: '' }}
-          />{' '}
-          <b>{AccountName.getName(account, intl)}</b>
+          <FormattedMessage id="receive.address.for.account" />{' '}
+          <b>{AccountName.getName(account, intl)}</b>: {account.address}
         </span>
       </div>
     );

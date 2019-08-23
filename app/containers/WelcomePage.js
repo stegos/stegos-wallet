@@ -1,17 +1,17 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import * as SettingsActions from '../actions/settings';
+import * as AppActions from '../actions/settings';
 import Welcome from '../components/Welcome';
 
 function mapStateToProps(state) {
   return {
-    settings: state.settings
+    app: state.app
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(SettingsActions, dispatch);
+  return bindActionCreators(AppActions, dispatch);
 }
 
 export default connect(
