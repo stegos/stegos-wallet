@@ -19,6 +19,7 @@
   "syncing.in.progress.description": "Your wallet is synchronizing with the blockchain...",
   "synced.successfully": "Your wallet is synchronized!",
   "syncing.please.wait": "Please wait...",
+  "syncing.failed.description": "Something went wrong, please restart your wallet",
 
   "terms.title": "Bugs and Terms of Use",
   "terms.share.data": "Share anonymized data to help improve Stegos Wallet",
@@ -151,6 +152,7 @@
   "input.name.comment": "Comment",
   "input.name.fees": "Fees",
   "input.name.account": "Select account...",
+  "input.name.language": "App language",
 
   "input.error.required": "This fields is required",
   "input.error.dropdown.required": "Please select a value",

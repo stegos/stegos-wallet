@@ -10,7 +10,9 @@ export type AppStateType = {
   autoLockTimeout: number,
   isLocked: boolean,
   error: string,
-  waiting: boolean
+  waiting: boolean,
+  language: string | null,
+  showWalletSettings: boolean
 };
 
 export type NodeStateType = {
@@ -20,7 +22,8 @@ export type NodeStateType = {
   syncingProgress: number,
   apiToken: string | null,
   firstReceivedBlockTimestamp: number | null,
-  lastReceivedBlockTimestamp: number | null
+  lastReceivedBlockTimestamp: number | null,
+  error: string | null
 };
 
 export type AccountsStateType = {
