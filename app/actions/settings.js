@@ -20,10 +20,15 @@ export const HIDE_ERROR = 'HIDE_ERROR';
 export const LOCK_WALLET = 'LOCK_WALLET';
 export const UNLOCK_WALLET = 'UNLOCK_WALLET';
 export const SET_WAITING = 'SET_WAITING';
+export const SET_LANGUAGE = 'SET_LANGUAGE';
 
 export const checkFirstLaunch = () => (dispatch: Dispatch) => {
   const exist = isDbExist();
   dispatch({ type: SET_FIRST_LAUNCH, payload: exist });
+};
+
+export const setLanguage = (language: string) => (dispatch: Dispatch) => {
+  dispatch({ type: SET_LANGUAGE, payload: language });
 };
 
 export const setPassword = (pass: string) => (dispatch: Dispatch) => {
