@@ -225,7 +225,6 @@ class WalletSettings extends Component<Props> {
             errorOutside
             showError
           />
-          <LanguageSwitch />
           <div className={styles.AutoLockContainer}>
             <span className={styles.AutoLockLabel}>
               <FormattedMessage id="wallet.settings.lock.title" tagName="b" />{' '}
@@ -245,6 +244,7 @@ class WalletSettings extends Component<Props> {
               <FormattedMessage id="wallet.settings.minutes" />
             </span>
           </div>
+          <LanguageSwitch />
         </div>
         <div className={styles.ActionsContainer}>
           <Button type="OutlineDisabled" onClick={() => this.cancel()}>
