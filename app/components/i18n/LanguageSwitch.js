@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import Dropdown from '../common/Dropdown/Dropdown';
 import styles from './LanguageSwitch.css';
 import { setLanguage } from '../../actions/settings';
@@ -22,14 +23,19 @@ class LanguageSwitch extends Component<Props> {
   render() {
     const { language, setLocale } = this.props;
     return (
-      <Dropdown
-        value={`App language: ${language || 'unknown'}`}
-        onChange={newLocale => setLocale(newLocale.value)}
-        options={localesOptions}
-        icon="expand_more"
-        iconPosition="right"
-        className={styles.LanguageSwitchDropdown}
-      />
+      <div className={styles.LanguageSwitchContainer}>
+        <span>
+          <FormattedMessage id="input.name.language" />:
+        </span>
+        <Dropdown
+          value={language || 'unknown'}
+          onChange={newLocale => setLocale(newLocale.value)}
+          options={localesOptions}
+          icon="expand_more"
+          iconPosition="right"
+          className={styles.LanguageSwitchDropdown}
+        />
+      </div>
     );
   }
 }
@@ -39,4 +45,4 @@ export default connect(
   dispatch => ({
     setLocale: lang => dispatch(setLanguage(lang))
   })
-)(LanguageSwitch);
+)(injectIntl(LanguageSwitch));
