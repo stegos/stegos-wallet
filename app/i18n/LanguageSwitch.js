@@ -1,15 +1,29 @@
 import React from 'react';
+import Dropdown from '../components/common/Dropdown/Dropdown';
 import { IntlContext } from './IntlContext';
-import Button from '../components/common/Button/Button';
+import styles from './LanguageSwitch.css';
 
 const LanguageSwitch = () => (
   <IntlContext.Consumer>
-    {({ switchToEnglish, switchToChinese }) => (
-      <React.Fragment>
-        <Button onClick={switchToEnglish}>English</Button>
-        <Button onClick={switchToChinese}>Chinese</Button>
-      </React.Fragment>
-    )}
+    {({ switchToEnglish, switchToChinese, locale }) => {
+      const localesOptions = [
+        { name: 'English', value: 'en', set: switchToEnglish },
+        { name: 'Chinese', value: 'zh', set: switchToChinese }
+      ];
+      const selectedLocale = localesOptions.find(l => l.value === locale);
+      return (
+        <Dropdown
+          value={`App language: ${
+            selectedLocale ? selectedLocale.name : 'unknown'
+          }`}
+          onChange={newLocale => newLocale.set()}
+          options={localesOptions}
+          icon="expand_more"
+          iconPosition="right"
+          className={styles.LanguageSwitchDropdown}
+        />
+      );
+    }}
   </IntlContext.Consumer>
 );
 

@@ -15,6 +15,7 @@ type Props = {
   value?: string,
   onChange?: (value: Option) => void,
   style?: object,
+  className?: string,
   icon?: IconName,
   iconPosition?: 'right' | 'left',
   error?: string,
@@ -40,6 +41,7 @@ export default class Dropdown extends Component<Props> {
     value: null,
     onChange: () => null,
     style: null,
+    className: '',
     icon: 'arrow_drop_down',
     iconPosition: 'left',
     error: null,
@@ -84,6 +86,7 @@ export default class Dropdown extends Component<Props> {
       value,
       onChange,
       style,
+      className,
       icon,
       iconPosition,
       error,
@@ -91,8 +94,9 @@ export default class Dropdown extends Component<Props> {
       readOnly
     } = this.props;
     const { isOpen } = this.state;
+    const classNames = [styles.Select, className].filter(Boolean).join(' ');
     return (
-      <div className={styles.Select} style={style}>
+      <div className={classNames} style={style}>
         <div
           onClick={() => this.setState({ isOpen: !isOpen && !readOnly })}
           role="button"

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import LanguageSwitch from '../../i18n/LanguageSwitch';
 import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
 import Modal from '../common/Modal/Modal';
@@ -224,6 +225,7 @@ class WalletSettings extends Component<Props> {
             errorOutside
             showError
           />
+          <LanguageSwitch />
           <div className={styles.AutoLockContainer}>
             <span className={styles.AutoLockLabel}>
               <FormattedMessage id="wallet.settings.lock.title" tagName="b" />{' '}

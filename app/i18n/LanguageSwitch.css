@@ -1,0 +1,11 @@
+.LanguageSwitchDropdown {
+  height: 49px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #5b5d63;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 22px;
+  letter-spacing: 0.48px;
+  color: #fff;
+}
