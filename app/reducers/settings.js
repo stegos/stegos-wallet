@@ -10,7 +10,8 @@ import {
   SHOW_ERROR,
   UNLOCK_WALLET,
   SET_WAITING,
-  SET_ACTIVE_ELEMENT
+  SET_ACTIVE_ELEMENT,
+  FREE_ACTIVE_ELEMENT
 } from '../actions/settings';
 import { COMPLETE_ONBOARDING } from '../actions/node';
 
@@ -96,6 +97,11 @@ export default function app(
       return {
         ...state,
         activeElement: payload
+      };
+    case FREE_ACTIVE_ELEMENT:
+      return {
+        ...state,
+        activeElement: null
       };
     default:
       return state;
