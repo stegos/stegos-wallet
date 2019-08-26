@@ -1,3 +1,4 @@
+import React from 'react';
 import type { Dispatch as ReduxDispatch, Store as ReduxStore } from 'redux';
 
 export type AppStateType = {
@@ -10,7 +11,8 @@ export type AppStateType = {
   autoLockTimeout: number,
   isLocked: boolean,
   error: string,
-  waiting: boolean
+  waiting: boolean,
+  activeElement: React.ReactElement
 };
 
 export type NodeStateType = {

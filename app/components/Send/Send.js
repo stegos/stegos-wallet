@@ -9,7 +9,6 @@ import Dropdown from '../common/Dropdown/Dropdown';
 import Icon from '../common/Icon/Icon';
 import Input from '../common/Input/Input';
 import Steps from '../common/Steps/Steps';
-import withSubmit from '../common/WithSubmit/WithSubmit';
 import styles from './Send.css';
 import routes from '../../constants/routes';
 import { POWER_DIVISIBILITY } from '../../constants/config';
@@ -28,8 +27,6 @@ type Props = {
 
 class Send extends Component<Props> {
   props: Props;
-
-  formRef: { current: null | HTMLFormElement };
 
   static renderDropdown(
     options,
@@ -103,7 +100,6 @@ class Send extends Component<Props> {
       generateCertificate: false,
       isBusy: false
     };
-    this.formRef = React.createRef<HTMLFormElement>();
   }
 
   get totalAmount() {
@@ -428,8 +424,9 @@ class Send extends Component<Props> {
             type="OutlinePrimary"
             iconRight="keyboard_backspace"
             iconRightMirrorHor
-            submit
             onClick={() => this.onNext()}
+            submit
+            priority={0}
           >
             <FormattedMessage id="button.next" />
           </Button>
@@ -463,8 +460,9 @@ class Send extends Component<Props> {
             pathname: routes.ACCOUNT,
             state: { accountId: account.id }
           }}
-          submit
           style={{ margin: 'auto' }}
+          submit
+          priority={0}
         >
           <FormattedMessage id="button.close" />
         </Button>
@@ -472,28 +470,12 @@ class Send extends Component<Props> {
     ];
   }
 
-  onSubmitForm(e) {
-    e.preventDefault();
-    console.log(e);
-    console.log(this.state);
-  }
-
-  onSubmit() {
-    console.log('onSubmit');
-    console.log(this.formRef.current.childNodes);
-  }
-
   render() {
     const { titledAccount, step, isBusy } = this.state;
     const { intl } = this.props;
-    console.log(this.formRef);
     return (
       <Fragment>
-        <form
-          className={styles.Send}
-          onSubmit={e => this.onSubmitForm(e)}
-          ref={this.formRef}
-        >
+        <div className={styles.Send}>
           {titledAccount && (
             <Fragment>
               <span className={styles.Title}>{titledAccount.name}</span>
@@ -534,7 +516,7 @@ class Send extends Component<Props> {
             {(step === 0 || step === 1) && this.sendForm()}
             {step === 2 && this.transactionSent()}
           </div>
-        </form>
+        </div>
         <Busy
           visible={isBusy}
           title={intl.formatMessage({ id: 'send.waiting' })}
@@ -544,4 +526,4 @@ class Send extends Component<Props> {
   }
 }
 
-export default injectIntl(withSubmit(Send));
+export default injectIntl(Send);

@@ -80,6 +80,8 @@ class Blocker extends Component<Props> {
             type="OutlinePrimary"
             onClick={() => this.onUnlock()}
             disabled={unlocking}
+            submit
+            priority={1}
           >
             <FormattedMessage id="button.unlock" />
           </Button>

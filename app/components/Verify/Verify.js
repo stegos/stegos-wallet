@@ -338,7 +338,12 @@ class Verify extends Component<Props> {
           </div>
         </div>
         <div className={styles.ActionsContainer}>
-          <Button type="OutlinePrimary" onClick={this.onVerify}>
+          <Button
+            type="OutlinePrimary"
+            onClick={this.onVerify}
+            submit
+            priority={1}
+          >
             <FormattedMessage id="button.verify" />
           </Button>
           {verified === true && (

@@ -248,7 +248,12 @@ class WalletSettings extends Component<Props> {
           <Button type="OutlineDisabled" onClick={() => this.cancel()}>
             <FormattedMessage id="button.cancel" />
           </Button>
-          <Button type="OutlinePrimary" onClick={() => this.apply()}>
+          <Button
+            type="OutlinePrimary"
+            onClick={() => this.apply()}
+            submit
+            priority={1}
+          >
             <FormattedMessage id="button.apply" />
           </Button>
         </div>

@@ -3,11 +3,11 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 import routes from '../constants/routes';
+import Button from './common/Button/Button';
 import styles from './Welcome.css';
 import logo from '../../resources/img/StegosLogoVertRGB.svg';
 import type { AppStateType } from '../reducers/types';
 import Input from './common/Input/Input';
-import Button from './common/Button/Button';
 
 type Props = {
   app: AppStateType,
@@ -67,7 +67,7 @@ export default class Welcome extends Component<Props> {
                 label={intl.formatMessage({ id: 'input.name.password' })}
                 type="password"
               />
-              <Button type="button" onClick={this.onNext}>
+              <Button type="button" onClick={this.onNext} submit>
                 <FormattedMessage id="button.next" tagName="span" />
               </Button>
             </Fragment>

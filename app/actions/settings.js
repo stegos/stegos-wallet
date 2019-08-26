@@ -1,4 +1,5 @@
 import { push } from 'connected-react-router';
+import React from 'react';
 import type { Dispatch, GetState } from '../reducers/types';
 import { createEmptyAccount } from '../reducers/types';
 import {
@@ -20,6 +21,8 @@ export const HIDE_ERROR = 'HIDE_ERROR';
 export const LOCK_WALLET = 'LOCK_WALLET';
 export const UNLOCK_WALLET = 'UNLOCK_WALLET';
 export const SET_WAITING = 'SET_WAITING';
+export const SET_ACTIVE_ELEMENT = 'SET_ACTIVE_ELEMENT';
+export const FREE_ACTIVE_ELEMENT = 'FREE_ACTIVE_ELEMENT';
 
 export const checkFirstLaunch = () => (dispatch: Dispatch) => {
   const exist = isDbExist();
@@ -176,3 +179,13 @@ export const changePassword = (newPass: string, oldPass: string) => (
       reject(e);
     }
   });
+
+export const setActiveElement = (activeElement: React.ReactElement) => (
+  dispatch: Dispatch
+) => {
+  dispatch({ type: SET_ACTIVE_ELEMENT, payload: activeElement });
+};
+
+export const freeActiveElement = () => (dispatch: Dispatch) => {
+  dispatch({ type: SET_ACTIVE_ELEMENT, payload: null });
+};

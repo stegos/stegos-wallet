@@ -150,7 +150,12 @@ class EditAccount extends PureComponent<Props> {
         >
           <FormattedMessage id="button.delete.account" />
         </Button>
-        <Button type="OutlinePrimary" onClick={() => this.apply()}>
+        <Button
+          type="OutlinePrimary"
+          onClick={() => this.apply()}
+          submit
+          priority={1}
+        >
           <FormattedMessage id="button.apply" />
         </Button>
       </div>

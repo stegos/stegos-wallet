@@ -9,7 +9,8 @@ import {
   SET_SETTINGS,
   SHOW_ERROR,
   UNLOCK_WALLET,
-  SET_WAITING
+  SET_WAITING,
+  SET_ACTIVE_ELEMENT
 } from '../actions/settings';
 import { COMPLETE_ONBOARDING } from '../actions/node';
 
@@ -23,7 +24,8 @@ const initialState = {
   autoLockTimeout: 25, // todo config
   isLocked: false,
   error: '',
-  waiting: false
+  waiting: false,
+  activeElement: null
 };
 
 export default function app(
@@ -89,6 +91,11 @@ export default function app(
       return {
         ...state,
         waiting: payload
+      };
+    case SET_ACTIVE_ELEMENT:
+      return {
+        ...state,
+        activeElement: payload
       };
     default:
       return state;

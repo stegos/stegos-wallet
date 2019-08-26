@@ -92,6 +92,8 @@ class DeleteAccount extends Component<Props> {
             type={disableDeleteButton ? 'OutlinePrimary' : 'FilledPrimary'}
             icon="cancel"
             onClick={() => this.deleteAccount()}
+            submit
+            priority={2}
           >
             <FormattedMessage id="button.delete.account" />
           </Button>

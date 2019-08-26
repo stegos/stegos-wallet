@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { Link, LocationShape } from 'react-router-dom';
+import ActiveElement from '../ActiveElement/ActiveElement';
 import Icon from '../Icon/Icon';
 import type { IconName } from '../Icon/IconName';
 import styles from './Button.css';
@@ -12,7 +13,7 @@ export type ButtonType =
   | 'FilledSecondary'
   | 'Invisible';
 
-type Props = {
+type ButtonProps = {
   disabled?: boolean,
   onClick?: MouseEvent => void,
   tabIndex?: number,
@@ -26,11 +27,12 @@ type Props = {
   link?: string | LocationShape,
   icoButton?: boolean,
   color?: string,
-  submit?: boolean
+  submit?: boolean,
+  priority?: number
 };
 
-export default class Button extends Component<Props> {
-  props: Props;
+class Button extends Component<ButtonProps> {
+  props: ButtonProps;
 
   static defaultProps = {
     disabled: false,
@@ -46,7 +48,8 @@ export default class Button extends Component<Props> {
     link: null,
     icoButton: false,
     color: 'inherit',
-    submit: false
+    submit: false,
+    priority: 0
   };
 
   constructor(props) {
@@ -57,13 +60,16 @@ export default class Button extends Component<Props> {
     }
   }
 
+  get submitPriority() {
+    const { priority } = this.props;
+    return priority;
+  }
+
   onKeyPress(e: KeyboardEvent) {
     const { onClick, disabled } = this.props;
     return (
-      !disabled &&
-      e.key === 'Enter' &&
-      typeof onClick === 'function' &&
-      onClick()
+      !disabled && e.key === 'Enter' && typeof onClick === 'function' // &&
+      // onClick()
     );
   }
 
@@ -104,6 +110,10 @@ export default class Button extends Component<Props> {
         />
       </div>
     );
+  }
+
+  submit() {
+    this.onClick();
   }
 
   render() {
@@ -168,3 +178,5 @@ export default class Button extends Component<Props> {
     );
   }
 }
+
+export default ActiveElement(Button);
