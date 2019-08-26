@@ -1,15 +1,17 @@
 import type { Action, AppStateType } from './types';
 import {
-  SET_FIRST_LAUNCH,
   HIDE_ERROR,
   LOCK_WALLET,
   SET_AUTO_LOCK_TIMEOUT,
   SET_BUGS_AND_TERMS,
+  SET_FIRST_LAUNCH,
+  SET_LANGUAGE,
   SET_PASSWORD,
   SET_SETTINGS,
-  SHOW_ERROR,
-  UNLOCK_WALLET,
   SET_WAITING,
+  SHOW_ERROR,
+  SHOW_WALLET_SETTINGS,
+  UNLOCK_WALLET,
   SET_ACTIVE_ELEMENT,
   FREE_ACTIVE_ELEMENT
 } from '../actions/settings';
@@ -26,6 +28,7 @@ const initialState = {
   isLocked: false,
   error: '',
   waiting: false,
+  showWalletSettings: false,
   activeElement: null
 };
 
@@ -92,6 +95,16 @@ export default function app(
       return {
         ...state,
         waiting: payload
+      };
+    case SET_LANGUAGE:
+      return {
+        ...state,
+        language: payload
+      };
+    case SHOW_WALLET_SETTINGS:
+      return {
+        ...state,
+        showWalletSettings: payload
       };
     case SET_ACTIVE_ELEMENT:
       return {

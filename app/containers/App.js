@@ -9,7 +9,7 @@ import type { AppStateType } from '../reducers/types';
 type Props = {
   children: React.Node,
   withIdleBlocking: boolean,
-  lockWallet: () => {},
+  lockWallet: () => void,
   app: AppStateType
 };
 

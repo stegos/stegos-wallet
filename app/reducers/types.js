@@ -12,6 +12,8 @@ export type AppStateType = {
   isLocked: boolean,
   error: string,
   waiting: boolean,
+  language: string | null,
+  showWalletSettings: boolean,
   activeElement: React.ReactElement
 };
 
@@ -43,7 +45,6 @@ export type Account = {
 
 export const createEmptyAccount = id => ({
   id,
-  name: `Account #${id}`,
   balance: 0,
   isLocked: true,
   transactions: []
@@ -68,7 +69,8 @@ export type Transaction = {
   amount: number,
   hasCertificate: boolean,
   status?: TransactionStatus,
-  sender?: string
+  sender?: string,
+  comment?: string
 };
 
 export type TransactionStatus =

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import LanguageSwitch from '../i18n/LanguageSwitch';
 import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
 import Modal from '../common/Modal/Modal';
@@ -13,10 +14,9 @@ import Busy from '../common/Busy/Busy';
 
 type Props = {
   app: AppStateType,
-  visible: boolean,
-  onCloseRequest: () => void,
   changePassword: () => void,
   setAutoLockTimeout: () => void,
+  hideWalletSettings: () => void,
   intl: any
 };
 
@@ -110,8 +110,8 @@ class WalletSettings extends Component<Props> {
   }
 
   close = () => {
-    const { onCloseRequest } = this.props;
-    onCloseRequest();
+    const { hideWalletSettings } = this.props;
+    hideWalletSettings();
   };
 
   validate = (): boolean => {
@@ -171,15 +171,15 @@ class WalletSettings extends Component<Props> {
       autoLockTimeout,
       autoLockTimeoutError
     } = this.state;
-    const { visible, app, intl } = this.props;
-    const { isPasswordSet, waiting } = app;
+    const { app, intl } = this.props;
+    const { isPasswordSet, waiting, showWalletSettings } = app;
     return (
       <Modal
         options={{
           title: intl.formatMessage({ id: 'wallet.settings.title' }),
           subtitle: intl.formatMessage({ id: 'wallet.settings.subtitle' }),
           type: 'big',
-          visible,
+          visible: showWalletSettings,
           onClose: this.cancel.bind(this)
         }}
         style={{ width: '55%' }}
@@ -243,6 +243,7 @@ class WalletSettings extends Component<Props> {
               <FormattedMessage id="wallet.settings.minutes" />
             </span>
           </div>
+          <LanguageSwitch />
         </div>
         <div className={styles.ActionsContainer}>
           <Button type="OutlineDisabled" onClick={() => this.cancel()}>

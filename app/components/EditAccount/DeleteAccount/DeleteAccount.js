@@ -6,6 +6,7 @@ import Icon from '../../common/Icon/Icon';
 import type { Account } from '../../../reducers/types';
 import Input from '../../common/Input/Input';
 import styles from './DeleteAccount.css';
+import { getAccountName } from '../../../utils/format';
 
 type Props = {
   account: Account,
@@ -25,11 +26,11 @@ class DeleteAccount extends Component<Props> {
   };
 
   onChangeAccountName = e => {
-    const { account } = this.props;
+    const { account, intl } = this.props;
     const newVal = e.target.value;
     this.setState({
       accountName: newVal,
-      disableDeleteButton: account.name !== newVal,
+      disableDeleteButton: getAccountName(account, intl) !== newVal,
       showError: false
     });
   };
@@ -37,7 +38,7 @@ class DeleteAccount extends Component<Props> {
   deleteAccount() {
     const { onDelete, account, intl } = this.props;
     const { accountName } = this.state;
-    if (account.name !== accountName) {
+    if (getAccountName(account, intl) !== accountName) {
       return this.setState({
         accountNameError: intl.formatMessage({
           id: 'input.error.account.name.does.not.match'
@@ -68,7 +69,7 @@ class DeleteAccount extends Component<Props> {
           <span className={styles.WarnText}>
             <FormattedMessage
               id="delete.account"
-              values={{ name: account.name }}
+              values={{ name: getAccountName(account, intl) }}
             />
           </span>
         </div>

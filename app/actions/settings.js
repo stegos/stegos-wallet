@@ -21,12 +21,30 @@ export const HIDE_ERROR = 'HIDE_ERROR';
 export const LOCK_WALLET = 'LOCK_WALLET';
 export const UNLOCK_WALLET = 'UNLOCK_WALLET';
 export const SET_WAITING = 'SET_WAITING';
+export const SET_LANGUAGE = 'SET_LANGUAGE';
+export const SHOW_WALLET_SETTINGS = 'SHOW_WALLET_SETTINGS';
 export const SET_ACTIVE_ELEMENT = 'SET_ACTIVE_ELEMENT';
 export const FREE_ACTIVE_ELEMENT = 'FREE_ACTIVE_ELEMENT';
 
 export const checkFirstLaunch = () => (dispatch: Dispatch) => {
   const exist = isDbExist();
   dispatch({ type: SET_FIRST_LAUNCH, payload: exist });
+};
+
+export const setLanguage = (language: string) => (dispatch: Dispatch) => {
+  getDatabase()
+    .then(async db => {
+      db.update(
+        { setting: 'language' },
+        { setting: 'language', value: language },
+        { upsert: true }
+      );
+      dispatch({ type: SET_LANGUAGE, payload: language });
+      return db;
+    })
+    .catch(err => {
+      dispatch({ type: SHOW_ERROR, payload: err.message });
+    });
 };
 
 export const setPassword = (pass: string) => (dispatch: Dispatch) => {
@@ -179,6 +197,14 @@ export const changePassword = (newPass: string, oldPass: string) => (
       reject(e);
     }
   });
+
+export const showWalletSettings = () => (dispatch: Dispatch) => {
+  dispatch({ type: SHOW_WALLET_SETTINGS, payload: true });
+};
+
+export const hideWalletSettings = () => (dispatch: Dispatch) => {
+  dispatch({ type: SHOW_WALLET_SETTINGS, payload: false });
+};
 
 export const setActiveElement = (activeElement: React.ReactElement) => (
   dispatch: Dispatch
