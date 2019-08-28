@@ -112,13 +112,13 @@
   "portfolio.description.one": "这是你的1账户的汇总",
   "portfolio.description.many": "这是你的{size}账户的汇总",
 
-  "unlock.wallet.title": "解锁钱包",
+  "unlock.wallet.title": "FIXME",
+  "unlock.wallet.subtitle": "FIXME",
   "unlock.wallet.waiting": "解锁钱包中...",
 
   "wallet.settings.title": "钱包设置",
   "wallet.settings.subtitle": "设置钱包密码",
-  "wallet.settings.lock.title": "钱包自动锁定",
-  "wallet.settings.lock.description": "设置超时自动锁定",
+  "wallet.settings.lock.title": "FIXME",
   "wallet.settings.minutes": "分钟",
   "wallet.settings.waiting": "修改密码中...",
 
