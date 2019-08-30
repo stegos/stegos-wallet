@@ -10,10 +10,44 @@ Download packages for Linux and Mac from [GitHub Releases](https://github.com/st
 
 ## Development
 
+### Prerequirements to build on windwos:
+
+- Windows 7+ / Windows Server 2003+
+- We use Chocolatey package manager, in order to use it, you need to have PowerShell v2+ installed.
+- Also Chocolatey needs .NET Framework 4+ (the installation will attempt to install .NET 4.0 if you do not have it installed)
+
 0. Install requirements:
 
 - [Yarn Package Manager](https://yarnpkg.com/en/docs/install), version 1.13.0 tested.
 - [NodeJS](https://nodejs.org/en/download/), version v10.16.0 tested.
+
+### Install dependencies on windows:
+
+#### Install Chocolatey package manager
+
+Note: Chocolatey is only used to install nodejs and yarn, and for consistency with `stegosd` `msys` installation.
+
+`@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"`
+
+#### Install native tools (Yarn, NodeJS):
+
+`choco install nodejs yarn`
+
+#### To Build on node-gyp on windows, you need windows-build-tools:
+
+Use yarn to install windows-build-tools globally:
+
+`yarn global add windows-build-tools`
+
+#### Sass library.
+
+For Ubuntu, Macos and most of other linux desktop distributions, libsass is preinstalled.
+But for Windows, and some linux slim builds (ubuntu wsl), you should install sass library manually.
+You can do it trough npm:
+
+```
+npm install node-sass
+```
 
 1. Clone this repository:
 
@@ -30,6 +64,9 @@ curl -L https://github.com/stegos/stegos/releases/download/v0.11/stegosd-linux-x
 chmod a+x node/stegosd
 ./node/stegosd --version
 ```
+
+For windows you also need download next dlls from stegosd release (libgcc_s_seh-1.dll,
+librocksdb-shared.dll, libstdc++-6.dll, libwinpthread-1.dll ).
 
 3. Build and run Wallet application:
 
