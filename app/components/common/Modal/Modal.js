@@ -79,7 +79,7 @@ export default class Modal extends Component<Props> {
           <div className={type === 'small' ? styles.Title : styles.TitleBig}>
             {title}
           </div>
-          {type === 'big' && <div className={styles.Subtitle}>{subtitle}</div>}
+          <div className={styles.Subtitle}>{subtitle}</div>
           {shouldShowCloseButton && (
             <div
               onClick={() => this.hide()}

@@ -109,21 +109,21 @@
   "transaction.status.committed": "已备注",
   "transaction.status.conflicted": "冲突",
 
-  "portfolio.description.one": "这是你的1账户的汇总",
-  "portfolio.description.many": "这是你的{size}账户的汇总",
+  "portfolio.description.one": "这是你的1个账户的汇总",
+  "portfolio.description.many": "这是你的{size}个账户的汇总",
 
-  "unlock.wallet.title": "解锁钱包",
+  "unlock.wallet.title": "你的钱包已锁定",
+  "unlock.wallet.subtitle": "输入密码以解锁",
   "unlock.wallet.waiting": "解锁钱包中...",
 
   "wallet.settings.title": "钱包设置",
   "wallet.settings.subtitle": "设置钱包密码",
-  "wallet.settings.lock.title": "钱包自动锁定",
-  "wallet.settings.lock.description": "设置超时自动锁定",
+  "wallet.settings.lock.title": "钱包自动锁定超时",
   "wallet.settings.minutes": "分钟",
   "wallet.settings.waiting": "修改密码中...",
 
   "button.skip": "跳过",
-  "button.next": "下一个",
+  "button.next": "下一步",
   "button.cancel": "取消",
   "button.apply": "应用",
   "button.unlock": "解锁",
@@ -152,6 +152,7 @@
   "input.name.comment": "备注",
   "input.name.fees": "费用",
   "input.name.account": "选择账户...",
+  "input.name.language": "App语言",
 
   "input.error.required": "此字段是必填字段",
   "input.error.dropdown.required": "请选择一个值",

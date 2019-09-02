@@ -226,8 +226,7 @@ class WalletSettings extends Component<Props> {
           />
           <div className={styles.AutoLockContainer}>
             <span className={styles.AutoLockLabel}>
-              <FormattedMessage id="wallet.settings.lock.title" tagName="b" />{' '}
-              <FormattedMessage id="wallet.settings.lock.description" />
+              <FormattedMessage id="wallet.settings.lock.title" />
             </span>
             <Input
               name="autoLockTimeout"
