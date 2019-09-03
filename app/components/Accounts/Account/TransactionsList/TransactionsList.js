@@ -111,8 +111,7 @@ class TransactionsList extends PureComponent<Props> {
                 <span
                   className={styles.TransactionAmount}
                   style={{
-                    color: item.type === 'Receive' ? '#FF6C00' : '#fff',
-                    fontSize: signAmount.length > 10 ? 10 : 'inherit'
+                    color: item.type === 'Receive' ? '#FF6C00' : '#fff'
                   }}
                 >
                   {signAmount}
@@ -120,8 +119,7 @@ class TransactionsList extends PureComponent<Props> {
                 <span
                   className={styles.TransactionAmountCurrency}
                   style={{
-                    marginLeft: 8,
-                    fontSize: signAmount.length > 10 ? 10 : 'inherit'
+                    marginLeft: 8
                   }}
                 >
                   STG
