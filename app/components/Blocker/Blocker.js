@@ -54,6 +54,7 @@ class Blocker extends Component<Props> {
       <Modal
         options={{
           title: intl.formatMessage({ id: 'unlock.wallet.title' }),
+          subtitle: intl.formatMessage({ id: 'unlock.wallet.subtitle' }),
           type: 'small',
           visible: isLocked,
           showCloseButton: false

@@ -113,13 +113,13 @@
   "portfolio.description.one": "Here's the summary of your 1 account",
   "portfolio.description.many": "Here's the summary of your {size} accounts",
 
-  "unlock.wallet.title": "Unlock wallet",
+  "unlock.wallet.title": "Your wallet is locked",
+  "unlock.wallet.subtitle": "Enter password to unlock your wallet",
   "unlock.wallet.waiting": "Unlocking wallet...",
 
   "wallet.settings.title": "Wallet Settings",
   "wallet.settings.subtitle": "Set wallet password",
-  "wallet.settings.lock.title": "Wallet auto-lock",
-  "wallet.settings.lock.description": "Set auto-lock timeout",
+  "wallet.settings.lock.title": "Wallet auto-lock timeout",
   "wallet.settings.minutes": "min",
   "wallet.settings.waiting": "Changing password...",
 
