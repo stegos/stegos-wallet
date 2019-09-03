@@ -10,7 +10,9 @@ export type AppStateType = {
   autoLockTimeout: number,
   isLocked: boolean,
   error: string,
-  waiting: boolean
+  waiting: boolean,
+  language: string | null,
+  showWalletSettings: boolean
 };
 
 export type NodeStateType = {
@@ -41,7 +43,6 @@ export type Account = {
 
 export const createEmptyAccount = id => ({
   id,
-  name: `Account #${id}`,
   balance: 0,
   isLocked: true,
   transactions: []

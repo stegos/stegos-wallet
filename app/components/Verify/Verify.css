@@ -12,6 +12,7 @@
   letter-spacing: 0.51px;
   text-transform: uppercase;
   color: #46fb48;
+  width: 5rem;
 }
 
 .LabelFailed {
@@ -22,6 +23,7 @@
   letter-spacing: 0.51px;
   text-transform: uppercase;
   color: #f00;
+  width: 5rem;
 }
 
 .LabelSmall {

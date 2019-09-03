@@ -2,18 +2,20 @@ import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import { Area, AreaChart } from 'recharts';
 
+import { injectIntl } from 'react-intl';
 import routes from '../../../../constants/routes';
-import { formatDigit } from '../../../../utils/format';
+import { formatDigit, getAccountName } from '../../../../utils/format';
 import styles from './AccountItem.css';
 import Stg from '../../../../../resources/img/Stg.svg';
 import { Account as AccountType } from '../../../../reducers/types';
 import { POWER_DIVISIBILITY } from '../../../../constants/config';
 
 type Props = {
-  account: AccountType
+  account: AccountType,
+  intl: any
 };
 
-export default class Account extends PureComponent<Props> {
+class Account extends PureComponent<Props> {
   get chartDataSource() {
     const { account } = this.props;
     const { transactions } = account;
@@ -36,7 +38,7 @@ export default class Account extends PureComponent<Props> {
   }
 
   render() {
-    const { account } = this.props;
+    const { account, intl } = this.props;
     const balance = account.balance / POWER_DIVISIBILITY;
     return (
       <Link
@@ -47,7 +49,7 @@ export default class Account extends PureComponent<Props> {
         }}
       >
         <div className={styles.NameContainer}>
-          <span className={styles.Name}>{account.name || ''}</span>
+          <span className={styles.Name}>{getAccountName(account, intl)}</span>
         </div>
         <div className={styles.BalanceContainer}>
           <img src={Stg} alt="STG" className={styles.StgIcon} />
@@ -87,3 +89,5 @@ export default class Account extends PureComponent<Props> {
     );
   }
 }
+
+export default injectIntl(Account);
