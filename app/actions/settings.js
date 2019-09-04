@@ -213,5 +213,5 @@ export const setActiveElement = (activeElement: React.ReactElement) => (
 };
 
 export const freeActiveElement = () => (dispatch: Dispatch) => {
-  dispatch({ type: SET_ACTIVE_ELEMENT, payload: null });
+  dispatch({ type: FREE_ACTIVE_ELEMENT });
 };
