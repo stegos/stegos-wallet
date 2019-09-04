@@ -65,7 +65,7 @@ export const validateCertificate = (
   rvalue: string,
   utxo: string
 ) => (dispatch: Dispatch) => {
-  dispatch({ type: SET_WAITING, payload: true });
+  dispatch({ type: SET_WAITING, payload: { waiting: true } });
   return sendSync({
     type: 'validate_certificate',
     spender,
@@ -73,7 +73,7 @@ export const validateCertificate = (
     rvalue,
     utxo
   }).finally(() => {
-    dispatch({ type: SET_WAITING, payload: false });
+    dispatch({ type: SET_WAITING, payload: { waiting: false } });
   });
 };
 
@@ -87,7 +87,7 @@ const handleNodeSynchronization = (dispatch: Dispatch, data: string) => {
 const loadAccounts = () => (dispatch: Dispatch, getState: GetState) => {
   sendSync({ type: 'list_accounts' })
     .then(async resp => {
-      dispatch({ type: SET_WAITING, payload: true });
+      dispatch({ type: SET_WAITING, payload: { waiting: true } });
       let state = getState();
       const { accounts, app } = state;
       const { password } = app;

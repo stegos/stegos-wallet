@@ -172,7 +172,7 @@ export const changePassword = (newPass: string, oldPass: string) => (
         reject();
         return;
       }
-      dispatch({ type: SET_WAITING, payload: true });
+      dispatch({ type: SET_WAITING, payload: { waiting: true } });
       await setNewPassword(newPass, async () => {
         await Promise.all(
           Object.entries(getState().accounts.items).map(account =>
@@ -184,12 +184,12 @@ export const changePassword = (newPass: string, oldPass: string) => (
           )
         );
       });
-      dispatch({ type: SET_WAITING, payload: false });
+      dispatch({ type: SET_WAITING, payload: { waiting: false } });
       dispatch({ type: SET_PASSWORD, payload: newPass });
       resolve();
     } catch (e) {
       console.log(e);
-      dispatch({ type: SET_WAITING, payload: false });
+      dispatch({ type: SET_WAITING, payload: { waiting: false } });
       dispatch({
         type: SHOW_ERROR,
         payload: `An error occurred. ${(e && e.message) || ''}`

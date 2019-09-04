@@ -38,7 +38,7 @@ export const getAccounts = () => (dispatch: Dispatch, getState: GetState) => {
           })()
         )
       );
-      dispatch({ type: SET_WAITING, payload: false });
+      dispatch({ type: SET_WAITING, payload: { waiting: false } });
       return resp;
     })
     .catch(console.log);
@@ -51,12 +51,21 @@ export const createAccount = () => async (
   const state = getState();
   const { app } = state;
   const { password } = app;
+  dispatch({ type: SET_WAITING, payload: { waiting: true } });
   await sendSync({ type: 'create_account', password }).then(resp =>
     sendSync({ type: 'unseal', password, account_id: resp.account_id })
-      .catch(console.log) // todo handle error when error codes will be available
-      .finally(() => {
-        dispatch(send({ type: 'account_info', account_id: resp.account_id }));
+      .then(async () => {
+        const address = await sendSync({
+          type: 'account_info',
+          account_id: resp.account_id
+        });
+        dispatch(send({ type: 'balance_info', account_id: resp.account_id }));
         dispatch(send({ type: 'get_recovery', account_id: resp.account_id }));
+        return address;
+      })
+      .catch(console.log) // todo handle error
+      .finally(() => {
+        dispatch({ type: SET_WAITING, payload: { waiting: false } });
       })
   );
 };
