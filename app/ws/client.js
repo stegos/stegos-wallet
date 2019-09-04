@@ -144,7 +144,7 @@ const encrypt = (plaintext, key) => {
   const resizedIV = Buffer.allocUnsafe(tokenLength);
   const iv = crypto
     .createHash('sha256')
-    .update(plaintext)
+    .update(Buffer.from(crypto.randomBytes(16)).toString('hex'))
     .digest();
   iv.copy(resizedIV);
   const encryptor = crypto.createCipheriv(
