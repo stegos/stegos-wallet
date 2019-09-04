@@ -66,6 +66,7 @@ export default class Welcome extends Component<Props> {
                 onInput={this.onPassChange}
                 label={intl.formatMessage({ id: 'input.name.password' })}
                 type="password"
+                autoFocus
               />
               <Button type="button" onClick={this.onNext} submit>
                 <FormattedMessage id="button.next" tagName="span" />

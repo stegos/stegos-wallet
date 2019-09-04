@@ -294,6 +294,7 @@ class Send extends Component<Props> {
             readOnly={step === 1}
             noLabel
             isTextarea
+            autoFocus
             resize={step === 0 ? 'vertical' : 'none'}
             error={recipientAddressError}
             showError={!!recipientAddressError}
