@@ -12,7 +12,7 @@ export type AppStateType = {
   isLocked: boolean,
   error: string,
   waiting: boolean,
-  waitingMessage: string | null,
+  waitingStatus: string | null,
   language: string | null,
   showWalletSettings: boolean,
   activeElement: React.ReactElement
