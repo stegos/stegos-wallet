@@ -1,5 +1,7 @@
 # Stegos Wallet
 
+[![Build Status][build-badge]][build-url]
+
 Electron-based Wallet application for [Stegos](https://github.com/stegos/stegos) blockchain.
 
 ![Stegos Wallet](screenshot.png)
@@ -79,3 +81,6 @@ yarn dev
 
 Please join us on [Telegram Chat](https://t.me/stegos4privacy) to get test tokens and let us know your thoughts.
 Subscribe to official [Telegram Channel](https://t.me/stegos4privacy_official) for the latest news.
+
+[build-badge]: https://gitlab.aws.stegos.com/Stegos/stegos-wallet/badges/develop/pipeline.svg
+[build-url]: https://gitlab.aws.stegos.com/Stegos/stegos-wallet/commits/develop
