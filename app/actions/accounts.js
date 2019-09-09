@@ -134,7 +134,7 @@ export const sendTransaction = (
     locked_timestamp: null
   }).catch(err => {
     console.log(err);
-    const message = err || 'An error occurred';
+    const message = (err && err.message) || 'An error occurred';
     dispatch({ type: SHOW_ERROR, payload: message });
     throw err;
   });
