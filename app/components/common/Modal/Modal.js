@@ -48,7 +48,21 @@ export default class Modal extends Component<Props> {
     this.setState({
       zIndex: Modal.getHighestZindex()
     });
+    document.body.addEventListener('keydown', this.onKeyPressed);
   }
+
+  componentWillUnmount() {
+    document.body.removeEventListener('keydown', this.onKeyPressed);
+  }
+
+  onKeyPressed = (e: KeyboardEvent) => {
+    const { options } = this.props;
+    const { visible } = options;
+    if (visible && e.code === 'Escape') {
+      e.preventDefault();
+      this.hide();
+    }
+  };
 
   hide() {
     const { options } = this.props;

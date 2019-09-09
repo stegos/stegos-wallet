@@ -32,6 +32,23 @@ class Alert extends Component<Props> {
     return maxZ + 2;
   }
 
+  componentDidMount() {
+    document.body.addEventListener('keydown', this.onKeyPressed);
+  }
+
+  componentWillUnmount() {
+    document.body.removeEventListener('keydown', this.onKeyPressed);
+  }
+
+  onKeyPressed = (e: KeyboardEvent) => {
+    const { error } = this.props;
+    const visible = error && error.length > 0;
+    if (visible && e.code === 'Escape') {
+      e.preventDefault();
+      this.close();
+    }
+  };
+
   close = () => {
     const { hideError } = this.props;
     hideError();
