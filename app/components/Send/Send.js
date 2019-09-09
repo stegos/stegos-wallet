@@ -297,6 +297,7 @@ class Send extends Component<Props> {
             error={recipientAddressError}
             showError={!!recipientAddressError}
             style={{ height: 'auto', margin: 0 }}
+            autoFocus
           />
           <span className={styles.FieldLabel}>
             <FormattedMessage id="input.name.amount" />

@@ -70,6 +70,7 @@ class Blocker extends Component<Props> {
               value={password}
               type="password"
               onChange={e => this.setState({ password: e.currentTarget.value })}
+              autoFocus
             />
           )}
           {unlocking && (

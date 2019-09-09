@@ -214,6 +214,7 @@ class Verify extends Component<Props> {
               error={senderError}
               showError={!!senderError}
               style={{ marginBottom: 0, flexGrow: 1 }}
+              autoFocus
             />
           </div>
           <div className={styles.Row}>
