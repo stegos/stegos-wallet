@@ -17,7 +17,6 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 66.6%;
 }
 
 .SearchInput {
@@ -45,6 +44,10 @@
   font-size: 18px;
   letter-spacing: 0.54px;
   color: #bfc1c6;
+}
+
+.RestoreButton {
+  font-size: 12px;
 }
 
 .Header {

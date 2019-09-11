@@ -6,7 +6,6 @@ import { formatDigit, getAccountName } from '../../../utils/format';
 import Button from '../../common/Button/Button';
 import Icon from '../../common/Icon/Icon';
 import EditAccount from '../../EditAccount/EditAccount';
-import RestoreAccount from '../../RestoreAccount/RestoreAccount';
 import Chart from './Chart/Chart';
 import TransactionsList from './TransactionsList/TransactionsList';
 
@@ -43,8 +42,7 @@ class Account extends PureComponent<Props> {
     super(props);
     this.state = {
       period: 'week',
-      editAccountVisible: false,
-      restoreAccountVisible: false
+      editAccountVisible: false
     };
     const { location, setLastUsedAccount } = props;
     const { accountId } = location.state;
@@ -67,12 +65,6 @@ class Account extends PureComponent<Props> {
         return transactions;
     }
   };
-
-  restoreAccount() {
-    this.setState({
-      restoreAccountVisible: true
-    });
-  }
 
   editAccount() {
     this.setState({
@@ -99,7 +91,7 @@ class Account extends PureComponent<Props> {
   }
 
   render() {
-    const { editAccountVisible, restoreAccountVisible, period } = this.state;
+    const { editAccountVisible, period } = this.state;
     const { location, deleteAccount, accounts, intl } = this.props;
     if (!location.state || !location.state.accountId) {
       return null;
@@ -228,25 +220,8 @@ class Account extends PureComponent<Props> {
                 </Button>
               </Link>
             </div>
-            <div className={styles.BottomActionContainer}>
-              <span className={styles.BottomActionDescription}>
-                <FormattedMessage id="account.restore.description" />
-              </span>
-              <Button
-                type="OutlineDisabled"
-                icon="undo"
-                className={styles.BottomActionButton}
-                onClick={() => this.restoreAccount()}
-              >
-                <FormattedMessage id="button.restore.account" />
-              </Button>
-            </div>
           </div>
         )}
-        <RestoreAccount
-          visible={restoreAccountVisible}
-          onClose={() => this.setState({ restoreAccountVisible: false })}
-        />
         <EditAccount
           visible={editAccountVisible}
           accountId={account.id}
