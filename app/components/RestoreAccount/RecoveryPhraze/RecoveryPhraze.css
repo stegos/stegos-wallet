@@ -22,8 +22,14 @@
   color: #fff;
 }
 
+.InputInnerContainer {
+  display: flex;
+  flex-direction: row;
+}
+
 .Input {
   margin-left: 10px;
+  flex: 1;
   font-style: normal;
   font-weight: 300;
   font-size: 16px;

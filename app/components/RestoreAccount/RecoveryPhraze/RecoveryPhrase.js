@@ -45,14 +45,16 @@ export default class RecoveryPhrase extends Component<Props> {
     for (let i = 0; i < wordsCount; i += 1) {
       phrazeInputs.push(
         <div className={styles.InputContainer} key={i}>
-          <span>{i + 1}.</span>
-          <input
-            value={phrase[i].value}
-            readOnly={readOnly}
-            name={phrase[i].id}
-            onChange={e => this.handleInputChange(e)}
-            className={styles.Input}
-          />
+          <div className={styles.InputInnerContainer}>
+            <span>{i + 1}.</span>
+            <input
+              value={phrase[i].value}
+              readOnly={readOnly}
+              name={phrase[i].id}
+              onChange={e => this.handleInputChange(e)}
+              className={styles.Input}
+            />
+          </div>
         </div>
       );
     }
