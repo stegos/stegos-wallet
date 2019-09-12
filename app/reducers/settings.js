@@ -11,7 +11,9 @@ import {
   SET_WAITING,
   SHOW_ERROR,
   SHOW_WALLET_SETTINGS,
-  UNLOCK_WALLET
+  UNLOCK_WALLET,
+  SET_ACTIVE_ELEMENT,
+  FREE_ACTIVE_ELEMENT
 } from '../actions/settings';
 import { COMPLETE_ONBOARDING } from '../actions/node';
 
@@ -26,7 +28,9 @@ const initialState = {
   isLocked: false,
   error: '',
   waiting: false,
-  showWalletSettings: false
+  waitingStatus: null,
+  showWalletSettings: false,
+  activeElement: null
 };
 
 export default function app(
@@ -91,7 +95,8 @@ export default function app(
     case SET_WAITING:
       return {
         ...state,
-        waiting: payload
+        waiting: payload.waiting,
+        waitingStatus: payload.status || null
       };
     case SET_LANGUAGE:
       return {
@@ -102,6 +107,16 @@ export default function app(
       return {
         ...state,
         showWalletSettings: payload
+      };
+    case SET_ACTIVE_ELEMENT:
+      return {
+        ...state,
+        activeElement: payload
+      };
+    case FREE_ACTIVE_ELEMENT:
+      return {
+        ...state,
+        activeElement: null
       };
     default:
       return state;

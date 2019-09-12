@@ -178,7 +178,12 @@ class RestoreAccount extends Component<Props> {
             <Button type="OutlineDisabled" onClick={() => this.close()}>
               <FormattedMessage id="button.cancel" />
             </Button>
-            <Button type="OutlinePrimary" onClick={() => this.restore()}>
+            <Button
+              type="OutlinePrimary"
+              onClick={() => this.restore()}
+              submit
+              priority={1}
+            >
               <FormattedMessage id="button.restore" />
             </Button>
           </div>
@@ -189,6 +194,8 @@ class RestoreAccount extends Component<Props> {
               type="OutlinePrimary"
               style={{ margin: 'auto' }}
               onClick={() => this.copyAddressToClipboard()}
+              submit
+              priority={1}
             >
               <FormattedMessage id="button.copy.address" />
             </Button>
@@ -200,6 +207,8 @@ class RestoreAccount extends Component<Props> {
               type="OutlinePrimary"
               style={{ margin: 'auto' }}
               onClick={() => this.close()}
+              submit
+              priority={1}
             >
               <FormattedMessage id="button.close" />
             </Button>

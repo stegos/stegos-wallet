@@ -213,6 +213,7 @@ class Verify extends Component<Props> {
               noLabel
               error={senderError}
               showError={!!senderError}
+              autoFocus
               style={{ marginBottom: 0, flexGrow: 1 }}
             />
           </div>
@@ -338,7 +339,12 @@ class Verify extends Component<Props> {
           </div>
         </div>
         <div className={styles.ActionsContainer}>
-          <Button type="OutlinePrimary" onClick={this.onVerify}>
+          <Button
+            type="OutlinePrimary"
+            onClick={this.onVerify}
+            submit
+            priority={1}
+          >
             <FormattedMessage id="button.verify" />
           </Button>
           {verified === true && (

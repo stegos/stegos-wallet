@@ -62,7 +62,12 @@ class Alert extends Component<Props> {
             </div>
           )}
           <div className={styles.Action}>
-            <Button type="OutlinePrimary" onClick={this.close}>
+            <Button
+              type="OutlinePrimary"
+              onClick={this.close}
+              submit
+              priority={visible ? zIndex : -1}
+            >
               OK
             </Button>
           </div>

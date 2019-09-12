@@ -123,6 +123,16 @@ class Account extends PureComponent<Props> {
             <FormattedMessage id="account.settings" />
           </Button>
         </div>
+        <Link
+          to={{
+            pathname: routes.ACCOUNTS
+          }}
+          style={{ alignSelf: 'flex-start', paddingLeft: 0 }}
+        >
+          <Button type="Invisible" icon="keyboard_backspace">
+            <FormattedMessage id="back.to.accounts" />
+          </Button>
+        </Link>
         {!isNewWallet && (
           <div className={styles.Actions}>
             <Button

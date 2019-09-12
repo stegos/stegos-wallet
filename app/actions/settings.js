@@ -1,4 +1,5 @@
 import { push } from 'connected-react-router';
+import React from 'react';
 import type { Dispatch, GetState } from '../reducers/types';
 import { createEmptyAccount } from '../reducers/types';
 import {
@@ -22,6 +23,8 @@ export const UNLOCK_WALLET = 'UNLOCK_WALLET';
 export const SET_WAITING = 'SET_WAITING';
 export const SET_LANGUAGE = 'SET_LANGUAGE';
 export const SHOW_WALLET_SETTINGS = 'SHOW_WALLET_SETTINGS';
+export const SET_ACTIVE_ELEMENT = 'SET_ACTIVE_ELEMENT';
+export const FREE_ACTIVE_ELEMENT = 'FREE_ACTIVE_ELEMENT';
 
 export const checkFirstLaunch = () => (dispatch: Dispatch) => {
   const exist = isDbExist();
@@ -169,7 +172,7 @@ export const changePassword = (newPass: string, oldPass: string) => (
         reject();
         return;
       }
-      dispatch({ type: SET_WAITING, payload: true });
+      dispatch({ type: SET_WAITING, payload: { waiting: true } });
       await setNewPassword(newPass, async () => {
         await Promise.all(
           Object.entries(getState().accounts.items).map(account =>
@@ -181,12 +184,12 @@ export const changePassword = (newPass: string, oldPass: string) => (
           )
         );
       });
-      dispatch({ type: SET_WAITING, payload: false });
+      dispatch({ type: SET_WAITING, payload: { waiting: false } });
       dispatch({ type: SET_PASSWORD, payload: newPass });
       resolve();
     } catch (e) {
       console.log(e);
-      dispatch({ type: SET_WAITING, payload: false });
+      dispatch({ type: SET_WAITING, payload: { waiting: false } });
       dispatch({
         type: SHOW_ERROR,
         payload: `An error occurred. ${(e && e.message) || ''}`
@@ -201,4 +204,14 @@ export const showWalletSettings = () => (dispatch: Dispatch) => {
 
 export const hideWalletSettings = () => (dispatch: Dispatch) => {
   dispatch({ type: SHOW_WALLET_SETTINGS, payload: false });
+};
+
+export const setActiveElement = (activeElement: React.ReactElement) => (
+  dispatch: Dispatch
+) => {
+  dispatch({ type: SET_ACTIVE_ELEMENT, payload: activeElement });
+};
+
+export const freeActiveElement = () => (dispatch: Dispatch) => {
+  dispatch({ type: FREE_ACTIVE_ELEMENT });
 };

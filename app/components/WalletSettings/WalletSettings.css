@@ -63,6 +63,6 @@
   margin-top: 128px;
 }
 
-.ActionsContainer > div {
+.ActionsContainer > * {
   margin-left: 25px;
 }

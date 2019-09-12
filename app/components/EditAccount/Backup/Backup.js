@@ -107,7 +107,12 @@ class Backup extends Component<Props> {
         />
         <div className={styles.ActionsContainer}>
           {step === 0 && (
-            <Button type="OutlinePrimary" onClick={() => this.next()}>
+            <Button
+              type="OutlinePrimary"
+              onClick={() => this.next()}
+              submit
+              priority={1}
+            >
               <FormattedMessage id="button.written.down" />
             </Button>
           )}
@@ -116,7 +121,12 @@ class Backup extends Component<Props> {
               <Button type="OutlineDisabled" onClick={() => this.back()}>
                 <FormattedMessage id="button.back" />
               </Button>
-              <Button type="OutlinePrimary" onClick={() => this.next()}>
+              <Button
+                type="OutlinePrimary"
+                onClick={() => this.next()}
+                submit
+                priority={2}
+              >
                 <FormattedMessage id="button.done" />
               </Button>
             </Fragment>
