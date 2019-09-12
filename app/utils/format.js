@@ -68,5 +68,4 @@ export const getAccountName = (account: Account, intl: any) => {
 };
 
 export const getAccountNameAndBalance = (account: Account, intl: any) =>
-  `${getAccountName(account, intl)} ${account.balance /
-    POWER_DIVISIBILITY} STG`;
+  `${getAccountName(account, intl)} ${(account.balance / POWER_DIVISIBILITY).toFixed(4)} STG`;
