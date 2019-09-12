@@ -121,6 +121,8 @@ class Receive extends Component<Props> {
             iconRightMirrorHor
             onClick={() => this.onAccountSelected()}
             disabled={!isValid}
+            submit
+            priority={0}
           >
             <FormattedMessage id="button.next" />
           </Button>
@@ -160,6 +162,8 @@ class Receive extends Component<Props> {
             type="OutlinePrimary"
             style={{ margin: 'auto' }}
             onClick={() => this.copyAddressToClipboard()}
+            submit
+            priority={0}
           >
             <FormattedMessage id="button.copy.address" />
           </Button>
@@ -169,6 +173,8 @@ class Receive extends Component<Props> {
             type="OutlinePrimary"
             style={{ margin: 'auto' }}
             onClick={() => this.onAddressCopied()}
+            submit
+            priority={0}
           >
             <FormattedMessage id="button.close" />
           </Button>

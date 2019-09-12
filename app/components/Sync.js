@@ -68,6 +68,7 @@ export default class Sync extends Component<Props> {
                   iconRight="keyboard_backspace"
                   iconRightMirrorHor
                   onClick={this.onNext}
+                  submit
                   style={{ visibility: node.isSynced ? 'visible' : 'hidden' }}
                 >
                   <FormattedMessage id="button.next" />

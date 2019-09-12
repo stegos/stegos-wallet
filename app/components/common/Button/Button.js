@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { Link, LocationShape } from 'react-router-dom';
+import ActiveElement from '../ActiveElement/ActiveElement';
 import Icon from '../Icon/Icon';
 import type { IconName } from '../Icon/IconName';
 import styles from './Button.css';
@@ -12,7 +13,7 @@ export type ButtonType =
   | 'FilledSecondary'
   | 'Invisible';
 
-type Props = {
+type ButtonProps = {
   disabled?: boolean,
   onClick?: MouseEvent => void,
   tabIndex?: number,
@@ -25,11 +26,13 @@ type Props = {
   className?: string,
   link?: string | LocationShape,
   icoButton?: boolean,
-  color?: string
+  color?: string,
+  submit?: boolean,
+  priority?: number
 };
 
-export default class Button extends Component<Props> {
-  props: Props;
+class Button extends Component<ButtonProps> {
+  props: ButtonProps;
 
   static defaultProps = {
     disabled: false,
@@ -44,7 +47,9 @@ export default class Button extends Component<Props> {
     className: '',
     link: null,
     icoButton: false,
-    color: 'inherit'
+    color: 'inherit',
+    submit: false,
+    priority: 0
   };
 
   constructor(props) {
@@ -55,13 +60,16 @@ export default class Button extends Component<Props> {
     }
   }
 
+  get submitPriority() {
+    const { priority } = this.props;
+    return priority;
+  }
+
   onKeyPress(e: KeyboardEvent) {
     const { onClick, disabled } = this.props;
     return (
-      !disabled &&
-      e.key === 'Enter' &&
-      typeof onClick === 'function' &&
-      onClick()
+      !disabled && e.key === 'Enter' && typeof onClick === 'function' // &&
+      // onClick()
     );
   }
 
@@ -104,6 +112,10 @@ export default class Button extends Component<Props> {
     );
   }
 
+  submit() {
+    this.onClick();
+  }
+
   render() {
     const {
       disabled,
@@ -116,7 +128,8 @@ export default class Button extends Component<Props> {
       style,
       className,
       link,
-      icoButton
+      icoButton,
+      submit
     } = this.props;
     let buttonTypeClass = '';
     switch (type) {
@@ -145,13 +158,14 @@ export default class Button extends Component<Props> {
       className
     ];
 
-    const ButtonWrapper = link ? Link : 'div';
+    const ButtonWrapper = link ? Link : 'button';
     return (
       <ButtonWrapper
         className={classes.join(' ')}
         onClick={this.onClick.bind(this)}
         onKeyPress={this.onKeyPress.bind(this)}
         role="button"
+        type={submit ? 'submit' : 'button'}
         tabIndex={tabIndex}
         style={style}
         to={link}
@@ -164,3 +178,5 @@ export default class Button extends Component<Props> {
     );
   }
 }
+
+export default ActiveElement(Button);

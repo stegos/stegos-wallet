@@ -9,6 +9,8 @@
   border: 1px solid #ff6c00;
   box-sizing: border-box;
   border-radius: 7.5px;
+  background: none;
+  font-family: 'Montserrat', sans-serif;
   font-style: normal;
   font-weight: bold;
   font-size: 16px;

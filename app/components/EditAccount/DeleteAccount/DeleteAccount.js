@@ -83,6 +83,7 @@ class DeleteAccount extends Component<Props> {
           className={styles.InputStyle}
           error={accountNameError}
           showError={showError}
+          autoFocus
           errorStyle={{
             position: 'absolute',
             top: 'calc(18px + 100%)'
@@ -93,6 +94,8 @@ class DeleteAccount extends Component<Props> {
             type={disableDeleteButton ? 'OutlinePrimary' : 'FilledPrimary'}
             icon="cancel"
             onClick={() => this.deleteAccount()}
+            submit
+            priority={2}
           >
             <FormattedMessage id="button.delete.account" />
           </Button>

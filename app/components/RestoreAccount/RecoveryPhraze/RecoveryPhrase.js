@@ -51,6 +51,7 @@ export default class RecoveryPhrase extends Component<Props> {
             readOnly={readOnly}
             name={phrase[i].id}
             onChange={e => this.handleInputChange(e)}
+            autoFocus={i === 0}
             className={styles.Input}
           />
         </div>
