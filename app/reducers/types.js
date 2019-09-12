@@ -12,6 +12,7 @@ export type AppStateType = {
   isLocked: boolean,
   error: string,
   waiting: boolean,
+  waitingStatus: string | null,
   language: string | null,
   showWalletSettings: boolean,
   activeElement: React.ReactElement
@@ -60,7 +61,8 @@ export const createOutgoingTransaction = (t, account) => ({
   utxo: t.outputs && t.outputs.filter(o => !o.is_change)[0],
   id: t.tx_hash,
   rvalue: t.outputs.filter(o => !o.is_change)[0].rvalue,
-  sender: account && account.address
+  sender: account && account.address,
+  comment: t.outputs.filter(o => !o.is_change)[0].comment
 });
 
 export type Transaction = {

@@ -105,6 +105,7 @@ class EditAccount extends PureComponent<Props> {
           className={styles.Input}
           placeholder={getAccountName(account, intl)}
           noLabel
+          autoFocus
           onChange={this.onChangeAccountName}
         />
 

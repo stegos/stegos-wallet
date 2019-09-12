@@ -83,6 +83,7 @@ class DeleteAccount extends Component<Props> {
           className={styles.InputStyle}
           error={accountNameError}
           showError={showError}
+          autoFocus
           errorStyle={{
             position: 'absolute',
             top: 'calc(18px + 100%)'

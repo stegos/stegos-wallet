@@ -22,6 +22,7 @@ import {
 type Props = {
   accounts: AccountsStateType,
   lastActive: string,
+  waitingStatus: string,
   sendTransaction: () => void,
   intl: any
 };
@@ -293,6 +294,7 @@ class Send extends Component<Props> {
             readOnly={step === 1}
             noLabel
             isTextarea
+            autoFocus
             resize={step === 0 ? 'vertical' : 'none'}
             error={recipientAddressError}
             showError={!!recipientAddressError}
@@ -475,7 +477,7 @@ class Send extends Component<Props> {
 
   render() {
     const { titledAccount, step, isBusy } = this.state;
-    const { intl } = this.props;
+    const { intl, waitingStatus } = this.props;
     return (
       <Fragment>
         <div className={styles.Send}>
@@ -523,6 +525,7 @@ class Send extends Component<Props> {
           </div>
         </div>
         <Busy
+          state={waitingStatus}
           visible={isBusy}
           title={intl.formatMessage({ id: 'send.waiting' })}
         />

@@ -197,6 +197,7 @@ class WalletSettings extends Component<Props> {
               type="password"
               error={oldPasswordError}
               errorOutside
+              autoFocus
               showError
             />
           )}
@@ -209,6 +210,7 @@ class WalletSettings extends Component<Props> {
             type="password"
             error={newPasswordError}
             errorOutside
+            autoFocus={!isPasswordSet}
             showError
           />
           <Input

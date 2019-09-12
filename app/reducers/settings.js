@@ -28,6 +28,7 @@ const initialState = {
   isLocked: false,
   error: '',
   waiting: false,
+  waitingStatus: null,
   showWalletSettings: false,
   activeElement: null
 };
@@ -94,7 +95,8 @@ export default function app(
     case SET_WAITING:
       return {
         ...state,
-        waiting: payload
+        waiting: payload.waiting,
+        waitingStatus: payload.status || null
       };
     case SET_LANGUAGE:
       return {

@@ -213,6 +213,7 @@ class Verify extends Component<Props> {
               noLabel
               error={senderError}
               showError={!!senderError}
+              autoFocus
               style={{ marginBottom: 0, flexGrow: 1 }}
               autoFocus
             />

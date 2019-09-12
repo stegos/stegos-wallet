@@ -11,7 +11,7 @@ stages:
     key: electron
     paths:
       - /root/.cache/electron
-#  when: manual
+  #when: manual
 
 build:linux:
   extends: .build
@@ -31,6 +31,9 @@ build:linux:
     - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/stegosd-linux-x64?job=release:linux -o node/stegosd
     - chmod a+x node/stegosd
     - node/stegosd --version
+    - VERSION=$(node/stegosd --version|cut -d ' ' -f 3)
+    - echo $VERSION
+    - npm version $VERSION --allow-same-version --no-git-tag-version
     - yarn install
     - apt-get update && apt-get install -y --no-install-recommends libopenjp2-tools binutils rpm ruby
     - yarn package-linux
@@ -55,7 +58,37 @@ build:macos:
     - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/stegosd-macos-x64?job=release:macos -o node/stegosd
     - chmod a+x node/stegosd
     - node/stegosd --version
+    - VERSION=$(node/stegosd --version|cut -d ' ' -f 3)
+    - echo $VERSION
+    - npm version $VERSION --allow-same-version --no-git-tag-version
     - yarn install
     - yarn package-macos
   tags:
     - macos
+
+build:windows:
+  extends: .build
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - release/StegosWallet Setup*.exe
+      - release/StegosWallet-*.msi
+  script:
+    - node --version
+    - yarn --version
+    - mkdir node
+    - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/stegosd-win-x64.exe?job=release:windows -o node/stegosd.exe
+    - chmod a+x node/stegosd.exe
+    - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/libgcc_s_seh-1.dll?job=release:windows -o node/libgcc_s_seh-1.dll
+    - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/librocksdb-shared.dll?job=release:windows -o node/librocksdb-shared.dll
+    - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/libstdc++-6.dll?job=release:windows -o node/libstdc++-6.dll
+    - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/libwinpthread-1.dll?job=release:windows -o node/libwinpthread-1.dll
+    - node/stegosd.exe --version
+    - VERSION=$(node/stegosd.exe --version|cut -d ' ' -f 3)
+    - echo $VERSION
+    - npm version $VERSION --allow-same-version --no-git-tag-version
+    - npm install node-sass
+    - yarn install
+    - yarn package-win
+  tags:
+    - win2019

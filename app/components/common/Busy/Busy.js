@@ -3,6 +3,7 @@ import Icon from '../Icon/Icon';
 import styles from './Busy.css';
 
 type Props = {
+  state?: string,
   title?: string,
   visible?: boolean
 };
@@ -20,6 +21,7 @@ export default class Busy extends Component<Props> {
   }
 
   static defaultProps = {
+    state: null,
     title: '',
     visible: false
   };
@@ -35,13 +37,14 @@ export default class Busy extends Component<Props> {
   }
 
   render() {
-    const { visible, title } = this.props;
+    const { visible, title, state } = this.props;
     const { zIndex } = this.state;
     if (!visible) {
       return null;
     }
     return (
       <div className={styles.Busy} style={{ zIndex }}>
+        {state && <span className={styles.Label}>{state}</span>}
         <Icon name="loop" size={48} className={styles.Rotate} />
         <span className={styles.Label}>{title}</span>
       </div>
