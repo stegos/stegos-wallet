@@ -20,7 +20,7 @@ import { COMPLETE_ONBOARDING } from '../actions/node';
 
 const initialState = {
   isFirstLaunch: null,
-  isBootstrappingComplete: true,
+  isBootstrappingComplete: false,
   isPasswordSet: null,
   password: null,
   isSendBugReport: false,
