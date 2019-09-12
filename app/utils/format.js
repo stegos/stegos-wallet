@@ -1,4 +1,7 @@
-import { RECOVERY_PHRASE_LENGTH } from '../constants/config';
+import {
+  POWER_DIVISIBILITY,
+  RECOVERY_PHRASE_LENGTH
+} from '../constants/config';
 import { Account } from '../reducers/types';
 
 export const toTwoDigits = (str: string) => `0${str}`.slice(-2);
@@ -63,3 +66,7 @@ export const getAccountName = (account: Account, intl: any) => {
   }
   return intl.formatMessage({ id: 'account.default.name' }, { id: account.id });
 };
+
+export const getAccountNameAndBalance = (account: Account, intl: any) =>
+  `${getAccountName(account, intl)} ${account.balance /
+    POWER_DIVISIBILITY} STG`;
