@@ -57,7 +57,8 @@ class Blocker extends Component<Props> {
           subtitle: intl.formatMessage({ id: 'unlock.wallet.subtitle' }),
           type: 'small',
           visible: isLocked,
-          showCloseButton: false
+          showCloseButton: false,
+          dontOnEsc: true
         }}
         style={{ width: 300 }}
       >
@@ -71,7 +72,6 @@ class Blocker extends Component<Props> {
               type="password"
               autoFocus
               onChange={e => this.setState({ password: e.currentTarget.value })}
-              autoFocus
             />
           )}
           {unlocking && (

@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as AppActions from '../../../actions/settings';
 import Icon from '../Icon/Icon';
+import WithSubmit from '../WithSubmit/WithSubmit';
 import styles from './Modal.css';
 
 type Props = {
@@ -13,10 +17,11 @@ type ModalProps = {
   type?: 'big' | 'small',
   onClose?: () => void,
   visible?: boolean,
-  showCloseButton?: boolean
+  showCloseButton?: boolean,
+  dontOnEsc?: boolean
 };
 
-export default class Modal extends Component<Props> {
+class Modal extends Component<Props> {
   static getHighestZindex(): number {
     const elements = document.getElementsByTagName('*');
     const maxZ = Math.max.apply(
@@ -36,7 +41,8 @@ export default class Modal extends Component<Props> {
       type: 'big',
       onClose: undefined,
       visible: false,
-      showCloseButton: true
+      showCloseButton: true,
+      dontOnEsc: false
     }
   };
 
@@ -48,21 +54,25 @@ export default class Modal extends Component<Props> {
     this.setState({
       zIndex: Modal.getHighestZindex()
     });
-    document.body.addEventListener('keydown', this.onKeyPressed);
   }
 
-  componentWillUnmount() {
-    document.body.removeEventListener('keydown', this.onKeyPressed);
-  }
+  onEscape() {
+    const { topModal, setTopModal, options } = this.props;
 
-  onKeyPressed = (e: KeyboardEvent) => {
-    const { options } = this.props;
-    const { visible } = options;
-    if (visible && e.code === 'Escape') {
-      e.preventDefault();
-      this.hide();
+    const { dontOnEsc, visible } = options;
+
+    if (dontOnEsc || !visible) {
+      return;
     }
-  };
+    if (topModal === null) {
+      setTopModal(this);
+      return;
+    }
+    const { zIndex } = this.state;
+    if (zIndex >= topModal.state.zIndex) {
+      setTopModal(this);
+    }
+  }
 
   hide() {
     const { options } = this.props;
@@ -115,3 +125,10 @@ export default class Modal extends Component<Props> {
     );
   }
 }
+
+export default connect(
+  state => ({
+    topModal: state.app.topModal
+  }),
+  dispatch => bindActionCreators(AppActions, dispatch)
+)(WithSubmit(Modal));
