@@ -49,6 +49,15 @@ class App extends React.Component<Props> {
     }
   }
 
+  onEscape() {
+    const { app, setTopModal } = this.props;
+    const { topModal } = app;
+    if (topModal && typeof topModal.hide === 'function') {
+      topModal.hide();
+      setTopModal(null);
+    }
+  }
+
   render() {
     const { children } = this.props;
     return <React.Fragment>{children}</React.Fragment>;
