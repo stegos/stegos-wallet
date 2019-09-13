@@ -15,7 +15,7 @@ import { POWER_DIVISIBILITY } from '../../constants/config';
 import {
   formatDigit,
   getAccountName,
-  getAccountNameAndBalance,
+  getBalance,
   isBase58,
   isPositiveStegosNumber
 } from '../../utils/format';
@@ -270,10 +270,26 @@ class Send extends Component<Props> {
           {Send.renderDropdown(
             Object.entries(accounts).map(acc => ({
               value: acc[1],
-              name: getAccountNameAndBalance(acc[1], intl)
+              name: (
+                <span>
+                  {getAccountName(acc[1], intl)}{' '}
+                  <span className={styles.FormDropdownBalance}>
+                    {getBalance(acc[1])}
+                  </span>{' '}
+                  STG
+                </span>
+              )
             })),
             intl.formatMessage({ id: 'input.name.account' }),
-            account && getAccountNameAndBalance(account, intl),
+            account && (
+              <span>
+                {getAccountName(account, intl)}{' '}
+                <span className={styles.FormDropdownBalance}>
+                  {getBalance(account)}
+                </span>{' '}
+                STG
+              </span>
+            ),
             this.handleAccountChange.bind(this),
             accountError,
             !!accountError,

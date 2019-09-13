@@ -67,5 +67,5 @@ export const getAccountName = (account: Account, intl: any) => {
   return intl.formatMessage({ id: 'account.default.name' }, { id: account.id });
 };
 
-export const getAccountNameAndBalance = (account: Account, intl: any) =>
-  `${getAccountName(account, intl)} ${(account.balance / POWER_DIVISIBILITY).toFixed(4)} STG`;
+export const getBalance = (account: Account) =>
+  `${(account.balance / POWER_DIVISIBILITY).toFixed(4)}`;
