@@ -2,7 +2,7 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import type { AccountsStateType } from '../../reducers/types';
+import type { Account, AccountsStateType } from '../../reducers/types';
 import Busy from '../common/Busy/Busy';
 import Button from '../common/Button/Button';
 import Dropdown from '../common/Dropdown/Dropdown';
@@ -15,7 +15,6 @@ import { POWER_DIVISIBILITY } from '../../constants/config';
 import {
   formatDigit,
   getAccountName,
-  getAccountNameAndBalance,
   isBase58,
   isPositiveStegosNumber
 } from '../../utils/format';
@@ -242,6 +241,12 @@ class Send extends Component<Props> {
     });
   }
 
+  getAccountNameAndBalance = (account: Account) => {
+    const { intl } = this.props;
+    return `${getAccountName(account, intl)} ${account.balance /
+      POWER_DIVISIBILITY} STG`;
+  };
+
   sendForm() {
     const { accounts, intl } = this.props;
     const {
@@ -270,10 +275,10 @@ class Send extends Component<Props> {
           {Send.renderDropdown(
             Object.entries(accounts).map(acc => ({
               value: acc[1],
-              name: getAccountNameAndBalance(acc[1], intl)
+              name: this.getAccountNameAndBalance(acc[1], intl)
             })),
             intl.formatMessage({ id: 'input.name.account' }),
-            account && getAccountNameAndBalance(account, intl),
+            account && this.getAccountNameAndBalance(account, intl),
             this.handleAccountChange.bind(this),
             accountError,
             !!accountError,
