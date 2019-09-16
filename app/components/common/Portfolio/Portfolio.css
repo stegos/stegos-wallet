@@ -155,30 +155,8 @@
   transform: translate(-50%, -50%);
 }
 
-.ButtonSwitchTrending {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  align-self: center;
-  width: 70px;
-  height: 70px;
-  border: none;
-  border-radius: 50%;
-  background-color: #3e4972;
-  color: rgba(255, 255, 255, 0.7);
-  cursor: pointer;
-  transform: translateY(calc(35px + 50%));
-  transition-duration: 0.1s;
-  transition-property: background-color, color;
-}
-
-.ButtonSwitchTrending:hover {
-  background-color: #4e5d93;
-  color: #ff6c00;
-}
-
-.ButtonSwitchTrending:focus {
-  outline: none;
+.ChartContainer {
+  padding-bottom: 70px;
 }
 
 .BottomActions {

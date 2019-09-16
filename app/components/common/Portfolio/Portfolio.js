@@ -138,12 +138,8 @@ class Portfolio extends PureComponent<Props> {
           </div>
           {!!transactions.length && (
             <Fragment>
-              <Chart data={this.chartDataSource} />
-              <div className={styles.ButtonSwitchTrending}>
-                <Icon
-                  name={trendingUp ? 'trending_up' : 'trending_down'}
-                  size={32}
-                />
+              <div className={styles.ChartContainer}>
+                <Chart data={this.chartDataSource} />
               </div>
             </Fragment>
           )}
