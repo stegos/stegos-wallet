@@ -241,10 +241,17 @@ class Send extends Component<Props> {
     });
   }
 
-  getAccountNameAndBalance = (account: Account) => {
+  renderAccountItem = (account: Account) => {
     const { intl } = this.props;
-    return `${getAccountName(account, intl)} ${account.balance /
-      POWER_DIVISIBILITY} STG`;
+    return (
+      <span>
+        {getAccountName(account, intl)}{' '}
+        <span className={styles.FormDropdownBalance}>
+          {account.balance / POWER_DIVISIBILITY}
+        </span>{' '}
+        STG
+      </span>
+    );
   };
 
   sendForm() {
@@ -275,10 +282,10 @@ class Send extends Component<Props> {
           {Send.renderDropdown(
             Object.entries(accounts).map(acc => ({
               value: acc[1],
-              name: this.getAccountNameAndBalance(acc[1], intl)
+              name: this.renderAccountItem(acc[1])
             })),
             intl.formatMessage({ id: 'input.name.account' }),
-            account && this.getAccountNameAndBalance(account, intl),
+            account && this.renderAccountItem(account),
             this.handleAccountChange.bind(this),
             accountError,
             !!accountError,
