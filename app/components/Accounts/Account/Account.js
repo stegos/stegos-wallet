@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { formatDigit, getAccountName } from '../../../utils/format';
 import Button from '../../common/Button/Button';
-import Icon from '../../common/Icon/Icon';
 import EditAccount from '../../EditAccount/EditAccount';
 import RestoreAccount from '../../RestoreAccount/RestoreAccount';
 import Chart from './Chart/Chart';
