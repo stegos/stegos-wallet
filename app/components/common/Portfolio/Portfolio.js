@@ -1,7 +1,6 @@
 // @flow
 import React, { Fragment, PureComponent } from 'react';
 import { FormattedMessage, FormattedPlural, injectIntl } from 'react-intl';
-import Icon from '../Icon/Icon';
 import Chart from '../../Accounts/Account/Chart/Chart';
 import TransactionsList from '../../Accounts/Account/TransactionsList/TransactionsList';
 import styles from './Portfolio.css';
@@ -74,8 +73,6 @@ class Portfolio extends PureComponent<Props> {
     const { intl } = this.props;
     const { balance, size } = this;
     const transactions = this.filteredTransactions;
-    const trendingUp =
-      transactions.length > 0 ? transactions[0].type === 'Receive' : false;
     return (
       <div className={styles.Account}>
         <div className={styles.Header}>
@@ -138,12 +135,8 @@ class Portfolio extends PureComponent<Props> {
           </div>
           {!!transactions.length && (
             <Fragment>
-              <Chart data={this.chartDataSource} />
-              <div className={styles.ButtonSwitchTrending}>
-                <Icon
-                  name={trendingUp ? 'trending_up' : 'trending_down'}
-                  size={32}
-                />
+              <div className={styles.ChartContainer}>
+                <Chart data={this.chartDataSource} />
               </div>
             </Fragment>
           )}
