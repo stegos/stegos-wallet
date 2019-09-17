@@ -40,7 +40,7 @@ export default function accounts(
       type !== 'new_micro_block' &&
       type !== 'new_macro_block' &&
       type !== 'rollback_micro_block' &&
-      type !== 'sync_changed' &&
+      type !== 'status_changed' &&
       remote.process.env.NODE_ENV === 'development'
     ) {
       console.log('HANDLE MSG');
