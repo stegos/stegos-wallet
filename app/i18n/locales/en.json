@@ -34,6 +34,7 @@
   "accounts.sort.by": "Sort by",
   "accounts.sort.account.name": "Account name",
   "accounts.sort.balance": "Account balance",
+  "accounts.waiting": "Getting accounts, please wait...",
 
   "account.settings": "Account settings",
   "account.no.tokens": "No Stegos tokens yet?",

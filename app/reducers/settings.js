@@ -13,9 +13,9 @@ import {
   SHOW_WALLET_SETTINGS,
   UNLOCK_WALLET,
   SET_ACTIVE_ELEMENT,
-  FREE_ACTIVE_ELEMENT
+  FREE_ACTIVE_ELEMENT,
+  FINISH_BOOTSTRAP
 } from '../actions/settings';
-import { COMPLETE_ONBOARDING } from '../actions/node';
 
 const initialState = {
   isFirstLaunch: null,
@@ -59,10 +59,9 @@ export default function app(
       return {
         ...state,
         isTermsAccepted: true,
-        isSendBugReport: payload.sentBugs,
-        isBootstrappingComplete: true
+        isSendBugReport: payload.sentBugs
       };
-    case COMPLETE_ONBOARDING:
+    case FINISH_BOOTSTRAP:
       return {
         ...state,
         isBootstrappingComplete: true
