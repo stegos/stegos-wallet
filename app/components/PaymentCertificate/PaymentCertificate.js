@@ -198,7 +198,12 @@ class PaymentCertificate extends Component<Props> {
           </div>
         </div>
         <div className={styles.ActionsContainer}>
-          <Button type="OutlinePrimary" onClick={() => this.downloadAsPdf()}>
+          <Button
+            type="OutlinePrimary"
+            onClick={() => this.downloadAsPdf()}
+            submit
+            priority={1}
+          >
             Download as PDF
           </Button>
         </div>

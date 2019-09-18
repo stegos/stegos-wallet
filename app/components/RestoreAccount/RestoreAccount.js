@@ -13,7 +13,7 @@ import Steps from '../common/Steps/Steps';
 import RecoveryPhrase from './RecoveryPhraze/RecoveryPhrase';
 import styles from './RestoreAccount.css';
 import { RECOVERY_PHRASE_LENGTH } from '../../constants/config';
-import { getEmptyRecoveryPhrase } from '../../utils/format';
+import { getAccountName, getEmptyRecoveryPhrase } from '../../utils/format';
 import Busy from '../common/Busy/Busy';
 
 type Props = {
@@ -92,7 +92,7 @@ class RestoreAccount extends Component<Props> {
 
   copyAddressStep() {
     const { qrCodeDataUrl, restoredAccountId } = this.state;
-    const { accounts } = this.props;
+    const { accounts, intl } = this.props;
     const account = accounts[restoredAccountId];
     return (
       <div className={styles.QrcodeContainer} key="Qrcode">
@@ -104,7 +104,7 @@ class RestoreAccount extends Component<Props> {
         <span className={styles.AccountAddress}>
           {account.address}{' '}
           <FormattedMessage id="receive.address.for.account" />{' '}
-          <b>{account.name}</b>: {account.address}
+          <b>{getAccountName(account, intl)}</b>: {account.address}
         </span>
       </div>
     );
@@ -112,7 +112,7 @@ class RestoreAccount extends Component<Props> {
 
   addressCopiedStep() {
     const { qrCodeDataUrl, restoredAccountId } = this.state;
-    const { accounts } = this.props;
+    const { accounts, intl } = this.props;
     const account = accounts[restoredAccountId];
     return (
       <div className={styles.QrcodeContainer} key="Qrcode">
@@ -126,7 +126,7 @@ class RestoreAccount extends Component<Props> {
             <FormattedMessage id="receive.address.copied" />
           </div>{' '}
           <FormattedMessage id="receive.address.for.account" />{' '}
-          <b>{account.name}</b>: {account.address}
+          <b>{getAccountName(account, intl)}</b>: {account.address}
         </span>
       </div>
     );
@@ -178,7 +178,12 @@ class RestoreAccount extends Component<Props> {
             <Button type="OutlineDisabled" onClick={() => this.close()}>
               <FormattedMessage id="button.cancel" />
             </Button>
-            <Button type="OutlinePrimary" onClick={() => this.restore()}>
+            <Button
+              type="OutlinePrimary"
+              onClick={() => this.restore()}
+              submit
+              priority={1}
+            >
               <FormattedMessage id="button.restore" />
             </Button>
           </div>
@@ -189,6 +194,8 @@ class RestoreAccount extends Component<Props> {
               type="OutlinePrimary"
               style={{ margin: 'auto' }}
               onClick={() => this.copyAddressToClipboard()}
+              submit
+              priority={1}
             >
               <FormattedMessage id="button.copy.address" />
             </Button>
@@ -200,6 +207,8 @@ class RestoreAccount extends Component<Props> {
               type="OutlinePrimary"
               style={{ margin: 'auto' }}
               onClick={() => this.close()}
+              submit
+              priority={1}
             >
               <FormattedMessage id="button.close" />
             </Button>

@@ -2,7 +2,7 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import type { AccountsStateType } from '../../reducers/types';
+import type { Account, AccountsStateType } from '../../reducers/types';
 import Busy from '../common/Busy/Busy';
 import Button from '../common/Button/Button';
 import Dropdown from '../common/Dropdown/Dropdown';
@@ -14,6 +14,7 @@ import routes from '../../constants/routes';
 import { POWER_DIVISIBILITY } from '../../constants/config';
 import {
   formatDigit,
+  getAccountName,
   isBase58,
   isPositiveStegosNumber
 } from '../../utils/format';
@@ -21,6 +22,7 @@ import {
 type Props = {
   accounts: AccountsStateType,
   lastActive: string,
+  waitingStatus: string,
   sendTransaction: () => void,
   intl: any
 };
@@ -239,6 +241,19 @@ class Send extends Component<Props> {
     });
   }
 
+  renderAccountItem = (account: Account) => {
+    const { intl } = this.props;
+    return (
+      <span>
+        {getAccountName(account, intl)}{' '}
+        <span className={styles.FormDropdownBalance}>
+          {account.balance / POWER_DIVISIBILITY}
+        </span>{' '}
+        STG
+      </span>
+    );
+  };
+
   sendForm() {
     const { accounts, intl } = this.props;
     const {
@@ -267,10 +282,10 @@ class Send extends Component<Props> {
           {Send.renderDropdown(
             Object.entries(accounts).map(acc => ({
               value: acc[1],
-              name: acc[1].name
+              name: this.renderAccountItem(acc[1])
             })),
             intl.formatMessage({ id: 'input.name.account' }),
-            account && account.name,
+            account && this.renderAccountItem(account),
             this.handleAccountChange.bind(this),
             accountError,
             !!accountError,
@@ -292,6 +307,7 @@ class Send extends Component<Props> {
             readOnly={step === 1}
             noLabel
             isTextarea
+            autoFocus
             resize={step === 0 ? 'vertical' : 'none'}
             error={recipientAddressError}
             showError={!!recipientAddressError}
@@ -425,6 +441,8 @@ class Send extends Component<Props> {
             iconRight="keyboard_backspace"
             iconRightMirrorHor
             onClick={() => this.onNext()}
+            submit
+            priority={0}
           >
             <FormattedMessage id="button.next" />
           </Button>
@@ -434,6 +452,7 @@ class Send extends Component<Props> {
   }
 
   transactionSent() {
+    const { intl } = this.props;
     const { account } = this.state;
     return [
       <div className={styles.TransactionSentContainer} key="Accounts">
@@ -448,7 +467,7 @@ class Send extends Component<Props> {
             id="send.transaction.sent.certificate"
             values={{ account: '' }}
           />{' '}
-          <b>{account.name}</b>.
+          <b>{getAccountName(account, intl)}</b>.
         </p>
       </div>,
       <div className={styles.ActionsContainer} key="Actions">
@@ -459,6 +478,8 @@ class Send extends Component<Props> {
             state: { accountId: account.id }
           }}
           style={{ margin: 'auto' }}
+          submit
+          priority={0}
         >
           <FormattedMessage id="button.close" />
         </Button>
@@ -468,13 +489,15 @@ class Send extends Component<Props> {
 
   render() {
     const { titledAccount, step, isBusy } = this.state;
-    const { intl } = this.props;
+    const { intl, waitingStatus } = this.props;
     return (
       <Fragment>
         <div className={styles.Send}>
           {titledAccount && (
             <Fragment>
-              <span className={styles.Title}>{titledAccount.name}</span>
+              <span className={styles.Title}>
+                {getAccountName(titledAccount, intl)}
+              </span>
               <Link
                 to={{
                   pathname: routes.ACCOUNT,
@@ -514,6 +537,7 @@ class Send extends Component<Props> {
           </div>
         </div>
         <Busy
+          state={waitingStatus}
           visible={isBusy}
           title={intl.formatMessage({ id: 'send.waiting' })}
         />

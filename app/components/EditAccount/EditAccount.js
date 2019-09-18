@@ -12,6 +12,7 @@ import Backup from './Backup/Backup';
 import DeleteAccount from './DeleteAccount/DeleteAccount';
 import styles from './EditAccount.css';
 import type { Account } from '../../reducers/types';
+import { getAccountName } from '../../utils/format';
 
 type Props = {
   accountId: number,
@@ -90,7 +91,7 @@ class EditAccount extends PureComponent<Props> {
   };
 
   renderMain() {
-    const { accounts, accountId } = this.props;
+    const { accounts, accountId, intl } = this.props;
     const account = accounts[accountId];
     return [
       <div className={styles.Container} key="form">
@@ -102,8 +103,9 @@ class EditAccount extends PureComponent<Props> {
         </div>
         <Input
           className={styles.Input}
-          placeholder={account.name}
+          placeholder={getAccountName(account, intl)}
           noLabel
+          autoFocus
           onChange={this.onChangeAccountName}
         />
 
@@ -150,7 +152,12 @@ class EditAccount extends PureComponent<Props> {
         >
           <FormattedMessage id="button.delete.account" />
         </Button>
-        <Button type="OutlinePrimary" onClick={() => this.apply()}>
+        <Button
+          type="OutlinePrimary"
+          onClick={() => this.apply()}
+          submit
+          priority={1}
+        >
           <FormattedMessage id="button.apply" />
         </Button>
       </div>

@@ -11,6 +11,7 @@ import Steps from '../common/Steps/Steps';
 import Verify from '../Verify/Verify';
 import styles from './Receive.css';
 import routes from '../../constants/routes';
+import { getAccountName } from '../../utils/format';
 
 type Props = {
   accounts: AccountsStateType,
@@ -86,11 +87,11 @@ class Receive extends Component<Props> {
           <div className={styles.AccountDropdown}>
             <Dropdown
               onChange={e => this.onSelectAccount(e)}
-              value={selectedAccount && selectedAccount.name}
+              value={selectedAccount && getAccountName(selectedAccount, intl)}
               placeholder={intl.formatMessage({ id: 'input.name.account' })}
               options={Object.entries(accounts).map(acc => ({
                 value: acc[1],
-                name: acc[1].name
+                name: getAccountName(acc[1], intl)
               }))}
               icon="expand_more"
               iconPosition="right"
@@ -120,6 +121,8 @@ class Receive extends Component<Props> {
             iconRightMirrorHor
             onClick={() => this.onAccountSelected()}
             disabled={!isValid}
+            submit
+            priority={0}
           >
             <FormattedMessage id="button.next" />
           </Button>
@@ -134,6 +137,7 @@ class Receive extends Component<Props> {
 
   copyAddressStep(copied: boolean) {
     const { selectedAccount, qrcodeDataUrl } = this.state;
+    const { intl } = this.props;
     return [
       <div className={styles.QrcodeContainer} key="Qrcode">
         <img
@@ -148,7 +152,8 @@ class Receive extends Component<Props> {
             </div>
           )}
           <FormattedMessage id="receive.address.for.account" />{' '}
-          <b>{selectedAccount.name}</b>: {selectedAccount.address}
+          <b>{getAccountName(selectedAccount, intl)}</b>:{' '}
+          {selectedAccount.address}
         </span>
       </div>,
       <div className={styles.ActionsContainer} key="Actions">
@@ -157,6 +162,8 @@ class Receive extends Component<Props> {
             type="OutlinePrimary"
             style={{ margin: 'auto' }}
             onClick={() => this.copyAddressToClipboard()}
+            submit
+            priority={0}
           >
             <FormattedMessage id="button.copy.address" />
           </Button>
@@ -166,6 +173,8 @@ class Receive extends Component<Props> {
             type="OutlinePrimary"
             style={{ margin: 'auto' }}
             onClick={() => this.onAddressCopied()}
+            submit
+            priority={0}
           >
             <FormattedMessage id="button.close" />
           </Button>
@@ -181,7 +190,9 @@ class Receive extends Component<Props> {
       <div className={styles.Receive}>
         {titledAccount && (
           <Fragment>
-            <span className={styles.Title}>{titledAccount.name}</span>
+            <span className={styles.Title}>
+              {getAccountName(titledAccount, intl)}
+            </span>
             <Link
               to={{
                 pathname: routes.ACCOUNT,

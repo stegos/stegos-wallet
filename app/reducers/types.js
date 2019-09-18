@@ -1,3 +1,4 @@
+import React from 'react';
 import type { Dispatch as ReduxDispatch, Store as ReduxStore } from 'redux';
 
 export type AppStateType = {
@@ -10,7 +11,11 @@ export type AppStateType = {
   autoLockTimeout: number,
   isLocked: boolean,
   error: string,
-  waiting: boolean
+  waiting: boolean,
+  waitingStatus: string | null,
+  language: string | null,
+  showWalletSettings: boolean,
+  activeElement: React.ReactElement
 };
 
 export type NodeStateType = {
@@ -41,7 +46,6 @@ export type Account = {
 
 export const createEmptyAccount = id => ({
   id,
-  name: `Account #${id}`,
   balance: 0,
   isLocked: true,
   transactions: []
@@ -57,7 +61,8 @@ export const createOutgoingTransaction = (t, account) => ({
   utxo: t.outputs && t.outputs.filter(o => !o.is_change)[0],
   id: t.tx_hash,
   rvalue: t.outputs.filter(o => !o.is_change)[0].rvalue,
-  sender: account && account.address
+  sender: account && account.address,
+  comment: t.outputs.filter(o => !o.is_change)[0].comment
 });
 
 export type Transaction = {
@@ -66,7 +71,8 @@ export type Transaction = {
   amount: number,
   hasCertificate: boolean,
   status?: TransactionStatus,
-  sender?: string
+  sender?: string,
+  comment?: string
 };
 
 export type TransactionStatus =

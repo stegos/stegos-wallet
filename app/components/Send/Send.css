@@ -136,6 +136,10 @@
   border: 1px solid transparent;
 }
 
+.FormDropdownBalance {
+  font-weight: bold;
+}
+
 .FeeInput {
   width: 100%;
   background: transparent;

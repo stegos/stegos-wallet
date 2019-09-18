@@ -87,6 +87,7 @@ const onOpen = (dispatch: Dispatch) => {
   }
   dispatch({ type: WS_OPEN });
   isOpened = true;
+  send(dispatch, { payload: { type: 'subscribe_status' } }); // todo
 };
 
 const onMessage = (store: MiddlewareAPI, evt: MessageEvent) => {
@@ -144,7 +145,7 @@ const encrypt = (plaintext, key) => {
   const resizedIV = Buffer.allocUnsafe(tokenLength);
   const iv = crypto
     .createHash('sha256')
-    .update(plaintext)
+    .update(Buffer.from(crypto.randomBytes(tokenLength)).toString('hex'))
     .digest();
   iv.copy(resizedIV);
   const encryptor = crypto.createCipheriv(

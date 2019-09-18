@@ -54,6 +54,7 @@ class Blocker extends Component<Props> {
       <Modal
         options={{
           title: intl.formatMessage({ id: 'unlock.wallet.title' }),
+          subtitle: intl.formatMessage({ id: 'unlock.wallet.subtitle' }),
           type: 'small',
           visible: isLocked,
           showCloseButton: false
@@ -68,6 +69,7 @@ class Blocker extends Component<Props> {
               })}
               value={password}
               type="password"
+              autoFocus
               onChange={e => this.setState({ password: e.currentTarget.value })}
             />
           )}
@@ -80,6 +82,8 @@ class Blocker extends Component<Props> {
             type="OutlinePrimary"
             onClick={() => this.onUnlock()}
             disabled={unlocking}
+            submit
+            priority={1}
           >
             <FormattedMessage id="button.unlock" />
           </Button>

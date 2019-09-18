@@ -3,12 +3,13 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as AppActions from '../actions/settings';
+import WithSubmit from '../components/common/WithSubmit/WithSubmit';
 import type { AppStateType } from '../reducers/types';
 
 type Props = {
   children: React.Node,
   withIdleBlocking: boolean,
-  lockWallet: () => {},
+  lockWallet: () => void,
   app: AppStateType
 };
 
@@ -40,6 +41,14 @@ class App extends React.Component<Props> {
     lockWallet();
   };
 
+  onSubmit() {
+    const { app } = this.props;
+    const { activeElement } = app;
+    if (activeElement && typeof activeElement.submit === 'function') {
+      activeElement.submit();
+    }
+  }
+
   render() {
     const { children } = this.props;
     return <React.Fragment>{children}</React.Fragment>;
@@ -49,4 +58,4 @@ class App extends React.Component<Props> {
 export default connect(
   state => ({ app: state.app }),
   dispatch => bindActionCreators(AppActions, dispatch)
-)(App);
+)(WithSubmit(App));
