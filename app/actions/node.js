@@ -23,13 +23,13 @@ export const runNode = () => (dispatch: Dispatch) => {
 export const connectToRunningNode = token => (dispatch: Dispatch) => {
   dispatch({ type: TOKEN_RECEIVED, payload: { token } });
   dispatch({ type: NODE_RUNNING });
+  subscribe(handleNodeSynchronization);
   dispatch(
     connect(
       WS_ENDPOINT,
       token
     )
   );
-  subscribe(handleNodeSynchronization);
 };
 
 export const onNodeRunning = () => (dispatch: Dispatch) => {
@@ -78,7 +78,7 @@ export const validateCertificate = (
 };
 
 const handleNodeSynchronization = (dispatch: Dispatch, data: string) => {
-  if (data.type === 'sync_changed' && data.is_synchronized) {
+  if (data.type === 'status_changed' && data.is_synchronized) {
     unsubscribe(handleNodeSynchronization);
     dispatch(loadAccounts());
   }

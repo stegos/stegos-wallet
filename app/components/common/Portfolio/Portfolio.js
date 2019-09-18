@@ -39,8 +39,7 @@ class Portfolio extends PureComponent<Props> {
     const transactions = Object.entries(accounts)
       .map(a => a[1].transactions)
       .reduce((arr, tr) => [...arr, ...tr], [])
-      .sort((a, b) => a.timestamp > b.timestamp)
-      .reverse();
+      .sort((a, b) => b.timestamp - a.timestamp);
     const now = new Date();
     const weekAgo = new Date().setDate(now.getDate() - 7);
     const monthAgo = new Date().setMonth(now.getMonth() - 1);
