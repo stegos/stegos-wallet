@@ -91,7 +91,7 @@ export default function accounts(
                   }
             )
             .filter(t => t.type === 'Send' || !t.is_change)
-            .sort((a, b) => a.timestamp > b.timestamp)
+            .sort((a, b) => a.timestamp - b.timestamp)
         });
       case 'transaction_created':
         return setAccountProps({
