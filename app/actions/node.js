@@ -15,7 +15,6 @@ const WS_ENDPOINT = `ws://${
 export const RUN_NODE = 'RUN_NODE';
 export const RUN_NODE_FAILED = 'RUN_NODE_FAILED';
 export const TOKEN_RECEIVED = 'TOKEN_RECEIVED';
-export const COMPLETE_ONBOARDING = 'COMPLETE_ONBOARDING';
 
 export const runNode = () => (dispatch: Dispatch) => {
   dispatch(send(RUN_NODE));
@@ -47,12 +46,13 @@ export const onTokenReceived = (event, token) => (dispatch: Dispatch) => {
   );
 };
 
-export const onSync = () => (dispatch: Dispatch, getState: GetState) => {
+const onSynced = () => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   const { app } = state;
   subscribe(handleTransactions);
-  if (app.isTermsAccepted) dispatch({ type: COMPLETE_ONBOARDING });
-  else dispatch(push(routes.BAGS_AND_TERMS));
+  dispatch(
+    push(app.isFirstLaunch ? routes.BAGS_AND_TERMS : routes.ENTER_PASSWORD)
+  );
 };
 
 export const validateCertificate = (
@@ -74,36 +74,13 @@ export const validateCertificate = (
 };
 
 const handleNodeSynchronization = (dispatch: Dispatch, data: string) => {
-  if (data.type === 'status_changed' && data.is_synchronized) {
+  if (
+    (data.type === 'status_changed' || data.type === 'subscribed_status') &&
+    data.is_synchronized
+  ) {
     unsubscribe(handleNodeSynchronization);
-    dispatch(loadAccounts());
+    dispatch(onSynced());
   }
-};
-
-const loadAccounts = () => (dispatch: Dispatch, getState: GetState) => {
-  sendSync({ type: 'list_accounts' })
-    .then(async resp => {
-      dispatch({ type: SET_WAITING, payload: { waiting: true } });
-      let state = getState();
-      const { accounts, app } = state;
-      const { password } = app;
-      if (Object.keys(accounts.items).length === 0) {
-        await sendSync({ type: 'create_account', password });
-      }
-      state = getState();
-      const { items } = state.accounts;
-      await Promise.all(
-        Object.entries(items)
-          .filter(a => a[1].isLocked === true)
-          .map(
-            account =>
-              sendSync({ type: 'unseal', password, account_id: account[0] }) // todo check if already unlocked
-                .catch(console.log) // todo handle error when error codes will be available
-          )
-      );
-      return resp;
-    })
-    .catch(console.log);
 };
 
 const handleTransactions = (dispatch: Dispatch, data: string) => {
