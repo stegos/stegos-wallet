@@ -144,52 +144,96 @@ app.on('quit', () => {
  */
 
 ipcMain.on('RUN_NODE', event => {
-  runNodeProcess()
-    .then(() => event.sender.send('NODE_RUNNING'))
-    .catch(e => {
-      console.log(e);
-      event.sender.send('RUN_NODE_FAILED', { error: e });
-    });
+  runNodeProcess().catch(e => {
+    console.log(e);
+    event.sender.send('RUN_NODE_FAILED', { error: e });
+  });
 });
 
 function runNodeProcess(): Promise<void> {
   return new Promise((resolve, reject) => {
     try {
-      if (fs.existsSync(tokenFile)) fs.unlinkSync(tokenFile);
-      if (fs.existsSync(logFile)) fs.unlinkSync(logFile); // todo may be rotation
-      nodeProcess = spawn(
-        `./stegosd`,
-        [
-          '--chain',
-          chain,
-          '--data-dir',
-          appDataPath,
-          '--api-endpoint',
-          apiEndpoint
-        ],
-        {
-          cwd: nodePath
-        }
-      );
-      nodeProcess.stdout.on('data', data => {
-        const str = data.toString('utf8');
-        if (process.env.NODE_ENV === 'development') console.log(str);
-        if (str.includes('ERROR [stegos')) {
-          fs.appendFile(logFile, str, () => {});
-          reject(new Error(`An error occurred\n${str}`));
-        }
-        if (!isTokenCapturing) {
-          isTokenCapturing = true;
-          captureToken(resolve); // todo rid off NODE_RUNNING action
-        }
-      });
-      nodeProcess.stderr.on('data', data => {
-        reject(data.toString('utf8'));
-      });
+      checkWSConnect()
+        .then(() => resolve())
+        .catch(() => {
+          runNodeSpawned(resolve, reject);
+        });
     } catch (e) {
       reject(e);
     }
   });
+}
+
+function runNodeSpawned(resolve, reject) {
+  if (fs.existsSync(logFile)) fs.unlinkSync(logFile); // todo may be rotation
+  nodeProcess = spawn(
+    `./stegosd`,
+    [
+      '--chain',
+      chain,
+      '--data-dir',
+      appDataPath,
+      '--api-endpoint',
+      apiEndpoint
+    ],
+    {
+      cwd: nodePath
+    }
+  );
+  nodeProcess.stdout.on('data', data => {
+    const str = data.toString('utf8');
+    if (process.env.NODE_ENV === 'development') console.log(str);
+    if (str.includes('ERROR [stegos')) {
+      fs.appendFile(logFile, str, () => {});
+      reject(new Error(`An error occurred\n${str}`));
+    }
+    if (!isTokenCapturing) {
+      isTokenCapturing = true;
+      captureToken(resolve);
+    }
+  });
+  nodeProcess.stderr.on('data', data => {
+    reject(data.toString('utf8'));
+  });
+}
+
+function checkWSConnect(): Promise<void> {
+  let isWSOpened = false;
+  let checkingWSInterval;
+  let ws;
+
+  return new Promise((resolve, reject) => {
+    const WebSocket = require('ws');
+    ws = new WebSocket(`ws://${apiEndpoint}`);
+    ws.onopen = () => {
+      isWSOpened = true;
+    };
+    ws.onclose = () => onCloseOrError(reject);
+    ws.onerror = () => onCloseOrError(reject);
+    checkingWSInterval = setInterval(() => {
+      if (isWSOpened) {
+        closeWS();
+        captureToken(resolve);
+      }
+    }, 300);
+  });
+
+  function onCloseOrError(reject) {
+    if (ws) {
+      closeWS();
+      reject();
+    }
+  }
+
+  function closeWS() {
+    clearInterval(checkingWSInterval);
+    checkingWSInterval = null;
+    if (ws) {
+      ws.close();
+      ws = null;
+      isWSOpened = false;
+    }
+  }
 }
 
 function captureToken(resolve): void {

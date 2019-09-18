@@ -13,7 +13,6 @@ const WS_ENDPOINT = `ws://${
 }`;
 
 export const RUN_NODE = 'RUN_NODE';
-export const NODE_RUNNING = 'NODE_RUNNING';
 export const RUN_NODE_FAILED = 'RUN_NODE_FAILED';
 export const TOKEN_RECEIVED = 'TOKEN_RECEIVED';
 export const COMPLETE_ONBOARDING = 'COMPLETE_ONBOARDING';
@@ -24,7 +23,6 @@ export const runNode = () => (dispatch: Dispatch) => {
 
 export const connectToRunningNode = token => (dispatch: Dispatch) => {
   dispatch({ type: TOKEN_RECEIVED, payload: { token } });
-  dispatch({ type: NODE_RUNNING });
   subscribe(handleNodeSynchronization);
   dispatch(
     connect(
@@ -32,10 +30,6 @@ export const connectToRunningNode = token => (dispatch: Dispatch) => {
       token
     )
   );
-};
-
-export const onNodeRunning = () => (dispatch: Dispatch) => {
-  dispatch({ type: NODE_RUNNING });
 };
 
 export const onRunNodeFailed = (_, args) => (dispatch: Dispatch) => {
