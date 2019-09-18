@@ -131,7 +131,10 @@ export default class AccountsList extends PureComponent<Props> {
             <AccountItem account={a[1]} key={a[0]} />
           ))}
         </div>
-        <Busy visible={waiting} />
+        <Busy
+          visible={waiting}
+          title={intl.formatMessage({ id: 'accounts.waiting' })}
+        />
       </div>
     );
   }

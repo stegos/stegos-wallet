@@ -1,5 +1,6 @@
 {
   "WELCOME": "/",
+  "ENTER_PASSWORD": "/enterPassword",
   "PROTECT": "/protect",
   "SYNC": "/sync",
   "BAGS_AND_TERMS": "/bagsAndTerms",
