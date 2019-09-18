@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import type { NodeStateType } from '../reducers/types';
-import Button from './common/Button/Button';
 import Header from './common/Header/Header';
 import ProgressBar from './common/ProgressBar/ProgressBar';
 import styles from './Sync.css';
@@ -11,9 +10,8 @@ import SyncFail from './SyncFail/SyncFail';
 
 type Props = {
   node: NodeStateType,
-  isTermsAccepted: boolean,
-  runNode: () => void,
-  onSync: () => void
+  isFirstLaunch: boolean,
+  runNode: () => void
 };
 
 export default class Sync extends Component<Props> {
@@ -24,17 +22,12 @@ export default class Sync extends Component<Props> {
     runNode();
   }
 
-  onNext = () => {
-    const { onSync } = this.props;
-    onSync();
-  };
-
   render() {
-    const { node, isTermsAccepted } = this.props;
+    const { node, isFirstLaunch } = this.props;
     return (
       <div className={styles.Wrapper}>
         <Header />
-        {!isTermsAccepted && <BootstrapWizard step={2} />}
+        {isFirstLaunch && <BootstrapWizard step={2} />}
         {node.error && <SyncFail error={node.error} />}
         {!node.error && (
           <div className={styles.Main}>
@@ -59,22 +52,6 @@ export default class Sync extends Component<Props> {
                 <FormattedMessage id="syncing.please.wait" />
               </span>
             )}
-            <div className={styles.FooterWrapper}>
-              <div style={{ flex: 1 }} />
-              <div style={{ flex: 1 }} />
-              <div className={styles.ButtonWrapper}>
-                <Button
-                  type="button"
-                  iconRight="keyboard_backspace"
-                  iconRightMirrorHor
-                  onClick={this.onNext}
-                  submit
-                  style={{ visibility: node.isSynced ? 'visible' : 'hidden' }}
-                >
-                  <FormattedMessage id="button.next" />
-                </Button>
-              </div>
-            </div>
           </div>
         )}
       </div>
