@@ -126,11 +126,8 @@ const loadAccounts = () => (dispatch: Dispatch, getState: GetState) => {
   sendSync({ type: 'list_accounts' })
     .then(async resp => {
       let state = getState();
-      const { accounts, app } = state;
+      const { app } = state;
       const { password } = app;
-      if (Object.keys(accounts.items).length === 0) {
-        await sendSync({ type: 'create_account', password });
-      }
       state = getState();
       const { items } = state.accounts;
       await Promise.all(
