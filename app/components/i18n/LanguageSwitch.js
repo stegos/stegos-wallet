@@ -4,20 +4,16 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import Dropdown from '../common/Dropdown/Dropdown';
 import styles from './LanguageSwitch.css';
 import { setLanguage } from '../../actions/settings';
+import { defaultLocale, localesOptions } from '../../utils/locale';
 
 type Props = {
   language?: string,
   setLocale: string => {}
 };
 
-const localesOptions = [
-  { name: 'English', value: 'en' },
-  { name: 'Chinese', value: 'zh' }
-];
-
 class LanguageSwitch extends Component<Props> {
   static defaultProps = {
-    language: 'en'
+    language: defaultLocale()
   };
 
   get language() {
