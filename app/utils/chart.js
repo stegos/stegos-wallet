@@ -8,8 +8,7 @@ export const generateChartData = (
 ) => {
   const trs = transactions
     .filter(t => t.status !== 'rejected')
-    .sort((a, b) => a.timestamp > b.timestamp)
-    .reverse();
+    .sort((a, b) => b.timestamp - a.timestamp);
   let data = [];
   let balance = currentBalance;
   let date = new Date();

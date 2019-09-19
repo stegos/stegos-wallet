@@ -53,7 +53,8 @@ export default function node(
 const handleMessage = (state: NodeStateType, payload) => {
   const { type } = payload;
   switch (type) {
-    case 'sync_changed':
+    case 'status_changed':
+    case 'subscribed_status':
       return payload.is_synchronized
         ? { ...state, isSynced: true, syncingProgress: 100 }
         : {

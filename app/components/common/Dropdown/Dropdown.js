@@ -117,10 +117,10 @@ export default class Dropdown extends Component<Props> {
           }}
           ref={this.setWrapperRef}
         >
-          {options.map(option => (
+          {options.map((option, i) => (
             <div
               className={styles.Option}
-              key={option.name + option.value.toString()}
+              key={option.name + option.value.toString() + i.toString()}
               onClick={() =>
                 !readOnly &&
                 (this.setState({ isOpen: false }) || onChange(option))

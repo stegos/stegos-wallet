@@ -11,6 +11,7 @@ import { getYearAgoTimestamp } from '../utils/format';
 export const RECOVERY_PHRASE_WRITTEN_DOWN = 'RECOVERY_PHRASE_WRITTEN_DOWN';
 export const SET_ACCOUNT_NAME = 'SET_ACCOUNT_NAME';
 export const SET_LAST_USED_ACCOUNT = 'SET_LAST_USED_ACCOUNT';
+export const SET_RESTORED = 'SET_RESTORED';
 
 export const createHistoryInfoAction = accountId => ({
   type: 'history_info',
@@ -75,6 +76,7 @@ export const restoreAccount = (phrase: string[]) => async (
   getState: GetState
 ) => {
   const { password } = getState().app;
+  dispatch({ type: SET_WAITING, payload: { waiting: true } });
   try {
     const resp = await sendSync({
       type: 'recover_account',
@@ -83,24 +85,23 @@ export const restoreAccount = (phrase: string[]) => async (
     });
 
     const accountId = resp.account_id;
+    dispatch({ type: SET_RESTORED, payload: { account_id: accountId } });
     await sendSync({ type: 'unseal', password, account_id: accountId });
     await sendSync({ type: 'account_info', account_id: accountId });
     dispatch(send({ type: 'balance_info', account_id: accountId }));
     dispatch(send({ type: 'get_recovery', account_id: accountId }));
     dispatch(send(createHistoryInfoAction(accountId)));
+    dispatch({ type: SET_WAITING, payload: { waiting: false } });
     return accountId;
   } catch (err) {
+    dispatch({ type: SET_WAITING, payload: { waiting: false } });
     console.log(err);
     dispatch({
       type: SHOW_ERROR,
-      payload: 'alert.recovery.phrase.is.incorrect'
+      payload: err.message
     });
     throw err;
   }
-};
-
-export const completeAccountRestoring = () => (dispatch: Dispatch) => {
-  dispatch(push(routes.ACCOUNTS));
 };
 
 export const deleteAccount = id => (dispatch: Dispatch) => {

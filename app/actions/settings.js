@@ -1,5 +1,6 @@
 import { push } from 'connected-react-router';
 import React from 'react';
+import routes from '../constants/routes';
 import type { Dispatch, GetState } from '../reducers/types';
 import { createEmptyAccount } from '../reducers/types';
 import {
@@ -26,10 +27,19 @@ export const SHOW_WALLET_SETTINGS = 'SHOW_WALLET_SETTINGS';
 export const SET_ACTIVE_ELEMENT = 'SET_ACTIVE_ELEMENT';
 export const FREE_ACTIVE_ELEMENT = 'FREE_ACTIVE_ELEMENT';
 export const SET_TOP_MODAL = 'SET_TOP_MODAL';
+export const FINISH_BOOTSTRAP = 'FINISH_BOOTSTRAP';
 
-export const checkFirstLaunch = () => (dispatch: Dispatch) => {
+export const checkFirstLaunch = () => (
+  dispatch: Dispatch,
+  getState: GetState
+) => {
   const exist = isDbExist();
-  dispatch({ type: SET_FIRST_LAUNCH, payload: exist });
+
+  const state = getState();
+  const { node } = state;
+  if (exist && !node.isSynced) dispatch(push(routes.SYNC));
+
+  dispatch({ type: SET_FIRST_LAUNCH, payload: !exist });
 };
 
 export const setLanguage = (language: string) => (dispatch: Dispatch) => {
@@ -49,7 +59,12 @@ export const setLanguage = (language: string) => (dispatch: Dispatch) => {
 };
 
 export const setPassword = (pass: string) => (dispatch: Dispatch) => {
-  createDatabase(pass)
+  dispatch({ type: SET_PASSWORD, payload: pass });
+  dispatch(push(routes.SYNC));
+};
+
+export const finishBootstrap = (pass: string) => async (dispatch: Dispatch) => {
+  await createDatabase(pass)
     .then(async db => {
       dispatch({ type: SET_PASSWORD, payload: pass });
       db.find({ setting: { $exists: true } }, (err, settings) => {
@@ -69,7 +84,8 @@ export const setPassword = (pass: string) => (dispatch: Dispatch) => {
               return ret;
             }, {})
           });
-          dispatch(push('/sync'));
+          dispatch(loadAccounts());
+          dispatch({ type: FINISH_BOOTSTRAP });
         });
       });
       return db;
@@ -79,7 +95,13 @@ export const setPassword = (pass: string) => (dispatch: Dispatch) => {
     });
 };
 
-export const setBugsAndTerms = (sendBugs: boolean) => (dispatch: Dispatch) => {
+export const setBugsAndTerms = (sendBugs: boolean) => async (
+  dispatch: Dispatch,
+  getState: GetState
+) => {
+  const state = getState();
+  const { password } = state.app;
+  await dispatch(finishBootstrap(password));
   getDatabase()
     .then(async db => {
       db.update(
@@ -98,6 +120,29 @@ export const setBugsAndTerms = (sendBugs: boolean) => (dispatch: Dispatch) => {
     .catch(err => {
       dispatch({ type: SHOW_ERROR, payload: err.message });
     });
+};
+
+const loadAccounts = () => (dispatch: Dispatch, getState: GetState) => {
+  dispatch({ type: SET_WAITING, payload: { waiting: true } });
+  sendSync({ type: 'list_accounts' })
+    .then(async resp => {
+      let state = getState();
+      const { app } = state;
+      const { password } = app;
+      state = getState();
+      const { items } = state.accounts;
+      await Promise.all(
+        Object.entries(items)
+          .filter(a => a[1].isLocked === true)
+          .map(
+            account =>
+              sendSync({ type: 'unseal', password, account_id: account[0] }) // todo check if already unlocked
+                .catch(console.log) // todo handle error when error codes will be available
+          )
+      );
+      return resp;
+    })
+    .catch(console.log);
 };
 
 export const setAutoLockTimeout = (duration: number) => (

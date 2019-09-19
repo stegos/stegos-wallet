@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { formatDigit, getAccountName } from '../../../utils/format';
 import Button from '../../common/Button/Button';
-import Icon from '../../common/Icon/Icon';
 import EditAccount from '../../EditAccount/EditAccount';
 import Chart from './Chart/Chart';
 import TransactionsList from './TransactionsList/TransactionsList';
@@ -101,8 +100,6 @@ class Account extends PureComponent<Props> {
     const transactions = this.filterTransactions(account.transactions);
     const balance = account.balance / POWER_DIVISIBILITY;
     const isNewWallet = !account.balance && account.transactions.length === 0;
-    const trendingUp =
-      transactions.length > 0 ? transactions[0].type === 'Receive' : false;
     return (
       <div className={styles.Account}>
         <div className={styles.Header}>
@@ -200,12 +197,8 @@ class Account extends PureComponent<Props> {
           </div>
           {!!transactions.length && (
             <Fragment>
-              <Chart data={this.chartDataSource} />
-              <div className={styles.ButtonSwitchTrending}>
-                <Icon
-                  name={trendingUp ? 'trending_up' : 'trending_down'}
-                  size={32}
-                />
+              <div className={styles.ChartContainer}>
+                <Chart data={this.chartDataSource} />
               </div>
             </Fragment>
           )}

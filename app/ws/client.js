@@ -87,6 +87,7 @@ const onOpen = (dispatch: Dispatch) => {
   }
   dispatch({ type: WS_OPEN });
   isOpened = true;
+  send(dispatch, { payload: { type: 'subscribe_status' } }); // todo
 };
 
 const onMessage = (store: MiddlewareAPI, evt: MessageEvent) => {

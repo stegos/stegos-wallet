@@ -152,7 +152,10 @@ export default class AccountsList extends PureComponent<Props> {
           visible={restoreAccountVisible}
           onClose={() => this.setState({ restoreAccountVisible: false })}
         />
-        <Busy visible={waiting} />
+        <Busy
+          visible={waiting}
+          title={intl.formatMessage({ id: 'accounts.waiting' })}
+        />
       </div>
     );
   }

@@ -38,8 +38,7 @@ class TransactionsList extends PureComponent<Props> {
       return null;
     }
     return transactions
-      .sort((a, b) => a.timestamp > b.timestamp)
-      .reverse() // todo why < compare does not works?
+      .sort((a, b) => b.timestamp - a.timestamp)
       .map((item: Transaction) => {
         const signAmount =
           (item.type === 'Receive' ? '+' : '-') +

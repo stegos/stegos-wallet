@@ -5,7 +5,8 @@ import { WS_MESSAGE } from '../ws/actionsTypes';
 import {
   RECOVERY_PHRASE_WRITTEN_DOWN,
   SET_ACCOUNT_NAME,
-  SET_LAST_USED_ACCOUNT
+  SET_LAST_USED_ACCOUNT,
+  SET_RESTORED
 } from '../actions/accounts';
 import { INIT_ACCOUNTS } from '../actions/settings';
 
@@ -40,7 +41,7 @@ export default function accounts(
       type !== 'new_micro_block' &&
       type !== 'new_macro_block' &&
       type !== 'rollback_micro_block' &&
-      type !== 'sync_changed' &&
+      type !== 'status_changed' &&
       remote.process.env.NODE_ENV === 'development'
     ) {
       console.log('HANDLE MSG');
@@ -91,7 +92,7 @@ export default function accounts(
                   }
             )
             .filter(t => t.type === 'Send' || !t.is_change)
-            .sort((a, b) => a.timestamp > b.timestamp)
+            .sort((a, b) => a.timestamp - b.timestamp)
         });
       case 'transaction_created':
         return setAccountProps({
@@ -135,6 +136,8 @@ export default function accounts(
         ...state,
         lastActive: payload
       };
+    case SET_RESTORED:
+      return setAccountProps({ isRestored: true });
     default:
       return state;
   }
