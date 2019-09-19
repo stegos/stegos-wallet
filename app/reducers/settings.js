@@ -14,7 +14,6 @@ import {
   UNLOCK_WALLET,
   SET_ACTIVE_ELEMENT,
   FREE_ACTIVE_ELEMENT,
-  SET_TOP_MODAL,
   FINISH_BOOTSTRAP
 } from '../actions/settings';
 
@@ -31,8 +30,7 @@ const initialState = {
   waiting: false,
   waitingStatus: null,
   showWalletSettings: false,
-  activeElement: null,
-  topModal: null
+  activeElement: null
 };
 
 export default function app(
@@ -118,11 +116,6 @@ export default function app(
       return {
         ...state,
         activeElement: null
-      };
-    case SET_TOP_MODAL:
-      return {
-        ...state,
-        topModal: payload
       };
     default:
       return state;

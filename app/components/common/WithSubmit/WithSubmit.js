@@ -21,13 +21,6 @@ export default ComposedComponent =>
           current.onSubmit();
         }
       }
-      if (e.code === 'Escape') {
-        e.preventDefault();
-        const { current } = this.componentRef;
-        if (current.onEscape) {
-          current.onEscape();
-        }
-      }
     };
 
     componentRef = React.createRef();

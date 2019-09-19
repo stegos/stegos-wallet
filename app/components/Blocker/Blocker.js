@@ -25,7 +25,7 @@ class Blocker extends Component<Props> {
   };
 
   onUnlock() {
-    const { unlockWallet, showError } = this.props;
+    const { unlockWallet } = this.props;
     const { password } = this.state;
     this.setState({
       unlocking: true
@@ -37,8 +37,7 @@ class Blocker extends Component<Props> {
           unlocking: false
         })
       )
-      .catch(e => {
-        showError(e.message || 'Unlock wallet failed, please try again.'); // todo to action
+      .catch(() => {
         this.setState({
           password: '',
           unlocking: false
@@ -57,8 +56,7 @@ class Blocker extends Component<Props> {
           subtitle: intl.formatMessage({ id: 'unlock.wallet.subtitle' }),
           type: 'small',
           visible: isLocked,
-          showCloseButton: false,
-          dontOnEsc: true
+          showCloseButton: false
         }}
         style={{ width: 300 }}
       >

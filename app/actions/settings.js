@@ -26,7 +26,6 @@ export const SET_LANGUAGE = 'SET_LANGUAGE';
 export const SHOW_WALLET_SETTINGS = 'SHOW_WALLET_SETTINGS';
 export const SET_ACTIVE_ELEMENT = 'SET_ACTIVE_ELEMENT';
 export const FREE_ACTIVE_ELEMENT = 'FREE_ACTIVE_ELEMENT';
-export const SET_TOP_MODAL = 'SET_TOP_MODAL';
 export const FINISH_BOOTSTRAP = 'FINISH_BOOTSTRAP';
 
 export const checkFirstLaunch = () => (
@@ -197,6 +196,10 @@ export const unlockWallet = (password: string) => async (
     } catch (e) {
       // todo check error if account already unsealed and send corresponding event
       console.log(e);
+      dispatch({
+        type: SHOW_ERROR,
+        payload: e && e.message
+      });
       throw e;
     } finally {
       dispatch({ type: UNLOCK_WALLET });
@@ -260,8 +263,4 @@ export const setActiveElement = (activeElement: React.ReactElement) => (
 
 export const freeActiveElement = () => (dispatch: Dispatch) => {
   dispatch({ type: FREE_ACTIVE_ELEMENT });
-};
-
-export const setTopModal = modal => (dispatch: Dispatch) => {
-  dispatch({ type: SET_TOP_MODAL, payload: modal });
 };
