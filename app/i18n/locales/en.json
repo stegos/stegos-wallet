@@ -88,9 +88,6 @@
 
   "restore.title": "Restore Account",
   "restore.subtitle": "In order to restore your existing account, please fill all words from the recovery phrase in correct order.",
-  "restore.step.one.title": "Account",
-  "restore.step.two.title": "Copy Address",
-  "restore.step.three.title": "Receive",
   "restore.waiting": "Restoring account",
 
   "chart.total.amount": "Total amount",
@@ -195,5 +192,6 @@
   "certificate.verification.failed": "Failed",
   "certificate.verifications.waiting": "Verifying...",
 
-  "account.default.name": "Account #{id}"
+  "account.default.name": "Account #{id}",
+  "account.default.restored.name": "Restored Account #{id}"
 }
