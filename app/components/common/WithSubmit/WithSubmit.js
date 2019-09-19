@@ -14,7 +14,7 @@ export default ComposedComponent =>
       if (document.activeElement.tagName === 'TEXTAREA') {
         return;
       }
-      if (e.code === 'Enter') {
+      if (e.code === 'Enter' || e.code === 'NumpadEnter') {
         e.preventDefault();
         const { current } = this.componentRef;
         if (current.onSubmit) {

@@ -7,6 +7,7 @@ import Dropdown from '../../common/Dropdown/Dropdown';
 import Icon from '../../common/Icon/Icon';
 import AccountItem from './AccountItem/AccountItem';
 import styles from './AccountsList.css';
+import RestoreAccount from '../../RestoreAccount/RestoreAccount';
 import Busy from '../../common/Busy/Busy';
 import { getAccountName } from '../../../utils/format';
 
@@ -36,7 +37,8 @@ export default class AccountsList extends PureComponent<Props> {
     this.state = {
       search: '',
       sort: sortOptions[0],
-      options: sortOptions
+      options: sortOptions,
+      restoreAccountVisible: false
     };
   }
 
@@ -79,8 +81,14 @@ export default class AccountsList extends PureComponent<Props> {
     createAccount();
   };
 
+  restoreAccount = () => {
+    this.setState({
+      restoreAccountVisible: true
+    });
+  };
+
   render() {
-    const { sort, search, options } = this.state;
+    const { sort, search, options, restoreAccountVisible } = this.state;
     const { intl, waiting } = this.props;
     const accounts = this.getFilteredAndSortedAccounts();
     return (
@@ -104,6 +112,15 @@ export default class AccountsList extends PureComponent<Props> {
             onClick={this.onCreateAccount}
           >
             <FormattedMessage id="button.add.account" />
+          </Button>
+          <Button
+            icon="undo"
+            type="Outline"
+            elevated
+            onClick={this.restoreAccount}
+            className={styles.RestoreButton}
+          >
+            <FormattedMessage id="button.restore.account" />
           </Button>
         </div>
         <div className={styles.Header}>
@@ -131,6 +148,10 @@ export default class AccountsList extends PureComponent<Props> {
             <AccountItem account={a[1]} key={a[0]} />
           ))}
         </div>
+        <RestoreAccount
+          visible={restoreAccountVisible}
+          onClose={() => this.setState({ restoreAccountVisible: false })}
+        />
         <Busy
           visible={waiting}
           title={intl.formatMessage({ id: 'accounts.waiting' })}
