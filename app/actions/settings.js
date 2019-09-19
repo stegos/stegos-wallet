@@ -196,6 +196,10 @@ export const unlockWallet = (password: string) => async (
     } catch (e) {
       // todo check error if account already unsealed and send corresponding event
       console.log(e);
+      dispatch({
+        type: SHOW_ERROR,
+        payload: e && e.message
+      });
       throw e;
     } finally {
       dispatch({ type: UNLOCK_WALLET });

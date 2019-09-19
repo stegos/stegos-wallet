@@ -61,5 +61,8 @@ export const getAccountName = (account: Account, intl: any) => {
   if (account.name) {
     return account.name;
   }
-  return intl.formatMessage({ id: 'account.default.name' }, { id: account.id });
+  return intl.formatMessage(
+    { id: `account.default.${account.isRestored ? 'restored.' : ''}name` },
+    { id: account.id }
+  );
 };
