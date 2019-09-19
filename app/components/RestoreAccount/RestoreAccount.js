@@ -1,27 +1,24 @@
 // @flow
-import { clipboard } from 'electron';
-import * as qrcode from 'qrcode-generator';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import * as AccountsActions from '../../actions/accounts';
-import type { Account } from '../../reducers/types';
+import { replace } from 'connected-react-router';
+import { restoreAccount } from '../../actions/accounts';
 import Button from '../common/Button/Button';
 import Modal from '../common/Modal/Modal';
-import Steps from '../common/Steps/Steps';
 import RecoveryPhrase from './RecoveryPhraze/RecoveryPhrase';
 import styles from './RestoreAccount.css';
 import { RECOVERY_PHRASE_LENGTH } from '../../constants/config';
-import { getAccountName, getEmptyRecoveryPhrase } from '../../utils/format';
+import { getEmptyRecoveryPhrase } from '../../utils/format';
 import Busy from '../common/Busy/Busy';
+import routes from '../../constants/routes';
 
 type Props = {
-  accounts: Account[],
   visible: boolean,
   onClose: () => void,
-  restoreAccount: () => void,
-  completeAccountRestoring: () => void,
+  restore: (string[]) => void,
+  navToAccount: string => void,
+  waiting: boolean,
   intl: any
 };
 
@@ -31,11 +28,7 @@ class RestoreAccount extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
-      phrase: getEmptyRecoveryPhrase(),
-      step: 0,
-      qrCodeDataUrl: null,
-      restoredAccountId: null,
-      isBusy: false
+      phrase: getEmptyRecoveryPhrase()
     };
   }
 
@@ -46,12 +39,8 @@ class RestoreAccount extends Component<Props> {
   }
 
   close() {
-    const { completeAccountRestoring } = this.props;
-    completeAccountRestoring();
     this.setState({
-      phrase: getEmptyRecoveryPhrase(),
-      step: 0,
-      qrCodeDataUrl: null
+      phrase: getEmptyRecoveryPhrase()
     });
     const { onClose } = this.props;
     if (typeof onClose === 'function') {
@@ -61,88 +50,19 @@ class RestoreAccount extends Component<Props> {
 
   restore() {
     const { phrase } = this.state;
-    const { restoreAccount } = this.props;
-    this.setState(
-      {
-        isBusy: true
-      },
-      () => {
-        restoreAccount(phrase.map(w => w.value))
-          .then(resp => {
-            const { accounts } = this.props;
-            const account = accounts[resp];
-            const qr = qrcode(4, 'L');
-            qr.addData(account.address);
-            qr.make();
-            const qrCodeDataUrl = qr.createDataURL();
-            this.setState({
-              qrCodeDataUrl,
-              step: 1,
-              restoredAccountId: resp,
-              isBusy: false
-            });
-            return resp;
-          })
-          .catch(() => {
-            this.setState({ isBusy: false });
-          });
-      }
-    );
-  }
-
-  copyAddressStep() {
-    const { qrCodeDataUrl, restoredAccountId } = this.state;
-    const { accounts, intl } = this.props;
-    const account = accounts[restoredAccountId];
-    return (
-      <div className={styles.QrcodeContainer} key="Qrcode">
-        <img
-          src={qrCodeDataUrl}
-          alt={account.address}
-          className={styles.Qrcode}
-        />
-        <span className={styles.AccountAddress}>
-          {account.address}{' '}
-          <FormattedMessage id="receive.address.for.account" />{' '}
-          <b>{getAccountName(account, intl)}</b>: {account.address}
-        </span>
-      </div>
-    );
-  }
-
-  addressCopiedStep() {
-    const { qrCodeDataUrl, restoredAccountId } = this.state;
-    const { accounts, intl } = this.props;
-    const account = accounts[restoredAccountId];
-    return (
-      <div className={styles.QrcodeContainer} key="Qrcode">
-        <img
-          src={qrCodeDataUrl}
-          alt={account.address}
-          className={styles.Qrcode}
-        />
-        <span className={styles.AccountAddress}>
-          <div style={{ color: '#EE6920' }}>
-            <FormattedMessage id="receive.address.copied" />
-          </div>{' '}
-          <FormattedMessage id="receive.address.for.account" />{' '}
-          <b>{getAccountName(account, intl)}</b>: {account.address}
-        </span>
-      </div>
-    );
-  }
-
-  copyAddressToClipboard() {
-    const { restoredAccountId } = this.state;
-    const { accounts } = this.props;
-    const account = accounts[restoredAccountId];
-    clipboard.writeText(account.address);
-    this.setState({ step: 2 });
+    const { restore, navToAccount } = this.props;
+    restore(phrase.map(w => w.value))
+      .then(accountId => {
+        this.close();
+        navToAccount(accountId);
+        return accountId;
+      })
+      .catch(console.log);
   }
 
   render() {
-    const { phrase, step, isBusy } = this.state;
-    const { visible, intl } = this.props;
+    const { phrase } = this.state;
+    const { visible, intl, waiting } = this.props;
     return (
       <Modal
         options={{
@@ -155,67 +75,27 @@ class RestoreAccount extends Component<Props> {
         style={{ width: '55%' }}
       >
         <div className={styles.Container}>
-          <Steps
-            steps={[
-              intl.formatMessage({ id: 'restore.step.one.title' }),
-              intl.formatMessage({ id: 'restore.step.two.title' }),
-              intl.formatMessage({ id: 'restore.step.three.title' })
-            ]}
-            activeStep={step}
+          <RecoveryPhrase
+            wordsCount={RECOVERY_PHRASE_LENGTH}
+            phrase={phrase}
+            onChange={e => this.handleRecoveryChange(e)}
           />
-          {step === 0 && (
-            <RecoveryPhrase
-              wordsCount={RECOVERY_PHRASE_LENGTH}
-              phrase={phrase}
-              onChange={e => this.handleRecoveryChange(e)}
-            />
-          )}
-          {step === 1 && this.copyAddressStep()}
-          {step === 2 && this.addressCopiedStep()}
         </div>
-        {step === 0 && (
-          <div className={styles.ActionsContainer}>
-            <Button type="OutlineDisabled" onClick={() => this.close()}>
-              <FormattedMessage id="button.cancel" />
-            </Button>
-            <Button
-              type="OutlinePrimary"
-              onClick={() => this.restore()}
-              submit
-              priority={1}
-            >
-              <FormattedMessage id="button.restore" />
-            </Button>
-          </div>
-        )}
-        {step === 1 && (
-          <div className={styles.ActionsContainer}>
-            <Button
-              type="OutlinePrimary"
-              style={{ margin: 'auto' }}
-              onClick={() => this.copyAddressToClipboard()}
-              submit
-              priority={1}
-            >
-              <FormattedMessage id="button.copy.address" />
-            </Button>
-          </div>
-        )}
-        {step === 2 && (
-          <div className={styles.ActionsContainer}>
-            <Button
-              type="OutlinePrimary"
-              style={{ margin: 'auto' }}
-              onClick={() => this.close()}
-              submit
-              priority={1}
-            >
-              <FormattedMessage id="button.close" />
-            </Button>
-          </div>
-        )}
+        <div className={styles.ActionsContainer}>
+          <Button type="OutlineDisabled" onClick={() => this.close()}>
+            <FormattedMessage id="button.cancel" />
+          </Button>
+          <Button
+            type="OutlinePrimary"
+            onClick={() => this.restore()}
+            submit
+            priority={1}
+          >
+            <FormattedMessage id="button.restore" />
+          </Button>
+        </div>
         <Busy
-          visible={isBusy}
+          visible={waiting}
           title={intl.formatMessage({ id: 'restore.waiting' })}
         />
       </Modal>
@@ -223,11 +103,13 @@ class RestoreAccount extends Component<Props> {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(AccountsActions, dispatch);
-}
-
 export default connect(
-  state => ({ accounts: state.accounts.items }),
-  mapDispatchToProps
+  state => ({
+    waiting: state.app.waiting
+  }),
+  dispatch => ({
+    restore: (phrase: string[]) => dispatch(restoreAccount(phrase)),
+    navToAccount: (accountId: string) =>
+      dispatch(replace({ pathname: routes.ACCOUNT, state: { accountId } }))
+  })
 )(injectIntl(RestoreAccount));

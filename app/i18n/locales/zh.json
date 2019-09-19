@@ -87,9 +87,6 @@
 
   "restore.title": "恢复账户",
   "restore.subtitle": "要恢复已存在的帐户，请按照正确顺序填写恢复短语中的所有字词。",
-  "restore.step.one.title": "账户",
-  "restore.step.two.title": "复制地址",
-  "restore.step.three.title": "接收",
   "restore.waiting": "恢复账户",
 
   "chart.total.amount": "总金额",
