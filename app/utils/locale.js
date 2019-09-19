@@ -3,9 +3,13 @@ export const localesOptions = [
   { name: 'Chinese', value: 'zh' }
 ];
 
-export const defaultLocale = () => {
-  const { language } = navigator;
+export const getLocaleOption = (language: string) => {
   const lang = language.split('-')[0];
   const i = localesOptions.findIndex(option => option.value === lang);
-  return i === -1 ? 'en' : localesOptions[i].value;
+  return i === -1 ? localesOptions[0] : localesOptions[i];
+};
+
+export const defaultLocale = () => {
+  const { language } = navigator;
+  return getLocaleOption(language).value;
 };

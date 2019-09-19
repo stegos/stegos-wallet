@@ -4,7 +4,11 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import Dropdown from '../common/Dropdown/Dropdown';
 import styles from './LanguageSwitch.css';
 import { setLanguage } from '../../actions/settings';
-import { defaultLocale, localesOptions } from '../../utils/locale';
+import {
+  defaultLocale,
+  getLocaleOption,
+  localesOptions
+} from '../../utils/locale';
 
 type Props = {
   language?: string,
@@ -18,8 +22,7 @@ class LanguageSwitch extends Component<Props> {
 
   get language() {
     const { language } = this.props;
-    const i = localesOptions.findIndex(option => option.value === language);
-    return i === -1 ? 'unknown' : localesOptions[i].name;
+    return getLocaleOption(language).name;
   }
 
   render() {
