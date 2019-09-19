@@ -105,23 +105,26 @@ export default class AccountsList extends PureComponent<Props> {
             />
             <Icon name="search" size={24} />
           </div>
-          <Button
-            icon="add"
-            type="FilledPrimary"
-            elevated
-            onClick={this.onCreateAccount}
-          >
-            <FormattedMessage id="button.add.account" />
-          </Button>
-          <Button
-            icon="undo"
-            type="Outline"
-            elevated
-            onClick={this.restoreAccount}
-            className={styles.RestoreButton}
-          >
-            <FormattedMessage id="button.restore.account" />
-          </Button>
+          <div className={styles.ButtonsContainer}>
+            <Button
+              icon="add"
+              type="FilledPrimary"
+              elevated
+              onClick={this.onCreateAccount}
+              className={styles.CreateAccountButton}
+            >
+              <FormattedMessage id="button.add.account" />
+            </Button>
+            <Button
+              icon="undo"
+              type="Outline"
+              elevated
+              onClick={this.restoreAccount}
+              className={styles.RestoreButton}
+            >
+              <FormattedMessage id="button.restore.account" />
+            </Button>
+          </div>
         </div>
         <div className={styles.Header}>
           <span className={styles.Title}>
