@@ -17,8 +17,11 @@ export const getCertificateVerificationDate = date =>
   `${to101Date(date)} ${to108Time(date)}`;
 
 export const BASE58_REGEX = /^[1-9A-HJ-NP-Za-km-z]{50,51}$/;
+export const BECH32_REGEX = /^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}$/;
 
 export const isBase58 = str => BASE58_REGEX.test(str);
+
+export const isBech32 = str => BECH32_REGEX.test(str);
 
 export const isStegosNumber = str => /^-?\d+\.?\d{0,6}$/.test(str); // todo use STG_DIVISIBILITY
 

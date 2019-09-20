@@ -15,7 +15,6 @@ import { POWER_DIVISIBILITY } from '../../constants/config';
 import {
   formatDigit,
   getAccountName,
-  isBase58,
   isPositiveStegosNumber
 } from '../../utils/format';
 
@@ -25,6 +24,37 @@ type Props = {
   waitingStatus: string,
   sendTransaction: () => void,
   intl: any
+};
+
+const fees = [
+  {
+    value: 'standard',
+    name: 'fee.standard',
+    fee: 0.01
+  },
+  {
+    value: 'high',
+    name: 'fee.high',
+    fee: 0.05
+  },
+  {
+    value: 'custom',
+    name: 'fee.custom',
+    fee: 0.01
+  }
+];
+
+const initialState = {
+  step: 0,
+  accountError: '',
+  recipientAddress: '',
+  recipientAddressError: '',
+  amount: '',
+  amountError: '',
+  comment: '',
+  fee: fees[0],
+  feeError: '',
+  generateCertificate: false
 };
 
 class Send extends Component<Props> {
@@ -63,45 +93,21 @@ class Send extends Component<Props> {
 
   constructor(props) {
     super(props);
-    const { accounts, lastActive, intl } = props;
+    const { accounts, lastActive } = props;
     const account =
       (lastActive && accounts[lastActive]) ||
       accounts[Object.keys(accounts)[0]];
 
-    const fees = [
-      {
-        value: 'standard',
-        name: intl.formatMessage({ id: 'fee.standard' }),
-        fee: 0.01
-      },
-      {
-        value: 'high',
-        name: intl.formatMessage({ id: 'fee.high' }),
-        fee: 0.05
-      },
-      {
-        value: 'custom',
-        name: intl.formatMessage({ id: 'fee.custom' }),
-        fee: 0.01
-      }
-    ];
-
     this.state = {
-      step: 0,
+      ...initialState,
       titledAccount: account,
       account,
-      accountError: '',
-      recipientAddress: '',
-      recipientAddressError: '',
-      amount: '',
-      amountError: '',
-      comment: '',
-      fee: fees[0],
-      fees,
-      feeError: '',
-      generateCertificate: false,
       isBusy: false
     };
+  }
+
+  onCancelConfirm() {
+    this.setState(initialState);
   }
 
   get totalAmount() {
@@ -122,7 +128,7 @@ class Send extends Component<Props> {
       });
       return false;
     }
-    if (!recipientAddress || !isBase58(recipientAddress)) {
+    if (!recipientAddress) {
       this.setState({
         recipientAddressError: intl.formatMessage({
           id: 'input.error.incorrect.address'
@@ -200,12 +206,6 @@ class Send extends Component<Props> {
     });
   }
 
-  onCancelConfirm() {
-    this.setState({
-      step: 0
-    });
-  }
-
   sendTransaction = () => {
     const { sendTransaction } = this.props;
     const {
@@ -254,6 +254,32 @@ class Send extends Component<Props> {
     );
   };
 
+  renderCancelButton() {
+    const { step } = this.state;
+    const { lastActive } = this.props;
+    const button = (
+      <Button
+        type={step === 1 ? 'OutlinePrimary' : 'OutlineDisabled'}
+        onClick={() => this.onCancelConfirm()}
+      >
+        <FormattedMessage id="button.cancel" />
+      </Button>
+    );
+    return lastActive && step === 1 ? (
+      <Link
+        to={{
+          pathname: routes.ACCOUNT,
+          state: { accountId: lastActive }
+        }}
+        style={{ alignSelf: 'flex-start', paddingLeft: 0 }}
+      >
+        {button}
+      </Link>
+    ) : (
+      button
+    );
+  }
+
   sendForm() {
     const { accounts, intl } = this.props;
     const {
@@ -266,7 +292,6 @@ class Send extends Component<Props> {
       amountError,
       comment,
       fee,
-      fees,
       feeError,
       step
     } = this.state;
@@ -352,10 +377,10 @@ class Send extends Component<Props> {
             {Send.renderDropdown(
               fees.map(feeItem => ({
                 value: feeItem,
-                name: feeItem.name
+                name: intl.formatMessage({ id: feeItem.name })
               })),
               'fees',
-              fee.name,
+              intl.formatMessage({ id: fee.name }),
               e => this.handleFeesChange(e),
               null,
               false,
@@ -430,12 +455,7 @@ class Send extends Component<Props> {
               STG {formatDigit(this.totalAmount.toFixed(2))}
             </span>
           </div>
-          <Button
-            type={step === 1 ? 'OutlinePrimary' : 'OutlineDisabled'}
-            onClick={() => this.onCancelConfirm()}
-          >
-            <FormattedMessage id="button.cancel" />
-          </Button>
+          {this.renderCancelButton()}
           <Button
             type="OutlinePrimary"
             iconRight="keyboard_backspace"
