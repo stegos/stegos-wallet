@@ -24,13 +24,17 @@ build:linux:
       - release/stegos-wallet*.snap
       - release/stegos-wallet*.deb
       - release/stegos-wallet*.rpm
+      - release/latest-linux.yml
   script:
     - node --version
     - yarn --version
     - mkdir node
     - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/stegosd-linux-x64?job=release:linux -o node/stegosd
+    - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/stegos-linux-x64?job=release:linux -o node/stegos
     - chmod a+x node/stegosd
+    - chmod a+x node/stegos
     - node/stegosd --version
+    - node/stegos --version
     - VERSION=$(node/stegosd --version|cut -d ' ' -f 3)
     - echo $VERSION
     - npm version $VERSION --allow-same-version --no-git-tag-version
@@ -47,6 +51,8 @@ build:macos:
     paths:
       - release/StegosWallet-*-mac.zip
       - release/StegosWallet-*.dmg
+      - release/latest-mac.yml
+      - release/mac.zip
   before_script:
     - brew install yarn && brew install node@10
     - brew uninstall --ignore-dependencies node
@@ -56,8 +62,11 @@ build:macos:
     - yarn --version
     - mkdir node
     - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/stegosd-macos-x64?job=release:macos -o node/stegosd
+    - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/stegos-macos-x64?job=release:macos -o node/stegos
     - chmod a+x node/stegosd
+    - chmod a+x node/stegos
     - node/stegosd --version
+    - node/stegos --version
     - VERSION=$(node/stegosd --version|cut -d ' ' -f 3)
     - echo $VERSION
     - npm version $VERSION --allow-same-version --no-git-tag-version
@@ -73,17 +82,22 @@ build:windows:
     paths:
       - release/StegosWallet Setup*.exe
       - release/StegosWallet-*.msi
+      - release/latest.yml
+      - release/StegosWallet Setup*.exe.blockmap
   script:
     - node --version
     - yarn --version
     - mkdir node
     - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/stegosd-win-x64.exe?job=release:windows -o node/stegosd.exe
     - chmod a+x node/stegosd.exe
+    - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/stegos-win-x64.exe?job=release:windows -o node/stegos.exe
+    - chmod a+x node/stegos.exe
     - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/libgcc_s_seh-1.dll?job=release:windows -o node/libgcc_s_seh-1.dll
     - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/librocksdb-shared.dll?job=release:windows -o node/librocksdb-shared.dll
     - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/libstdc++-6.dll?job=release:windows -o node/libstdc++-6.dll
     - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/libwinpthread-1.dll?job=release:windows -o node/libwinpthread-1.dll
     - node/stegosd.exe --version
+    - node/stegos.exe --version
     - VERSION=$(node/stegosd.exe --version|cut -d ' ' -f 3)
     - echo $VERSION
     - npm version $VERSION --allow-same-version --no-git-tag-version
