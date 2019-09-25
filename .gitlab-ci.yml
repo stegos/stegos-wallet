@@ -52,7 +52,6 @@ build:macos:
       - release/StegosWallet-*-mac.zip
       - release/StegosWallet-*.dmg
       - release/latest-mac.yml
-      - release/mac.zip
   before_script:
     - brew install yarn && brew install node@10
     - brew uninstall --ignore-dependencies node
