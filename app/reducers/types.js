@@ -40,7 +40,8 @@ export type Account = {
   recoveryPhrase: string,
   isLocked: string,
   transactions: Transaction[],
-  isRecoveryPhraseWrittenDown: boolean
+  isRecoveryPhraseWrittenDown: boolean,
+  isRestored: boolean
 };
 
 export const createEmptyAccount = id => ({

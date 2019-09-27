@@ -8,7 +8,7 @@ import Button from '../common/Button/Button';
 import Input from '../common/Input/Input';
 import Modal from '../common/Modal/Modal';
 import styles from './Verify.css';
-import { formatDigit, isBase58 } from '../../utils/format';
+import { formatDigit } from '../../utils/format';
 import { validateCertificate } from '../../actions/node';
 import { POWER_DIVISIBILITY } from '../../constants/config';
 import generateCertificatePdf from '../../utils/pdf';
@@ -51,13 +51,13 @@ class Verify extends Component<Props> {
   validate = () => {
     const { intl } = this.props;
     const { sender, recipient, rvalue, utxo } = this.state;
-    if (!sender || !isBase58(sender)) {
+    if (!sender) {
       this.setState({
         senderError: intl.formatMessage({ id: 'input.error.incorrect.address' })
       });
       return false;
     }
-    if (!recipient || !isBase58(recipient)) {
+    if (!recipient) {
       this.setState({
         recipientError: intl.formatMessage({
           id: 'input.error.incorrect.address'
