@@ -11,8 +11,6 @@
  * @flow
  */
 import { app, BrowserWindow, ipcMain } from 'electron';
-import { autoUpdater } from 'electron-updater';
-import log from 'electron-log';
 import { spawn } from 'child_process';
 import path from 'path';
 import fs from 'fs';
@@ -20,14 +18,6 @@ import getPath from 'platform-folders';
 // import MenuBuilder from './menu';
 import { TOKEN_RECEIVED } from './actions/node';
 import { wsEndpoint } from './constants/config';
-
-export default class AppUpdater {
-  constructor() {
-    log.transports.file.level = 'info';
-    autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
-  }
-}
 
 app.commandLine.appendSwitch('high-dpi-support', 'true');
 
@@ -119,10 +109,6 @@ app.on('ready', async () => {
 
   // No menu bar specified in design, remove unused menu builder file app/menu.js?
   mainWindow.setMenu(null);
-
-  // Remove this if your app does not use auto updates
-  // eslint-disable-next-line
-  new AppUpdater();
 });
 
 app.on('quit', () => {
