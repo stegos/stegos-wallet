@@ -5,6 +5,7 @@ import en from 'react-intl/locale-data/en';
 import zh from 'react-intl/locale-data/zh';
 import zhTranslation from '../../i18n/locales/zh';
 import enTranslation from '../../i18n/locales/en';
+import { defaultLocale } from '../../utils/locale';
 
 addLocaleData([...en, ...zh]);
 
@@ -14,7 +15,7 @@ type Props = {
 
 class IntlProviderWrapper extends React.Component<Props> {
   static defaultProps = {
-    language: 'en'
+    language: defaultLocale()
   };
 
   get messages() {

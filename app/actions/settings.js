@@ -126,11 +126,8 @@ const loadAccounts = () => (dispatch: Dispatch, getState: GetState) => {
   sendSync({ type: 'list_accounts' })
     .then(async resp => {
       let state = getState();
-      const { accounts, app } = state;
+      const { app } = state;
       const { password } = app;
-      if (Object.keys(accounts.items).length === 0) {
-        await sendSync({ type: 'create_account', password });
-      }
       state = getState();
       const { items } = state.accounts;
       await Promise.all(
@@ -199,6 +196,10 @@ export const unlockWallet = (password: string) => async (
     } catch (e) {
       // todo check error if account already unsealed and send corresponding event
       console.log(e);
+      dispatch({
+        type: SHOW_ERROR,
+        payload: e && e.message
+      });
       throw e;
     } finally {
       dispatch({ type: UNLOCK_WALLET });

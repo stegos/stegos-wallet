@@ -1,10 +1,9 @@
 import type { Action, NodeStateType } from './types';
-import { NODE_RUNNING, RUN_NODE_FAILED, TOKEN_RECEIVED } from '../actions/node';
+import { RUN_NODE_FAILED, TOKEN_RECEIVED } from '../actions/node';
 import { WS_MESSAGE, WS_OPEN } from '../ws/actionsTypes';
 
 const initialState = {
   hasKey: null,
-  isStarted: false,
   isConnected: false,
   isSynced: false,
   syncingProgress: 0,
@@ -22,13 +21,7 @@ export default function node(
     case RUN_NODE_FAILED:
       return {
         ...state,
-        isStarted: false,
         error: action.payload.error
-      };
-    case NODE_RUNNING:
-      return {
-        ...state,
-        isStarted: true
       };
     case TOKEN_RECEIVED:
       return {

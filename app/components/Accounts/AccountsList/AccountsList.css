@@ -17,7 +17,6 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 66.6%;
 }
 
 .SearchInput {
@@ -45,6 +44,17 @@
   font-size: 18px;
   letter-spacing: 0.54px;
   color: #bfc1c6;
+}
+
+.ButtonsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.RestoreButton {
+  font-size: 12px;
+  margin-left: 60px;
 }
 
 .Header {
@@ -94,4 +104,33 @@
   grid-template-columns: 1fr;
   grid-auto-rows: max-content;
   grid-gap: 30px;
+}
+
+@media screen and (max-width: 1530px) {
+  .RestoreButton {
+    margin-left: 25px;
+  }
+}
+
+@media screen and (max-width: 1460px) {
+  .Header {
+    margin-top: 5px;
+  }
+
+  .SearchBar {
+    align-items: flex-start;
+  }
+
+  .CreateAccountButton {
+    width: 200px;
+  }
+
+  .ButtonsContainer {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .RestoreButton {
+    margin: 25px 0 0 0;
+  }
 }
