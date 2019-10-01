@@ -8,9 +8,7 @@ import { wsEndpoint } from '../constants/config';
 import { createHistoryInfoAction } from './accounts';
 import { SET_WAITING } from './settings';
 
-const WS_ENDPOINT = `ws://${
-  process.env.APIENDPOINT ? process.env.APIENDPOINT : wsEndpoint
-}`;
+const WS_ENDPOINT = `ws://${process.env.APIENDPOINT || wsEndpoint}`;
 
 export const RUN_NODE = 'RUN_NODE';
 export const RUN_NODE_FAILED = 'RUN_NODE_FAILED';
@@ -18,17 +16,6 @@ export const TOKEN_RECEIVED = 'TOKEN_RECEIVED';
 
 export const runNode = () => (dispatch: Dispatch) => {
   dispatch(send(RUN_NODE));
-};
-
-export const connectToRunningNode = token => (dispatch: Dispatch) => {
-  dispatch({ type: TOKEN_RECEIVED, payload: { token } });
-  subscribe(handleNodeSynchronization);
-  dispatch(
-    connect(
-      WS_ENDPOINT,
-      token
-    )
-  );
 };
 
 export const onRunNodeFailed = (_, args) => (dispatch: Dispatch) => {
