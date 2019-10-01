@@ -19,7 +19,6 @@ export type AppStateType = {
 };
 
 export type NodeStateType = {
-  isStarted: boolean,
   isConnected: boolean,
   isSynced: boolean,
   syncingProgress: number,

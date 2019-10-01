@@ -265,18 +265,22 @@ class Send extends Component<Props> {
         <FormattedMessage id="button.cancel" />
       </Button>
     );
-    return lastActive && step === 1 ? (
+    return step === 1 ? (
+      button
+    ) : (
       <Link
-        to={{
-          pathname: routes.ACCOUNT,
-          state: { accountId: lastActive }
-        }}
+        to={
+          lastActive
+            ? {
+                pathname: routes.ACCOUNT,
+                state: { accountId: lastActive }
+              }
+            : { pathname: routes.ACCOUNTS }
+        }
         style={{ alignSelf: 'flex-start', paddingLeft: 0 }}
       >
         {button}
       </Link>
-    ) : (
-      button
     );
   }
 
@@ -473,7 +477,7 @@ class Send extends Component<Props> {
 
   transactionSent() {
     const { intl } = this.props;
-    const { account } = this.state;
+    const { account, generateCertificate } = this.state;
     return [
       <div className={styles.TransactionSentContainer} key="Accounts">
         <span className={styles.TransactionSentTitle}>
@@ -482,13 +486,15 @@ class Send extends Component<Props> {
         <p className={styles.TransactionSentText}>
           <FormattedMessage id="send.transaction.sent.description" />
         </p>
-        <p className={styles.TransactionSentText}>
-          <FormattedMessage
-            id="send.transaction.sent.certificate"
-            values={{ account: '' }}
-          />{' '}
-          <b>{getAccountName(account, intl)}</b>.
-        </p>
+        {generateCertificate && (
+          <p className={styles.TransactionSentText}>
+            <FormattedMessage
+              id="send.transaction.sent.certificate"
+              values={{ account: '' }}
+            />{' '}
+            <b>{getAccountName(account, intl)}</b>.
+          </p>
+        )}
       </div>,
       <div className={styles.ActionsContainer} key="Actions">
         <Button
