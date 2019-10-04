@@ -18,6 +18,7 @@ import getPath from 'platform-folders';
 // import MenuBuilder from './menu';
 import { TOKEN_RECEIVED } from './actions/node';
 import { wsEndpoint } from './constants/config';
+import parseArgs from './utils/argv';
 
 const WebSocket = require('ws');
 
@@ -25,6 +26,9 @@ app.commandLine.appendSwitch('high-dpi-support', 'true');
 
 let mainWindow = null;
 let nodeProcess = null;
+
+if (process.env.NODE_ENV === 'production') parseArgs();
+
 const nodePath =
   process.env.NODE_ENV === 'production'
     ? path.resolve(__dirname, '../../node/')
@@ -40,23 +44,6 @@ if (process.env.NODE_ENV === 'production') {
   sourceMapSupport.install();
 }
 
-if (
-  process.env.NODE_ENV === 'development' ||
-  process.env.DEBUG_PROD === 'true'
-) {
-  require('electron-debug')();
-}
-
-const installExtensions = async () => {
-  const installer = require('electron-devtools-installer');
-  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-  const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
-
-  return Promise.all(
-    extensions.map(name => installer.default(installer[name], forceDownload))
-  ).catch(console.log);
-};
-
 /**
  * Add event listeners...
  */
@@ -70,13 +57,6 @@ app.on('window-all-closed', () => {
 });
 
 app.on('ready', async () => {
-  if (
-    process.env.NODE_ENV === 'development' ||
-    process.env.DEBUG_PROD === 'true'
-  ) {
-    await installExtensions();
-  }
-
   mainWindow = new BrowserWindow({
     show: false,
     width: 1440,
@@ -85,6 +65,13 @@ app.on('ready', async () => {
     minHeight: 320,
     icon: path.join(__dirname, '../resources/icons/64x64.png')
   });
+
+  if (process.env.NODE_ENV === 'development' || process.env.DEBUG === 'true') {
+    require('electron-debug')();
+    mainWindow.webContents.on('did-frame-finish-load', () => {
+      mainWindow.webContents.openDevTools();
+    });
+  }
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
@@ -110,7 +97,6 @@ app.on('ready', async () => {
   // const menuBuilder = new MenuBuilder(mainWindow);
   // menuBuilder.buildMenu();
 
-  // No menu bar specified in design, remove unused menu builder file app/menu.js?
   mainWindow.setMenu(null);
 });
 
