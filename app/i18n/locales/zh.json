@@ -66,7 +66,7 @@
   "receive.address.copied": "地址已复制",
   "receive.address.for.account": "地址",
 
-  "send.title": "Send",
+  "send.title": "发送",
   "send.step.one.title": "转账详情",
   "send.step.two.title": "检查",
   "send.step.three.title": "确认",
@@ -96,6 +96,7 @@
 
   "transactions.list.title": "最后的操作",
   "transactions.list.certificate": "凭证",
+  "transactions.list.comment": "Comment",
 
   "transaction.type.send": "发送",
   "transaction.type.receive": "接收",
