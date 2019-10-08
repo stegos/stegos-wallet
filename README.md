@@ -8,11 +8,11 @@ Electron-based Wallet application for [Stegos](https://github.com/stegos/stegos)
 
 ## Installation
 
-Download packages for Linux and Mac from [GitHub Releases](https://github.com/stegos/stegos-wallet/releases). All packages ship with bundled version of [Stegos Node](https://github.com/stegos/stegos/release).
+Download packages for Linux and Mac from [GitHub Releases](https://github.com/stegos/stegos-wallet/releases). All packages ship with bundled version of [Stegos Node](https://github.com/stegos/stegos/releases).
 
 ## Development
 
-### Prerequirements to build on windwos:
+### Prerequirements to build on windows:
 
 - Windows 7+ / Windows Server 2003+
 - We use Chocolatey package manager, in order to use it, you need to have PowerShell v2+ installed.
