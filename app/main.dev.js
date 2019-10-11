@@ -33,7 +33,7 @@ const nodePath =
   process.env.NODE_ENV === 'production'
     ? path.resolve(__dirname, '../../node/')
     : path.resolve(__dirname, '../node/');
-const chain = process.env.CHAIN || 'devnet';
+const chain = process.env.CHAIN || 'testnet';
 const appDataPath = process.env.APPDATAPATH || `${getPath('appData')}/stegos/`;
 const apiEndpoint = process.env.APIENDPOINT || wsEndpoint;
 const tokenFile = `${appDataPath}/api.token`; // todo config
@@ -144,7 +144,7 @@ function runNodeProcess(): Promise<void> {
       const str = data.toString('utf8');
       if (process.env.NODE_ENV === 'development') console.log(str);
       if (str.includes('ERROR [stegos')) {
-        fs.appendFile(logFile, str, () => {});
+        fs.appendFile(logFile, str, () => { });
         reject(new Error(`An error occurred\n${str}`));
       }
       if (str.includes('[stegos_api] Starting API Server on')) {
@@ -153,7 +153,7 @@ function runNodeProcess(): Promise<void> {
     });
     nodeProcess.stderr.on('data', data => {
       const err = data.toString('utf8');
-      fs.appendFile(logFile, err, () => {});
+      fs.appendFile(logFile, err, () => { });
       reject(err);
     });
   });

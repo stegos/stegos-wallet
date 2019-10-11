@@ -1,7 +1,7 @@
 {
   "name": "stegos-wallet",
   "productName": "StegosWallet",
-  "version": "0.14.0",
+  "version": "0.16.0",
   "description": "Platform for privacy applications",
   "copyright": "Copyright © 2018-2019 Stegos AG",
   "author": {

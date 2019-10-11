@@ -126,7 +126,9 @@ export default class PasswordProtection extends Component<Props> {
                   iconRight="keyboard_backspace"
                   iconRightMirrorHor
                 >
-                  <FormattedMessage id="button.next" />
+                  <nobr>
+                    <FormattedMessage id="button.next" />
+                  </nobr>
                 </Button>
               </div>
             </div>
