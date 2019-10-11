@@ -20,7 +20,9 @@ type Props = {
   readOnly?: boolean,
   isTextarea?: boolean,
   autoFocus?: boolean,
-  resize?: 'none' | 'vertical' | 'horizontal' | 'both'
+  resize?: 'none' | 'vertical' | 'horizontal' | 'both',
+  onEnter?: () => void,
+  onEsc?: () => void
 };
 
 export default class Input extends Component<Props> {
@@ -44,8 +46,21 @@ export default class Input extends Component<Props> {
     readOnly: false,
     isTextarea: false,
     autoFocus: false,
-    resize: 'none'
+    resize: 'none',
+    onEnter: undefined,
+    onEsc: undefined
   };
+
+  onKeyDown(e) {
+    const { onEnter, onEsc } = this.props;
+    const { key } = e;
+    if (key === 'Enter' && typeof onEnter === 'function') {
+      onEnter();
+    }
+    if (key === 'Escape' && typeof onEsc === 'function') {
+      onEsc();
+    }
+  }
 
   render() {
     const {
@@ -77,6 +92,7 @@ export default class Input extends Component<Props> {
         {!noLabel && <span className={styles.Label}>{label}</span>}
         <InputComponent
           value={value}
+          onKeyDown={e => this.onKeyDown(e)}
           onInput={onInput}
           onChange={onChange}
           type={type}

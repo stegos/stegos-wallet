@@ -18,6 +18,7 @@ import {
   weekAgo,
   yearAgo
 } from '../../../utils/chart';
+import Input from '../../common/Input/Input';
 
 type Location = {
   pathname: string,
@@ -29,6 +30,7 @@ type Props = {
   accounts: any,
   deleteAccount: () => void,
   setLastUsedAccount: () => void,
+  setAccountName: () => void,
   intl: any
 };
 
@@ -39,12 +41,14 @@ class Account extends PureComponent<Props> {
 
   constructor(props) {
     super(props);
+    const { location, setLastUsedAccount, accounts, intl } = props;
+    const { accountId } = location.state;
     this.state = {
       period: 'week',
-      editAccountVisible: false
+      editAccountVisible: false,
+      accountName:
+        accounts[accountId] && getAccountName(accounts[accountId], intl)
     };
-    const { location, setLastUsedAccount } = props;
-    const { accountId } = location.state;
     setLastUsedAccount(accountId);
   }
 
@@ -65,11 +69,48 @@ class Account extends PureComponent<Props> {
     }
   };
 
+  get account() {
+    const { location, accounts } = this.props;
+    if (!location.state || !location.state.accountId) {
+      return null;
+    }
+    const { accountId } = location.state;
+    return accounts[accountId];
+  }
+
   editAccount() {
     this.setState({
       editAccountVisible: true
     });
   }
+
+  onEdit() {
+    const { editingName } = this.state;
+    if (editingName) {
+      const { intl } = this.props;
+      const { account } = this;
+      if (!account) return;
+      this.setState({
+        editingName: false,
+        accountName: getAccountName(account, intl)
+      });
+    } else {
+      this.setState({ editingName: true });
+    }
+  }
+
+  saveName() {
+    const { setAccountName } = this.props;
+    const { accountName } = this.state;
+    const { account } = this;
+    if (!account) return;
+    setAccountName(account.id, accountName);
+    this.setState({ editingName: false });
+  }
+
+  onChangeAccountName = e => {
+    this.setState({ accountName: e.target.value });
+  };
 
   changePeriod(period: 'week' | 'month' | 'year' = 'week') {
     this.setState({
@@ -90,7 +131,7 @@ class Account extends PureComponent<Props> {
   }
 
   render() {
-    const { editAccountVisible, period } = this.state;
+    const { editAccountVisible, period, editingName, accountName } = this.state;
     const { location, deleteAccount, accounts, intl } = this.props;
     if (!location.state || !location.state.accountId) {
       return null;
@@ -103,7 +144,31 @@ class Account extends PureComponent<Props> {
     return (
       <div className={styles.Account}>
         <div className={styles.Header}>
-          <span className={styles.Title}>{getAccountName(account, intl)}</span>
+          <div className={styles.TitleContainer}>
+            {editingName ? (
+              <Input
+                className={styles.InputEditName}
+                value={accountName}
+                noLabel
+                autoFocus
+                onChange={e => this.onChangeAccountName(e)}
+                onEsc={() =>
+                  this.setState({
+                    editingName: false,
+                    accountName: getAccountName(account, intl)
+                  })
+                }
+                onEnter={() => this.saveName()}
+              />
+            ) : (
+              <span className={styles.Title}>{accountName}</span>
+            )}
+            <Button
+              type="Invisible"
+              icon="mode_edit"
+              onClick={() => this.onEdit()}
+            />
+          </div>
           <Button
             type="Invisible"
             icon="tune"
