@@ -1,7 +1,7 @@
 // @flow
 import { clipboard } from 'electron';
 import React, { Component, Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Location } from 'react-router-dom';
 import * as qrcode from 'qrcode-generator';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import type { AccountsStateType } from '../../reducers/types';
@@ -15,7 +15,7 @@ import { getAccountName } from '../../utils/format';
 
 type Props = {
   accounts: AccountsStateType,
-  lastActive: string,
+  location: Location,
   intl: any
 };
 
@@ -24,10 +24,10 @@ class Receive extends Component<Props> {
 
   constructor(props) {
     super(props);
-    const { accounts, lastActive } = props;
+    const { accounts, location } = props;
+    const accountId = location.state && location.state.accountId;
     const selectedAccount =
-      (lastActive && accounts[lastActive]) ||
-      accounts[Object.keys(accounts)[0]];
+      (accountId && accounts[accountId]) || accounts[Object.keys(accounts)[0]];
 
     this.state = {
       step: 0,

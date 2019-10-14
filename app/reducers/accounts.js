@@ -5,14 +5,12 @@ import { WS_MESSAGE } from '../ws/actionsTypes';
 import {
   RECOVERY_PHRASE_WRITTEN_DOWN,
   SET_ACCOUNT_NAME,
-  SET_LAST_USED_ACCOUNT,
   SET_RESTORED
 } from '../actions/accounts';
 import { INIT_ACCOUNTS } from '../actions/settings';
 
 const initialState = {
-  items: {}, // map
-  lastActive: null
+  items: {} // map
 };
 
 export default function accounts(
@@ -131,11 +129,6 @@ export default function accounts(
       return setAccountProps({ name: payload.name });
     case RECOVERY_PHRASE_WRITTEN_DOWN:
       return setAccountProps({ isRecoveryPhraseWrittenDown: true });
-    case SET_LAST_USED_ACCOUNT:
-      return {
-        ...state,
-        lastActive: payload
-      };
     case SET_RESTORED:
       return setAccountProps({ isRestored: true });
     default:

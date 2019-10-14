@@ -1,6 +1,6 @@
 // @flow
 import React, { Component, Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Location } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import type { Account, AccountsStateType } from '../../reducers/types';
 import Busy from '../common/Busy/Busy';
@@ -20,10 +20,12 @@ import {
 
 type Props = {
   accounts: AccountsStateType,
-  lastActive: string,
   waitingStatus: string,
   sendTransaction: () => void,
-  intl: any
+  saveState: (state: any) => void,
+  savedState: any,
+  intl: any,
+  location: Location
 };
 
 const fees = [
@@ -54,7 +56,8 @@ const initialState = {
   comment: '',
   fee: fees[0],
   feeError: '',
-  generateCertificate: false
+  generateCertificate: false,
+  isBusy: false
 };
 
 class Send extends Component<Props> {
@@ -93,17 +96,34 @@ class Send extends Component<Props> {
 
   constructor(props) {
     super(props);
-    const { accounts, lastActive } = props;
-    const account =
-      (lastActive && accounts[lastActive]) ||
-      accounts[Object.keys(accounts)[0]];
+    const { accounts, location, savedState } = props;
+    const accountId = location.state && location.state.accountId;
+    let account = accountId && accounts[accountId];
+    if (account) {
+      this.state = {
+        ...initialState,
+        titledAccount: account,
+        account
+      };
+    } else {
+      account = accounts[Object.keys(accounts)[0]];
+      this.state = {
+        ...initialState,
+        titledAccount: account,
+        account,
+        ...savedState
+      };
+    }
+  }
 
-    this.state = {
-      ...initialState,
-      titledAccount: account,
-      account,
-      isBusy: false
-    };
+  componentWillUnmount() {
+    const { saveState } = this.props;
+    const { step } = this.state;
+    if (step === 2) {
+      saveState(null);
+    } else {
+      saveState(this.state);
+    }
   }
 
   onCancelConfirm() {

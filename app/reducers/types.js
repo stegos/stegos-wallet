@@ -15,7 +15,8 @@ export type AppStateType = {
   waitingStatus: string | null,
   language: string | null,
   showWalletSettings: boolean,
-  activeElement: React.ReactElement
+  activeElement: React.ReactElement,
+  pageStates: { [page: string]: any }
 };
 
 export type NodeStateType = {
