@@ -11,15 +11,17 @@ import SyncFail from './SyncFail/SyncFail';
 type Props = {
   node: NodeStateType,
   isFirstLaunch: boolean,
-  runNode: () => void
+  runNode: () => void,
+  connectToNode: () => void
 };
 
 export default class Sync extends Component<Props> {
   props: Props;
 
   componentDidMount(): void {
-    const { runNode } = this.props;
-    runNode();
+    const { runNode, connectToNode, node } = this.props;
+    if (node.isExternalNode) connectToNode();
+    else runNode();
   }
 
   render() {

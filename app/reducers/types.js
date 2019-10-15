@@ -20,6 +20,9 @@ export type AppStateType = {
 };
 
 export type NodeStateType = {
+  isExternalNode: boolean | null,
+  envChain: NetType | undefined,
+  chain: NetType | undefined,
   isConnected: boolean,
   isSynced: boolean,
   syncingProgress: number,
@@ -105,3 +108,5 @@ export type GetState = () => { ...State };
 export type Dispatch = ReduxDispatch<Action>;
 
 export type Store = ReduxStore<GetState, Action>;
+
+export type NetType = 'devnet' | 'testnet' | 'mainnet';

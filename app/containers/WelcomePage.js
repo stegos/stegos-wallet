@@ -1,17 +1,23 @@
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-import * as AppActions from '../actions/settings';
+import { checkFirstLaunch } from '../actions/settings';
 import Welcome from '../components/Welcome';
+import { checkRunningNode, setChain } from '../actions/node';
+import type { NetType } from '../reducers/types';
 
 function mapStateToProps(state) {
   return {
-    app: state.app
+    isFirstLaunch: state.app.isFirstLaunch,
+    node: state.node
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(AppActions, dispatch);
+  return {
+    checkFirstLaunch: () => dispatch(checkFirstLaunch()),
+    checkRunningNode: () => dispatch(checkRunningNode()),
+    setChain: (type: NetType) => dispatch(setChain(type))
+  };
 }
 
 export default connect(

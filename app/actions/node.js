@@ -1,6 +1,6 @@
 import { send } from 'redux-electron-ipc';
 import { push } from 'connected-react-router';
-import type { Dispatch, GetState } from '../reducers/types';
+import type { Dispatch, GetState, NetType } from '../reducers/types';
 import { connect, send as wsSend } from '../ws/actions';
 import { sendSync, subscribe, unsubscribe } from '../ws/client';
 import routes from '../constants/routes';
@@ -10,12 +10,39 @@ import { SET_WAITING } from './settings';
 
 const WS_ENDPOINT = `ws://${process.env.APIENDPOINT || wsEndpoint}`;
 
+export const CHECK_RUNNING_NODE = 'CHECK_RUNNING_NODE';
+export const CHECK_RUNNING_NODE_RESULT = 'CHECK_RUNNING_NODE_RESULT';
+export const SET_CHAIN = 'SET_CHAIN';
 export const RUN_NODE = 'RUN_NODE';
+export const CONNECT_TO_NODE = 'CONNECT_TO_NODE';
 export const RUN_NODE_FAILED = 'RUN_NODE_FAILED';
 export const TOKEN_RECEIVED = 'TOKEN_RECEIVED';
 
-export const runNode = () => (dispatch: Dispatch) => {
-  dispatch(send(RUN_NODE));
+export const checkRunningNode = () => (dispatch: Dispatch) => {
+  dispatch(send(CHECK_RUNNING_NODE));
+};
+
+export const onResultOfCheckingRunningNode = (_, args) => (
+  dispatch: Dispatch,
+  getState: GetState
+) => {
+  dispatch({ type: CHECK_RUNNING_NODE_RESULT, payload: { ...args } });
+  const state = getState();
+  if (state.app.isFirstLaunch === false && args.isRunning === true)
+    dispatch(push(routes.SYNC));
+};
+
+export const setChain = (type: NetType) => (dispatch: Dispatch) => {
+  dispatch({ type: SET_CHAIN, payload: type });
+};
+
+export const runNode = () => (dispatch: Dispatch, getState: GetState) => {
+  const state = getState();
+  dispatch(send(RUN_NODE, { chain: state.node.chain }));
+};
+
+export const connectToNode = () => (dispatch: Dispatch) => {
+  dispatch(send(CONNECT_TO_NODE));
 };
 
 export const onRunNodeFailed = (_, args) => (dispatch: Dispatch) => {
