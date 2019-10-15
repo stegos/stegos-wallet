@@ -32,6 +32,25 @@ export default function accounts(
     }
   });
 
+  const updatedTransactions = () => {
+    const txs = state.items[payload.account_id].transactions;
+    txs.push(
+      ...payload.log.map(t =>
+        t.type.toLowerCase() === 'outgoing'
+          ? createOutgoingTransaction(t, account)
+          : {
+              ...t,
+              type: 'Receive',
+              timestamp: new Date(t.timestamp),
+              id: t.utxo
+            }
+      )
+    );
+    return txs
+      .filter(t => t.type === 'Send' || !t.is_change)
+      .sort((a, b) => a.timestamp - b.timestamp);
+  };
+
   const handleMessage = () => {
     const { type } = payload;
 
@@ -77,21 +96,7 @@ export default function accounts(
       case 'recovery':
         return setAccountProps({ recoveryPhrase: payload.recovery.split(' ') });
       case 'history_info':
-        return setAccountProps({
-          transactions: payload.log
-            .map(t =>
-              t.type.toLowerCase() === 'outgoing'
-                ? createOutgoingTransaction(t, account)
-                : {
-                    ...t,
-                    type: 'Receive',
-                    timestamp: new Date(t.timestamp),
-                    id: t.utxo
-                  }
-            )
-            .filter(t => t.type === 'Send' || !t.is_change)
-            .sort((a, b) => a.timestamp - b.timestamp)
-        });
+        return setAccountProps({ transactions: updatedTransactions() });
       case 'transaction_created':
         return setAccountProps({
           transactions: [
