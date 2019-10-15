@@ -29,16 +29,8 @@ export const FREE_ACTIVE_ELEMENT = 'FREE_ACTIVE_ELEMENT';
 export const FINISH_BOOTSTRAP = 'FINISH_BOOTSTRAP';
 export const SAVE_PAGE_STATE = 'SAVE_PAGE_STATE';
 
-export const checkFirstLaunch = () => (
-  dispatch: Dispatch,
-  getState: GetState
-) => {
+export const checkFirstLaunch = () => (dispatch: Dispatch) => {
   const exist = isDbExist();
-
-  const state = getState();
-  const { node } = state;
-  if (exist && !node.isSynced) dispatch(push(routes.SYNC));
-
   dispatch({ type: SET_FIRST_LAUNCH, payload: !exist });
 };
 
