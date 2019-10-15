@@ -49,14 +49,19 @@ export const getEmptyRecoveryPhrase = () => {
 
 export const formatDateForWs = ts => {
   const date = new Date(ts);
-  return `${date.getFullYear()}-${toTwoDigits(
-    date.getMonth() + 1
-  )}-${toTwoDigits(date.getDate())}T00:00:00.000000000Z`;
+  return (
+    `${date.getFullYear()}-${toTwoDigits(date.getMonth() + 1)}-${toTwoDigits(
+      date.getDate()
+    )}` +
+    `T${toTwoDigits(date.getHours())}:${toTwoDigits(
+      date.getMinutes()
+    )}:${toTwoDigits(date.getSeconds())}.000000000Z`
+  );
 };
 
 export const getYearAgoTimestamp = () => {
   const now = new Date();
-  return formatDateForWs(now.setFullYear(now.getFullYear() - 1));
+  return now.setFullYear(now.getFullYear() - 1);
 };
 
 export const getAccountName = (account: Account, intl: any) => {

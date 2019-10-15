@@ -76,7 +76,8 @@ export default function app(
     case HIDE_ERROR:
       return {
         ...state,
-        error: ''
+        error: '',
+        activeElement: null
       };
     case SHOW_ERROR:
       return {

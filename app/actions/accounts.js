@@ -6,16 +6,23 @@ import { sendSync } from '../ws/client';
 import { SET_WAITING, SHOW_ERROR } from './settings';
 import { HISTORY_LIMIT, RECOVERY_PHRASE_LENGTH } from '../constants/config';
 import { getDatabase } from '../db/db';
-import { getYearAgoTimestamp } from '../utils/format';
+import { formatDateForWs, getYearAgoTimestamp } from '../utils/format';
 
 export const RECOVERY_PHRASE_WRITTEN_DOWN = 'RECOVERY_PHRASE_WRITTEN_DOWN';
 export const SET_ACCOUNT_NAME = 'SET_ACCOUNT_NAME';
 export const SET_RESTORED = 'SET_RESTORED';
 
+const lastHistoryTsMap: Map<number, Date> = new Map();
+const getLastHistoryTs = accountId => {
+  const ts = lastHistoryTsMap[accountId] || getYearAgoTimestamp();
+  lastHistoryTsMap[accountId] = new Date();
+  return formatDateForWs(ts);
+};
+
 export const createHistoryInfoAction = accountId => ({
   type: 'history_info',
   account_id: accountId,
-  starting_from: getYearAgoTimestamp(), // todo from last request timestamp
+  starting_from: getLastHistoryTs(accountId),
   limit: HISTORY_LIMIT
 });
 

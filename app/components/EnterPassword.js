@@ -47,7 +47,7 @@ export default class EnterPassword extends Component<Props> {
             type="password"
             autoFocus
           />
-          <Button type="button" onClick={this.onNext} submit>
+          <Button onClick={this.onNext} submit>
             <FormattedMessage id="button.next" tagName="span" />
           </Button>
         </div>
