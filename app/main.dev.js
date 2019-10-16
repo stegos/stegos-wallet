@@ -19,6 +19,7 @@ import getPath from 'platform-folders';
 import { TOKEN_RECEIVED } from './actions/node';
 import { wsEndpoint } from './constants/config';
 import parseArgs from './utils/argv';
+import { checkUpdateAndNotify } from './utils/updater';
 
 const WebSocket = require('ws');
 
@@ -96,6 +97,8 @@ app.on('ready', async () => {
   // menuBuilder.buildMenu();
 
   mainWindow.setMenu(null);
+
+  checkUpdateAndNotify();
 });
 
 app.on('quit', () => {

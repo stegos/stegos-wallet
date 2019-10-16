@@ -100,7 +100,7 @@ export default class Welcome extends Component<Props, State> {
               onKeyPress={() => false}
               onClick={this.onContinue}
             >
-              <span className={styles.StatusBar}>
+              <span className={styles.ActionLink}>
                 <FormattedMessage id="welcome.click.here" />
               </span>
             </div>
