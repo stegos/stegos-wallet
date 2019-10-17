@@ -33,7 +33,8 @@ export default function node(
       return {
         ...state,
         isExternalNode: action.payload.isRunning,
-        envChain: action.payload.envChain
+        envChain: action.payload.envChain,
+        chain: action.payload.isRunning ? action.payload.envChain : undefined
       };
     case SET_CHAIN:
       return {

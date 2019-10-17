@@ -6,6 +6,7 @@ import styles from './Welcome.css';
 import logo from '../../resources/img/StegosLogoVertRGB.svg';
 import type { NetType, NodeStateType } from '../reducers/types';
 import Dropdown from './common/Dropdown/Dropdown';
+import type { Option } from './common/Dropdown/Dropdown';
 
 type Props = {
   isFirstLaunch: boolean | null,
@@ -16,15 +17,10 @@ type Props = {
 };
 
 type State = {
-  type: NetOption
+  type: Option
 };
 
-type NetOption = {
-  name: string,
-  value: NetType
-};
-
-const netOptions: NetOption[] = [
+const netOptions: Option[] = [
   { name: 'Mainnet', value: 'mainnet' },
   { name: 'Devnet', value: 'devnet' },
   { name: 'Testnet', value: 'testnet' }

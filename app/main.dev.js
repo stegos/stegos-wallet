@@ -118,7 +118,7 @@ ipcMain.on('CHECK_RUNNING_NODE', async event => {
     const nodeStarted = await checkWSConnect();
     event.sender.send('CHECK_RUNNING_NODE_RESULT', {
       isRunning: nodeStarted,
-      envChain: process.env.STEGOS_CHAIN
+      envChain: process.env.STEGOS_CHAIN || 'testnet'
     });
   } catch (e) {
     console.log(e);
