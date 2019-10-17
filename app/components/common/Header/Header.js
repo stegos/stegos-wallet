@@ -1,23 +1,27 @@
 // @flow
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import styles from './Header.css';
 import logo from '../../../../resources/img/StegosLogoHorRGB.svg';
 import { version } from '../../../../package.json';
+import type { NetType } from '../../../reducers/types';
 
 type Props = {
   containerClassName?: string,
   logoContainerClassName?: string,
   contentContainerClassName?: string,
+  chain?: NetType,
   title?: string
 };
 
-export default class Header extends Component<Props> {
+class Header extends Component<Props> {
   props: Props;
 
   static defaultProps = {
     containerClassName: '',
     logoContainerClassName: '',
     contentContainerClassName: '',
+    chain: '',
     title: null
   };
 
@@ -27,12 +31,14 @@ export default class Header extends Component<Props> {
       containerClassName,
       logoContainerClassName,
       contentContainerClassName,
+      chain,
       title
     } = this.props;
     return (
       <div className={`${styles.Container} ${containerClassName}`}>
         <div className={`${styles.LogoWrapper} ${logoContainerClassName}`}>
           <img src={logo} alt="STEGOS" className={styles.Logo} />
+          <div className={styles.Chain}>{chain && chain.toUpperCase()}</div>
           <div className={styles.Version}>{version}</div>
         </div>
         <div className={`${styles.Content} ${contentContainerClassName}`}>
@@ -43,3 +49,8 @@ export default class Header extends Component<Props> {
     );
   }
 }
+
+export default connect(
+  state => ({ chain: state.node.chain }),
+  () => ({})
+)(Header);

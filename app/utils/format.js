@@ -1,4 +1,5 @@
 import { RECOVERY_PHRASE_LENGTH } from '../constants/config';
+import type { NetType } from '../reducers/types';
 import { Account } from '../reducers/types';
 
 export const toTwoDigits = (str: string) => `0${str}`.slice(-2);
@@ -73,4 +74,9 @@ export const getAccountName = (account: Account, intl: any) => {
     { id: `account.default.${account.isRestored ? 'restored.' : ''}name` },
     { id: account.id }
   );
+};
+
+export const getAppTitle = (chain: NetType | null): string => {
+  const net = chain ? ` - ${chain.toUpperCase()}` : '';
+  return `StegosWallet${net}`;
 };

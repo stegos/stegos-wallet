@@ -7,6 +7,7 @@ import routes from '../constants/routes';
 import { wsEndpoint } from '../constants/config';
 import { createHistoryInfoAction } from './accounts';
 import { SET_WAITING } from './settings';
+import { getAppTitle } from '../utils/format';
 
 const WS_ENDPOINT = `ws://${process.env.APIENDPOINT || wsEndpoint}`;
 
@@ -28,11 +29,14 @@ export const onResultOfCheckingRunningNode = (_, args) => (
 ) => {
   dispatch({ type: CHECK_RUNNING_NODE_RESULT, payload: { ...args } });
   const state = getState();
-  if (state.app.isFirstLaunch === false && args.isRunning === true)
+  if (state.app.isFirstLaunch === false && args.isRunning === true) {
+    setAppTitle(args.envChain);
     dispatch(push(routes.SYNC));
+  }
 };
 
 export const setChain = (type: NetType) => (dispatch: Dispatch) => {
+  setAppTitle(type);
   dispatch({ type: SET_CHAIN, payload: type });
 };
 
@@ -127,4 +131,8 @@ const handleTransactions = (dispatch: Dispatch, data: string) => {
     }
     dispatch({ type: SET_WAITING, payload: { waiting: true, status: state } });
   }
+};
+
+const setAppTitle = (type: NetType) => {
+  document.title = getAppTitle(type);
 };

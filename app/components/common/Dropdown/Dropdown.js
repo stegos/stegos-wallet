@@ -4,7 +4,7 @@ import Icon from '../Icon/Icon';
 import type { IconName } from '../Icon/IconName';
 import styles from './Dropdown.css';
 
-type Option = {
+export type Option = {
   name: string,
   value: any
 };
