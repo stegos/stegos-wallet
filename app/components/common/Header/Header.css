@@ -29,11 +29,17 @@
 }
 
 .LogoWrapper {
-  width: 28%;
+  width: max-content;
   box-sizing: border-box;
   padding: 21px 39px 30px 119px;
   transition-duration: 0.1s;
   transition-property: padding;
+}
+
+@media screen and (max-width: 1130px) {
+  .LogoWrapper {
+    width: 28%;
+  }
 }
 
 @media screen and (max-width: 1280px) {
