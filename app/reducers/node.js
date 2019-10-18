@@ -5,7 +5,7 @@ import {
   SET_CHAIN,
   TOKEN_RECEIVED
 } from '../actions/node';
-import { WS_MESSAGE, WS_OPEN } from '../ws/actionsTypes';
+import { WS_ERROR, WS_MESSAGE, WS_OPEN } from '../ws/actionsTypes';
 
 const initialState = {
   isExternalNode: null,
@@ -50,6 +50,11 @@ export default function node(
       return {
         ...state,
         isConnected: true
+      };
+    case WS_ERROR:
+      return {
+        ...state,
+        error: action.payload
       };
     case WS_MESSAGE:
       return {
