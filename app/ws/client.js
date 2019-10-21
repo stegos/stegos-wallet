@@ -1,12 +1,11 @@
 import { MiddlewareAPI } from 'redux';
 import crypto from 'crypto';
 import type { Action, Dispatch } from '../reducers/types';
-import { WS_CLOSED, WS_ERROR, WS_MESSAGE, WS_OPEN } from './actionsTypes';
+import { WS_ERROR, WS_MESSAGE, WS_OPEN } from './actionsTypes';
 
 let ws = null;
 let apiToken = null;
 let isOpened = false;
-let shouldReconnect = true;
 let wsUrl: string | null = null;
 const reconnectInterval: number = 2000; // todo param
 let reconnectionInterval = null;
@@ -15,6 +14,8 @@ const tokenLength = 16; // todo config
 let messageCounter = 1;
 const messages = {};
 const listeners = [];
+let reconnectionAttempts = 0;
+const reconnectionAttemptsLimit = 10; // todo config
 
 export const connect = (store: MiddlewareAPI, { payload }: Action) => {
   close();
@@ -65,9 +66,9 @@ export const sendSync = (payload: any) =>
 
 const close = (code?: number, reason?: string) => {
   if (ws) {
+    isOpened = false;
     ws.close(code || 1000, reason || 'WebSocket connection closed.');
     ws = null;
-    isOpened = false;
   }
 };
 
@@ -84,6 +85,7 @@ const onOpen = (dispatch: Dispatch) => {
   if (reconnectionInterval) {
     clearInterval(reconnectionInterval);
     reconnectionInterval = null;
+    reconnectionAttempts = 0;
   }
   dispatch({ type: WS_OPEN });
   isOpened = true;
@@ -107,33 +109,35 @@ const onMessage = (store: MiddlewareAPI, evt: MessageEvent) => {
 };
 
 const onClose = (store: MiddlewareAPI) => {
-  store.dispatch({ type: WS_CLOSED });
   Object.keys(messages).forEach(id => {
     if (messages[id] !== null) {
       messages[id].reject();
     }
   });
-  if (isOpened || shouldReconnect) {
+  if (isOpened) {
     reconnect(store);
   }
 };
 
 const onError = (store: MiddlewareAPI) => {
-  store.dispatch({ type: WS_ERROR });
-  if (isOpened || shouldReconnect) {
+  if (isOpened) {
     reconnect(store);
   }
 };
 
 const reconnect = (store: MiddlewareAPI) => {
+  if (reconnectionInterval) return;
   ws = null;
-  shouldReconnect = false;
-  connect(
-    store,
-    { payload: { url: wsUrl } }
-  );
   reconnectionInterval = setInterval(() => {
-    // todo limit attempts
+    if (reconnectionAttempts > reconnectionAttemptsLimit) {
+      if (reconnectionInterval) {
+        clearInterval(reconnectionInterval);
+        reconnectionInterval = null;
+      }
+      store.dispatch({ type: WS_ERROR, payload: 'error.node' });
+      return;
+    }
+    reconnectionAttempts += 1;
     connect(
       store,
       { payload: { url: wsUrl } }
