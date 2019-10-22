@@ -10,17 +10,15 @@ import BootstrapWizard from './common/Wizard/BootstrapWizard';
 type Props = {
   node: NodeStateType,
   isFirstLaunch: boolean,
-  runNode: () => void,
-  connectToNode: () => void
+  connectOrRunNode: () => void
 };
 
 export default class Sync extends Component<Props> {
   props: Props;
 
   componentDidMount(): void {
-    const { runNode, connectToNode, node } = this.props;
-    if (node.isExternalNode) connectToNode();
-    else runNode();
+    const { connectOrRunNode } = this.props;
+    connectOrRunNode();
   }
 
   render() {

@@ -1,6 +1,6 @@
 import { send } from 'redux-electron-ipc';
 import { push } from 'connected-react-router';
-import type { Dispatch, GetState, NetType } from '../reducers/types';
+import type { Dispatch, GetState, Network } from '../reducers/types';
 import { connect, send as wsSend } from '../ws/actions';
 import { sendSync, subscribe, unsubscribe } from '../ws/client';
 import routes from '../constants/routes';
@@ -11,42 +11,40 @@ import { getAppTitle } from '../utils/format';
 
 const WS_ENDPOINT = `ws://${process.env.APIENDPOINT || wsEndpoint}`;
 
-export const CHECK_RUNNING_NODE = 'CHECK_RUNNING_NODE';
-export const CHECK_RUNNING_NODE_RESULT = 'CHECK_RUNNING_NODE_RESULT';
+export const GET_NODE_PARAMS = 'GET_NODE_PARAMS';
+export const SET_NODE_PARAMS = 'SET_NODE_PARAMS';
 export const SET_CHAIN = 'SET_CHAIN';
-export const RUN_NODE = 'RUN_NODE';
-export const CONNECT_TO_NODE = 'CONNECT_TO_NODE';
+export const CONNECT_OR_RUN_NODE = 'CONNECT_OR_RUN_NODE';
 export const RUN_NODE_FAILED = 'RUN_NODE_FAILED';
 export const TOKEN_RECEIVED = 'TOKEN_RECEIVED';
 
-export const checkRunningNode = () => (dispatch: Dispatch) => {
-  dispatch(send(CHECK_RUNNING_NODE));
+export const getPreconfiguredNodeParams = () => (dispatch: Dispatch) => {
+  dispatch(send(GET_NODE_PARAMS));
 };
 
-export const onResultOfCheckingRunningNode = (_, args) => (
+export const setNodeParams = (_, args) => (
   dispatch: Dispatch,
   getState: GetState
 ) => {
-  dispatch({ type: CHECK_RUNNING_NODE_RESULT, payload: { ...args } });
+  dispatch({ type: SET_NODE_PARAMS, payload: { ...args } });
   const state = getState();
-  if (state.app.isFirstLaunch === false && args.isRunning === true) {
-    setAppTitle(args.envChain);
+  if (state.app.isFirstLaunch === false && args.isPreconfigured) {
+    setAppTitle(args.chain);
     dispatch(push(routes.SYNC));
   }
 };
 
-export const setChain = (type: NetType) => (dispatch: Dispatch) => {
+export const setChain = (type: Network) => (dispatch: Dispatch) => {
   setAppTitle(type);
   dispatch({ type: SET_CHAIN, payload: type });
 };
 
-export const runNode = () => (dispatch: Dispatch, getState: GetState) => {
+export const connectOrRunNode = () => (
+  dispatch: Dispatch,
+  getState: GetState
+) => {
   const state = getState();
-  dispatch(send(RUN_NODE, { chain: state.node.chain }));
-};
-
-export const connectToNode = () => (dispatch: Dispatch) => {
-  dispatch(send(CONNECT_TO_NODE));
+  dispatch(send(CONNECT_OR_RUN_NODE, { chain: state.chain }));
 };
 
 export const onRunNodeFailed = (_, args) => (dispatch: Dispatch) => {
@@ -133,6 +131,6 @@ const handleTransactions = (dispatch: Dispatch, data: string) => {
   }
 };
 
-const setAppTitle = (type: NetType) => {
+const setAppTitle = (type: Network) => {
   document.title = getAppTitle(type);
 };

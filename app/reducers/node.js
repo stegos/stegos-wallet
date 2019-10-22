@@ -1,14 +1,14 @@
 import type { Action, NodeStateType } from './types';
 import {
-  CHECK_RUNNING_NODE_RESULT,
   RUN_NODE_FAILED,
   SET_CHAIN,
+  SET_NODE_PARAMS,
   TOKEN_RECEIVED
 } from '../actions/node';
 import { WS_ERROR, WS_MESSAGE, WS_OPEN } from '../ws/actionsTypes';
 
 const initialState = {
-  isExternalNode: null,
+  isPreconfigured: null,
   hasKey: null,
   isConnected: false,
   isSynced: false,
@@ -29,12 +29,11 @@ export default function node(
         ...state,
         error: action.payload.error
       };
-    case CHECK_RUNNING_NODE_RESULT:
+    case SET_NODE_PARAMS:
       return {
         ...state,
-        isExternalNode: action.payload.isRunning,
-        envChain: action.payload.envChain,
-        chain: action.payload.isRunning ? action.payload.envChain : undefined
+        isPreconfigured: action.payload.isPreconfigured,
+        chain: action.payload.chain
       };
     case SET_CHAIN:
       return {

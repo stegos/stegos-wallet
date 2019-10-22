@@ -2,8 +2,8 @@ import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { checkFirstLaunch } from '../actions/settings';
 import Welcome from '../components/Welcome';
-import { checkRunningNode, setChain } from '../actions/node';
-import type { NetType } from '../reducers/types';
+import { getPreconfiguredNodeParams, setChain } from '../actions/node';
+import type { Network } from '../reducers/types';
 
 function mapStateToProps(state) {
   return {
@@ -15,8 +15,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     checkFirstLaunch: () => dispatch(checkFirstLaunch()),
-    checkRunningNode: () => dispatch(checkRunningNode()),
-    setChain: (type: NetType) => dispatch(setChain(type))
+    getPreconfiguredNodeParams: () => dispatch(getPreconfiguredNodeParams()),
+    setChain: (type: Network) => dispatch(setChain(type))
   };
 }
 
