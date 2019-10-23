@@ -9,6 +9,7 @@ import { WS_ERROR, WS_MESSAGE, WS_OPEN } from '../ws/actionsTypes';
 
 const initialState = {
   isPreconfigured: null,
+  hash: null,
   hasKey: null,
   isConnected: false,
   isSynced: false,
@@ -32,8 +33,7 @@ export default function node(
     case SET_NODE_PARAMS:
       return {
         ...state,
-        isPreconfigured: action.payload.isPreconfigured,
-        chain: action.payload.chain
+        ...action.payload
       };
     case SET_CHAIN:
       return {

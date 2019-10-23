@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import styles from './Header.css';
 import logo from '../../../../resources/img/StegosLogoHorRGB.svg';
 import { version } from '../../../../package.json';
-import type { Network } from '../../../reducers/types';
+import type { NodeStateType } from '../../../reducers/types';
 
 type Props = {
   containerClassName?: string,
   logoContainerClassName?: string,
   contentContainerClassName?: string,
-  chain?: Network,
+  node: NodeStateType,
   title?: string
 };
 
@@ -21,7 +21,6 @@ class Header extends Component<Props> {
     containerClassName: '',
     logoContainerClassName: '',
     contentContainerClassName: '',
-    chain: '',
     title: null
   };
 
@@ -31,15 +30,19 @@ class Header extends Component<Props> {
       containerClassName,
       logoContainerClassName,
       contentContainerClassName,
-      chain,
+      node,
       title
     } = this.props;
     return (
       <div className={`${styles.Container} ${containerClassName}`}>
         <div className={`${styles.LogoWrapper} ${logoContainerClassName}`}>
           <img src={logo} alt="STEGOS" className={styles.Logo} />
-          <div className={styles.Chain}>{chain && chain.toUpperCase()}</div>
-          <div className={styles.Version}>{version}</div>
+          <div className={styles.Chain}>
+            {node.chain && node.chain.toUpperCase()}
+          </div>
+          <div className={styles.Version}>
+            {version} {node.hash && `(${node.hash.substring(0, 7)})`}
+          </div>
         </div>
         <div className={`${styles.Content} ${contentContainerClassName}`}>
           {title && <span className={styles.Title}>{title}</span>}
@@ -51,6 +54,6 @@ class Header extends Component<Props> {
 }
 
 export default connect(
-  state => ({ chain: state.node.chain }),
+  state => ({ node: state.node }),
   () => ({})
 )(Header);
