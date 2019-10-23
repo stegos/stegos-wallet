@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import styles from './Header.css';
 import logo from '../../../../resources/img/StegosLogoHorRGB.svg';
 import { version } from '../../../../package.json';
-import type { NetType } from '../../../reducers/types';
+import type { Network } from '../../../reducers/types';
 
 type Props = {
   containerClassName?: string,
   logoContainerClassName?: string,
   contentContainerClassName?: string,
-  chain?: NetType,
+  chain?: Network,
   title?: string
 };
 
