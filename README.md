@@ -77,6 +77,32 @@ yarn install
 yarn dev
 ```
 
+#### Run with arguments
+
+```
+--chain <NAME>
+```
+
+Specify chain to use: testnet|devnet|mainnet
+
+```
+--data-dir <DIR>
+```
+
+Path to data directory, contains api.token file
+
+```
+--api-endpoint <ENDPOINT>
+```
+
+API ENDPOINT, e.g. 127.0.0.1:3145 [default: 127.0.0.1:3145]. If you want to run multiple wallets at the same you time, you should set this param.
+
+```
+--debug
+```
+
+Launches prod version with debug console
+
 ## Feedback
 
 Please join us on [Telegram Chat](https://t.me/stegos4privacy) to get test tokens and let us know your thoughts.

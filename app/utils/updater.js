@@ -46,7 +46,7 @@ export const checkUpdateAndNotify = async () => {
 };
 
 /**
- * returns commit sha of current version
+ * returns the commit sha of the current version
  * @return {Promise<null|string>}
  */
 export const getCurrentSha = async () => {
