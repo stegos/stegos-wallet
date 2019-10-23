@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  user-select: text;
 }
 
 .LabelSuccess {
@@ -21,7 +22,6 @@
   line-height: 24px;
   letter-spacing: 0.45px;
   color: #fff;
-  user-select: text;
 }
 
 .LabelBold {
