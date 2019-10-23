@@ -2,7 +2,7 @@
 import React, { Component, Fragment } from 'react';
 import { Link, Location } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import type { Account, AccountsStateType } from '../../reducers/types';
+import type { Account, AccountsStateType, Network } from '../../reducers/types';
 import Busy from '../common/Busy/Busy';
 import Button from '../common/Button/Button';
 import Dropdown from '../common/Dropdown/Dropdown';
@@ -15,11 +15,14 @@ import { POWER_DIVISIBILITY } from '../../constants/config';
 import {
   formatDigit,
   getAccountName,
-  isPositiveStegosNumber
+  getNetworkOfAddress,
+  isPositiveStegosNumber,
+  isStegosAddress
 } from '../../utils/format';
 
 type Props = {
   accounts: AccountsStateType,
+  network: Network,
   waitingStatus: string,
   sendTransaction: () => void,
   saveState: (state: any) => void,
@@ -137,7 +140,7 @@ class Send extends Component<Props> {
 
   validate = () => {
     const { account, recipientAddress, amount, fee } = this.state;
-    const { intl } = this.props;
+    const { intl, network } = this.props;
     const totalAmount = this.totalAmount * POWER_DIVISIBILITY;
 
     if (!account) {
@@ -148,10 +151,18 @@ class Send extends Component<Props> {
       });
       return false;
     }
-    if (!recipientAddress) {
+    if (!recipientAddress || !isStegosAddress(recipientAddress)) {
       this.setState({
         recipientAddressError: intl.formatMessage({
           id: 'input.error.incorrect.address'
+        })
+      });
+      return false;
+    }
+    if (getNetworkOfAddress(recipientAddress) !== network) {
+      this.setState({
+        recipientAddressError: intl.formatMessage({
+          id: 'input.error.address.from.another.network'
         })
       });
       return false;
@@ -276,7 +287,8 @@ class Send extends Component<Props> {
 
   renderCancelButton() {
     const { step } = this.state;
-    const { lastActive } = this.props;
+    const { location } = this.props;
+    const accountId = location.state && location.state.accountId;
     const button = (
       <Button
         type={step === 1 ? 'OutlinePrimary' : 'OutlineDisabled'}
@@ -290,10 +302,10 @@ class Send extends Component<Props> {
     ) : (
       <Link
         to={
-          lastActive
+          accountId
             ? {
                 pathname: routes.ACCOUNT,
-                state: { accountId: lastActive }
+                state: { accountId }
               }
             : { pathname: routes.ACCOUNTS }
         }

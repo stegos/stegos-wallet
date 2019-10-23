@@ -161,6 +161,7 @@
   "input.error.password.does.not.match": "Password does not match",
   "input.error.invalid.value": "Invalid value",
   "input.error.incorrect.address": "Incorrect address",
+  "input.error.address.from.another.network": "Address from another network",
   "input.error.insufficient.balance": "Insufficient balance",
   "input.error.minimum.fee": "Minimum fee is {fee}",
   "input.error.account.name.does.not.match": "Account name does not match",

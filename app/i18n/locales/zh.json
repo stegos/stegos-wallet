@@ -160,6 +160,7 @@
   "input.error.password.does.not.match": "密码不一致",
   "input.error.invalid.value": "无效值",
   "input.error.incorrect.address": "地址不正确",
+  "input.error.address.from.another.network": "Address from another network",
   "input.error.insufficient.balance": "余额不足",
   "input.error.minimum.fee": "最低费用是{fee}",
   "input.error.account.name.does.not.match": "帐户名称不匹配",
