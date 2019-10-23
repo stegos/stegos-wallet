@@ -44,7 +44,7 @@ export const connectOrRunNode = () => (
   getState: GetState
 ) => {
   const state = getState();
-  dispatch(send(CONNECT_OR_RUN_NODE, { chain: state.chain }));
+  dispatch(send(CONNECT_OR_RUN_NODE, { chain: state.node.chain }));
 };
 
 export const onRunNodeFailed = (_, args) => (dispatch: Dispatch) => {
