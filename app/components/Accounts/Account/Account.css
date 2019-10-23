@@ -12,6 +12,11 @@
   justify-content: space-between;
 }
 
+.TitleContainer {
+  display: flex;
+  flex-direction: row;
+}
+
 .Title {
   font-style: normal;
   font-weight: bold;
@@ -190,4 +195,10 @@
   line-height: 18px;
   letter-spacing: 0.36px;
   color: #fff;
+}
+
+.InputEditName {
+  margin-top: 15px;
+  margin-bottom: 10px;
+  width: 200px;
 }

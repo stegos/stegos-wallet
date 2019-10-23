@@ -1,38 +1,52 @@
 import { send } from 'redux-electron-ipc';
 import { push } from 'connected-react-router';
-import type { Dispatch, GetState } from '../reducers/types';
+import type { Dispatch, GetState, NetType } from '../reducers/types';
 import { connect, send as wsSend } from '../ws/actions';
 import { sendSync, subscribe, unsubscribe } from '../ws/client';
 import routes from '../constants/routes';
 import { wsEndpoint } from '../constants/config';
 import { createHistoryInfoAction } from './accounts';
 import { SET_WAITING } from './settings';
+import { getAppTitle } from '../utils/format';
 
-const WS_ENDPOINT = `ws://${wsEndpoint}`;
+const WS_ENDPOINT = `ws://${process.env.APIENDPOINT || wsEndpoint}`;
 
+export const CHECK_RUNNING_NODE = 'CHECK_RUNNING_NODE';
+export const CHECK_RUNNING_NODE_RESULT = 'CHECK_RUNNING_NODE_RESULT';
+export const SET_CHAIN = 'SET_CHAIN';
 export const RUN_NODE = 'RUN_NODE';
-export const NODE_RUNNING = 'NODE_RUNNING';
+export const CONNECT_TO_NODE = 'CONNECT_TO_NODE';
 export const RUN_NODE_FAILED = 'RUN_NODE_FAILED';
 export const TOKEN_RECEIVED = 'TOKEN_RECEIVED';
 
-export const runNode = () => (dispatch: Dispatch) => {
-  dispatch(send(RUN_NODE));
+export const checkRunningNode = () => (dispatch: Dispatch) => {
+  dispatch(send(CHECK_RUNNING_NODE));
 };
 
-export const connectToRunningNode = token => (dispatch: Dispatch) => {
-  dispatch({ type: TOKEN_RECEIVED, payload: { token } });
-  dispatch({ type: NODE_RUNNING });
-  subscribe(handleNodeSynchronization);
-  dispatch(
-    connect(
-      WS_ENDPOINT,
-      token
-    )
-  );
+export const onResultOfCheckingRunningNode = (_, args) => (
+  dispatch: Dispatch,
+  getState: GetState
+) => {
+  dispatch({ type: CHECK_RUNNING_NODE_RESULT, payload: { ...args } });
+  const state = getState();
+  if (state.app.isFirstLaunch === false && args.isRunning === true) {
+    setAppTitle(args.envChain);
+    dispatch(push(routes.SYNC));
+  }
 };
 
-export const onNodeRunning = () => (dispatch: Dispatch) => {
-  dispatch({ type: NODE_RUNNING });
+export const setChain = (type: NetType) => (dispatch: Dispatch) => {
+  setAppTitle(type);
+  dispatch({ type: SET_CHAIN, payload: type });
+};
+
+export const runNode = () => (dispatch: Dispatch, getState: GetState) => {
+  const state = getState();
+  dispatch(send(RUN_NODE, { chain: state.node.chain }));
+};
+
+export const connectToNode = () => (dispatch: Dispatch) => {
+  dispatch(send(CONNECT_TO_NODE));
 };
 
 export const onRunNodeFailed = (_, args) => (dispatch: Dispatch) => {
@@ -117,4 +131,8 @@ const handleTransactions = (dispatch: Dispatch, data: string) => {
     }
     dispatch({ type: SET_WAITING, payload: { waiting: true, status: state } });
   }
+};
+
+const setAppTitle = (type: NetType) => {
+  document.title = getAppTitle(type);
 };

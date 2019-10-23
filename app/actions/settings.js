@@ -27,17 +27,10 @@ export const SHOW_WALLET_SETTINGS = 'SHOW_WALLET_SETTINGS';
 export const SET_ACTIVE_ELEMENT = 'SET_ACTIVE_ELEMENT';
 export const FREE_ACTIVE_ELEMENT = 'FREE_ACTIVE_ELEMENT';
 export const FINISH_BOOTSTRAP = 'FINISH_BOOTSTRAP';
+export const SAVE_PAGE_STATE = 'SAVE_PAGE_STATE';
 
-export const checkFirstLaunch = () => (
-  dispatch: Dispatch,
-  getState: GetState
-) => {
+export const checkFirstLaunch = () => (dispatch: Dispatch) => {
   const exist = isDbExist();
-
-  const state = getState();
-  const { node } = state;
-  if (exist && !node.isSynced) dispatch(push(routes.SYNC));
-
   dispatch({ type: SET_FIRST_LAUNCH, payload: !exist });
 };
 
@@ -263,4 +256,10 @@ export const setActiveElement = (activeElement: React.ReactElement) => (
 
 export const freeActiveElement = () => (dispatch: Dispatch) => {
   dispatch({ type: FREE_ACTIVE_ELEMENT });
+};
+
+export const savePageState = (page: string, state: any) => (
+  dispatch: Dispatch
+) => {
+  dispatch({ type: SAVE_PAGE_STATE, payload: { page, state } });
 };

@@ -15,11 +15,14 @@ export type AppStateType = {
   waitingStatus: string | null,
   language: string | null,
   showWalletSettings: boolean,
-  activeElement: React.ReactElement
+  activeElement: React.ReactElement,
+  pageStates: { [page: string]: any }
 };
 
 export type NodeStateType = {
-  isStarted: boolean,
+  isExternalNode: boolean | null,
+  envChain: NetType | undefined,
+  chain: NetType | undefined,
   isConnected: boolean,
   isSynced: boolean,
   syncingProgress: number,
@@ -105,3 +108,5 @@ export type GetState = () => { ...State };
 export type Dispatch = ReduxDispatch<Action>;
 
 export type Store = ReduxStore<GetState, Action>;
+
+export type NetType = 'devnet' | 'testnet' | 'mainnet';

@@ -1,6 +1,6 @@
 // @flow
 import React, { Fragment, PureComponent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Location } from 'react-router-dom';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { formatDigit, getAccountName } from '../../../utils/format';
 import Button from '../../common/Button/Button';
@@ -18,17 +18,13 @@ import {
   weekAgo,
   yearAgo
 } from '../../../utils/chart';
-
-type Location = {
-  pathname: string,
-  state?: object
-};
+import Input from '../../common/Input/Input';
 
 type Props = {
   location: Location,
   accounts: any,
   deleteAccount: () => void,
-  setLastUsedAccount: () => void,
+  setAccountName: () => void,
   intl: any
 };
 
@@ -39,13 +35,14 @@ class Account extends PureComponent<Props> {
 
   constructor(props) {
     super(props);
+    const { location, accounts, intl } = props;
+    const { accountId } = location.state;
     this.state = {
       period: 'week',
-      editAccountVisible: false
+      editAccountVisible: false,
+      accountName:
+        accounts[accountId] && getAccountName(accounts[accountId], intl)
     };
-    const { location, setLastUsedAccount } = props;
-    const { accountId } = location.state;
-    setLastUsedAccount(accountId);
   }
 
   filterTransactions = period => {
@@ -65,11 +62,48 @@ class Account extends PureComponent<Props> {
     }
   };
 
+  get account() {
+    const { location, accounts } = this.props;
+    if (!location.state || !location.state.accountId) {
+      return null;
+    }
+    const { accountId } = location.state;
+    return accounts[accountId];
+  }
+
   editAccount() {
     this.setState({
       editAccountVisible: true
     });
   }
+
+  onEdit() {
+    const { editingName } = this.state;
+    if (editingName) {
+      const { intl } = this.props;
+      const { account } = this;
+      if (!account) return;
+      this.setState({
+        editingName: false,
+        accountName: getAccountName(account, intl)
+      });
+    } else {
+      this.setState({ editingName: true });
+    }
+  }
+
+  saveName() {
+    const { setAccountName } = this.props;
+    const { accountName } = this.state;
+    const { account } = this;
+    if (!account) return;
+    setAccountName(account.id, accountName);
+    this.setState({ editingName: false });
+  }
+
+  onChangeAccountName = e => {
+    this.setState({ accountName: e.target.value });
+  };
 
   changePeriod(period: 'week' | 'month' | 'year' = 'week') {
     this.setState({
@@ -90,7 +124,7 @@ class Account extends PureComponent<Props> {
   }
 
   render() {
-    const { editAccountVisible, period } = this.state;
+    const { editAccountVisible, period, editingName, accountName } = this.state;
     const { location, deleteAccount, accounts, intl } = this.props;
     if (!location.state || !location.state.accountId) {
       return null;
@@ -103,7 +137,31 @@ class Account extends PureComponent<Props> {
     return (
       <div className={styles.Account}>
         <div className={styles.Header}>
-          <span className={styles.Title}>{getAccountName(account, intl)}</span>
+          <div className={styles.TitleContainer}>
+            {editingName ? (
+              <Input
+                className={styles.InputEditName}
+                value={accountName}
+                noLabel
+                autoFocus
+                onChange={e => this.onChangeAccountName(e)}
+                onEsc={() =>
+                  this.setState({
+                    editingName: false,
+                    accountName: getAccountName(account, intl)
+                  })
+                }
+                onEnter={() => this.saveName()}
+              />
+            ) : (
+              <span className={styles.Title}>{accountName}</span>
+            )}
+            <Button
+              type="Invisible"
+              icon="mode_edit"
+              onClick={() => this.onEdit()}
+            />
+          </div>
           <Button
             type="Invisible"
             icon="tune"
@@ -127,7 +185,7 @@ class Account extends PureComponent<Props> {
             <Button
               type="FilledSecondary"
               icon="file_upload"
-              link={{ pathname: routes.SEND }}
+              link={{ pathname: routes.SEND, state: { accountId } }}
               elevated
             >
               <FormattedMessage id="button.send.tokens" />
@@ -135,7 +193,7 @@ class Account extends PureComponent<Props> {
             <Button
               type="FilledPrimary"
               icon="file_download"
-              link={{ pathname: routes.RECEIVE }}
+              link={{ pathname: routes.RECEIVE, state: { accountId } }}
               elevated
             >
               <FormattedMessage id="button.receive.tokens" />
@@ -213,7 +271,7 @@ class Account extends PureComponent<Props> {
                 <FormattedMessage id="account.receive.description" />
               </span>
 
-              <Link to={{ pathname: routes.RECEIVE }}>
+              <Link to={{ pathname: routes.RECEIVE, state: { accountId } }}>
                 <Button
                   type="OutlineDisabled"
                   icon="open_in_browser"

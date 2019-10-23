@@ -57,3 +57,11 @@
   font-size: 8px;
   text-align: center;
 }
+
+.Chain {
+  font-size: 18px;
+  font-weight: 600;
+  text-align: right;
+  margin-top: -25px;
+  color: #fff;
+}

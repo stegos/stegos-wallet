@@ -1,10 +1,15 @@
 import type { Action, NodeStateType } from './types';
-import { NODE_RUNNING, RUN_NODE_FAILED, TOKEN_RECEIVED } from '../actions/node';
-import { WS_MESSAGE, WS_OPEN } from '../ws/actionsTypes';
+import {
+  CHECK_RUNNING_NODE_RESULT,
+  RUN_NODE_FAILED,
+  SET_CHAIN,
+  TOKEN_RECEIVED
+} from '../actions/node';
+import { WS_ERROR, WS_MESSAGE, WS_OPEN } from '../ws/actionsTypes';
 
 const initialState = {
+  isExternalNode: null,
   hasKey: null,
-  isStarted: false,
   isConnected: false,
   isSynced: false,
   syncingProgress: 0,
@@ -22,13 +27,19 @@ export default function node(
     case RUN_NODE_FAILED:
       return {
         ...state,
-        isStarted: false,
         error: action.payload.error
       };
-    case NODE_RUNNING:
+    case CHECK_RUNNING_NODE_RESULT:
       return {
         ...state,
-        isStarted: true
+        isExternalNode: action.payload.isRunning,
+        envChain: action.payload.envChain,
+        chain: action.payload.isRunning ? action.payload.envChain : undefined
+      };
+    case SET_CHAIN:
+      return {
+        ...state,
+        chain: action.payload
       };
     case TOKEN_RECEIVED:
       return {
@@ -39,6 +50,11 @@ export default function node(
       return {
         ...state,
         isConnected: true
+      };
+    case WS_ERROR:
+      return {
+        ...state,
+        error: action.payload
       };
     case WS_MESSAGE:
       return {

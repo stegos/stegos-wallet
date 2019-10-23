@@ -1,4 +1,5 @@
 import { RECOVERY_PHRASE_LENGTH } from '../constants/config';
+import type { NetType } from '../reducers/types';
 import { Account } from '../reducers/types';
 
 export const toTwoDigits = (str: string) => `0${str}`.slice(-2);
@@ -17,8 +18,11 @@ export const getCertificateVerificationDate = date =>
   `${to101Date(date)} ${to108Time(date)}`;
 
 export const BASE58_REGEX = /^[1-9A-HJ-NP-Za-km-z]{50,51}$/;
+export const BECH32_REGEX = /^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}$/;
 
 export const isBase58 = str => BASE58_REGEX.test(str);
+
+export const isBech32 = str => BECH32_REGEX.test(str);
 
 export const isStegosNumber = str => /^-?\d+\.?\d{0,6}$/.test(str); // todo use STG_DIVISIBILITY
 
@@ -46,14 +50,19 @@ export const getEmptyRecoveryPhrase = () => {
 
 export const formatDateForWs = ts => {
   const date = new Date(ts);
-  return `${date.getFullYear()}-${toTwoDigits(
-    date.getMonth() + 1
-  )}-${toTwoDigits(date.getDate())}T00:00:00.000000000Z`;
+  return (
+    `${date.getFullYear()}-${toTwoDigits(date.getMonth() + 1)}-${toTwoDigits(
+      date.getDate()
+    )}` +
+    `T${toTwoDigits(date.getHours())}:${toTwoDigits(
+      date.getMinutes()
+    )}:${toTwoDigits(date.getSeconds())}.000000000Z`
+  );
 };
 
 export const getYearAgoTimestamp = () => {
   const now = new Date();
-  return formatDateForWs(now.setFullYear(now.getFullYear() - 1));
+  return now.setFullYear(now.getFullYear() - 1);
 };
 
 export const getAccountName = (account: Account, intl: any) => {
@@ -65,4 +74,9 @@ export const getAccountName = (account: Account, intl: any) => {
     { id: `account.default.${account.isRestored ? 'restored.' : ''}name` },
     { id: account.id }
   );
+};
+
+export const getAppTitle = (chain: NetType | null): string => {
+  const net = chain ? ` - ${chain.toUpperCase()}` : '';
+  return `StegosWallet${net}`;
 };

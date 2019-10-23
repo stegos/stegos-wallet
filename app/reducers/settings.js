@@ -1,7 +1,11 @@
 import type { Action, AppStateType } from './types';
 import {
+  FINISH_BOOTSTRAP,
+  FREE_ACTIVE_ELEMENT,
   HIDE_ERROR,
   LOCK_WALLET,
+  SAVE_PAGE_STATE,
+  SET_ACTIVE_ELEMENT,
   SET_AUTO_LOCK_TIMEOUT,
   SET_BUGS_AND_TERMS,
   SET_FIRST_LAUNCH,
@@ -11,10 +15,7 @@ import {
   SET_WAITING,
   SHOW_ERROR,
   SHOW_WALLET_SETTINGS,
-  UNLOCK_WALLET,
-  SET_ACTIVE_ELEMENT,
-  FREE_ACTIVE_ELEMENT,
-  FINISH_BOOTSTRAP
+  UNLOCK_WALLET
 } from '../actions/settings';
 
 const initialState = {
@@ -30,7 +31,8 @@ const initialState = {
   waiting: false,
   waitingStatus: null,
   showWalletSettings: false,
-  activeElement: null
+  activeElement: null,
+  pageStates: {}
 };
 
 export default function app(
@@ -74,7 +76,8 @@ export default function app(
     case HIDE_ERROR:
       return {
         ...state,
-        error: ''
+        error: '',
+        activeElement: null
       };
     case SHOW_ERROR:
       return {
@@ -116,6 +119,14 @@ export default function app(
       return {
         ...state,
         activeElement: null
+      };
+    case SAVE_PAGE_STATE:
+      return {
+        ...state,
+        pageStates: {
+          ...state.pageStates,
+          [payload.page]: payload.state
+        }
       };
     default:
       return state;

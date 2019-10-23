@@ -1,7 +1,7 @@
 {
   "name": "stegos-wallet",
   "productName": "StegosWallet",
-  "version": "0.13.0",
+  "version": "0.16.0",
   "description": "Platform for privacy applications",
   "copyright": "Copyright © 2018-2019 Stegos AG",
   "author": {
@@ -241,7 +241,7 @@
     "devtron": "^1.4.0",
     "electron-debug": "^2.0.0",
     "electron-log": "^2.2.17",
-    "electron-updater": "^3.2.3",
+    "node-fetch": "^2.6.0",
     "history": "^4.7.2",
     "nedb": "^1.8.0",
     "pdfjs": "^2.3.0",
