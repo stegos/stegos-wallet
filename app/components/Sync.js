@@ -9,17 +9,11 @@ import BootstrapWizard from './common/Wizard/BootstrapWizard';
 
 type Props = {
   node: NodeStateType,
-  isFirstLaunch: boolean,
-  connectOrRunNode: () => void
+  isFirstLaunch: boolean
 };
 
 export default class Sync extends Component<Props> {
   props: Props;
-
-  componentDidMount(): void {
-    const { connectOrRunNode } = this.props;
-    connectOrRunNode();
-  }
 
   render() {
     const { node, isFirstLaunch } = this.props;

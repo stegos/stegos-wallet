@@ -1,5 +1,6 @@
 import type { Action, NodeStateType } from './types';
 import {
+  RELAUNCH_NODE,
   RUN_NODE_FAILED,
   SET_CHAIN,
   SET_NODE_PARAMS,
@@ -44,6 +45,13 @@ export default function node(
       return {
         ...state,
         apiToken: action.payload.token
+      };
+    case RELAUNCH_NODE:
+      return {
+        ...state,
+        error: null,
+        isSynced: false,
+        syncingProgress: 0
       };
     case WS_OPEN:
       return {

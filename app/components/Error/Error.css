@@ -49,3 +49,10 @@
   width: 150px;
   margin: 0 auto;
 }
+
+.ButtonsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}

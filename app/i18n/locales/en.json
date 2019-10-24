@@ -196,5 +196,5 @@
   "account.default.name": "Account #{id}",
   "account.default.restored.name": "Restored Account #{id}",
 
-  "error.node": "Unknown error in the node"
+  "error.node": "The node  is not responding"
 }

@@ -41,27 +41,25 @@ class Root extends Component<Props> {
   }
 
   renderApp() {
-    const { history, app } = this.props;
+    const { history, app, error } = this.props;
     return app.isBootstrappingComplete ? (
       <React.Fragment>
         <ConnectedRouter history={history}>
-          <Routes />
+          {error ? <Error error={error} withRelaunch /> : <Routes />}
         </ConnectedRouter>
       </React.Fragment>
     ) : (
       <ConnectedRouter history={history}>
-        <BootstrapRoutes />
+        {error ? <Error error={error} /> : <BootstrapRoutes />}
       </ConnectedRouter>
     );
   }
 
   render() {
-    const { store, error } = this.props;
+    const { store } = this.props;
     return (
       <Provider store={store}>
-        <IntlProviderWrapper>
-          {error ? <Error error={error} /> : this.renderApp()}
-        </IntlProviderWrapper>
+        <IntlProviderWrapper>{this.renderApp()}</IntlProviderWrapper>
       </Provider>
     );
   }

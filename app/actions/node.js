@@ -15,6 +15,7 @@ export const GET_NODE_PARAMS = 'GET_NODE_PARAMS';
 export const SET_NODE_PARAMS = 'SET_NODE_PARAMS';
 export const SET_CHAIN = 'SET_CHAIN';
 export const CONNECT_OR_RUN_NODE = 'CONNECT_OR_RUN_NODE';
+export const RELAUNCH_NODE = 'RELAUNCH_NODE';
 export const RUN_NODE_FAILED = 'RUN_NODE_FAILED';
 export const TOKEN_RECEIVED = 'TOKEN_RECEIVED';
 
@@ -30,13 +31,22 @@ export const setNodeParams = (_, args) => (
   const state = getState();
   if (state.app.isFirstLaunch === false && args.isPreconfigured) {
     setAppTitle(args.chain);
-    dispatch(push(routes.SYNC));
+    dispatch(connectOrRunNode());
   }
 };
 
-export const setChain = (type: Network) => (dispatch: Dispatch) => {
+export const setChain = (type: Network) => (
+  dispatch: Dispatch,
+  getState: GetState
+) => {
   setAppTitle(type);
   dispatch({ type: SET_CHAIN, payload: type });
+  const state = getState();
+  if (state.app.isFirstLaunch) {
+    dispatch(push(routes.PROTECT));
+  } else {
+    dispatch(connectOrRunNode());
+  }
 };
 
 export const connectOrRunNode = () => (
@@ -45,6 +55,14 @@ export const connectOrRunNode = () => (
 ) => {
   const state = getState();
   dispatch(send(CONNECT_OR_RUN_NODE, { chain: state.node.chain }));
+  dispatch(push(routes.SYNC));
+};
+
+export const relaunchNode = () => (dispatch: Dispatch, getState: GetState) => {
+  dispatch({ type: RELAUNCH_NODE });
+  const state = getState();
+  dispatch(send(RELAUNCH_NODE, { chain: state.node.chain }));
+  dispatch(push(routes.SYNC));
 };
 
 export const onRunNodeFailed = (_, args) => (dispatch: Dispatch) => {

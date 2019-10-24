@@ -1,26 +1,36 @@
 // @flow
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import styles from './Error.css';
-import * as AppActions from '../../actions/settings';
 import Button from '../common/Button/Button';
 import Header from '../common/Header/Header';
 import App from '../../containers/App';
 import Fail from '../../../resources/img/Fail.svg';
+import { relaunchNode } from '../../actions/node';
 
 type Props = {
-  error: string
+  error: string,
+  withRelaunch?: boolean,
+  relaunch: () => void
 };
 
 class Error extends Component<Props> {
+  static defaultProps = {
+    withRelaunch: false
+  };
+
   static onClose() {
     window.close();
   }
 
+  onRelaunch = () => {
+    const { relaunch } = this.props;
+    relaunch();
+  };
+
   render() {
-    const { error } = this.props;
+    const { error, withRelaunch } = this.props;
     return (
       <App>
         <div className={styles.Wrapper}>
@@ -34,9 +44,16 @@ class Error extends Component<Props> {
               <FormattedMessage id={error} />
             </span>
           </div>
-          <Button onClick={() => Error.onClose()} className={styles.Close}>
-            Close App
-          </Button>
+          <div className={styles.ButtonsContainer}>
+            <Button onClick={Error.onClose} className={styles.Close}>
+              Close Wallet
+            </Button>
+            {withRelaunch && (
+              <Button onClick={this.onRelaunch} className={styles.Close}>
+                Relaunch
+              </Button>
+            )}
+          </div>
         </div>
       </App>
     );
@@ -45,5 +62,5 @@ class Error extends Component<Props> {
 
 export default connect(
   state => ({ error: state.node.error }),
-  dispatch => bindActionCreators(AppActions, dispatch)
+  dispatch => ({ relaunch: () => dispatch(relaunchNode()) })
 )(injectIntl(Error));

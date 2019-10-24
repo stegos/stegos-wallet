@@ -192,5 +192,8 @@
   "certificate.verification.failed": "失效",
   "certificate.verifications.waiting": "验证中...",
 
-  "account.default.name": "账户 #{id}"
+  "account.default.name": "账户 #{id}",
+  "account.default.restored.name": "Restored Account #{id}",
+
+  "error.node": "The node  is not responding"
 }

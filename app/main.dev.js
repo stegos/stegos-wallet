@@ -105,10 +105,7 @@ app.on('ready', async () => {
 });
 
 app.on('quit', () => {
-  if (nodeProcess != null) {
-    nodeProcess.kill('SIGKILL');
-    nodeProcess = null;
-  }
+  killNode();
   app.exit(0);
 });
 
@@ -117,7 +114,7 @@ app.on('quit', () => {
  */
 
 ipcMain.on('GET_NODE_PARAMS', async event => {
-  const hash = await getCurrentSha();
+  const hash = await getCurrentSha(); // todo fix
   if (argChain) {
     event.sender.send('SET_NODE_PARAMS', {
       isPreconfigured: true,
@@ -145,6 +142,23 @@ ipcMain.on('CONNECT_OR_RUN_NODE', async (event, args) => {
     if (argChain || !nodeConnection) {
       await runNodeProcess(argChain || args.chain);
     }
+    const tokenFile = `${
+      process.env.APPDATAPATH || nodeConnection
+        ? nodeConnection.tokenFilePath
+        : `${defaultStegosPath}/${argChain || args.chain}`
+    }/api.token`;
+    captureToken(tokenFile);
+  } catch (e) {
+    console.log(e);
+    event.sender.send('RUN_NODE_FAILED', { error: e });
+  }
+});
+
+ipcMain.on('RELAUNCH_NODE', async (event, args) => {
+  killNode();
+  try {
+    // todo extract
+    await runNodeProcess(argChain || args.chain);
     const tokenFile = `${
       process.env.APPDATAPATH || nodeConnection
         ? nodeConnection.tokenFilePath
@@ -193,6 +207,13 @@ function runNodeProcess(chain: string): Promise<void> {
       reject(err);
     });
   });
+}
+
+function killNode() {
+  if (nodeProcess != null) {
+    nodeProcess.kill('SIGKILL');
+    nodeProcess = null;
+  }
 }
 
 /**

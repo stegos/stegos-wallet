@@ -2,7 +2,6 @@
 import { remote } from 'electron';
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import routes from '../constants/routes';
 import styles from './Welcome.css';
 import logo from '../../resources/img/StegosLogoVertRGB.svg';
 import type { Network, NodeStateType } from '../reducers/types';
@@ -14,8 +13,7 @@ type Props = {
   node: NodeStateType,
   checkFirstLaunch: () => void,
   getPreconfiguredNodeParams: () => void,
-  setChain: (type: Network) => void,
-  history: {}
+  setChain: (type: Network) => void
 };
 
 type State = {
@@ -49,10 +47,9 @@ export default class Welcome extends Component<Props, State> {
   }
 
   onContinue = () => {
-    const { setChain, isFirstLaunch, history } = this.props;
+    const { setChain } = this.props;
     const { chainOption } = this.state;
     setChain(chainOption.value);
-    history.push(isFirstLaunch ? routes.PROTECT : routes.SYNC);
   };
 
   render() {
