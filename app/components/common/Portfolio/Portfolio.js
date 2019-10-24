@@ -1,6 +1,7 @@
 // @flow
 import React, { Fragment, PureComponent } from 'react';
 import { FormattedMessage, FormattedPlural, injectIntl } from 'react-intl';
+import { formatDigit } from '../../../utils/format';
 import Chart from '../../Accounts/Account/Chart/Chart';
 import TransactionsList from '../../Accounts/Account/TransactionsList/TransactionsList';
 import styles from './Portfolio.css';
@@ -126,7 +127,7 @@ class Portfolio extends PureComponent<Props> {
             <div className={styles.BalanceAmount}>
               <div>
                 <span className={styles.BalanceValue}>
-                  {(balance / POWER_DIVISIBILITY).toFixed(4)}
+                  {formatDigit((balance / POWER_DIVISIBILITY).toFixed(4))}
                 </span>
                 <span className={styles.BalanceCurrency}> STG</span>
               </div>

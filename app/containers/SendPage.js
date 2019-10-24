@@ -7,6 +7,7 @@ import { savePageState } from '../actions/settings';
 function mapStateToProps(state) {
   return {
     accounts: state.accounts.items,
+    network: state.node.chain,
     waitingStatus: state.app.waitingStatus,
     savedState: state.app.pageStates.SEND
   };

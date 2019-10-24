@@ -9,11 +9,13 @@ import Routes from '../Routes';
 import '../utils/extended';
 import menu from '../contextMenu';
 import IntlProviderWrapper from '../components/i18n/IntlContext';
+import Error from '../components/Error/Error';
 
 type Props = {
   store: Store,
   history: {},
-  app: AppStateType
+  app: AppStateType,
+  error: string
 };
 
 class Root extends Component<Props> {
@@ -38,28 +40,32 @@ class Root extends Component<Props> {
     );
   }
 
+  renderApp() {
+    const { history, app, error } = this.props;
+    return app.isBootstrappingComplete ? (
+      <React.Fragment>
+        <ConnectedRouter history={history}>
+          {error ? <Error error={error} withRelaunch /> : <Routes />}
+        </ConnectedRouter>
+      </React.Fragment>
+    ) : (
+      <ConnectedRouter history={history}>
+        {error ? <Error error={error} /> : <BootstrapRoutes />}
+      </ConnectedRouter>
+    );
+  }
+
   render() {
-    const { store, history, app } = this.props;
+    const { store } = this.props;
     return (
       <Provider store={store}>
-        <IntlProviderWrapper>
-          {app.isBootstrappingComplete ? (
-            <React.Fragment>
-              <ConnectedRouter history={history}>
-                <Routes />
-              </ConnectedRouter>
-            </React.Fragment>
-          ) : (
-            <ConnectedRouter history={history}>
-              <BootstrapRoutes />
-            </ConnectedRouter>
-          )}
-        </IntlProviderWrapper>
+        <IntlProviderWrapper>{this.renderApp()}</IntlProviderWrapper>
       </Provider>
     );
   }
 }
 
 export default connect(state => ({
-  app: state.app
+  app: state.app,
+  error: state.node.error
 }))(Root);

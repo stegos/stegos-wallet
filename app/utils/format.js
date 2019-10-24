@@ -1,5 +1,5 @@
 import { RECOVERY_PHRASE_LENGTH } from '../constants/config';
-import type { NetType } from '../reducers/types';
+import type { Network } from '../reducers/types';
 import { Account } from '../reducers/types';
 
 export const toTwoDigits = (str: string) => `0${str}`.slice(-2);
@@ -18,11 +18,23 @@ export const getCertificateVerificationDate = date =>
   `${to101Date(date)} ${to108Time(date)}`;
 
 export const BASE58_REGEX = /^[1-9A-HJ-NP-Za-km-z]{50,51}$/;
-export const BECH32_REGEX = /^(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}$/;
+export const BECH32_STEGOS_ADDRESS_REGEX = /^st[rgt]1[ac-hj-np-z02-9]{8,87}$/;
 
-export const isBase58 = str => BASE58_REGEX.test(str);
+export const isStegosAddress = str => BECH32_STEGOS_ADDRESS_REGEX.test(str);
 
-export const isBech32 = str => BECH32_REGEX.test(str);
+export const getNetworkOfAddress = (address: string): Network | null => {
+  if (!isStegosAddress(address)) return null;
+  switch (address[2]) {
+    case 'r':
+      return 'devnet';
+    case 'g':
+      return 'mainnet';
+    case 't':
+      return 'testnet';
+    default:
+      return null;
+  }
+};
 
 export const isStegosNumber = str => /^-?\d+\.?\d{0,6}$/.test(str); // todo use STG_DIVISIBILITY
 
@@ -76,7 +88,7 @@ export const getAccountName = (account: Account, intl: any) => {
   );
 };
 
-export const getAppTitle = (chain: NetType | null): string => {
+export const getAppTitle = (chain: Network | null): string => {
   const net = chain ? ` - ${chain.toUpperCase()}` : '';
   return `StegosWallet${net}`;
 };

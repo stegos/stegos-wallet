@@ -20,9 +20,9 @@ export type AppStateType = {
 };
 
 export type NodeStateType = {
-  isExternalNode: boolean | null,
-  envChain: NetType | undefined,
-  chain: NetType | undefined,
+  isPreconfigured: boolean | null,
+  chain: Network | undefined,
+  hash: string | null,
   isConnected: boolean,
   isSynced: boolean,
   syncingProgress: number,
@@ -109,4 +109,9 @@ export type Dispatch = ReduxDispatch<Action>;
 
 export type Store = ReduxStore<GetState, Action>;
 
-export type NetType = 'devnet' | 'testnet' | 'mainnet';
+export type Network = 'devnet' | 'testnet' | 'mainnet';
+
+export type NodeConnection = {
+  network: Network,
+  tokenFilePath: string
+};

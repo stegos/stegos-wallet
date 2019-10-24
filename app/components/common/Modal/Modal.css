@@ -41,6 +41,7 @@
   text-align: center;
   letter-spacing: 0.6px;
   color: #fff;
+  user-select: text;
 }
 
 .Close {
@@ -58,6 +59,7 @@
   text-align: center;
   letter-spacing: 1.11px;
   color: #fff;
+  user-select: text;
 }
 
 .Subtitle {
@@ -68,4 +70,5 @@
   text-align: center;
   letter-spacing: 0.39px;
   color: #fff;
+  user-select: text;
 }

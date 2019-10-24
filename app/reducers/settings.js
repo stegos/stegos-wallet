@@ -17,6 +17,7 @@ import {
   SHOW_WALLET_SETTINGS,
   UNLOCK_WALLET
 } from '../actions/settings';
+import { RELAUNCH_NODE } from '../actions/node';
 
 const initialState = {
   isFirstLaunch: null,
@@ -67,6 +68,11 @@ export default function app(
       return {
         ...state,
         isBootstrappingComplete: true
+      };
+    case RELAUNCH_NODE:
+      return {
+        ...state,
+        isBootstrappingComplete: false
       };
     case SET_AUTO_LOCK_TIMEOUT:
       return {

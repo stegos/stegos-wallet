@@ -19,7 +19,8 @@ import getPath from 'platform-folders';
 import { TOKEN_RECEIVED } from './actions/node';
 import { wsEndpoint } from './constants/config';
 import parseArgs from './utils/argv';
-import { checkUpdateAndNotify } from './utils/updater';
+import { checkUpdateAndNotify, getCurrentSha } from './utils/updater';
+import type { NodeConnection } from './reducers/types';
 
 const WebSocket = require('ws');
 
@@ -34,9 +35,11 @@ const nodePath =
   process.env.NODE_ENV === 'production'
     ? path.resolve(__dirname, '../../node/')
     : path.resolve(__dirname, '../node/');
-const stegosDataPath =
-  process.env.APPDATAPATH || `${getPath('appData')}/stegos`;
+const defaultStegosPath = `${getPath('appData')}/stegos`;
+const argDataPath = process.env.APPDATAPATH;
 const apiEndpoint = process.env.APIENDPOINT || wsEndpoint;
+const argChain = process.env.CHAIN;
+let nodeConnection = null;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -102,10 +105,7 @@ app.on('ready', async () => {
 });
 
 app.on('quit', () => {
-  if (nodeProcess != null) {
-    nodeProcess.kill('SIGKILL');
-    nodeProcess = null;
-  }
+  killNode();
   app.exit(0);
 });
 
@@ -113,24 +113,40 @@ app.on('quit', () => {
  * IPC listeners
  */
 
-ipcMain.on('CHECK_RUNNING_NODE', async event => {
+ipcMain.on('GET_NODE_PARAMS', async event => {
+  const hash = await getCurrentSha(); // todo fix
+  if (argChain) {
+    event.sender.send('SET_NODE_PARAMS', {
+      isPreconfigured: true,
+      chain: argChain,
+      hash
+    });
+    return;
+  }
+  // todo process.env.APPDATAPATH
   try {
-    const nodeStarted = await checkWSConnect();
-    event.sender.send('CHECK_RUNNING_NODE_RESULT', {
-      isRunning: nodeStarted,
-      envChain: process.env.STEGOS_CHAIN || 'testnet'
+    nodeConnection = await checkWSConnect();
+    event.sender.send('SET_NODE_PARAMS', {
+      isPreconfigured: !!nodeConnection,
+      chain: !!nodeConnection && nodeConnection.network,
+      hash
     });
   } catch (e) {
     console.log(e);
-    event.sender.send('CHECK_RUNNING_NODE_RESULT', false);
+    event.sender.send('SET_NODE_PARAMS', { isPreconfigured: false, hash });
   }
 });
 
-ipcMain.on('RUN_NODE', async (event, args) => {
+ipcMain.on('CONNECT_OR_RUN_NODE', async (event, args) => {
   try {
-    const nodeStarted = await checkWSConnect();
-    if (!nodeStarted) await runNodeProcess(args.chain);
-    const tokenFile = `${stegosDataPath}/${args.chain}/api.token`; // todo config
+    if (argChain || !nodeConnection) {
+      await runNodeProcess(argChain || args.chain);
+    }
+    const tokenFile = `${
+      process.env.APPDATAPATH || nodeConnection
+        ? nodeConnection.tokenFilePath
+        : `${defaultStegosPath}/${argChain || args.chain}`
+    }/api.token`;
     captureToken(tokenFile);
   } catch (e) {
     console.log(e);
@@ -138,9 +154,16 @@ ipcMain.on('RUN_NODE', async (event, args) => {
   }
 });
 
-ipcMain.on('CONNECT_TO_NODE', async event => {
+ipcMain.on('RELAUNCH_NODE', async (event, args) => {
+  killNode();
   try {
-    const tokenFile = `${stegosDataPath}/testnet/api.token`; // fix when API will be ready
+    // todo extract
+    await runNodeProcess(argChain || args.chain);
+    const tokenFile = `${
+      process.env.APPDATAPATH || nodeConnection
+        ? nodeConnection.tokenFilePath
+        : `${defaultStegosPath}/${argChain || args.chain}`
+    }/api.token`;
     captureToken(tokenFile);
   } catch (e) {
     console.log(e);
@@ -149,7 +172,7 @@ ipcMain.on('CONNECT_TO_NODE', async event => {
 });
 
 function runNodeProcess(chain: string): Promise<void> {
-  const appDataPath = `${stegosDataPath}/${chain}`;
+  const appDataPath = argDataPath || `${defaultStegosPath}/${chain}`;
   const logFile = `${appDataPath}/stegos.log`; // todo config
   return new Promise((resolve, reject) => {
     if (fs.existsSync(logFile)) fs.unlinkSync(logFile); // todo may be rotation
@@ -186,11 +209,26 @@ function runNodeProcess(chain: string): Promise<void> {
   });
 }
 
-function checkWSConnect(): Promise<boolean> {
+function killNode() {
+  if (nodeProcess != null) {
+    nodeProcess.kill('SIGKILL');
+    nodeProcess = null;
+  }
+}
+
+/**
+ * returns a token file path if exists
+ * @return {Promise<null|NodeConnection>}
+ */
+function checkWSConnect(): Promise<NodeConnection | null> {
   return new Promise(resolve => {
     let ws = new WebSocket(`ws://${apiEndpoint}`);
     ws.onopen = () => {
-      resolve(true);
+      const network = 'testnet'; // todo when API will be ready
+      resolve({
+        network,
+        tokenFilePath: `${getPath('appData')}/stegos/${network}`
+      });
       closeWS();
     };
     ws.onclose = onCloseOrError;
@@ -199,7 +237,7 @@ function checkWSConnect(): Promise<boolean> {
     function onCloseOrError() {
       if (ws) {
         closeWS();
-        resolve(false);
+        resolve();
       }
     }
 

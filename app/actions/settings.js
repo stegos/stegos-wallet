@@ -1,6 +1,4 @@
-import { push } from 'connected-react-router';
 import React from 'react';
-import routes from '../constants/routes';
 import type { Dispatch, GetState } from '../reducers/types';
 import { createEmptyAccount } from '../reducers/types';
 import {
@@ -10,6 +8,7 @@ import {
   setNewPassword
 } from '../db/db';
 import { sendSync } from '../ws/client';
+import { connectOrRunNode } from './node';
 
 export const SET_FIRST_LAUNCH = 'SET_FIRST_LAUNCH';
 export const SET_PASSWORD = 'SET_PASSWORD';
@@ -52,7 +51,7 @@ export const setLanguage = (language: string) => (dispatch: Dispatch) => {
 
 export const setPassword = (pass: string) => (dispatch: Dispatch) => {
   dispatch({ type: SET_PASSWORD, payload: pass });
-  dispatch(push(routes.SYNC));
+  dispatch(connectOrRunNode());
 };
 
 export const finishBootstrap = (pass: string) => async (dispatch: Dispatch) => {
