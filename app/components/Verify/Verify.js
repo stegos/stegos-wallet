@@ -11,6 +11,7 @@ import styles from './Verify.css';
 import {
   formatDigit,
   getNetworkOfAddress,
+  isHex64,
   isStegosAddress
 } from '../../utils/format';
 import { validateCertificate } from '../../actions/node';
@@ -87,15 +88,13 @@ class Verify extends Component<Props> {
       });
       return false;
     }
-    if (!rvalue) {
-      // todo true validator
+    if (!rvalue || !isHex64(rvalue)) {
       this.setState({
         rvalueError: intl.formatMessage({ id: 'input.error.invalid.value' })
       });
       return false;
     }
-    if (!utxo || utxo.length < 50) {
-      // todo true validator
+    if (!utxo || !isHex64(utxo)) {
       this.setState({
         utxoError: intl.formatMessage({ id: 'input.error.invalid.value' })
       });

@@ -18,6 +18,7 @@ export const getCertificateVerificationDate = date =>
   `${to101Date(date)} ${to108Time(date)}`;
 
 export const BASE58_REGEX = /^[1-9A-HJ-NP-Za-km-z]{50,51}$/;
+export const HEX64_REGEX = /^[a-fA-F0-9]{64}$/;
 export const BECH32_STEGOS_ADDRESS_REGEX = /^st[rgt]1[ac-hj-np-z02-9]{8,87}$/;
 
 export const isStegosAddress = str => BECH32_STEGOS_ADDRESS_REGEX.test(str);
@@ -35,6 +36,8 @@ export const getNetworkOfAddress = (address: string): Network | null => {
       return null;
   }
 };
+
+export const isHex64 = str => HEX64_REGEX.test(str);
 
 export const isStegosNumber = str => /^-?\d+\.?\d{0,6}$/.test(str); // todo use STG_DIVISIBILITY
 
