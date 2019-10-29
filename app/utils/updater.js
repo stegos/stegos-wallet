@@ -27,7 +27,7 @@ export const checkUpdateAndNotify = async () => {
   const last = releases.sort((a, b) => compareVersions(a.tag_name, b.tag_name))[
     releases.length - 1
   ];
-  if (last && compareVersions(last.tag_name, p.version)) {
+  if (last && compareVersions(last.tag_name, p.version) > 0) {
     const notification = new Notification({
       title: 'StegosWallet Update Available',
       body: `Version ${
