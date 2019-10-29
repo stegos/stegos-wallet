@@ -18,7 +18,6 @@ const getFromGithub = async (path: string) => {
 };
 
 export const checkUpdateAndNotify = async () => {
-  console.log('Checking update on github');
   const resp = await fetch(`${githubRepo}releases`);
   if (resp.status !== 200) {
     console.log("Can't get updates from github");
