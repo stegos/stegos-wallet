@@ -145,7 +145,7 @@ ipcMain.on('CONNECT_OR_RUN_NODE', async (event, args) => {
     const tokenFile = `${
       process.env.APPDATAPATH || nodeConnection
         ? nodeConnection.tokenFilePath
-        : `${defaultStegosPath}/${argChain || args.chain}`
+        : getNodePath(argChain || args.chain)
     }/api.token`;
     captureToken(tokenFile);
   } catch (e) {
@@ -162,7 +162,7 @@ ipcMain.on('RELAUNCH_NODE', async (event, args) => {
     const tokenFile = `${
       process.env.APPDATAPATH || nodeConnection
         ? nodeConnection.tokenFilePath
-        : `${defaultStegosPath}/${argChain || args.chain}`
+        : getNodePath(argChain || args.chain)
     }/api.token`;
     captureToken(tokenFile);
   } catch (e) {
@@ -172,7 +172,7 @@ ipcMain.on('RELAUNCH_NODE', async (event, args) => {
 });
 
 function runNodeProcess(chain: string): Promise<void> {
-  const appDataPath = argDataPath || `${defaultStegosPath}/${chain}`;
+  const appDataPath = argDataPath || getNodePath(chain);
   const logFile = `${appDataPath}/stegos.log`; // todo config
   return new Promise((resolve, reject) => {
     if (fs.existsSync(logFile)) fs.unlinkSync(logFile); // todo may be rotation
@@ -227,7 +227,7 @@ function checkWSConnect(): Promise<NodeConnection | null> {
       const network = 'testnet'; // todo when API will be ready
       resolve({
         network,
-        tokenFilePath: `${getPath('appData')}/stegos/${network}`
+        tokenFilePath: `${getPath('appData')}/stegos`
       });
       closeWS();
     };
@@ -267,4 +267,9 @@ function readFile(filePath: string): string | null {
   return fs.existsSync(filePath)
     ? fs.readFileSync(filePath).toString('utf8')
     : null;
+}
+
+// eslint-disable-next-line no-unused-vars
+function getNodePath(chain: string) {
+  return `${defaultStegosPath}`;
 }
