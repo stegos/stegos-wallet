@@ -127,8 +127,8 @@ ipcMain.on('GET_NODE_PARAMS', async event => {
   try {
     nodeConnection = await checkWSConnect();
     event.sender.send('SET_NODE_PARAMS', {
-      isPreconfigured: !!nodeConnection,
-      chain: !!nodeConnection && nodeConnection.network,
+      isPreconfigured: true, // todo
+      chain: (!!nodeConnection && nodeConnection.network) || 'testnet',
       hash
     });
   } catch (e) {
