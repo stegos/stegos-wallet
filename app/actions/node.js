@@ -75,9 +75,15 @@ export const onTokenReceived = (event, token) => (dispatch: Dispatch) => {
   dispatch(
     connect(
       WS_ENDPOINT,
-      token
+      token,
+      onOpenCallback
     )
   );
+};
+
+const onOpenCallback = (dispatch: Dispatch) => {
+  dispatch(wsSend({ type: 'subscribe_status' }));
+  dispatch(wsSend({ type: 'version_info' }));
 };
 
 const onSynced = () => (dispatch: Dispatch, getState: GetState) => {

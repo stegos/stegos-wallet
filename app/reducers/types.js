@@ -22,7 +22,8 @@ export type AppStateType = {
 export type NodeStateType = {
   isPreconfigured: boolean | null,
   chain: Network | undefined,
-  hash: string | null,
+  version: string,
+  hash: string,
   isConnected: boolean,
   isSynced: boolean,
   syncingProgress: number,
