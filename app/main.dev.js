@@ -19,7 +19,7 @@ import getPath from 'platform-folders';
 import { TOKEN_RECEIVED } from './actions/node';
 import { wsEndpoint } from './constants/config';
 import parseArgs from './utils/argv';
-import { checkUpdateAndNotify, getCurrentSha } from './utils/updater';
+import { checkUpdateAndNotify } from './utils/updater';
 import type { NodeConnection } from './reducers/types';
 
 const WebSocket = require('ws');
@@ -114,12 +114,10 @@ app.on('quit', () => {
  */
 
 ipcMain.on('GET_NODE_PARAMS', async event => {
-  const hash = await getCurrentSha(); // todo fix
   if (argChain) {
     event.sender.send('SET_NODE_PARAMS', {
       isPreconfigured: true,
-      chain: argChain,
-      hash
+      chain: argChain
     });
     return;
   }
@@ -128,12 +126,11 @@ ipcMain.on('GET_NODE_PARAMS', async event => {
     nodeConnection = await checkWSConnect();
     event.sender.send('SET_NODE_PARAMS', {
       isPreconfigured: true, // todo
-      chain: (!!nodeConnection && nodeConnection.network) || 'testnet',
-      hash
+      chain: (!!nodeConnection && nodeConnection.network) || 'testnet'
     });
   } catch (e) {
     console.log(e);
-    event.sender.send('SET_NODE_PARAMS', { isPreconfigured: false, hash });
+    event.sender.send('SET_NODE_PARAMS', { isPreconfigured: false });
   }
 });
 

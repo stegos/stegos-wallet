@@ -10,7 +10,8 @@ import { WS_ERROR, WS_MESSAGE, WS_OPEN } from '../ws/actionsTypes';
 
 const initialState = {
   isPreconfigured: null,
-  hash: null,
+  version: '',
+  hash: '',
   hasKey: null,
   isConnected: false,
   isSynced: false,
@@ -90,6 +91,11 @@ const handleMessage = (state: NodeStateType, payload) => {
         ...state,
         ...handleReceivedBlockTimestamp(state, payload)
       };
+    case 'version_info':
+      return {
+        ...state,
+        ...handleVersionInfo(payload)
+      };
     default:
       return {};
   }
@@ -114,6 +120,14 @@ function handleReceivedBlockTimestamp(state, payload) {
           100
       )
     )
+  };
+}
+
+function handleVersionInfo(payload) {
+  const info = payload.version;
+  return {
+    version: info.split(' ')[0],
+    hash: info.split(' ')[1].substring(1)
   };
 }
 

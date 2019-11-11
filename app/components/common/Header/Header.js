@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styles from './Header.css';
 import logo from '../../../../resources/img/StegosLogoHorRGB.svg';
-import { version } from '../../../../package.json';
 import type { NodeStateType } from '../../../reducers/types';
 
 type Props = {
@@ -41,7 +40,8 @@ class Header extends Component<Props> {
             {node.chain && node.chain.toUpperCase()}
           </div>
           <div className={styles.Version}>
-            {version} {node.hash && `(${node.hash.substring(0, 7)})`}
+            {node.version}{' '}
+            {node.hash.length > 0 && `(${node.hash.substring(0, 7)})`}
           </div>
         </div>
         <div className={`${styles.Content} ${contentContainerClassName}`}>

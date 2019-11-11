@@ -20,11 +20,11 @@ const reconnectionAttemptsLimit = 10; // todo config
 export const connect = (store: MiddlewareAPI, { payload }: Action) => {
   close();
   const { dispatch } = store;
-  const { url } = payload;
-  apiToken = payload.token || apiToken;
+  const { url, token, onOpen: onOpenCallback } = payload;
+  apiToken = token;
   wsUrl = url;
   ws = new WebSocket(url);
-  ws.onopen = () => onOpen(dispatch);
+  ws.onopen = () => onOpen(dispatch, onOpenCallback);
   ws.onmessage = evt => onMessage(store, evt);
   ws.onclose = () => onClose(store);
   ws.onerror = () => onError(store);
@@ -81,7 +81,10 @@ export const unsubscribe = (listener: (data: string) => {}) => {
   if (index > -1) listeners.splice(index, 1);
 };
 
-const onOpen = (dispatch: Dispatch) => {
+const onOpen = (
+  dispatch: Dispatch,
+  onOpenCallback: (dispatch: Dispatch) => void
+) => {
   if (reconnectionInterval) {
     clearInterval(reconnectionInterval);
     reconnectionInterval = null;
@@ -89,7 +92,7 @@ const onOpen = (dispatch: Dispatch) => {
   }
   dispatch({ type: WS_OPEN });
   isOpened = true;
-  send(dispatch, { payload: { type: 'subscribe_status' } }); // todo
+  if (onOpenCallback) onOpenCallback(dispatch);
 };
 
 const onMessage = (store: MiddlewareAPI, evt: MessageEvent) => {
