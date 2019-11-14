@@ -33,9 +33,8 @@ export default function accounts(
   });
 
   const updatedTransactions = () => {
-    const txs = state.items[payload.account_id].transactions;
-    txs.push(
-      ...payload.log.map(t =>
+    const txs = payload.log
+      .map(t =>
         t.type.toLowerCase() === 'outgoing'
           ? createOutgoingTransaction(t, account)
           : {
@@ -45,10 +44,15 @@ export default function accounts(
               id: t.output_hash
             }
       )
-    );
-    return txs
       .filter(t => t.type === 'Send' || !t.is_change)
       .sort((a, b) => a.timestamp - b.timestamp);
+    if (txs.length === 0) return txs;
+    const lastOutputTxIndex = txs.findIndex(t => t.type === 'Send');
+    txs.splice(
+      0,
+      lastOutputTxIndex === -1 ? txs.length - 1 : lastOutputTxIndex - 1
+    );
+    return txs;
   };
 
   const handleMessage = () => {
