@@ -37,9 +37,9 @@ class PaymentCertificate extends Component<Props> {
         title: this.title,
         subtitle: this.subtitle,
         sender: tx.sender,
-        recipient: this.output.recipient,
-        rvalue: this.output.rvalue,
-        utxo: this.output.utxo,
+        recipient: tx.recipient,
+        rvalue: tx.rvalue,
+        utxo: tx.utxo,
         verificationDate: this.verificationDate,
         block: tx.epoch,
         amount: this.amount
@@ -66,11 +66,6 @@ class PaymentCertificate extends Component<Props> {
       hour: '2-digit',
       minute: '2-digit'
     })}`;
-  }
-
-  get output() {
-    const { tx } = this.props;
-    return tx.outputs.filter(o => !o.is_change)[0];
   }
 
   get verificationDate() {
@@ -120,19 +115,19 @@ class PaymentCertificate extends Component<Props> {
             <div className={`${styles.RowLabel} ${styles.LabelBold}`}>
               <FormattedMessage id="certificate.recipient" />:
             </div>
-            <span className={styles.LabelSmall}>{this.output.recipient}</span>
+            <span className={styles.LabelSmall}>{tx.recipient}</span>
           </div>
           <div className={styles.Row}>
             <div className={`${styles.RowLabel} ${styles.LabelBold}`}>
               <FormattedMessage id="certificate.rvalue" />:
             </div>
-            <span className={styles.LabelSmall}>{this.output.rvalue}</span>
+            <span className={styles.LabelSmall}>{tx.rvalue}</span>
           </div>
           <div className={styles.Row}>
             <div className={`${styles.RowLabel} ${styles.LabelBold}`}>
               <FormattedMessage id="certificate.utxo" />:
             </div>
-            <span className={styles.LabelSmall}>{this.output.utxo}</span>
+            <span className={styles.LabelSmall}>{tx.utxo}</span>
           </div>
           <div
             className={styles.Row}

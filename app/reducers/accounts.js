@@ -42,7 +42,7 @@ export default function accounts(
               ...t,
               type: 'Receive',
               timestamp: new Date(t.timestamp),
-              id: t.utxo
+              id: t.output_hash
             }
       )
     );

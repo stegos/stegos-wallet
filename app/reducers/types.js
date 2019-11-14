@@ -57,19 +57,23 @@ export const createEmptyAccount = id => ({
   transactions: []
 });
 
-export const createOutgoingTransaction = (t, account) => ({
-  ...t,
-  type: 'Send',
-  timestamp: t.timestamp ? new Date(t.timestamp) : new Date(),
-  amount: t.outputs
-    ? t.outputs.reduce((a, c) => a + (c.is_change ? 0 : c.amount), 0)
-    : 0,
-  utxo: t.outputs && t.outputs.filter(o => !o.is_change)[0],
-  id: t.tx_hash,
-  rvalue: t.outputs.filter(o => !o.is_change)[0].rvalue,
-  sender: account && account.address,
-  comment: t.outputs.filter(o => !o.is_change)[0].comment
-});
+export const createOutgoingTransaction = (t, account) => {
+  const output = t.outputs && t.outputs.filter(o => !o.is_change)[0];
+  return {
+    ...t,
+    type: 'Send',
+    timestamp: t.timestamp ? new Date(t.timestamp) : new Date(),
+    amount: t.outputs
+      ? t.outputs.reduce((a, c) => a + (c.is_change ? 0 : c.amount), 0)
+      : 0,
+    utxo: output && output.output_hash,
+    id: t.tx_hash,
+    rvalue: output && output.rvalue,
+    recipient: output && output.recipient,
+    sender: account && account.address,
+    comment: output && output.comment
+  };
+};
 
 export type Transaction = {
   type: TransactionType,
