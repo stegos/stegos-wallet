@@ -173,7 +173,7 @@ class Send extends Component<Props> {
       });
       return false;
     }
-    if (totalAmount > account.balance) {
+    if (totalAmount > account.availableBalance) {
       this.setState({
         accountError: intl.formatMessage({
           id: 'input.error.insufficient.balance'
@@ -278,7 +278,7 @@ class Send extends Component<Props> {
       <span>
         {getAccountName(account, intl)}{' '}
         <span className={styles.FormDropdownBalance}>
-          {account.balance / POWER_DIVISIBILITY}
+          {account.availableBalance / POWER_DIVISIBILITY}
         </span>{' '}
         STG
       </span>

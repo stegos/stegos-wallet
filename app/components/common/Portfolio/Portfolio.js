@@ -29,6 +29,22 @@ class Portfolio extends PureComponent<Props> {
     return Object.entries(accounts).reduce((a, c) => a + c[1].balance, 0);
   }
 
+  get availableBalance() {
+    const { accounts } = this.props;
+    return Object.entries(accounts).reduce(
+      (a, c) => a + c[1].availableBalance,
+      0
+    );
+  }
+
+  get lockedBalance() {
+    const { accounts } = this.props;
+    return Object.entries(accounts).reduce(
+      (a, c) => a + c[1].balance - c[1].availableBalance,
+      0
+    );
+  }
+
   get size() {
     const { accounts } = this.props;
     return Object.keys(accounts).length;
@@ -71,7 +87,7 @@ class Portfolio extends PureComponent<Props> {
   render() {
     const { period } = this.state;
     const { intl } = this.props;
-    const { balance, size } = this;
+    const { availableBalance, balance, lockedBalance, size } = this;
     const transactions = this.filteredTransactions;
     return (
       <div className={styles.Account}>
@@ -89,9 +105,6 @@ class Portfolio extends PureComponent<Props> {
         </div>
         <div className={styles.AccountDetailsContainer}>
           <div className={styles.AccountDetailsHeader}>
-            <span className={styles.DetailsHeaderText}>
-              <FormattedMessage id="chart.total.amount" />
-            </span>
             <div>
               <button
                 className={`${styles.Chip} ${(period === 'week' &&
@@ -126,10 +139,40 @@ class Portfolio extends PureComponent<Props> {
             <img src={Stg} alt="STG" className={styles.StgLogo} />
             <div className={styles.BalanceAmount}>
               <div>
-                <span className={styles.BalanceValue}>
-                  {formatDigit((balance / POWER_DIVISIBILITY).toFixed(4))}
+                <span>
+                  <FormattedMessage id="chart.available.amount" />:
                 </span>
-                <span className={styles.BalanceCurrency}> STG</span>
+                <span className={styles.BalanceAvailableValue}>
+                  &nbsp;
+                  {formatDigit(
+                    (availableBalance / POWER_DIVISIBILITY).toFixed(4)
+                  )}
+                </span>
+                <span className={styles.BalanceAvailableCurrency}> STG</span>
+              </div>
+              <div className={styles.BalanceExtendedContainer}>
+                <div className={styles.BalanceExtendedItem}>
+                  <span className={styles.DetailsHeaderText}>
+                    <FormattedMessage id="chart.total.amount" />:
+                  </span>
+                  <span>
+                    &nbsp;
+                    {formatDigit((balance / POWER_DIVISIBILITY).toFixed(4))}
+                  </span>
+                  <span> STG</span>
+                </div>
+                <div className={styles.BalanceExtendedItem}>
+                  <span className={styles.DetailsHeaderText}>
+                    <FormattedMessage id="chart.locked.amount" />:
+                  </span>
+                  <span>
+                    &nbsp;
+                    {formatDigit(
+                      (lockedBalance / POWER_DIVISIBILITY).toFixed(4)
+                    )}
+                  </span>
+                  <span> STG</span>
+                </div>
               </div>
             </div>
           </div>

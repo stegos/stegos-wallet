@@ -90,7 +90,9 @@
   "restore.subtitle": "In order to restore your existing account, please fill all words from the recovery phrase in correct order.",
   "restore.waiting": "Restoring account",
 
-  "chart.total.amount": "Total amount",
+  "chart.total.amount": "Total",
+  "chart.available.amount": "Available",
+  "chart.locked.amount": "Locked",
   "chart.week": "Week",
   "chart.month": "Month",
   "chart.year": "Year",

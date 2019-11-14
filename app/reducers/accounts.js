@@ -92,7 +92,10 @@ export default function accounts(
         return setAccountProps({ isLocked: true });
       case 'balance_info':
       case 'balance_changed':
-        return setAccountProps({ balance: payload.current });
+        return setAccountProps({
+          balance: payload.current,
+          availableBalance: payload.available
+        });
       case 'recovery':
         return setAccountProps({ recoveryPhrase: payload.recovery.split(' ') });
       case 'history_info':

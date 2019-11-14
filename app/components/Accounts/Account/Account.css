@@ -117,35 +117,42 @@
 .BalanceAmount {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
 
-.BalanceValue {
+.BalanceAvailableValue {
   font-style: normal;
   font-weight: bold;
-  font-size: 50px;
+  font-size: 25px;
   line-height: 65px;
   letter-spacing: 1.5px;
   color: #fff;
 }
 
-.BalanceCurrency {
+.BalanceAvailableCurrency {
   font-style: normal;
   font-weight: normal;
-  font-size: 50px;
+  font-size: 25px;
   line-height: 65px;
   letter-spacing: 1.5px;
   color: #fff;
 }
 
-.BalanceUsd {
-  margin-top: 20px;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 19px;
-  line-height: 18px;
-  letter-spacing: 0.57px;
-  text-transform: uppercase;
-  color: #9a9a9a;
+.BalanceExtendedContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.BalanceExtendedItem {
+  flex-grow: 1;
+}
+
+.BalanceLocked {
+  text-decoration: underline;
+}
+
+.BalanceLocked:hover {
+  cursor: pointer;
 }
 
 .NoTransactions {

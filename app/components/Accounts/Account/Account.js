@@ -133,6 +133,9 @@ class Account extends PureComponent<Props> {
     const account = accounts[accountId];
     const transactions = this.filterTransactions(account.transactions);
     const balance = account.balance / POWER_DIVISIBILITY;
+    const availableBalance = account.availableBalance / POWER_DIVISIBILITY;
+    const lockedBalance =
+      (account.balance - account.availableBalance) / POWER_DIVISIBILITY;
     const isNewWallet = !account.balance && account.transactions.length === 0;
     return (
       <div className={styles.Account}>
@@ -202,9 +205,6 @@ class Account extends PureComponent<Props> {
         )}
         <div className={styles.AccountDetailsContainer}>
           <div className={styles.AccountDetailsHeader}>
-            <span className={styles.DetailsHeaderText}>
-              <FormattedMessage id="chart.total.amount" />
-            </span>
             <div>
               <button
                 className={`${styles.Chip} ${(period === 'week' &&
@@ -240,10 +240,33 @@ class Account extends PureComponent<Props> {
             {!isNewWallet && (
               <div className={styles.BalanceAmount}>
                 <div>
-                  <span className={styles.BalanceValue}>
-                    {formatDigit(balance.toFixed(4))}
+                  <span>
+                    <FormattedMessage id="chart.available.amount" />:
                   </span>
-                  <span className={styles.BalanceCurrency}> STG</span>
+                  <span className={styles.BalanceAvailableValue}>
+                    &nbsp;{formatDigit(availableBalance.toFixed(4))}
+                  </span>
+                  <span className={styles.BalanceAvailableCurrency}> STG</span>
+                </div>
+                <div className={styles.BalanceExtendedContainer}>
+                  <div className={styles.BalanceExtendedItem}>
+                    <span className={styles.DetailsHeaderText}>
+                      <FormattedMessage id="chart.total.amount" />:
+                    </span>
+                    <span>&nbsp;{formatDigit(balance.toFixed(4))}</span>
+                    <span> STG</span>
+                  </div>
+                  <div
+                    className={`${styles.BalanceExtendedItem} ${
+                      styles.BalanceLocked
+                    }`}
+                  >
+                    <span className={styles.DetailsHeaderText}>
+                      <FormattedMessage id="chart.locked.amount" />:
+                    </span>
+                    <span>&nbsp;{formatDigit(lockedBalance.toFixed(4))}</span>
+                    <span> STG</span>
+                  </div>
                 </div>
               </div>
             )}
