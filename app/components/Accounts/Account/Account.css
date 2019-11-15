@@ -59,7 +59,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
 .DetailsHeaderText {
@@ -145,11 +145,11 @@
 
 .BalanceExtendedItem {
   flex-grow: 1;
+  outline: none;
 }
 
 .BalanceLocked {
   text-decoration: underline;
-  outline: none;
 }
 
 .BalanceLocked:hover {

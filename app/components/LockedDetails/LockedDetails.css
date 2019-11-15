@@ -1,4 +1,123 @@
-.lockedTxContainer {
+.ListContainer {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.TotalAmount {
+  padding-bottom: 15px;
+  padding-top: 7px;
+}
+
+.TransactionContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #979797;
+}
+
+.TransactionRow {
+  display: grid;
+  align-items: center;
+  justify-content: space-between;
+  grid-template-columns: 10% 14% 28% 48%;
+  grid-template-areas:
+    '. . . .'
+    '. . comment locked';
+  width: 100%;
+}
+
+.TransactionDirection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background: #242b43;
+  border-radius: 5px;
+  color: #fff;
+}
+
+.TransactionStatus {
+  position: absolute;
+  bottom: 100%;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0.42px;
+  color: #aaa;
+}
+
+.TransactionDate {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 160px;
+}
+
+.TransactionDateTime {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.TransactionTime {
+  display: flex;
+  flex-direction: row;
+  margin-left: 8px;
+}
+
+.TransactionText {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 18px;
+  letter-spacing: 0.42px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.TransactionAmountContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  font-size: 1.25vw;
+}
+
+.TransactionAmount {
+  font-style: normal;
+  font-weight: bold;
+  font-size: inherit;
+  line-height: 18px;
+  text-align: right;
+  letter-spacing: 0.54px;
+  color: #fff;
+}
+
+.TransactionAmountCurrency {
+  font-style: normal;
+  font-weight: normal;
+  font-size: inherit;
+  line-height: 18px;
+  text-align: right;
+  letter-spacing: 0.54px;
+  color: #fff;
+}
+
+.TransactionComment {
+  font-size: 10px;
+  grid-area: comment;
+}
+
+.TransactionLockedTimestamp {
+  font-size: 10px;
+  grid-area: locked;
+  text-align: right;
 }

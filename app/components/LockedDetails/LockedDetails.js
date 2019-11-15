@@ -14,12 +14,12 @@ type Props = {
 };
 
 class LockedDetails extends Component<Props> {
-  close() {
+  close = () => {
     const { onClose } = this.props;
     if (typeof onClose === 'function') {
       onClose();
     }
-  }
+  };
 
   get title() {
     const { intl } = this.props;
@@ -46,42 +46,95 @@ class LockedDetails extends Component<Props> {
       <Modal
         options={{
           title: this.title,
-          subtitle: this.subtitle,
           type: 'big',
           visible,
-          onClose: this.close.bind(this)
+          onClose: this.close
         }}
         style={{ width: '55%' }}
       >
-        <span>
-          <FormattedMessage id="locked.details.total.locked" />:{' '}
-          {formatDigit((this.total / POWER_DIVISIBILITY).toFixed(4))}
-        </span>
-        {this.lockedTransactions.map((tx: Transaction) => (
-          <div className={styles.lockedTxContainer} key={tx.id}>
-            <div>
-              <Icon name="file_download" size="24" />
+        <div className={styles.ListContainer}>
+          <span className={styles.TotalAmount}>
+            <FormattedMessage id="locked.details.total.locked" />:{' '}
+            {formatDigit((this.total / POWER_DIVISIBILITY).toFixed(4))} STG
+          </span>
+          {this.lockedTransactions.map((tx: Transaction) => (
+            <div className={styles.TransactionContainer} key={tx.id}>
+              <div className={styles.TransactionRow}>
+                <div className={styles.TransactionDirection}>
+                  <Icon name="file_download" size="24" />
+                </div>
+                <span>
+                  <FormattedMessage
+                    id={`transaction.type.${tx.type.toLowerCase()}`}
+                  />
+                </span>
+                <div className={styles.TransactionDate}>
+                  {tx.status && (
+                    <span className={styles.TransactionStatus}>
+                      <FormattedMessage
+                        id={`transaction.status.${tx.status.toLowerCase()}`}
+                      />
+                    </span>
+                  )}
+                  <div className={styles.TransactionDateTime}>
+                    <span className={styles.TransactionText}>
+                      {intl.formatDate(tx.timestamp, {
+                        month: 'short',
+                        day: '2-digit',
+                        year: 'numeric'
+                      })}
+                    </span>
+                    <div className={styles.TransactionTime}>
+                      <Icon
+                        name="schedule"
+                        color="rgba(130, 130, 130, 0.7)"
+                        size="20"
+                        style={{ marginRight: 8 }}
+                      />
+                      <span className={styles.TransactionText}>
+                        {intl.formatTime(tx.timestamp)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className={styles.TransactionAmountContainer}>
+                  <span
+                    className={styles.TransactionAmount}
+                    style={{
+                      color: tx.type === 'Receive' ? '#FF6C00' : '#fff'
+                    }}
+                  >
+                    {`+${formatDigit(
+                      tx.amount / POWER_DIVISIBILITY
+                    ).toString()}`}
+                  </span>
+                  <span
+                    className={styles.TransactionAmountCurrency}
+                    style={{
+                      marginLeft: 8
+                    }}
+                  >
+                    STG
+                  </span>
+                </div>
+                <span className={styles.TransactionComment}>
+                  <FormattedMessage id="transactions.list.comment" />
+                  :&nbsp;{tx.comment}
+                </span>
+                <span className={styles.TransactionLockedTimestamp}>
+                  <FormattedMessage id="locked.details.until" />
+                  &nbsp;
+                  {intl.formatDate(tx.lockedTimestamp, {
+                    month: 'short',
+                    day: '2-digit',
+                    year: 'numeric'
+                  })}
+                  &nbsp;{intl.formatTime(tx.lockedTimestamp)}
+                </span>
+              </div>
             </div>
-            <span>
-              <FormattedMessage
-                id={`transaction.type.${tx.type.toLowerCase()}`}
-              />
-            </span>
-            <span>Comment: {tx.comment || '--empty--'}</span>
-            <span>
-              STG {formatDigit((tx.amount / POWER_DIVISIBILITY).toFixed(4))}
-            </span>
-            <span>
-              <FormattedMessage id="locked.details.until" />
-              &nbsp;
-              {intl.formatDate(tx.lockedTimestamp, {
-                month: 'short',
-                day: '2-digit',
-                year: 'numeric'
-              })}
-            </span>
-          </div>
-        ))}
+          ))}
+        </div>
       </Modal>
     );
   }
