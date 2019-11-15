@@ -22,7 +22,6 @@ type State = {
 
 const netOptions: Option[] = [
   { name: 'Mainnet', value: 'mainnet' },
-  { name: 'Devnet', value: 'devnet' },
   { name: 'Testnet', value: 'testnet' }
 ];
 
@@ -30,7 +29,7 @@ const defaultChainOption = (function getDefaultChainOption() {
   const envChain = remote.process.env.STEGOS_CHAIN;
   const envChainOption =
     envChain && netOptions.filter(o => o.value === envChain.toLowerCase())[0];
-  return envChainOption || netOptions[2];
+  return envChainOption || netOptions[1];
 })();
 
 export default class Welcome extends Component<Props, State> {

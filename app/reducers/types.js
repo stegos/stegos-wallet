@@ -116,8 +116,3 @@ export type Dispatch = ReduxDispatch<Action>;
 export type Store = ReduxStore<GetState, Action>;
 
 export type Network = 'devnet' | 'testnet' | 'mainnet';
-
-export type NodeConnection = {
-  network: Network,
-  tokenFilePath: string
-};
