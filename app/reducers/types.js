@@ -78,6 +78,7 @@ export const createOutgoingTransaction = (t, account) => {
 export type Transaction = {
   type: TransactionType,
   timestamp: string,
+  lockedTimestamp: string,
   amount: number,
   hasCertificate: boolean,
   status?: TransactionStatus,

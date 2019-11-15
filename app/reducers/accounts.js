@@ -41,6 +41,8 @@ export default function accounts(
               ...t,
               type: 'Receive',
               timestamp: new Date(t.timestamp),
+              lockedTimestamp:
+                t.locked_timestamp && new Date(t.locked_timestamp),
               id: t.output_hash
             }
       )

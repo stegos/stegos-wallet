@@ -194,6 +194,10 @@
   "certificate.verification.failed": "失效",
   "certificate.verifications.waiting": "验证中...",
 
+  "locked.details.title": "Locked Tokens Details",
+  "locked.details.total.locked": "Total locked",
+  "locked.details.until": "locked until",
+
   "account.default.name": "账户 #{id}",
   "account.default.restored.name": "Restored Account #{id}",
 

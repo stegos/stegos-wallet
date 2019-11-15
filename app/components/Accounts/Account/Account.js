@@ -19,6 +19,7 @@ import {
   yearAgo
 } from '../../../utils/chart';
 import Input from '../../common/Input/Input';
+import LockedDetails from '../../LockedDetails/LockedDetails';
 
 type Props = {
   location: Location,
@@ -40,6 +41,7 @@ class Account extends PureComponent<Props> {
     this.state = {
       period: 'week',
       editAccountVisible: false,
+      showLockedDetails: false,
       accountName:
         accounts[accountId] && getAccountName(accounts[accountId], intl)
     };
@@ -123,14 +125,33 @@ class Account extends PureComponent<Props> {
     );
   }
 
+  toggleLockedDetails = () => {
+    this.setState(s => ({
+      showLockedDetails: !s.showLockedDetails
+    }));
+  };
+
   render() {
-    const { editAccountVisible, period, editingName, accountName } = this.state;
+    const {
+      editAccountVisible,
+      period,
+      editingName,
+      accountName,
+      showLockedDetails
+    } = this.state;
     const { location, deleteAccount, accounts, intl } = this.props;
     if (!location.state || !location.state.accountId) {
       return null;
     }
     const { accountId } = location.state;
     const account = accounts[accountId];
+    const hasLocked =
+      account.transactions.filter(
+        t =>
+          t.type === 'Receive' &&
+          t.lockedTimestamp &&
+          t.lockedTimestamp > new Date()
+      ).length > 0;
     const transactions = this.filterTransactions(account.transactions);
     const balance = account.balance / POWER_DIVISIBILITY;
     const availableBalance = account.availableBalance / POWER_DIVISIBILITY;
@@ -258,8 +279,14 @@ class Account extends PureComponent<Props> {
                   </div>
                   <div
                     className={`${styles.BalanceExtendedItem} ${
-                      styles.BalanceLocked
+                      hasLocked ? styles.BalanceLocked : ''
                     }`}
+                    onClick={() =>
+                      hasLocked ? this.toggleLockedDetails() : {}
+                    }
+                    role="button"
+                    tabIndex="-1"
+                    onKeyPress={() => false}
                   >
                     <span className={styles.DetailsHeaderText}>
                       <FormattedMessage id="chart.locked.amount" />:
@@ -312,6 +339,11 @@ class Account extends PureComponent<Props> {
           onDelete={deleteAccount}
           onApply={() => this.setState({ editAccountVisible: false })}
           onCancel={() => this.setState({ editAccountVisible: false })}
+        />
+        <LockedDetails
+          visible={showLockedDetails}
+          account={account}
+          onClose={this.toggleLockedDetails}
         />
       </div>
     );
