@@ -83,18 +83,18 @@ build:windows:
       - release/StegosWallet-*.msi
       - release/latest.yml
       - release/StegosWallet Setup*.exe.blockmap
+  before_script:
+    - pacman -S --noconfirm --needed unzip
   script:
     - node --version
     - yarn --version
     - mkdir node
-    - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/stegosd-win-x64.exe?job=release:windows-x64 -o node/stegosd.exe
+    - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/stegosd-win-x64.zip?job=release:windows-x64 -o node/stegosd.zip
+    - unzip node/stegosd.zip -d node/
+    - mv node/stegosd-win-x64.exe node/stegosd.exe
     - chmod a+x node/stegosd.exe
     - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/stegos-win-x64.exe?job=release:windows-x64 -o node/stegos.exe
     - chmod a+x node/stegos.exe
-    - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/libgcc_s_seh-1.dll?job=release:windows-x64 -o node/libgcc_s_seh-1.dll
-    - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/librocksdb-shared.dll?job=release:windows-x64 -o node/librocksdb-shared.dll
-    - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/libstdc++-6.dll?job=release:windows-x64 -o node/libstdc++-6.dll
-    - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/libwinpthread-1.dll?job=release:windows-x64 -o node/libwinpthread-1.dll
     - node/stegosd.exe --version
     - node/stegos.exe --version
     - VERSION=$(node/stegosd.exe --version|cut -d ' ' -f 3)
