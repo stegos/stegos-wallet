@@ -107,7 +107,7 @@ export const validateCertificate = (
     spender,
     recipient,
     rvalue,
-    utxo
+    output_hash: utxo
   }).finally(() => {
     dispatch({ type: SET_WAITING, payload: { waiting: false } });
   });
