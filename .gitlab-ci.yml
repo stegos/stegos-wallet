@@ -1,6 +1,6 @@
 variables:
   STEGOS_PROJECT_ID: 25
-  STEGOS_BRANCH: dev
+  STEGOS_BRANCH: $CI_COMMIT_REF_NAME
 
 stages:
   - build
