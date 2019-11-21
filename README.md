@@ -8,7 +8,7 @@ Electron-based Wallet application for [Stegos](https://github.com/stegos/stegos)
 
 ## Installation
 
-Download packages for Linux and Mac from [GitHub Releases](https://github.com/stegos/stegos-wallet/releases). All packages ship with bundled version of [Stegos Node](https://github.com/stegos/stegos/release).
+Download packages for Linux and Mac from [GitHub Releases](https://github.com/stegos/stegos-wallet/releases). All packages ship with bundled version of [Stegos Node](https://github.com/stegos/stegos/releases).
 
 ## Development
 
@@ -51,6 +51,8 @@ You can do it trough npm:
 npm install node-sass
 ```
 
+### Running a local Node
+
 1. Clone this repository:
 
 ```
@@ -62,7 +64,7 @@ cd stegos-wallet
 
 ```
 mkdir node
-curl -L https://github.com/stegos/stegos/releases/download/v0.11/stegosd-linux-x64 -o node/stegosd
+curl -L https://github.com/stegos/stegos/releases/download/v1.0/stegosd-linux-x64 -o node/stegosd
 chmod a+x node/stegosd
 ./node/stegosd --version
 ```
