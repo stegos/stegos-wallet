@@ -35,17 +35,17 @@ const fees = [
   {
     value: 'standard',
     name: 'fee.standard',
-    fee: 0.01
+    fee: 0.001
   },
   {
     value: 'high',
     name: 'fee.high',
-    fee: 0.05
+    fee: 0.005
   },
   {
     value: 'custom',
     name: 'fee.custom',
-    fee: 0.01
+    fee: 0.001
   }
 ];
 
@@ -187,11 +187,11 @@ class Send extends Component<Props> {
       });
       return false;
     }
-    if (+fee.fee < 0.01) {
+    if (+fee.fee < 0.001) {
       this.setState({
         feeError: intl.formatMessage(
           { id: 'input.error.minimum.fee' },
-          { fee: 0.01 }
+          { fee: 0.001 }
         )
       });
       return false;
