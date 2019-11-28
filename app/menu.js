@@ -49,7 +49,9 @@ export default class MenuBuilder {
       submenu: [
         {
           label: 'About Stegos',
-          selector: 'orderFrontStandardAboutPanel:'
+          click() {
+            shell.openExternal('https://github.com/stegos/stegos-wallet');
+          }
         },
         { type: 'separator' },
         {
