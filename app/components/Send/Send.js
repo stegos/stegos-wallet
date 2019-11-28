@@ -35,17 +35,17 @@ const fees = [
   {
     value: 'standard',
     name: 'fee.standard',
-    fee: 0.001
+    fee: 0.002
   },
   {
     value: 'high',
     name: 'fee.high',
-    fee: 0.005
+    fee: 0.01
   },
   {
     value: 'custom',
     name: 'fee.custom',
-    fee: 0.001
+    fee: 0.002
   }
 ];
 
@@ -135,7 +135,7 @@ class Send extends Component<Props> {
 
   get totalAmount() {
     const { amount, fee } = this.state;
-    return +amount + Number(fee.fee) * 2;
+    return +amount + Number(fee.fee);
   }
 
   validate = () => {
@@ -187,11 +187,11 @@ class Send extends Component<Props> {
       });
       return false;
     }
-    if (+fee.fee < 0.001) {
+    if (+fee.fee < 0.002) {
       this.setState({
         feeError: intl.formatMessage(
           { id: 'input.error.minimum.fee' },
-          { fee: 0.001 }
+          { fee: 0.002 }
         )
       });
       return false;
@@ -254,7 +254,7 @@ class Send extends Component<Props> {
       comment,
       account.id,
       generateCertificate,
-      fee.fee * POWER_DIVISIBILITY
+      Math.ceil((fee.fee * POWER_DIVISIBILITY) / 2)
     )
       .then(resp => {
         this.setState({ isBusy: false });
@@ -446,11 +446,6 @@ class Send extends Component<Props> {
                   padding: 0
                 }}
               />
-              {!feeError && (
-                <span className={styles.FieldLabel} style={{ marginTop: 0 }}>
-                  <FormattedMessage id="send.stg.per.utxo" />
-                </span>
-              )}
             </div>
           </div>
           <span className={styles.FieldLabel} />
@@ -486,9 +481,10 @@ class Send extends Component<Props> {
         </div>
         <div className={styles.ActionsContainer} key="Actions">
           <div className={styles.TotalAmount}>
-            <FormattedMessage id="send.total.to.debit" />{' '}
+            <FormattedMessage id="send.total.to.debit" />
+            {': '}
             <span className={styles.TotalAmountValue}>
-              STG {formatDigit(this.totalAmount.toFixed(2))}
+              STG {formatDigit(this.totalAmount.toFixed(4))}
             </span>
           </div>
           {this.renderCancelButton()}
