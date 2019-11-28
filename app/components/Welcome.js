@@ -21,8 +21,8 @@ type State = {
 };
 
 const netOptions: Option[] = [
-  { name: 'Mainnet', value: 'mainnet' },
-  { name: 'Testnet', value: 'testnet' }
+  { name: '主网 Mainnet', value: 'mainnet' },
+  { name: '测试网 Testnet', value: 'testnet' }
 ];
 
 const defaultChainOption = (function getDefaultChainOption() {
