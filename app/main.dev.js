@@ -15,7 +15,7 @@ import { spawn } from 'child_process';
 import path from 'path';
 import fs from 'fs';
 import getPath from 'platform-folders';
-// import MenuBuilder from './menu';
+import MenuBuilder from './menu';
 import { TOKEN_RECEIVED } from './actions/node';
 import { wsEndpoint } from './constants/config';
 import parseArgs from './utils/argv';
@@ -69,13 +69,6 @@ app.on('ready', async () => {
     icon: path.join(__dirname, '../resources/icons/64x64.png')
   });
 
-  if (process.env.NODE_ENV === 'development' || process.env.DEBUG === 'true') {
-    require('electron-debug')();
-    mainWindow.webContents.on('did-frame-finish-load', () => {
-      mainWindow.webContents.openDevTools();
-    });
-  }
-
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   // @TODO: Use 'ready-to-show' event
@@ -96,11 +89,8 @@ app.on('ready', async () => {
     mainWindow = null;
   });
 
-  // Disable default electron menu bar
-  // const menuBuilder = new MenuBuilder(mainWindow);
-  // menuBuilder.buildMenu();
-
-  mainWindow.setMenu(null);
+  const menuBuilder = new MenuBuilder(mainWindow);
+  menuBuilder.buildMenu();
 
   checkUpdateAndNotify();
 });
@@ -159,8 +149,6 @@ ipcMain.on('RELAUNCH_NODE', async (event, args) => {
 
 function runNodeProcess(chain: string): Promise<void> {
   const args = ['--chain', chain, '--api-endpoint', apiEndpoint];
-  console.log('ARGS');
-  console.log(args);
   return new Promise((resolve, reject) => {
     if (fs.existsSync(logFile)) fs.unlinkSync(logFile); // todo may be rotation
     nodeProcess = spawn(`./stegosd`, args, {
