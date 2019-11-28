@@ -55,7 +55,7 @@ export default class MenuBuilder {
         },
         { type: 'separator' },
         {
-          label: 'Hide StegosWallet',
+          label: 'Hide Stegos',
           accelerator: 'Command+H',
           selector: 'hide:'
         },
