@@ -100,10 +100,10 @@ class Backup extends Component<Props> {
           />
         </span>
         <RecoveryPhrase
-          wordsCount={RECOVERY_PHRASE_LENGTH}
           phrase={phrase}
           readOnly={step === 0}
           onChange={e => this.handleRecoveryChange(e)}
+          withCopy={step === 0}
         />
         <div className={styles.ActionsContainer}>
           {step === 0 && (

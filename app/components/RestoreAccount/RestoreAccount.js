@@ -8,7 +8,6 @@ import Button from '../common/Button/Button';
 import Modal from '../common/Modal/Modal';
 import RecoveryPhrase from './RecoveryPhraze/RecoveryPhrase';
 import styles from './RestoreAccount.css';
-import { RECOVERY_PHRASE_LENGTH } from '../../constants/config';
 import { getEmptyRecoveryPhrase } from '../../utils/format';
 import Busy from '../common/Busy/Busy';
 import routes from '../../constants/routes';
@@ -76,7 +75,6 @@ class RestoreAccount extends Component<Props> {
       >
         <div className={styles.Container}>
           <RecoveryPhrase
-            wordsCount={RECOVERY_PHRASE_LENGTH}
             phrase={phrase}
             onChange={e => this.handleRecoveryChange(e)}
           />
