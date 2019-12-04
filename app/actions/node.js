@@ -6,8 +6,9 @@ import { sendSync, subscribe, unsubscribe } from '../ws/client';
 import routes from '../constants/routes';
 import { wsEndpoint } from '../constants/config';
 import { createHistoryInfoAction } from './accounts';
-import { SET_WAITING } from './settings';
+import { SET_FIRST_LAUNCH, SET_WAITING } from './settings';
 import { getAppTitle } from '../utils/format';
+import { isDbExist } from '../db/db';
 
 const WS_ENDPOINT = `ws://${process.env.APIENDPOINT || wsEndpoint}`;
 
@@ -23,31 +24,36 @@ export const getPreconfiguredNodeParams = () => (dispatch: Dispatch) => {
   dispatch(send(GET_NODE_PARAMS));
 };
 
-export const setNodeParams = (_, args) => (
-  dispatch: Dispatch,
-  getState: GetState
-) => {
+export const setNodeParams = (_, args) => (dispatch: Dispatch) => {
   dispatch({ type: SET_NODE_PARAMS, payload: { ...args } });
-  const state = getState();
-  if (state.app.isFirstLaunch === false && args.isPreconfigured) {
-    setAppTitle(args.chain);
+  if (args.isPreconfigured) {
+    dispatch(processPreconfiguredChain(args.chain));
+  }
+};
+
+const processPreconfiguredChain = (chain: Network) => (dispatch: Dispatch) => {
+  if (!chain) return;
+  const isFirstLaunch = checkFirstLaunch(chain);
+  dispatch({ type: SET_FIRST_LAUNCH, payload: isFirstLaunch });
+  if (!isFirstLaunch) {
+    setAppTitle(chain);
     dispatch(connectOrRunNode());
   }
 };
 
-export const setChain = (type: Network) => (
-  dispatch: Dispatch,
-  getState: GetState
-) => {
-  setAppTitle(type);
-  dispatch({ type: SET_CHAIN, payload: type });
-  const state = getState();
-  if (state.app.isFirstLaunch) {
+export const setChain = (chain: Network) => (dispatch: Dispatch) => {
+  setAppTitle(chain);
+  dispatch({ type: SET_CHAIN, payload: chain });
+  const isFirstLaunch = checkFirstLaunch(chain);
+  dispatch({ type: SET_FIRST_LAUNCH, payload: isFirstLaunch });
+  if (isFirstLaunch) {
     dispatch(push(routes.PROTECT));
   } else {
     dispatch(connectOrRunNode());
   }
 };
+
+const checkFirstLaunch = (chain: Network) => !isDbExist(chain);
 
 export const connectOrRunNode = () => (
   dispatch: Dispatch,

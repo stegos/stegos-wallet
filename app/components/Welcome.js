@@ -11,7 +11,6 @@ import Dropdown from './common/Dropdown/Dropdown';
 type Props = {
   isFirstLaunch: boolean | null,
   node: NodeStateType,
-  checkFirstLaunch: () => void,
   getPreconfiguredNodeParams: () => void,
   setChain: (type: Network) => void
 };
@@ -40,8 +39,7 @@ export default class Welcome extends Component<Props, State> {
   };
 
   componentDidMount(): void {
-    const { checkFirstLaunch, getPreconfiguredNodeParams } = this.props;
-    checkFirstLaunch();
+    const { getPreconfiguredNodeParams } = this.props;
     getPreconfiguredNodeParams();
   }
 

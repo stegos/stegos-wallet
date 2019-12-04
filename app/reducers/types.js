@@ -34,7 +34,7 @@ export type NodeStateType = {
 };
 
 export type AccountsStateType = {
-  accounts: Map<string, Account> // todo leave only map
+  accounts: Map<string, Account>
 };
 
 export type Account = {

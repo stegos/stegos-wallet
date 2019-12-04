@@ -5,7 +5,7 @@ import { send } from '../ws/actions';
 import { sendSync } from '../ws/client';
 import { SET_WAITING, SHOW_ERROR } from './settings';
 import { HISTORY_LIMIT, RECOVERY_PHRASE_LENGTH } from '../constants/config';
-import { getDatabase } from '../db/db';
+import { getDb } from '../db/db';
 import { formatDateForWs, getYearAgoTimestamp } from '../utils/format';
 
 export const RECOVERY_PHRASE_WRITTEN_DOWN = 'RECOVERY_PHRASE_WRITTEN_DOWN';
@@ -106,7 +106,7 @@ export const restoreAccount = (phrase: string[]) => async (
 export const deleteAccount = id => (dispatch: Dispatch) => {
   sendSync({ type: 'delete_account', account_id: id })
     .then(resp => {
-      getDatabase()
+      getDb()
         .then(db => db.remove({ account: id }))
         .catch(console.log);
       dispatch(push(routes.ACCOUNTS));
@@ -143,7 +143,7 @@ export const writeDownRecoveryPhrase = (
   accountId: string,
   phrase: string[]
 ) => (dispatch: Dispatch, getState: GetState) =>
-  getDatabase()
+  getDb()
     .then(async db => {
       const state = getState();
       const { recoveryPhrase } = state.accounts.items[accountId];
@@ -171,7 +171,7 @@ export const writeDownRecoveryPhrase = (
 export const setAccountName = (accountId: string, name: string) => (
   dispatch: Dispatch
 ) =>
-  getDatabase()
+  getDb()
     .then(db => {
       db.update({ account: accountId }, { $set: { name } }, { upsert: true });
       dispatch({

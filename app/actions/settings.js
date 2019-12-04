@@ -1,12 +1,7 @@
 import React from 'react';
 import type { Dispatch, GetState } from '../reducers/types';
 import { createEmptyAccount } from '../reducers/types';
-import {
-  createDatabase,
-  getDatabase,
-  isDbExist,
-  setNewPassword
-} from '../db/db';
+import { getDb, initializeDb } from '../db/db';
 import { sendSync } from '../ws/client';
 import { connectOrRunNode } from './node';
 
@@ -28,13 +23,8 @@ export const FREE_ACTIVE_ELEMENT = 'FREE_ACTIVE_ELEMENT';
 export const FINISH_BOOTSTRAP = 'FINISH_BOOTSTRAP';
 export const SAVE_PAGE_STATE = 'SAVE_PAGE_STATE';
 
-export const checkFirstLaunch = () => (dispatch: Dispatch) => {
-  const exist = isDbExist();
-  dispatch({ type: SET_FIRST_LAUNCH, payload: !exist });
-};
-
 export const setLanguage = (language: string) => (dispatch: Dispatch) => {
-  getDatabase()
+  getDb()
     .then(async db => {
       db.update(
         { setting: 'language' },
@@ -54,36 +44,36 @@ export const setPassword = (pass: string) => (dispatch: Dispatch) => {
   dispatch(connectOrRunNode());
 };
 
-export const finishBootstrap = (pass: string) => async (dispatch: Dispatch) => {
-  await createDatabase(pass)
-    .then(async db => {
-      dispatch({ type: SET_PASSWORD, payload: pass });
-      db.find({ setting: { $exists: true } }, (err, settings) => {
-        dispatch({
-          type: SET_SETTINGS,
-          payload: settings.reduce(
-            (a, c) => ({ ...a, [c.setting]: c.value }),
-            {}
-          )
-        });
-        db.find({ account: { $exists: true } }, (e, accounts) => {
-          dispatch({
-            type: INIT_ACCOUNTS,
-            payload: accounts.reduce((ret, acc) => {
-              const id = acc.account;
-              ret[id] = { ...createEmptyAccount(id), ...acc, id };
-              return ret;
-            }, {})
-          });
-          dispatch(loadAccounts());
-          dispatch({ type: FINISH_BOOTSTRAP });
-        });
-      });
-      return db;
-    })
-    .catch(err => {
-      dispatch({ type: SHOW_ERROR, payload: err.message });
+export const finishBootstrap = (pass: string) => async (
+  dispatch: Dispatch,
+  getState: GetState
+) => {
+  const state = getState();
+  const { chain } = state.node;
+  const db = initializeDb(chain);
+  if (!db) {
+    dispatch({ type: SHOW_ERROR, payload: 'DB not initialized' });
+    return;
+  }
+  dispatch({ type: SET_PASSWORD, payload: pass });
+  db.find({ setting: { $exists: true } }, (err, settings) => {
+    dispatch({
+      type: SET_SETTINGS,
+      payload: settings.reduce((a, c) => ({ ...a, [c.setting]: c.value }), {})
     });
+    db.find({ account: { $exists: true } }, (e, accounts) => {
+      dispatch({
+        type: INIT_ACCOUNTS,
+        payload: accounts.reduce((ret, acc) => {
+          const id = acc.account;
+          ret[id] = { ...createEmptyAccount(id), ...acc, id };
+          return ret;
+        }, {})
+      });
+      dispatch(loadAccounts());
+    });
+  });
+  return db;
 };
 
 export const setBugsAndTerms = (sendBugs: boolean) => async (
@@ -93,7 +83,7 @@ export const setBugsAndTerms = (sendBugs: boolean) => async (
   const state = getState();
   const { password } = state.app;
   await dispatch(finishBootstrap(password));
-  getDatabase()
+  getDb()
     .then(async db => {
       db.update(
         { setting: 'isSendBugReport' },
@@ -113,33 +103,42 @@ export const setBugsAndTerms = (sendBugs: boolean) => async (
     });
 };
 
-const loadAccounts = () => (dispatch: Dispatch, getState: GetState) => {
+const loadAccounts = () => async (dispatch: Dispatch, getState: GetState) => {
   dispatch({ type: SET_WAITING, payload: { waiting: true } });
-  sendSync({ type: 'list_accounts' })
-    .then(async resp => {
-      let state = getState();
-      const { app } = state;
-      const { password } = app;
-      state = getState();
-      const { items } = state.accounts;
-      await Promise.all(
-        Object.entries(items)
-          .filter(a => a[1].isLocked === true)
-          .map(
-            account =>
-              sendSync({ type: 'unseal', password, account_id: account[0] }) // todo check if already unlocked
-                .catch(console.log) // todo handle error when error codes will be available
+  const list = await sendSync({ type: 'list_accounts' });
+  let state = getState();
+  const { app } = state;
+  const { password } = app;
+  state = getState();
+  const { items } = state.accounts;
+  try {
+    await Promise.all(
+      Object.entries(items)
+        .filter(a => a[1].isLocked === true)
+        .map(account =>
+          sendSync({ type: 'unseal', password, account_id: account[0] }).catch(
+            err => {
+              if (err.message !== 'Already unsealed') throw err;
+            }
           )
-      );
-      return resp;
-    })
-    .catch(console.log);
+        )
+    );
+    dispatch({ type: FINISH_BOOTSTRAP });
+    return list;
+  } catch (e) {
+    console.log(e);
+    dispatch({
+      type: SHOW_ERROR,
+      payload: 'alert.password.is.incorrect'
+    });
+    throw e;
+  }
 };
 
 export const setAutoLockTimeout = (duration: number) => (
   dispatch: Dispatch
 ) => {
-  getDatabase()
+  getDb()
     .then(async db => {
       db.update(
         { setting: 'autoLockTimeout' },
@@ -185,16 +184,14 @@ export const unlockWallet = (password: string) => async (
           sendSync({ type: 'unseal', password, account_id: account[0] })
         )
       );
+      dispatch({ type: UNLOCK_WALLET });
     } catch (e) {
-      // todo check error if account already unsealed and send corresponding event
       console.log(e);
       dispatch({
         type: SHOW_ERROR,
         payload: e && e.message
       });
       throw e;
-    } finally {
-      dispatch({ type: UNLOCK_WALLET });
     }
   }
 };
@@ -214,17 +211,15 @@ export const changePassword = (newPass: string, oldPass: string) => (
         return;
       }
       dispatch({ type: SET_WAITING, payload: { waiting: true } });
-      await setNewPassword(newPass, async () => {
-        await Promise.all(
-          Object.entries(getState().accounts.items).map(account =>
-            sendSync({
-              type: 'change_password',
-              new_password: newPass,
-              account_id: account[0]
-            })
-          )
-        );
-      });
+      await Promise.all(
+        Object.entries(getState().accounts.items).map(account =>
+          sendSync({
+            type: 'change_password',
+            new_password: newPass,
+            account_id: account[0]
+          })
+        )
+      );
       dispatch({ type: SET_WAITING, payload: { waiting: false } });
       dispatch({ type: SET_PASSWORD, payload: newPass });
       resolve();
