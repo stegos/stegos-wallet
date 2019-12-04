@@ -90,8 +90,8 @@
   "restore.waiting": "恢复账户",
 
   "chart.total.amount": "总金额",
-  "chart.available.amount": "Available",
-  "chart.locked.amount": "Locked",
+  "chart.available.amount": "可用",
+  "chart.locked.amount": "锁定",
   "chart.week": "周",
   "chart.month": "月",
   "chart.year": "年",
