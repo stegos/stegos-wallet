@@ -47,7 +47,15 @@ export type Account = {
   isLocked: string,
   transactions: Transaction[],
   isRecoveryPhraseWrittenDown: boolean,
-  isRestored: boolean
+  isRestored: boolean,
+  unspent: Payment[]
+};
+
+export type Payment = {
+  hash: string,
+  amount: BigInt,
+  comment: string,
+  recipient: string
 };
 
 export const createEmptyAccount = id => ({

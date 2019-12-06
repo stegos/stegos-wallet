@@ -1,5 +1,5 @@
 import { remote } from 'electron';
-import type { AccountsStateType, Action } from './types';
+import type { AccountsStateType, Action, Payment } from './types';
 import { createEmptyAccount, createOutgoingTransaction } from './types';
 import { WS_MESSAGE } from '../ws/actionsTypes';
 import {
@@ -49,13 +49,29 @@ export default function accounts(
       .filter(t => t.type === 'Send' || !t.is_change)
       .sort((a, b) => a.timestamp - b.timestamp);
     if (txs.length === 0) return txs;
-    const lastOutputTxIndex = txs.findIndex(t => t.type === 'Send');
-    txs.splice(
-      0,
-      lastOutputTxIndex === -1 ? txs.length - 1 : lastOutputTxIndex - 1
+    const lastHistoryTxIndex = Math.max.apply(
+      null,
+      account.unspent
+        ? account.unspent.map(p =>
+            txs.findIndex(tx => p.hash === tx.output_hash)
+          )
+        : -1
     );
-    return txs;
+    return txs.filter(
+      (tx, index) =>
+        index >= lastHistoryTxIndex ||
+        (account.unspent &&
+          account.unspent.findIndex(p => p.hash === tx.output_hash) !== -1)
+    );
   };
+
+  const processUnspent = (): Payment[] =>
+    payload.payments.map(p => ({
+      hash: p.output_hash,
+      amount: p.amount,
+      comment: p.comment,
+      recipient: p.recipient
+    }));
 
   const handleMessage = () => {
     const { type } = payload;
@@ -104,6 +120,8 @@ export default function accounts(
         });
       case 'recovery':
         return setAccountProps({ recoveryPhrase: payload.recovery.split(' ') });
+      case 'unspent_info':
+        return setAccountProps({ unspent: processUnspent() });
       case 'history_info':
         return setAccountProps({ transactions: updatedTransactions() });
       case 'transaction_created':

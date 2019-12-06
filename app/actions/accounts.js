@@ -34,6 +34,10 @@ export const getAccounts = () => (dispatch: Dispatch, getState: GetState) => {
           (async () => {
             await sendSync({ type: 'balance_info', account_id: account.id });
             await sendSync({ type: 'get_recovery', account_id: account.id });
+            if (account.unspent === undefined) {
+              await sendSync({ type: 'unspent_info', account_id: account.id });
+              dispatch(saveUnspent(account.id));
+            }
             await sendSync(createHistoryInfoAction(account.id));
           })()
         )
@@ -184,3 +188,24 @@ export const setAccountName = (accountId: string, name: string) => (
       dispatch({ type: SHOW_ERROR, payload: err.message });
       throw err;
     });
+
+const saveUnspent = (accountId: string) => (
+  dispatch: Dispatch,
+  getState: GetState
+) => {
+  const state = getState();
+  const { items } = state.accounts;
+  const account = items[accountId];
+  getDb()
+    .then(db => {
+      db.update(
+        { account: account.id },
+        { $set: { unspent: account.unspent } },
+        { upsert: true }
+      );
+      return db;
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
