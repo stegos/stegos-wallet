@@ -43,11 +43,9 @@ class Root extends Component<Props> {
   renderApp() {
     const { history, app, error } = this.props;
     return app.isBootstrappingComplete ? (
-      <React.Fragment>
-        <ConnectedRouter history={history}>
-          {error ? <Error error={error} withRelaunch /> : <Routes />}
-        </ConnectedRouter>
-      </React.Fragment>
+      <ConnectedRouter history={history}>
+        {error ? <Error error={error} withRelaunch /> : <Routes />}
+      </ConnectedRouter>
     ) : (
       <ConnectedRouter history={history}>
         {error ? <Error error={error} /> : <BootstrapRoutes />}

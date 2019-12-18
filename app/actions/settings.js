@@ -50,7 +50,13 @@ export const finishBootstrap = (pass: string) => async (
 ) => {
   const state = getState();
   const { chain } = state.node;
-  const db = initializeDb(chain);
+  let db;
+  try {
+    db = await initializeDb(chain, pass);
+  } catch (err) {
+    dispatch({ type: SHOW_ERROR, payload: err.message });
+    return;
+  }
   if (!db) {
     dispatch({ type: SHOW_ERROR, payload: 'DB not initialized' });
     return;
