@@ -28,7 +28,7 @@ const defaultChainOption = (function getDefaultChainOption() {
   const envChain = remote.process.env.STEGOS_CHAIN;
   const envChainOption =
     envChain && netOptions.filter(o => o.value === envChain.toLowerCase())[0];
-  return envChainOption || netOptions[1];
+  return envChainOption || netOptions[0];
 })();
 
 export default class Welcome extends Component<Props, State> {
