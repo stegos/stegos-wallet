@@ -78,7 +78,7 @@
   "send.cloak.payment": "Cloak public outputs",
   "send.cloak.description": "This transaction will cloak all your tokens.",
   "send.public.payment": "Send as public payment",
-  "send.public.description": "Warning: This payment would be send without clocking of recipient and amount! No comments is available.",
+  "send.public.description": "Warning: This payment would be sent without cloaking of recipient and amount! No comments is available.",
   "send.regular.payment": "Regular payment",
 
   "send.total.to.debit": "Total to debit",

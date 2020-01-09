@@ -86,7 +86,7 @@ class TransactionsList extends PureComponent<Props> {
                   </div>
                 </div>
               </div>
-              {item.rvalue ? (
+              {item.rvalue && (
                 <div
                   className={styles.TransactionCertificate}
                   onClick={() => this.showCertificate(item)}
@@ -99,12 +99,6 @@ class TransactionsList extends PureComponent<Props> {
                     <FormattedMessage id="transactions.list.certificate" />
                   </span>
                 </div>
-              ) : (
-                <div
-                  className={styles.TransactionCertificate}
-                  role="button"
-                  tabIndex="-1"
-                />
               )}
               {item.public && (
                 <div
@@ -122,6 +116,13 @@ class TransactionsList extends PureComponent<Props> {
                     <FormattedMessage id="transactions.list.public" />
                   </span>
                 </div>
+              )}
+              {!item.rvalue && !item.public && (
+                <div
+                  className={styles.TransactionCertificate}
+                  role="button"
+                  tabIndex="-1"
+                />
               )}
               <div className={styles.TransactionAmountContainer}>
                 <span
