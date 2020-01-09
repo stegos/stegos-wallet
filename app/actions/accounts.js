@@ -125,23 +125,46 @@ export const sendTransaction = (
   comment,
   accountId,
   withCertificate,
+  paymentType,
   fee
-) => (dispatch: Dispatch) =>
-  sendSync({
-    type: withCertificate ? 'payment' : 'secure_payment',
-    recipient,
-    amount,
-    comment,
-    account_id: accountId,
-    with_certificate: withCertificate,
-    payment_fee: fee,
-    locked_timestamp: null
-  }).catch(err => {
+) => async (dispatch: Dispatch) => {
+  let request = {};
+  switch (paymentType) {
+    case 'public':
+      request = {
+        type: 'public_payment',
+        recipient,
+        amount,
+        account_id: accountId,
+        payment_fee: fee
+      };
+      break;
+    case 'cloak':
+      request = {
+        type: 'cloak_all',
+        payment_fee: fee,
+        account_id: accountId
+      };
+      break;
+    default:
+      request = {
+        type: withCertificate ? 'payment' : 'secure_payment',
+        recipient,
+        amount,
+        comment,
+        account_id: accountId,
+        with_certificate: withCertificate,
+        payment_fee: fee
+      };
+  }
+  console.log('request = ', request);
+  await sendSync(request).catch(err => {
     console.log(err);
     const message = (err && err.message) || 'An error occurred';
     dispatch({ type: SHOW_ERROR, payload: message });
     throw err;
   });
+};
 
 export const writeDownRecoveryPhrase = (
   accountId: string,

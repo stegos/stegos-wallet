@@ -60,6 +60,7 @@ const initialState = {
   fee: fees[0],
   feeError: '',
   generateCertificate: false,
+  paymentType: 'regular',
   isBusy: false
 };
 
@@ -139,7 +140,7 @@ class Send extends Component<Props> {
   }
 
   validate = () => {
-    const { account, recipientAddress, amount, fee } = this.state;
+    const { account, recipientAddress, amount, fee, paymentType } = this.state;
     const { intl, network } = this.props;
     const totalAmount = this.totalAmount * POWER_DIVISIBILITY;
 
@@ -151,35 +152,37 @@ class Send extends Component<Props> {
       });
       return false;
     }
-    if (!recipientAddress || !isStegosAddress(recipientAddress)) {
-      this.setState({
-        recipientAddressError: intl.formatMessage({
-          id: 'input.error.incorrect.address'
-        })
-      });
-      return false;
-    }
-    if (getNetworkOfAddress(recipientAddress) !== network) {
-      this.setState({
-        recipientAddressError: intl.formatMessage({
-          id: 'input.error.address.from.another.network'
-        })
-      });
-      return false;
-    }
-    if (!amount || !isPositiveStegosNumber(amount)) {
-      this.setState({
-        amountError: intl.formatMessage({ id: 'input.error.invalid.value' })
-      });
-      return false;
-    }
-    if (totalAmount > account.availableBalance) {
-      this.setState({
-        accountError: intl.formatMessage({
-          id: 'input.error.insufficient.balance'
-        })
-      });
-      return false;
+    if (paymentType !== 'cloak') {
+      if (!recipientAddress || !isStegosAddress(recipientAddress)) {
+        this.setState({
+          recipientAddressError: intl.formatMessage({
+            id: 'input.error.incorrect.address'
+          })
+        });
+        return false;
+      }
+      if (getNetworkOfAddress(recipientAddress) !== network) {
+        this.setState({
+          recipientAddressError: intl.formatMessage({
+            id: 'input.error.address.from.another.network'
+          })
+        });
+        return false;
+      }
+      if (!amount || !isPositiveStegosNumber(amount)) {
+        this.setState({
+          amountError: intl.formatMessage({ id: 'input.error.invalid.value' })
+        });
+        return false;
+      }
+      if (totalAmount > account.availableBalance) {
+        this.setState({
+          accountError: intl.formatMessage({
+            id: 'input.error.insufficient.balance'
+          })
+        });
+        return false;
+      }
     }
     if (!isPositiveStegosNumber(fee.fee)) {
       this.setState({
@@ -223,6 +226,24 @@ class Send extends Component<Props> {
     });
   }
 
+  publicPayment() {
+    this.setState({
+      paymentType: 'public'
+    });
+  }
+
+  regularPayment() {
+    this.setState({
+      paymentType: 'regular'
+    });
+  }
+
+  cloakPayment() {
+    this.setState({
+      paymentType: 'cloak'
+    });
+  }
+
   onNext = () => {
     const { step } = this.state;
     if (this.validate()) {
@@ -245,6 +266,7 @@ class Send extends Component<Props> {
       comment,
       account,
       generateCertificate,
+      paymentType,
       fee
     } = this.state;
     this.setState({ isBusy: true });
@@ -254,6 +276,7 @@ class Send extends Component<Props> {
       comment,
       account.id,
       generateCertificate,
+      paymentType,
       Math.ceil((fee.fee * POWER_DIVISIBILITY) / 2)
     )
       .then(resp => {
@@ -280,7 +303,11 @@ class Send extends Component<Props> {
         <span className={styles.FormDropdownBalance}>
           {account.availableBalance / POWER_DIVISIBILITY}
         </span>{' '}
-        STG
+        STG (Public{' '}
+        <span className={styles.FormDropdownBalance}>
+          {account.publicBalance / POWER_DIVISIBILITY}
+        </span>{' '}
+        STG )
       </span>
     );
   };
@@ -320,6 +347,7 @@ class Send extends Component<Props> {
     const { accounts, intl } = this.props;
     const {
       generateCertificate,
+      paymentType,
       account,
       accountError,
       recipientAddress,
@@ -352,60 +380,139 @@ class Send extends Component<Props> {
             !!accountError,
             step === 1
           )}
+          {/* regular payment */}
+
           <span className={styles.FieldLabel}>
-            <FormattedMessage id="input.name.recipient.address" />
+            <FormattedMessage id="input.name.payment.type" />
           </span>
-          <Input
-            className={formFieldClass}
-            name="recipientAddress"
-            value={recipientAddress}
-            onChange={e =>
-              this.setState({
-                recipientAddress: e.target.value,
-                recipientAddressError: ''
-              })
-            }
-            readOnly={step === 1}
-            noLabel
-            isTextarea
-            autoFocus
-            resize={step === 0 ? 'vertical' : 'none'}
-            error={recipientAddressError}
-            showError={!!recipientAddressError}
-            style={{ height: 'auto', margin: 0 }}
-          />
-          <span className={styles.FieldLabel}>
-            <FormattedMessage id="input.name.amount" />
-          </span>
-          <Input
-            className={formFieldClass}
-            type="number"
-            name="amount"
-            value={amount}
-            onChange={e =>
-              this.setState({ amount: e.target.value, amountError: '' })
-            }
-            readOnly={step === 1}
-            noLabel
-            error={amountError}
-            showError={!!amountError}
-            style={{ height: 'auto', margin: 0 }}
-          />
-          <span className={styles.FieldLabel}>
-            <FormattedMessage id="input.name.comment" />
-          </span>
-          <Input
-            className={formFieldClass}
-            rows={3}
-            name="comment"
-            value={comment}
-            onChange={e => this.setState({ comment: e.target.value })}
-            readOnly={step === 1}
-            noLabel
-            isTextarea
-            resize={step === 0 ? 'vertical' : 'none'}
-            style={{ height: 'auto', margin: 0 }}
-          />
+          <div
+            className={styles.FormFieldContainer}
+            style={{ cursor: 'pointer' }}
+            onClick={() => step === 0 && this.regularPayment()}
+            onKeyPress={() => false}
+            role="radio"
+            aria-checked={paymentType === 'regular'}
+            tabIndex={-1}
+          >
+            <Icon
+              name={
+                paymentType === 'regular'
+                  ? 'radio_button_on'
+                  : 'radio_button_off'
+              }
+              color="rgba(255, 255, 255, 0.7)"
+              size={24}
+            />
+            <div className={styles.CheckboxLabel}>
+              <FormattedMessage id="send.regular.payment" />
+            </div>
+          </div>
+          {/* public payment */}
+
+          <span className={styles.FieldLabel} />
+          <div
+            className={styles.FormFieldContainer}
+            style={{ cursor: 'pointer' }}
+            onClick={() => step === 0 && this.publicPayment()}
+            onKeyPress={() => false}
+            role="radio"
+            aria-checked={paymentType === 'public'}
+            tabIndex={-1}
+          >
+            <Icon
+              name={
+                paymentType === 'public'
+                  ? 'radio_button_on'
+                  : 'radio_button_off'
+              }
+              color="rgba(255, 255, 255, 0.7)"
+              size={24}
+            />
+            <div className={styles.CheckboxLabel}>
+              <FormattedMessage id="send.public.payment" />
+            </div>
+          </div>
+          {/* Cloak payment */}
+
+          <span className={styles.FieldLabel} />
+          <div
+            className={styles.FormFieldContainer}
+            style={{ cursor: 'pointer' }}
+            onClick={() => step === 0 && this.cloakPayment()}
+            onKeyPress={() => false}
+            role="radio"
+            aria-checked={paymentType === 'cloak'}
+            tabIndex={-1}
+          >
+            <Icon
+              name={
+                paymentType === 'cloak' ? 'radio_button_on' : 'radio_button_off'
+              }
+              color="rgba(255, 255, 255, 0.7)"
+              size={24}
+            />
+            <div className={styles.CheckboxLabel}>
+              <FormattedMessage id="send.cloak.payment" />
+            </div>
+          </div>
+
+          <span className={styles.FieldLabel} />
+          {paymentType === 'public' && (
+            <div className={styles.PaymentDescription}>
+              <FormattedMessage id="send.public.description" />
+            </div>
+          )}
+          {paymentType === 'cloak' && (
+            <div className={styles.PaymentDescription}>
+              <FormattedMessage id="send.cloak.description" />
+            </div>
+          )}
+          {paymentType === 'regular' && (
+            <div className={styles.PaymentDescription} />
+          )}
+          {paymentType !== 'cloak' && (
+            <>
+              <span className={styles.FieldLabel}>
+                <FormattedMessage id="input.name.recipient.address" />
+              </span>
+              <Input
+                className={formFieldClass}
+                name="recipientAddress"
+                value={recipientAddress}
+                onChange={e =>
+                  this.setState({
+                    recipientAddress: e.target.value,
+                    recipientAddressError: ''
+                  })
+                }
+                readOnly={step === 1}
+                noLabel
+                isTextarea
+                autoFocus
+                resize={step === 0 ? 'vertical' : 'none'}
+                error={recipientAddressError}
+                showError={!!recipientAddressError}
+                style={{ height: 'auto', margin: 0 }}
+              />
+              <span className={styles.FieldLabel}>
+                <FormattedMessage id="input.name.amount" />
+              </span>
+              <Input
+                className={formFieldClass}
+                type="number"
+                name="amount"
+                value={amount}
+                onChange={e =>
+                  this.setState({ amount: e.target.value, amountError: '' })
+                }
+                readOnly={step === 1}
+                noLabel
+                error={amountError}
+                showError={!!amountError}
+                style={{ height: 'auto', margin: 0 }}
+              />
+            </>
+          )}
           <span className={styles.FieldLabel}>
             <FormattedMessage id="input.name.fees" />
           </span>
@@ -448,36 +555,57 @@ class Send extends Component<Props> {
               />
             </div>
           </div>
-          <span className={styles.FieldLabel} />
-          <div
-            className={styles.FormFieldContainer}
-            style={{ cursor: 'pointer' }}
-            onClick={() => step === 0 && this.generateCertificate()}
-            onKeyPress={() => false}
-            role="checkbox"
-            aria-checked={generateCertificate}
-            tabIndex={-1}
-          >
-            <Icon
-              name={
-                generateCertificate ? 'check_box' : 'check_box_outline_blank'
-              }
-              color="rgba(255, 255, 255, 0.7)"
-              size={24}
-            />
-            <div className={styles.CheckboxLabel}>
-              <FormattedMessage id="send.generate.payment.certificate" />
-              <div className={styles.CertificateDescription}>
-                <FormattedMessage
-                  id={
+          {paymentType === 'regular' && (
+            <>
+              <span className={styles.FieldLabel}>
+                <FormattedMessage id="input.name.comment" />
+              </span>
+              <Input
+                className={formFieldClass}
+                rows={3}
+                name="comment"
+                value={comment}
+                onChange={e => this.setState({ comment: e.target.value })}
+                readOnly={step === 1}
+                noLabel
+                isTextarea
+                resize={step === 0 ? 'vertical' : 'none'}
+                style={{ height: 'auto', margin: 0 }}
+              />
+              <span className={styles.FieldLabel} />
+              <div
+                className={styles.FormFieldContainer}
+                style={{ cursor: 'pointer' }}
+                onClick={() => step === 0 && this.generateCertificate()}
+                onKeyPress={() => false}
+                role="checkbox"
+                aria-checked={generateCertificate}
+                tabIndex={-1}
+              >
+                <Icon
+                  name={
                     generateCertificate
-                      ? 'send.with.certificate.description'
-                      : 'send.no.certificate.description'
+                      ? 'check_box'
+                      : 'check_box_outline_blank'
                   }
+                  color="rgba(255, 255, 255, 0.7)"
+                  size={24}
                 />
+                <div className={styles.CheckboxLabel}>
+                  <FormattedMessage id="send.generate.payment.certificate" />
+                  <div className={styles.CertificateDescription}>
+                    <FormattedMessage
+                      id={
+                        generateCertificate
+                          ? 'send.with.certificate.description'
+                          : 'send.no.certificate.description'
+                      }
+                    />
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
+            </>
+          )}
         </div>
         <div className={styles.ActionsContainer} key="Actions">
           <div className={styles.TotalAmount}>

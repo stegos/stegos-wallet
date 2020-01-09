@@ -106,6 +106,23 @@ class TransactionsList extends PureComponent<Props> {
                   tabIndex="-1"
                 />
               )}
+              {item.public && (
+                <div
+                  className={styles.PublicPayment}
+                  role="button"
+                  tabIndex="-1"
+                  onKeyPress={() => false}
+                >
+                  <Icon
+                    name="visibility"
+                    size={20}
+                    color="rgba(255,255,255,0.7)"
+                  />
+                  <span className={styles.TransactionText}>
+                    <FormattedMessage id="transactions.list.public" />
+                  </span>
+                </div>
+              )}
               <div className={styles.TransactionAmountContainer}>
                 <span
                   className={styles.TransactionAmount}

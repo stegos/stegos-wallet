@@ -156,6 +156,45 @@
   cursor: pointer;
 }
 
+.BalancePublic {
+  position: relative;
+  display: inline-block;
+}
+
+/* Tooltip text */
+.BalancePublic .BalancePublicInfo {
+  top: 125%;
+  right: 50%;
+  margin-left: -60px;
+  visibility: hidden;
+  width: 300px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.BalancePublic:hover .BalancePublicInfo {
+  visibility: visible;
+}
+
+.BalancePublic .BalancePublicInfo::after {
+  content: ' ';
+  position: absolute;
+  bottom: 100%; /* At the top of the tooltip */
+  right: 10%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent black transparent;
+}
+
 .NoTransactions {
   position: absolute;
   left: 50%;

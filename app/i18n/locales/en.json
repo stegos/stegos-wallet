@@ -75,6 +75,12 @@
   "send.generate.payment.certificate": "Generate Payment Certificate",
   "send.no.certificate.description": "No payment certificate will be generated.",
   "send.with.certificate.description": "Payment certificate will be generated. In case if you will need it, you will be able to prove that you made the transaction above.",
+  "send.cloak.payment": "Cloak public outputs",
+  "send.cloak.description": "This transaction will cloak all your tokens.",
+  "send.public.payment": "Send as public payment",
+  "send.public.description": "Warning: This payment would be send without clocking of recipient and amount! No comments is available.",
+  "send.regular.payment": "Regular payment",
+
   "send.total.to.debit": "Total to debit",
   "send.stg.per.utxo": "STG per UTXO",
   "send.waiting": "Sending transaction",
@@ -93,6 +99,8 @@
   "chart.total.amount": "Total",
   "chart.available.amount": "Available",
   "chart.locked.amount": "Locked",
+  "chart.public.amount": "Public",
+  "chart.public.amount.info": "Public payment cannot be spend directly, use cloak instead.",
   "chart.week": "Week",
   "chart.month": "Month",
   "chart.year": "Year",
@@ -100,6 +108,7 @@
   "transactions.list.title": "Last operations",
   "transactions.list.certificate": "Certificate",
   "transactions.list.comment": "Comment",
+  "transactions.list.public": "Public",
 
   "transaction.type.send": "Send",
   "transaction.type.receive": "Receive",
@@ -155,6 +164,7 @@
   "input.name.fees": "Fees",
   "input.name.account": "Select account...",
   "input.name.language": "App language",
+  "input.name.payment.type": "Payment type",
 
   "input.error.required": "This fields is required",
   "input.error.dropdown.required": "Please select a value",
