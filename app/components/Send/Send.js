@@ -183,7 +183,15 @@ class Send extends Component<Props> {
         });
         return false;
       }
+    } else if (totalAmount > account.publicBalance) {
+      this.setState({
+        accountError: intl.formatMessage({
+          id: 'input.error.insufficient.balance'
+        })
+      });
+      return false;
     }
+
     if (!isPositiveStegosNumber(fee.fee)) {
       this.setState({
         feeError: intl.formatMessage({ id: 'input.error.invalid.value' })

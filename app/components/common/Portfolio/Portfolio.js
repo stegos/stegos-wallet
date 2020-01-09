@@ -45,6 +45,11 @@ class Portfolio extends PureComponent<Props> {
     );
   }
 
+  get publicBalance() {
+    const { accounts } = this.props;
+    return Object.entries(accounts).reduce((a, c) => a + c[1].publicBalance, 0);
+  }
+
   get size() {
     const { accounts } = this.props;
     return Object.keys(accounts).length;
@@ -87,7 +92,13 @@ class Portfolio extends PureComponent<Props> {
   render() {
     const { period } = this.state;
     const { intl } = this.props;
-    const { availableBalance, balance, lockedBalance, size } = this;
+    const {
+      availableBalance,
+      balance,
+      lockedBalance,
+      publicBalance,
+      size
+    } = this;
     const transactions = this.filteredTransactions;
     return (
       <div className={styles.Account}>
@@ -169,6 +180,18 @@ class Portfolio extends PureComponent<Props> {
                     &nbsp;
                     {formatDigit(
                       (lockedBalance / POWER_DIVISIBILITY).toFixed(4)
+                    )}
+                  </span>
+                  <span> STG</span>
+                </div>
+                <div className={styles.BalanceExtendedItem}>
+                  <span className={styles.DetailsHeaderText}>
+                    <FormattedMessage id="chart.public.amount" />:
+                  </span>
+                  <span>
+                    &nbsp;
+                    {formatDigit(
+                      (publicBalance / POWER_DIVISIBILITY).toFixed(4)
                     )}
                   </span>
                   <span> STG</span>
