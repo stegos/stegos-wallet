@@ -40,12 +40,28 @@
   grid-template-columns: max-content auto;
   grid-auto-rows: auto;
   grid-gap: 30px;
-  padding: 32px 13% 84px 13%;
+  padding: 32px 13% 64px 13%;
   background-color: #1e2338;
 }
 
 @media screen and (max-width: 1220px) {
   .SendFormContainer {
+    grid-template-columns: auto;
+    grid-gap: 8px;
+  }
+}
+
+.PaymentType {
+  display: grid;
+  grid-template-columns: max-content auto;
+  grid-auto-rows: auto;
+  grid-gap: 30px;
+  padding: 0 13% 0 13%;
+  background-color: #1e2338;
+}
+
+@media screen and (max-width: 1220px) {
+  .PaymentType {
     grid-template-columns: auto;
     grid-gap: 8px;
   }
@@ -97,6 +113,18 @@
   height: 24px;
   margin-top: 24px;
   margin-bottom: -48px;
+  width: 100%;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 10px;
+  line-height: 12px;
+  letter-spacing: 0.3px;
+  white-space: normal;
+  color: #fff;
+}
+
+.PaymentDescription {
+  height: 24px;
   width: 100%;
   font-style: normal;
   font-weight: normal;

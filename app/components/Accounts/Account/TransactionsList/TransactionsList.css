@@ -88,6 +88,15 @@
   min-width: 100px;
 }
 
+.PublicPayment {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 6vw;
+  min-width: 80px;
+}
+
 .TransactionText {
   font-style: normal;
   font-weight: normal;

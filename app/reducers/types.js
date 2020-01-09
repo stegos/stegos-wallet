@@ -43,6 +43,7 @@ export type Account = {
   address: string,
   balance: BigInt,
   availableBalance: BigInt,
+  publicBalance: BigInt,
   recoveryPhrase: string,
   isLocked: string,
   transactions: Transaction[],
@@ -79,6 +80,7 @@ export const createOutgoingTransaction = (t, account) => {
     rvalue: output && output.rvalue,
     recipient: output && output.recipient,
     sender: account && account.address,
+    public: output && output.output_type === 'public_payment',
     comment: output && output.comment
   };
 };
@@ -87,12 +89,15 @@ export type Transaction = {
   type: TransactionType,
   timestamp: string,
   lockedTimestamp: string,
+  public: boolean,
   amount: number,
   hasCertificate: boolean,
   status?: TransactionStatus,
   sender?: string,
   comment?: string
 };
+
+export type NewPaymentType = 'public' | 'cloak' | 'regular';
 
 export type TransactionStatus =
   | 'created'

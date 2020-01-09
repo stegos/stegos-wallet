@@ -43,6 +43,7 @@ export default function accounts(
               timestamp: new Date(t.timestamp),
               lockedTimestamp:
                 t.locked_timestamp && new Date(t.locked_timestamp),
+              public: t.output_type === 'public_payment',
               id: t.output_hash
             }
       )
@@ -116,7 +117,8 @@ export default function accounts(
       case 'balance_changed':
         return setAccountProps({
           balance: payload.current,
-          availableBalance: payload.available
+          availableBalance: payload.available,
+          publicBalance: payload.public_payment.available
         });
       case 'recovery':
         return setAccountProps({ recoveryPhrase: payload.recovery.split(' ') });

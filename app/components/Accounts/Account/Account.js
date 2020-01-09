@@ -155,6 +155,7 @@ class Account extends PureComponent<Props> {
     const transactions = this.filterTransactions(account.transactions);
     const balance = account.balance / POWER_DIVISIBILITY;
     const availableBalance = account.availableBalance / POWER_DIVISIBILITY;
+    const publicBalance = account.publicBalance / POWER_DIVISIBILITY;
     const lockedBalance =
       (account.balance - account.availableBalance) / POWER_DIVISIBILITY;
     const isNewWallet = !account.balance && account.transactions.length === 0;
@@ -293,6 +294,24 @@ class Account extends PureComponent<Props> {
                     </span>
                     <span>&nbsp;{formatDigit(lockedBalance.toFixed(4))}</span>
                     <span> STG</span>
+                  </div>
+                  <div
+                    className={`${styles.BalanceExtendedItem} ${
+                      styles.BalancePublic
+                    }`}
+                    role="button"
+                    tabIndex="-1"
+                    onKeyPress={() => false}
+                  >
+                    <span className={styles.DetailsHeaderText}>
+                      <FormattedMessage id="chart.public.amount" />:
+                    </span>
+                    <span>&nbsp;{formatDigit(publicBalance.toFixed(4))}</span>
+                    <span> STG</span>
+
+                    <span className={styles.BalancePublicInfo}>
+                      <FormattedMessage id="chart.public.amount.info" />
+                    </span>
                   </div>
                 </div>
               </div>
