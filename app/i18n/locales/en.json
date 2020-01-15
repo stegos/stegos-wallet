@@ -10,18 +10,18 @@
 
   "bootstrap.step.one.label": "Password protection",
   "bootstrap.step.two.label": "Sync",
-  "bootstrap.step.three.label": "Bugs & Terms of Use",
+  "bootstrap.step.three.label": "Bugs Reports & Terms of Use",
 
   "protect.title": "Protect your wallet",
-  "protect.description": "Set a password to prevent an unauthorized access to Stegos Wallet data on your computer, including account names, transactions and public wallet keys.",
-  "protect.attention": "Make sure you remeber your password. Do not share it. Losing your password requires resetting Stegos Wallet and re-adding accounts. Resetting Stegos Wallet does not affect your crypto assets.",
+  "protect.description": "Set a password to prevent an unauthorized access to Stegos Wallet data on your computer, including account names, transactions and public keys.",
+  "protect.attention": "Make sure you remeber your password. Do not share it! Losing your password requires resetting Stegos Wallet and re-adding accounts. Resetting Stegos Wallet does not affect your crypto assets.",
 
   "syncing.in.progress.description": "Your wallet is synchronizing with the blockchain...",
   "synced.successfully": "Your wallet is synchronized!",
   "syncing.please.wait": "Please wait...",
-  "syncing.failed.description": "Something went wrong, please restart your wallet",
+  "syncing.failed.description": "Something went wrong, please restart Stegos Wallet",
 
-  "terms.title": "Bugs and Terms of Use",
+  "terms.title": "Bug Reports & Terms of Use",
   "terms.share.data": "Share anonymized data to help improve Stegos Wallet",
   "terms.send.reports": "Automatically send reports to help Stegos fix bugs",
   "terms.accept": "By continuing, you acknowledge that you have read and agree to\nthe Terms of Use and Privacy Policy.",
@@ -34,12 +34,12 @@
   "accounts.sort.by": "Sort by",
   "accounts.sort.account.name": "Account name",
   "accounts.sort.balance": "Account balance",
-  "accounts.waiting": "Getting accounts, please wait...",
+  "accounts.waiting": "Scanning blockchain for your tokens, please wait...",
 
   "account.settings": "Account settings",
   "account.no.tokens": "No Stegos tokens yet?",
-  "account.receive.description": "Click 'Receive' button below to get your account address to start receiving tokens.",
-  "account.restore.description": "Click 'Restore from recovery phrase' button to restore your existing account.",
+  "account.receive.description": "Click the 'Receive' button below to get your account address and start receiving tokens.",
+  "account.restore.description": "Click the 'Restore from recovery phrase' button to restore an existing account.",
 
   "edit.account.title": "Edit Account",
   "edit.account.backup.subtitle": "Account Backup",
@@ -49,12 +49,12 @@
   "edit.account.backup.description": "Write down recovery phrase",
   "edit.account.recovery.phrase.saved": "Recovery phrase saved",
 
-  "delete.account": "Your account “{name}” will be removed from this device. You cannot revert this operation!",
+  "delete.account": "Your account “{name}” will be removed from this device. You cannot undo this operation!",
 
   "backup.step.one.label": "Write down",
   "backup.step.two.label": "Verify",
   "backup.step.one.description": "The phrase is case sensitive. Please make sure you write it down. You will need it to restore your account.",
-  "backup.step.two.description": "In order to restore your existing account, please fill all words from the recovery phrase in correct order.",
+  "backup.step.two.description": "In order to restore your existing account, please fill all words from the recovery phrase in the right order.",
 
   "back.to.account": "Back to the account",
   "back.to.accounts": "Back",
@@ -63,7 +63,7 @@
   "receive.step.one.title": "Account",
   "receive.step.two.title": "Copy Address",
   "receive.step.three.title": "Receive",
-  "receive.account.to.credit": "Account To Credit",
+  "receive.account.to.credit": "Account to Credit",
   "receive.address.copied": "Address copied",
   "receive.address.for.account": "Address for",
 
@@ -71,36 +71,36 @@
   "send.step.one.title": "Details",
   "send.step.two.title": "Verification",
   "send.step.three.title": "Confirmation",
-  "send.account.to.debit": "Account To Debit",
+  "send.account.to.debit": "Account to Debit",
   "send.generate.payment.certificate": "Generate Payment Certificate",
   "send.no.certificate.description": "No payment certificate will be generated.",
-  "send.with.certificate.description": "Payment certificate will be generated. In case if you will need it, you will be able to prove that you made the transaction above.",
-  "send.cloak.payment": "Cloak public outputs",
-  "send.cloak.description": "This transaction will cloak all your tokens.",
+  "send.with.certificate.description": "A payment certificate will be generated. You will be able to prove that you made the payment above.",
+  "send.cloak.payment": "Make public tokens private (do this!)",
+  "send.cloak.description": "This will make all your public tokens private. Do this now!",
   "send.public.payment": "Send as public payment",
-  "send.public.description": "Warning: This payment would be sent without cloaking of recipient and amount! No comments is available.",
-  "send.regular.payment": "Regular payment",
+  "send.public.description": "Warning: This payment is NOT private and will be seen by everyone!",
+  "send.regular.payment": "Private payment",
 
   "send.total.to.debit": "Total to debit",
   "send.stg.per.utxo": "STG per UTXO",
   "send.waiting": "Sending transaction",
   "send.transaction.sent.title": "Transaction sent",
-  "send.transaction.sent.description": "Your account balance will be update once the blockchain has confirmed the transaction.",
-  "send.transaction.sent.certificate": "Payment certificate for this transaction will be available in Last Operations for {account}",
+  "send.transaction.sent.description": "Your account balance will be updated shortly.",
+  "send.transaction.sent.certificate": "The payment certificate for this transaction will be available in Last Operations for {account}",
 
   "fee.standard": "Standard",
   "fee.high": "High",
   "fee.custom": "Custom",
 
   "restore.title": "Restore Account",
-  "restore.subtitle": "In order to restore your existing account, please fill all words from the recovery phrase in correct order.",
+  "restore.subtitle": "In order to restore your existing account, please fill in the words from the recovery phrase in the right order.",
   "restore.waiting": "Restoring account",
 
   "chart.total.amount": "Total",
   "chart.available.amount": "Available",
   "chart.locked.amount": "Locked",
   "chart.public.amount": "Public",
-  "chart.public.amount.info": "Public payment cannot be spend directly, use cloak instead.",
+  "chart.public.amount.info": "Convert public tokens to private before spending.",
   "chart.week": "Week",
   "chart.month": "Month",
   "chart.year": "Year",
@@ -120,7 +120,7 @@
   "transaction.status.committed": "committed",
   "transaction.status.conflicted": "conflicted",
 
-  "portfolio.description.one": "Here's the summary of your 1 account",
+  "portfolio.description.one": "Here's the summary of your account",
   "portfolio.description.many": "Here's the summary of your {size} accounts",
 
   "unlock.wallet.title": "Your wallet is locked",
@@ -166,14 +166,14 @@
   "input.name.language": "App language",
   "input.name.payment.type": "Payment type",
 
-  "input.error.required": "This fields is required",
+  "input.error.required": "This field is required",
   "input.error.dropdown.required": "Please select a value",
   "input.error.old.password.required": "Enter current password",
   "input.error.new.password.required": "Enter new password",
   "input.error.password.does.not.match": "Password does not match",
   "input.error.invalid.value": "Invalid value",
   "input.error.incorrect.address": "Incorrect address",
-  "input.error.address.from.another.network": "Address from another network",
+  "input.error.address.from.another.network": "Address is from another network",
   "input.error.insufficient.balance": "Insufficient balance",
   "input.error.minimum.fee": "Minimum fee is {fee}",
   "input.error.account.name.does.not.match": "Account name does not match",
@@ -184,7 +184,7 @@
 
   "alert.error.caption": "Error",
   "alert.account.password.is.incorrect": "The account password is incorrect. Please try again.",
-  "alert.recovery.phrase.is.incorrect": "The recovery phrase is incorrect. Please verify it, correct and try again.",
+  "alert.recovery.phrase.is.incorrect": "The recovery phrase is incorrect. Please modify and try again.",
   "alert.password.is.incorrect": "The password is incorrect. Please try again.",
   "alert.default.error": "An error occurred.",
   "alert.error.with.message": "An error occurred. {error}",
@@ -205,12 +205,12 @@
   "certificate.verification.failed": "Failed",
   "certificate.verifications.waiting": "Verifying...",
 
-  "locked.details.title": "Locked Tokens Details",
+  "locked.details.title": "Locked Token Details",
   "locked.details.total.locked": "Total locked",
   "locked.details.until": "locked until",
 
   "account.default.name": "Account #{id}",
   "account.default.restored.name": "Restored Account #{id}",
 
-  "error.node": "The node  is not responding"
+  "error.node": "The built-in node is not responding"
 }
