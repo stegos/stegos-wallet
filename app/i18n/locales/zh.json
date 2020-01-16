@@ -10,18 +10,18 @@
 
   "bootstrap.step.one.label": "密码保护",
   "bootstrap.step.two.label": "同步",
-  "bootstrap.step.three.label": "错误和使用条款",
+  "bootstrap.step.three.label": "错误报告和使用条款",
 
   "protect.title": "保护你的钱包",
-  "protect.description": "设置密码以防止未经授权访问计算机上的Stegos钱包数据，包括帐户名称，交易和公共钱包密钥。",
-  "protect.attention": "确保记下密码，不要分享给其他人。丢失密码需要重置Stegos钱包并重新添加帐户。重置Stegos钱包不会影响您的加密资产。",
+  "protect.description": "设置密码以防止未经授权访问计算机上的Stegos钱包数据，包括帐户名称，交易和公钥。",
+  "protect.attention": "确保记下密码，不要分享给其他人！丢失密码需要重置Stegos钱包并重新添加帐户。重置Stegos钱包不会影响您的加密资产。",
 
   "syncing.in.progress.description": "您的钱包正在与区块链同步...",
   "synced.successfully": "您的钱包已同步!",
   "syncing.please.wait": "请等待...",
-  "syncing.failed.description": "发生了一些错误, 请重启您的钱包",
+  "syncing.failed.description": "发生了一些错误, 请重启Stegos钱包",
 
-  "terms.title": "错误和使用条款",
+  "terms.title": "错误报告和使用条款",
   "terms.share.data": "分享匿名数据以帮助改进Stegos钱包",
   "terms.send.reports": "自动发送报告以帮助Stegos修复错误",
   "terms.accept": "我已经详细阅读并同意\n使用条款和隐私政策。",
@@ -34,11 +34,12 @@
   "accounts.sort.by": "排序方式",
   "accounts.sort.account.name": "账户名称",
   "accounts.sort.balance": "账户余额",
+  "accounts.waiting": "正在扫描区块链中您的STG币, 请等待...",
 
   "account.settings": "账户设置",
   "account.no.tokens": "还没有Stegos代币吗？",
-  "account.receive.description": "点击下方的'接收'按钮以获取您的帐户的收币地址。",
-  "account.restore.description": "点击'从恢复短语恢复'按钮以恢复现有帐户。",
+  "account.receive.description": "点击下方的'接收'按钮以获取您的帐户的收币地址，并开始接收STG币。",
+  "account.restore.description": "点击'从恢复短语恢复'按钮以恢复一个已存在的帐户。",
 
   "edit.account.title": "编辑账户",
   "edit.account.backup.subtitle": "账户备份",
@@ -48,12 +49,12 @@
   "edit.account.backup.description": "抄写恢复短语",
   "edit.account.recovery.phrase.saved": "恢复短语已保存",
 
-  "delete.account": "你的账户 “{name}” 将会从此设备删除，此操作无法恢复！",
+  "delete.account": "你的账户 “{name}” 将会从此设备删除，此操作无法撤销！",
 
   "backup.step.one.label": "抄写",
   "backup.step.two.label": "验证",
   "backup.step.one.description": "恢复短语区分大小写，请确保您已抄写到安全的地方，您需要它来恢复您的帐户。",
-  "backup.step.two.description": "要恢复现有帐户，请按正确顺序填写恢复短语中的所有字词。",
+  "backup.step.two.description": "要恢复现有帐户，请按正确顺序填写恢复短语中的所有单词。",
 
   "back.to.account": "回到账户",
   "back.to.accounts": "返回",
@@ -73,32 +74,33 @@
   "send.account.to.debit": "付款地址",
   "send.generate.payment.certificate": "生成付款凭证",
   "send.no.certificate.description": "将不会生成付款凭证",
-  "send.with.certificate.description": "将生成付款凭证，一旦你需要它，您将能够证明您已完成上述交易。",
+  "send.with.certificate.description": "将生成一个付款凭证，您可以用它来证明您已完成上述交易。",
+  "send.cloak.payment": "将公共的STG币转换成匿名币（执行此操作！）",
+  "send.cloak.description": "这会将您所有的公共STG币转换成匿名币，开始执行！",
+  "send.public.payment": "作为公共付款发送",
+  "send.public.description": "警告：这笔付款不是匿名的，所有人都会看到！",
+  "send.regular.payment": "匿名付款",
+
   "send.total.to.debit": "付款总额",
   "send.stg.per.utxo": "STG 每个 UTXO",
   "send.waiting": "发送交易",
   "send.transaction.sent.title": "交易已发送",
-  "send.transaction.sent.description": "一旦区块链确认了交易，您的帐户余额将会更新。",
+  "send.transaction.sent.description": "您的帐户余额将很快会更新。",
   "send.transaction.sent.certificate": "此交易的付款凭证将在{account}的最后一步操作中提供。",
-  "send.cloak.payment": "切换至隐身模式",
-  "send.cloak.description": "这笔支付将隐藏你的所有STG币",
-  "send.public.payment": "公开支付",
-  "send.public.description": "警告：这笔支付将在不掩盖收件人和金额的情况下发送！无法使用备注功能。",
-  "send.regular.payment": "常规支付",
 
   "fee.standard": "标准",
   "fee.high": "高",
   "fee.custom": "自定义",
 
   "restore.title": "恢复账户",
-  "restore.subtitle": "要恢复已存在的帐户，请按照正确顺序填写恢复短语中的所有字词。",
+  "restore.subtitle": "要恢复已存在的帐户，请按照正确顺序填写恢复短语中的单词。",
   "restore.waiting": "恢复账户",
 
   "chart.total.amount": "总金额",
   "chart.available.amount": "可用",
   "chart.locked.amount": "锁定",
   "chart.public.amount": "公开",
-  "chart.public.amount.info": "公开的STG币不能直接用于付款，请先切换至隐身模式。",
+  "chart.public.amount.info": "发送匿名付款前请先将STG币转换成匿名币",
   "chart.week": "周",
   "chart.month": "月",
   "chart.year": "年",
@@ -118,8 +120,8 @@
   "transaction.status.committed": "已备注",
   "transaction.status.conflicted": "冲突",
 
-  "portfolio.description.one": "这是你的1个账户的汇总",
-  "portfolio.description.many": "这是你的{size}个账户的汇总",
+  "portfolio.description.one": "这是您的账户汇总",
+  "portfolio.description.many": "这是您的{size}个账户的汇总",
 
   "unlock.wallet.title": "你的钱包已锁定",
   "unlock.wallet.subtitle": "输入密码以解锁",
@@ -171,7 +173,7 @@
   "input.error.password.does.not.match": "密码不一致",
   "input.error.invalid.value": "无效值",
   "input.error.incorrect.address": "地址不正确",
-  "input.error.address.from.another.network": "Address from another network",
+  "input.error.address.from.another.network": "该地址来自另一个网络",
   "input.error.insufficient.balance": "余额不足",
   "input.error.minimum.fee": "最低费用是{fee}",
   "input.error.account.name.does.not.match": "帐户名称不匹配",
@@ -182,7 +184,7 @@
 
   "alert.error.caption": "错误",
   "alert.account.password.is.incorrect": "账户密码不正确，请重试。",
-  "alert.recovery.phrase.is.incorrect": "恢复短语不正确，请检查，更正后重试。",
+  "alert.recovery.phrase.is.incorrect": "恢复短语不正确，请修正后重试。",
   "alert.password.is.incorrect": "账户密码不正确，请重试。",
   "alert.default.error": "发生了一个错误",
   "alert.error.with.message": "发生了一个错误{error}",
@@ -203,12 +205,12 @@
   "certificate.verification.failed": "失效",
   "certificate.verifications.waiting": "验证中...",
 
-  "locked.details.title": "Locked Tokens Details",
-  "locked.details.total.locked": "Total locked",
-  "locked.details.until": "locked until",
+  "locked.details.title": "锁定的代币的详情",
+  "locked.details.total.locked": "锁定总金额",
+  "locked.details.until": "锁定到",
 
   "account.default.name": "账户 #{id}",
-  "account.default.restored.name": "Restored Account #{id}",
+  "account.default.restored.name": "恢复的账户 #{id}",
 
-  "error.node": "The node  is not responding"
+  "error.node": "内置的节点没有响应"
 }
