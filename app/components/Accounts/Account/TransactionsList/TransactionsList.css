@@ -97,6 +97,58 @@
   min-width: 80px;
 }
 
+.UtxoId {
+  cursor: pointer;
+  font-size: 10px;
+  position: relative;
+  display: inline-block;
+  grid-area: utxoid;
+}
+
+.UtxoId > i {
+  transition: color 0.3s;
+}
+.UtxoId > span {
+  margin-left: 3px;
+}
+
+/* Tooltip text */
+.UtxoId .UtxoIdTooltip {
+  top: 115%;
+  left: 50%;
+  margin-left: -100px; /* Use half of the width (120/2 = 60), to center the tooltip */
+  visibility: hidden;
+  width: 400px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+  opacity: 0;
+  transition: opacity 0.6s;
+
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.UtxoId:hover .UtxoIdTooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.UtxoId .UtxoIdTooltip::after {
+  content: ' ';
+  position: absolute;
+  bottom: 100%; /* At the top of the tooltip */
+  left: 30%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent black transparent;
+}
+
 .TransactionText {
   font-style: normal;
   font-weight: normal;
@@ -146,7 +198,7 @@
   grid-template-columns: 10% 14% 28% 28% 20%;
   grid-template-areas:
     '. . . . .'
-    '. . comment comment comment';
+    '. utxoid comment comment comment';
   width: 100%;
 }
 

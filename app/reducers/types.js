@@ -94,7 +94,8 @@ export type Transaction = {
   hasCertificate: boolean,
   status?: TransactionStatus,
   sender?: string,
-  comment?: string
+  comment?: string,
+  utxo?: string
 };
 
 export type NewPaymentType = 'public' | 'cloak' | 'regular';
