@@ -7,6 +7,7 @@ type Props = {
   size?: number,
   color?: string,
   className?: string,
+  display?: string,
   style?: any,
   mirrorVert?: boolean,
   mirrorHor?: boolean
@@ -18,6 +19,7 @@ export default class Icon extends Component<Props> {
   static defaultProps = {
     size: 'inherit',
     color: 'inherit',
+    display: 'block',
     className: '',
     style: null,
     mirrorVert: false,
@@ -26,6 +28,7 @@ export default class Icon extends Component<Props> {
 
   render() {
     const {
+      display,
       name,
       size,
       color,
@@ -39,7 +42,7 @@ export default class Icon extends Component<Props> {
       <i
         className={`material-icons ${className}`}
         style={{
-          display: 'block',
+          display: `${display}`,
           lineHeight: pxSize,
           fontSize: pxSize,
           color: `${color}`,

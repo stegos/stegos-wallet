@@ -1,4 +1,6 @@
 // @flow
+
+import { clipboard } from 'electron';
 import React, { PureComponent } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { formatDigit } from '../../../../utils/format';
@@ -15,6 +17,7 @@ type Props = {
 
 class TransactionsList extends PureComponent<Props> {
   state = {
+    itemId: '',
     tx: null,
     showCertificate: false
   };
@@ -32,7 +35,7 @@ class TransactionsList extends PureComponent<Props> {
     });
   }
 
-  renderTransactions() {
+  renderTransactions(itemId) {
     const { transactions, intl } = this.props;
     if (!transactions || transactions.length === 0) {
       return null;
@@ -109,7 +112,7 @@ class TransactionsList extends PureComponent<Props> {
                 >
                   <Icon
                     name="visibility"
-                    size={20}
+                    size={24}
                     color="rgba(255,255,255,0.7)"
                   />
                   <span className={styles.TransactionText}>
@@ -142,6 +145,28 @@ class TransactionsList extends PureComponent<Props> {
                   STG
                 </span>
               </div>
+              {item.utxo && (
+                <div
+                  className={styles.UtxoId}
+                  role="button"
+                  onClick={() => this.copyHash(item.utxo, item.id)}
+                  onKeyPress={() => false}
+                  tabIndex="-1"
+                >
+                  <Icon
+                    name="file_copy"
+                    display="inline"
+                    size={10}
+                    color={
+                      itemId === item.id
+                        ? 'rgba(135,255,135,0.7)'
+                        : 'rgba(255,255,255,0.7)'
+                    }
+                  />
+                  <span>{shortHash(item.utxo)}</span>
+                  <span className={styles.UtxoIdTooltip}>{item.utxo}</span>
+                </div>
+              )}
               {item.comment && (
                 <span className={styles.TransactionComment}>
                   <FormattedMessage id="transactions.list.comment" />:{' '}
@@ -154,14 +179,26 @@ class TransactionsList extends PureComponent<Props> {
       });
   }
 
+  copyHash(hash, itemId) {
+    this.setState({
+      itemId
+    });
+    clipboard.writeText(hash);
+    setTimeout(() => {
+      this.setState({
+        itemId: ''
+      });
+    }, 1000);
+  }
+
   render() {
-    const { tx, showCertificate } = this.state;
+    const { itemId, tx, showCertificate } = this.state;
     return (
       <div className={styles.TransactionsList}>
         <span className={styles.Title}>
           <FormattedMessage id="transactions.list.title" />
         </span>
-        {this.renderTransactions()}
+        {this.renderTransactions(itemId)}
         <PaymentCertificate
           tx={tx}
           visible={showCertificate}
@@ -170,6 +207,10 @@ class TransactionsList extends PureComponent<Props> {
       </div>
     );
   }
+}
+
+function shortHash(hash) {
+  return hash.slice(0, 10);
 }
 
 export default injectIntl(TransactionsList);

@@ -44,7 +44,8 @@ export default function accounts(
               lockedTimestamp:
                 t.locked_timestamp && new Date(t.locked_timestamp),
               public: t.output_type === 'public_payment',
-              id: t.output_hash
+              id: t.output_hash,
+              utxo: t.output_hash
             }
       )
       .filter(t => t.type === 'Send' || !t.is_change)
