@@ -59,7 +59,7 @@ const initialState = {
   comment: '',
   fee: fees[0],
   feeError: '',
-  generateCertificate: false,
+  generateCertificate: true,
   paymentType: 'regular',
   isBusy: false
 };

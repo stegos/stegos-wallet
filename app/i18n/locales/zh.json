@@ -73,7 +73,7 @@
   "send.step.three.title": "确认",
   "send.account.to.debit": "付款地址",
   "send.generate.payment.certificate": "生成付款凭证",
-  "send.no.certificate.description": "将不会生成付款凭证",
+  "send.no.certificate.description": "警告：将不会生成付款凭证",
   "send.with.certificate.description": "将生成一个付款凭证，您可以用它来证明您已完成上述交易。",
   "send.cloak.payment": "将公共的STG币转换成匿名币（执行此操作！）",
   "send.cloak.description": "这会将您所有的公共STG币转换成匿名币，开始执行！",

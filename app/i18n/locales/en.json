@@ -73,7 +73,7 @@
   "send.step.three.title": "Confirmation",
   "send.account.to.debit": "Account to Debit",
   "send.generate.payment.certificate": "Generate Payment Certificate",
-  "send.no.certificate.description": "No payment certificate will be generated.",
+  "send.no.certificate.description": "Warning: No payment certificate will be generated.",
   "send.with.certificate.description": "A payment certificate will be generated. You will be able to prove that you made the payment above.",
   "send.cloak.payment": "Make public tokens private (do this!)",
   "send.cloak.description": "This will make all your public tokens private. Do this now!",
