@@ -1,6 +1,7 @@
 variables:
   STEGOS_PROJECT_ID: 25
-  STEGOS_BRANCH: $CI_COMMIT_REF_NAME
+  STEGOS_BRANCH: v1.2
+  VERSION: 1.2.1
 
 stages:
   - build
@@ -26,6 +27,7 @@ build:linux:
       - release/stegos-wallet*.rpm
       - release/latest-linux.yml
   script:
+    - echo tag = $CI_COMMIT_REF_NAME
     - node --version
     - yarn --version
     - mkdir node
@@ -35,7 +37,7 @@ build:linux:
     - chmod a+x node/stegos
     - node/stegosd --version
     - node/stegos --version
-    - VERSION=$(node/stegosd --version|cut -d ' ' -f 3)
+    - VERSION=${VERSION:-$(node/stegosd --version|cut -d ' ' -f 3)}
     - echo $VERSION
     - npm version $VERSION --allow-same-version --no-git-tag-version
     - yarn install
@@ -66,7 +68,7 @@ build:macos:
     - chmod a+x node/stegos
     - node/stegosd --version
     - node/stegos --version
-    - VERSION=$(node/stegosd --version|cut -d ' ' -f 3)
+    - VERSION=${VERSION:-$(node/stegosd --version|cut -d ' ' -f 3)}
     - echo $VERSION
     - npm version $VERSION --allow-same-version --no-git-tag-version
     - yarn install
@@ -97,7 +99,7 @@ build:windows:
     - chmod a+x node/stegos.exe
     - node/stegosd.exe --version
     - node/stegos.exe --version
-    - VERSION=$(node/stegosd.exe --version|cut -d ' ' -f 3)
+    - VERSION=${VERSION:-$(node/stegosd.exe --version|cut -d ' ' -f 3)}
     - echo $VERSION
     - npm version $VERSION --allow-same-version --no-git-tag-version
     - npm install node-sass
