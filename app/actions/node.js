@@ -2,7 +2,7 @@ import { send } from 'redux-electron-ipc';
 import { push } from 'connected-react-router';
 import type { Dispatch, GetState, Network } from '../reducers/types';
 import { connect, send as wsSend } from '../ws/actions';
-import { sendSync, subscribe, unsubscribe } from '../ws/client';
+import { sendSync, subscribe } from '../ws/client';
 import routes from '../constants/routes';
 import { wsEndpoint } from '../constants/config';
 import { createHistoryInfoAction } from './accounts';
@@ -61,14 +61,15 @@ export const connectOrRunNode = () => (
 ) => {
   const state = getState();
   dispatch(send(CONNECT_OR_RUN_NODE, { chain: state.node.chain }));
-  dispatch(push(routes.SYNC));
+  dispatch(push(routes.ENTER_PASSWORD));
 };
 
 export const relaunchNode = () => (dispatch: Dispatch, getState: GetState) => {
   dispatch({ type: RELAUNCH_NODE });
   const state = getState();
+  const { app } = state;
   dispatch(send(RELAUNCH_NODE, { chain: state.node.chain }));
-  dispatch(push(routes.SYNC));
+  dispatch(push(app.isFirstLaunch ? routes.PROTECT : routes.ENTER_PASSWORD));
 };
 
 export const onRunNodeFailed = (_, args) => (dispatch: Dispatch) => {
@@ -77,7 +78,6 @@ export const onRunNodeFailed = (_, args) => (dispatch: Dispatch) => {
 
 export const onTokenReceived = (event, token) => (dispatch: Dispatch) => {
   dispatch({ type: TOKEN_RECEIVED, payload: { token } });
-  subscribe(handleNodeSynchronization);
   dispatch(
     connect(
       WS_ENDPOINT,
@@ -87,18 +87,18 @@ export const onTokenReceived = (event, token) => (dispatch: Dispatch) => {
   );
 };
 
+const setSyncAccountsTimer = (dispatch: Dispatch) => {
+  const syncAccountsTimeout = 10;
+  console.log('Sending accounts info request');
+  dispatch(wsSend({ type: 'accounts_info' }));
+  setTimeout(() => setSyncAccountsTimer(dispatch), syncAccountsTimeout * 1000);
+};
+
 const onOpenCallback = (dispatch: Dispatch) => {
   dispatch(wsSend({ type: 'subscribe_status' }));
   dispatch(wsSend({ type: 'version_info' }));
-};
-
-const onSynced = () => (dispatch: Dispatch, getState: GetState) => {
-  const state = getState();
-  const { app } = state;
   subscribe(handleTransactions);
-  dispatch(
-    push(app.isFirstLaunch ? routes.BAGS_AND_TERMS : routes.ENTER_PASSWORD)
-  );
+  setSyncAccountsTimer(dispatch);
 };
 
 export const validateCertificate = (
@@ -117,16 +117,6 @@ export const validateCertificate = (
   }).finally(() => {
     dispatch({ type: SET_WAITING, payload: { waiting: false } });
   });
-};
-
-const handleNodeSynchronization = (dispatch: Dispatch, data: string) => {
-  if (
-    (data.type === 'status_changed' || data.type === 'subscribed_status') &&
-    data.is_synchronized
-  ) {
-    unsubscribe(handleNodeSynchronization);
-    dispatch(onSynced());
-  }
 };
 
 const handleTransactions = (dispatch: Dispatch, data: string) => {

@@ -27,7 +27,7 @@
   "terms.accept": "我已经详细阅读并同意\n使用条款和隐私政策。",
 
   "status.synchronized": "已同步",
-  "status.unsynchronized": "未同步",
+  "status.unsynchronized": "未同步 {local}/{remote}",
   "status.wallet": "钱包",
 
   "accounts.title": "账户",

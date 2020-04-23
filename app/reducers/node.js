@@ -14,8 +14,21 @@ const initialState = {
   hash: '',
   hasKey: null,
   isConnected: false,
-  isSynced: false,
-  syncingProgress: 0,
+  minEpoch: 0,
+  remoteEpoch: 0,
+  isSynced() {
+    return this.minEpoch === this.getRemoteEpoch();
+  },
+  getRemoteEpoch() {
+    let remoteEpoch = +this.remoteEpoch;
+    if (remoteEpoch === 0) {
+      remoteEpoch = this.minEpoch + 1;
+    }
+    return remoteEpoch;
+  },
+  syncingProgress() {
+    return Math.round((this.minEpoch / this.getRemoteEpoch()) * 100);
+  },
   apiToken: null,
   firstReceivedBlockTimestamp: null,
   lastReceivedBlockTimestamp: null,
@@ -50,9 +63,7 @@ export default function node(
     case RELAUNCH_NODE:
       return {
         ...state,
-        error: null,
-        isSynced: false,
-        syncingProgress: 0
+        error: null
       };
     case WS_OPEN:
       return {
@@ -77,15 +88,13 @@ export default function node(
 const handleMessage = (state: NodeStateType, payload) => {
   const { type } = payload;
   switch (type) {
+    case 'accounts_info':
+      return {
+        ...state,
+        remoteEpoch: payload.remote_epoch
+      };
     case 'status_changed':
-    case 'subscribed_status':
-      return payload.is_synchronized
-        ? { ...state, isSynced: true, syncingProgress: 100 }
-        : {
-            ...state,
-            isSynced: false,
-            ...handleReceivedBlockTimestamp(state, payload)
-          };
+      return { ...state, minEpoch: payload.epoch };
     case 'epoch_changed':
       return {
         ...state,
@@ -102,7 +111,6 @@ const handleMessage = (state: NodeStateType, payload) => {
 };
 
 function handleReceivedBlockTimestamp(state, payload) {
-  const { syncingProgress } = state;
   const firstReceivedBlockTimestamp =
     state.firstReceivedBlockTimestamp ||
     getTimestamp(payload.last_macro_block_timestamp);
@@ -111,15 +119,7 @@ function handleReceivedBlockTimestamp(state, payload) {
   );
   return {
     firstReceivedBlockTimestamp,
-    lastReceivedBlockTimestamp,
-    syncingProgress: Math.max(
-      syncingProgress,
-      Math.round(
-        ((lastReceivedBlockTimestamp - firstReceivedBlockTimestamp) /
-          (+new Date() - firstReceivedBlockTimestamp)) *
-          100
-      )
-    )
+    lastReceivedBlockTimestamp
   };
 }
 

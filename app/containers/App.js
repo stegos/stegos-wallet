@@ -22,17 +22,20 @@ class App extends React.Component<Props> {
     this.resetTimer();
   }
 
-  timeout = null;
+  autoLockTimer = null;
 
   resetTimer = () => {
     const { app, withIdleBlocking } = this.props;
     const { isLocked, autoLockTimeout } = app;
     if (withIdleBlocking && !isLocked) {
-      if (this.timeout) {
-        clearTimeout(this.timeout);
-        this.timeout = null;
+      if (this.autoLockTimer) {
+        clearTimeout(this.autoLockTimer);
+        this.autoLockTimer = null;
       }
-      this.timeout = setTimeout(this.blockWallet, autoLockTimeout * 1000 * 60);
+      this.autoLockTimer = setTimeout(
+        this.blockWallet,
+        autoLockTimeout * 1000 * 60
+      );
     }
   };
 

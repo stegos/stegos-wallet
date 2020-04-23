@@ -26,7 +26,7 @@ const initialState = {
   password: null,
   isSendBugReport: false,
   isTermsAccepted: false,
-  autoLockTimeout: 25, // todo config
+  autoLockTimeout: 25,
   isLocked: false,
   error: '',
   waiting: false,

@@ -25,12 +25,14 @@ export type NodeStateType = {
   version: string,
   hash: string,
   isConnected: boolean,
-  isSynced: boolean,
-  syncingProgress: number,
+  minEpoch: number,
+  remoteEpoch: number,
   apiToken: string | null,
   firstReceivedBlockTimestamp: number | null,
   lastReceivedBlockTimestamp: number | null,
-  error: string | null
+  error: string | null,
+  syncingProgress: () => number,
+  isSynced: () => bollean
 };
 
 export type AccountsStateType = {
