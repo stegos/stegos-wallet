@@ -148,7 +148,7 @@ ipcMain.on('RELAUNCH_NODE', async (event, args) => {
 });
 
 function runNodeProcess(chain: string): Promise<void> {
-  const args = ['--chain', chain, '--api-endpoint', apiEndpoint];
+  const args = ['--chain', chain, '--api-endpoint', apiEndpoint, '--light'];
   return new Promise((resolve, reject) => {
     if (fs.existsSync(logFile)) fs.unlinkSync(logFile); // todo may be rotation
     nodeProcess = spawn(`./stegosd`, args, {

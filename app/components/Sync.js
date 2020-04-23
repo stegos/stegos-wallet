@@ -25,20 +25,22 @@ export default class Sync extends Component<Props> {
           <span className={styles.Title}>
             <FormattedMessage
               id={
-                node.isSynced
+                node.isSynced()
                   ? 'synced.successfully'
                   : 'syncing.in.progress.description'
               }
             />
           </span>
           <div className={styles.ProgressBarWrapper}>
-            <span className={styles.Progress}>{node.syncingProgress}%</span>
+            <span className={styles.Progress}>
+              {node.minEpoch}/{node.remoteEpoch}
+            </span>
             <ProgressBar
-              progress={node.syncingProgress}
+              progress={node.syncingProgress()}
               className={styles.ProgressBar}
             />
           </div>
-          {!node.isSynced && (
+          {!node.isSynced() && (
             <span className={styles.Label}>
               <FormattedMessage id="syncing.please.wait" />
             </span>

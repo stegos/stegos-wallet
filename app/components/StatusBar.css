@@ -20,6 +20,7 @@
   border-radius: 21.5px;
   background-color: rgba(15, 16, 23, 0.72);
   user-select: none;
+  min-width: 260px;
 }
 
 .NetworkIndicatorText {

@@ -27,7 +27,7 @@
   "terms.accept": "By continuing, you acknowledge that you have read and agree to\nthe Terms of Use and Privacy Policy.",
 
   "status.synchronized": "Synchronized",
-  "status.unsynchronized": "Unsynchronized",
+  "status.unsynchronized": "Unsynchronized {local}/{remote}",
   "status.wallet": "Wallet",
 
   "accounts.title": "Accounts",

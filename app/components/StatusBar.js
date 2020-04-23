@@ -53,7 +53,7 @@ class StatusBar extends PureComponent<Props> {
           style={{ marginRight: 60 }}
         />
         <div className={styles.NetworkIndicator}>
-          {node.isSynced ? (
+          {node.isSynced() ? (
             <Icon
               name="done"
               size={20}
@@ -71,8 +71,14 @@ class StatusBar extends PureComponent<Props> {
           <span className={styles.NetworkIndicatorText}>
             <FormattedMessage
               id={
-                node.isSynced ? 'status.synchronized' : 'status.unsynchronized'
+                node.isSynced()
+                  ? 'status.synchronized'
+                  : 'status.unsynchronized'
               }
+              values={{
+                local: node.minEpoch,
+                remote: node.getRemoteEpoch()
+              }}
             />
           </span>
         </div>

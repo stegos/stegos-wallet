@@ -118,16 +118,20 @@ const loadAccounts = () => async (dispatch: Dispatch, getState: GetState) => {
   state = getState();
   const { items } = state.accounts;
   try {
+    await sendSync({ type: 'subscribe_wallet_updates' });
     await Promise.all(
       Object.entries(items)
         .filter(a => a[1].isLocked === true)
-        .map(account =>
-          sendSync({ type: 'unseal', password, account_id: account[0] }).catch(
-            err => {
-              if (err.message !== 'Already unsealed') throw err;
-            }
-          )
-        )
+        .map(account => {
+          console.log('password = ', password);
+          return sendSync({
+            type: 'unseal',
+            password,
+            account_id: account[0]
+          }).catch(err => {
+            if (err.message !== 'Already unsealed') throw err;
+          });
+        })
     );
     dispatch({ type: FINISH_BOOTSTRAP });
     return list;
