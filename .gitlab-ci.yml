@@ -25,6 +25,9 @@ build:linux:
       - release/stegos-wallet*.deb
       - release/stegos-wallet*.rpm
       - release/latest-linux.yml
+  before_script:
+    - apt-get install libssl-dev
+    - apt-get install zlib1g
   script:
     - node --version
     - yarn --version
@@ -33,6 +36,9 @@ build:linux:
     - curl ${CI_API_V4_URL}/projects/${STEGOS_PROJECT_ID}/jobs/artifacts/${STEGOS_BRANCH}/raw/release/stegos-linux-x64?job=release:linux-x64 -o node/stegos
     - chmod a+x node/stegosd
     - chmod a+x node/stegos
+    - cp /usr/lib/x86_64-linux-gnu/libssl.so node/libssl.so.1.0.0
+    - cp /usr/lib/x86_64-linux-gnu/libcrypto.so node/libcrypto.so.1.0.0
+    - cp /usr/lib/x86_64-linux-gnu/libz.so node/libz.so.1
     - node/stegosd --version
     - node/stegos --version
     - VERSION=$(node/stegosd --version|cut -d ' ' -f 3)
